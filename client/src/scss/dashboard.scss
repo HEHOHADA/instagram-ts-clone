@@ -1,0 +1,320 @@
+@import "mixins";
+
+.dashboard {
+  max-width: 950px;
+  padding: 30px 30px 0;
+  flex-direction: row;
+  display: flex;
+
+  .dashboard__main {
+    flex-direction: column;
+    max-width: 600px;
+    width: 100%;
+    margin-right: 30px;
+    float: left;
+    display: flex;
+
+
+    .dashboard__history {
+      padding: 16px 0 3px 0;
+      margin-bottom: 25px;
+      border: 1px solid #dbdbdb;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: row;
+
+      .dashboard__history__container {
+        height: 84px;
+        outline: 0;
+        margin-left: 20px;
+        position: relative;
+        width: 100%;
+
+        .dashboard__item__container {
+          display: flex;
+          flex-direction: row;
+          position: relative;
+
+          .dashboard__item {
+            margin-right: 20px;
+
+            .history__image {
+              @include image__item(54px)
+            }
+
+            .history__username {
+              display: block;
+              position: absolute;
+              margin: 10px;
+              font-size: 12px
+            }
+          }
+        }
+
+        .history__btn__left {
+          @include button__arrow(left)
+        }
+
+        .history__btn__right {
+          @include button__arrow(right)
+        }
+      }
+    }
+
+    .dashboard__content {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 60px;
+      border-radius: 3px;
+      border: 1px solid #dbdbdb;
+      position: relative;
+
+      .dashboard__content__header {
+        height: 60px;
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        padding: 16px;
+
+        .content__header_img {
+          @include image__item(32px)
+        }
+
+        .content__header__name {
+          margin-left: 12px;
+          font-size: 12px;
+          color: black;
+          font-weight: bold;
+          letter-spacing: 1px;
+        }
+
+        .content__header__options {
+          right: 0;
+          position: absolute;
+          margin-right: 5px;
+          cursor: pointer;
+        }
+      }
+
+      .content__img {
+        display: flex;
+        position: relative;
+
+        .content__img__item {
+          width: 100%;
+        }
+      }
+
+      .content__tools {
+        border: 1px solid #dbdbdb;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+
+        .content__tools__options {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          padding: 0 16px;
+          height: 40px;
+          width: 100%;
+
+          .tool {
+            padding: 8px
+          }
+
+          .tool__save {
+            right: 0;
+            position: absolute;
+            margin-right: 10px;
+            cursor: pointer;
+          }
+        }
+
+        .content__likes {
+          padding-left: 16px;
+          padding-right: 16px;
+          font-size: 12px;
+          margin-bottom: 6px;
+        }
+
+        .content__comments {
+          margin: 0 0 auto;
+          padding: 0 16px;
+          flex-direction: column;
+
+          .comment__item {
+            margin-bottom: 4px;
+            display: flex;
+            flex-direction: row;
+
+            .comment__username {
+              font-size: 14px;
+              font-weight: bold;
+              margin-right: 5px;
+            }
+
+            .comment__text {
+              font-size: 14px;
+              margin-right: 5px;
+            }
+          }
+        }
+
+        .content__created {
+          padding: 0 16px;
+          margin: 8px 0;
+          color: #8e8e8e;
+        }
+
+        .comment__create {
+          border-top: 1px solid rgba(142, 142, 142, .2);
+          padding: 0 16px;
+          margin-top: 4px;
+          display: flex;
+          flex-direction: row;
+          min-height: 56px;
+          align-items: center;
+
+          .comment__add {
+            height: 18px;
+            flex-grow: 1;
+            border: 0;
+            resize: none;
+            color: #262626;
+            font-size: 14px;
+            line-height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-height: 80px;
+
+            &::placeholder {
+              color: rgba(38, 38, 38, 0.5);
+            }
+          }
+
+          .comment__btn {
+            @include button(14px);
+
+            &:disabled {
+              opacity: .3;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dashboard__recommendation {
+    position: fixed;
+    top: 88px;
+    max-width: 293px;
+    right: 0;
+    height: 100vh;
+    left: 700px;
+
+    .user__profile {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      margin: 16px;
+
+      .user__img {
+        @include image__item(56px)
+      }
+
+      .user__info {
+        margin-left: 20px;
+        flex-direction: column;
+        display: flex;
+
+        .user__username {
+          font-size: 16px;
+          font-weight: bold;
+          line-height: 18px;
+          letter-spacing: 1px;
+        }
+
+        .user__name {
+          letter-spacing: 1px;
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+
+    }
+
+    .dashboard__recommendation__items {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+
+
+      .recommend__helper {
+        padding-top: 10px;
+        margin-top: 12px;
+        justify-content: space-between;
+        display: flex;
+
+        .recommend__for__you {
+          color: #8e8e8e;
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        .recommend__all {
+          color: #8e8e8e;
+          font-size: 14px;
+          margin-left: 10px;
+          cursor: pointer;
+        }
+      }
+
+      .recommendations {
+
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        margin: 0 10px 10px;
+
+        .recommend__item {
+          padding-bottom: 8px;
+          display: flex;
+          flex-direction: row;
+          padding-top: 8px;
+
+          .recommend__img {
+            @include image__item(32px);
+            margin-right: 6px;
+          }
+
+          .recommend__info {
+            margin-left: 10px;
+            flex: 1 1 auto;
+
+            .recommend__username {
+              color: #262626;
+              font-weight: bold;
+              font-size: 16px;
+            }
+
+            .recommend__name {
+              color: #262626;
+              font-size: 14px;
+            }
+
+            .recommend__info__item {
+              color: #8e8e8e;
+              font-size: 10px;
+            }
+          }
+
+          .recommend__sub {
+            @include button(12px)
+          }
+        }
+      }
+    }
+  }
+}

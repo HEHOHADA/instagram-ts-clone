@@ -1,0 +1,6 @@
+export const invalidLogin = 'invalid login'
+export const confirmEmailError = 'Email is not confirmed'
+export const forgotPasswordLockedError =   'account is loked'
+export const expiredKeyError = 'key is expired'
+export const userNotFound= 'user not found'
+export const somethingWentWrong = 'somethingWentWrong'

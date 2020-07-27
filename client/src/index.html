@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>Instagram</title>
+</head>
+<body>
+
+<div id="next">
+    <nav class="header">
+        <div class="header__items container">
+            <div class="header__logo">&nbsp;</div>
+            <div class="header__search">
+                <input type="text" placehoalder="Search" class="header__searchInput"/>
+                <button class="header__searchButton">
+                    <i class="material-icons">
+                        search
+                    </i>
+                </button>
+            </div>
+            <div class="header__nav-items">
+                <div class="nav__container">
+                    <div class="nav__home nav_item">
+                        <span class="material-icons">
+                            home
+                        </span>
+                    </div>
+                    <div class="nav__direct nav_item">
+                        <span class="material-icons">
+                            comment
+                        </span>
+                    </div>
+                    <div class="nav__recommend nav_item">
+                        <span class="material-icons">
+                            compass_calibration
+                        </span>
+                    </div>
+                    <div class="nav__profile nav_item">
+                        <span class="material-icons">
+                            account_circle
+                        </span>
+                        <div class="dropdown">
+                            <div class="menu">
+                                <a href="#" class="menu__item"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="main">
+        <div class="direct">
+            <div class="direct__container">
+                <div class="direct__items__container">
+                    <div class="direct__conversations__container">
+                        <div class="direct__conversations__header">
+                            <div class="header__text">Direct</div>
+                            <div class="header__add-new">
+                                <svg aria-label="Новое сообщение" class="_8-yf5 " fill="#262626" height="24"
+                                     viewBox="0 0 44 44" width="24">
+                                    <path
+                                        d="M33.7 44.12H8.5a8.41 8.41 0 01-8.5-8.5v-25.2a8.41 8.41 0 018.5-8.5H23a1.5 1.5 0 010 3H8.5a5.45 5.45 0 00-5.5 5.5v25.2a5.45 5.45 0 005.5 5.5h25.2a5.45 5.45 0 005.5-5.5v-14.5a1.5 1.5 0 013 0v14.5a8.41 8.41 0 01-8.5 8.5z"></path>
+                                    <path
+                                        d="M17.5 34.82h-6.7a1.5 1.5 0 01-1.5-1.5v-6.7a1.5 1.5 0 01.44-1.06L34.1 1.26a4.45 4.45 0 016.22 0l2.5 2.5a4.45 4.45 0 010 6.22l-24.3 24.4a1.5 1.5 0 01-1.02.44zm-5.2-3h4.58l23.86-24a1.45 1.45 0 000-2l-2.5-2.5a1.45 1.45 0 00-2 0l-24 23.86z"></path>
+                                    <path
+                                        d="M38.2 14.02a1.51 1.51 0 01-1.1-.44l-6.56-6.56a1.5 1.5 0 012.12-2.12l6.6 6.6a1.49 1.49 0 010 2.12 1.51 1.51 0 01-1.06.4z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="direct__conversation__overflow">
+                            <ul class="direct__conversations">
+                                <li class="direct__conversation">
+                                    <div class="conversation__img">
+                                        <img alt="Фото профиля yurfos" class="_6q-tv" data-testid="user-avatar"
+                                             draggable="false"
+                                             src="https://scontent-frx5-1.cdninstagram.com/v/t51.2885-19/s150x150/106558826_282409769486623_7544924254557319006_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&amp;_nc_ohc=2lz_eX4qW14AX_t5MX-&amp;oh=0ed45e0eba2b40a040ee1dcbcea57022&amp;oe=5F408B22">
+                                    </div>
+                                    <div class="conversation__user">
+                                        <div class="user__name">yuros</div>
+                                        <div class="user__last-seen">Yesterday</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="conversation__item">
+                        <div class="conversation__info">
+                            <div class="conversation__user">
+                                <div class="conversation__user__img">
+                                    <img alt="Фото профиля tagir_sl" class="_6q-tv" data-testid="user-avatar"
+                                         draggable="false"
+                                         src="https://scontent-frx5-1.cdninstagram.com/v/t51.2885-19/s150x150/82887532_479076982782123_4114449992347811840_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&amp;_nc_ohc=-cQIoaRPnroAX_HhXjA&amp;oh=a91a511860acc67ae169ac649b9f3e15&amp;oe=5F410096">
+                                </div>
+                                <div class="conversation__user__name">Tagit</div>
+                            </div>
+                            <div class="user__info">
+                                <svg aria-label="Посмотреть информацию о переписке" class="_8-yf5 " fill="#262626"
+                                     height="24" viewBox="0 0 48 48" width="24">
+                                    <path
+                                        d="M24 48C10.8 48 0 37.2 0 24S10.8 0 24 0s24 10.8 24 24-10.8 24-24 24zm0-45C12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21S35.6 3 24 3z"></path>
+                                    <circle clip-rule="evenodd" cx="24" cy="14.8" fill-rule="evenodd"
+                                            r="2.6"></circle>
+                                    <path
+                                        d="M27.1 35.7h-6.2c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5h6.2c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5z"></path>
+                                    <path
+                                        d="M24 35.7c-.8 0-1.5-.7-1.5-1.5V23.5h-1.6c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5H24c.8 0 1.5.7 1.5 1.5v12.2c0 .8-.7 1.5-1.5 1.5z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="conversation__messages">
+                            <div class="conversation__date"></div>
+                            <div class="message__container">
+                                <div class="message__user__image"></div>
+                                <div class="message__text"></div>
+                            </div>
+                        </div>
+                        <div class="conversation__form__container">
+                            <div class="message__smile"></div>
+                            <div class="message__input"></div>
+                            <div class="message__photo"></div>
+                            <div class="message__like"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
