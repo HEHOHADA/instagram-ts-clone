@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class TestJoin1595792922431 implements MigrationInterface {
-    name = 'TestJoin1595792922431'
+export class joinTest1595880608286 implements MigrationInterface {
+    name = 'joinTest1595880608286'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "user" ALTER COLUMN "pictureUrl" SET DEFAULT null`);

@@ -1,9 +1,7 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { Photo } from './Photo'
 import { Comment } from './Comment'
-import { Follower } from './Follower'
-import { Following } from './Following'
 
 @Entity()
 @ObjectType({isAbstract: true})
@@ -13,13 +11,6 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  // @Field()
-  // @Column('text', {nullable: true})
-  // firstName: string
-  //
-  // @Field()
-  // @Column('text', {nullable: true})
-  // lastName: string
   @Field()
   @Column('text')
   fullName: string
@@ -27,6 +18,10 @@ export class User extends BaseEntity {
   @Field()
   @Column('text', {unique: true})
   email: string
+
+  @Field()
+  @Column('text', {unique: true})
+  username: string
 
   @Field({nullable: true})
   @Column('varchar', {nullable: true, default: null})
@@ -50,9 +45,25 @@ export class User extends BaseEntity {
   @OneToMany(() => Comment, comment => comment.userId)
   comments: Comment[]
 
-  @OneToMany(() => Follower, follower => follower.userId)
-  followers: Follower[]
+  @Field()
+  followerCount: number
 
-  @OneToMany(() => Following, following => following.userId)
-  followings: Following[]
+  @Field()
+  photoCount: number
+
+
+  @ManyToMany(
+      () => User,
+      (user) => user.following
+  )
+  @JoinTable()
+  followers: User[]
+
+  @ManyToMany(
+      () => User,
+      (user) => user.followers
+  )
+  @JoinTable()
+  following: User[]
+
 }

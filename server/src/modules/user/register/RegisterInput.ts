@@ -6,4 +6,6 @@ import UserType from '../types/UserType'
 export class RegisterInput extends PasswordMixin(UserType){
   @Field()
   fullName: string
+  @Field()
+  username: string
 }

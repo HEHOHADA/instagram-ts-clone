@@ -13,7 +13,7 @@ export class CreateCommentResolver {
       @Ctx()ctx: MyContext
   ) {
     return await Comment.create({
-      comment: commentText,
+      commentText,
       photoId,
       userId: ctx.payload.userId
     }).save()

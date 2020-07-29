@@ -1,4 +1,13 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Photo } from './Photo'
@@ -18,7 +27,7 @@ export class Comment extends BaseEntity {
 
   @Field(() => String)
   @Column('text')
-  comment: string
+  commentText: string
 
   @Field()
   @Column('uuid')
@@ -28,11 +37,14 @@ export class Comment extends BaseEntity {
   @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
   date: Date
 
+  @Field(() => User)
   @ManyToOne(() => User,
       user => user.photos)
   user: User
 
+  @Field(() => Photo)
   @ManyToOne(() => Photo,
       photo => photo.comments)
+  @JoinColumn({name: 'photoId'})
   photo: Photo
 }

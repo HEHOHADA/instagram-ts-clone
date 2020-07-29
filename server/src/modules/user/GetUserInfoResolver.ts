@@ -2,10 +2,11 @@ import { Arg, Query, Resolver } from 'type-graphql'
 import { User } from '../../entity/User'
 import { ApolloError } from 'apollo-server-express'
 import { getConnection } from 'typeorm'
+import { Photo } from '../../entity/Photo'
 
 @Resolver()
 export class GetUserInfoResolver {
-  @Query(() => Boolean)
+  @Query(() => User)
   async getUserInfo(
       @Arg('userId')userId: string
   ) {
@@ -14,15 +15,18 @@ export class GetUserInfoResolver {
         .createQueryBuilder('user')
         .select('user')
         .where('id = :userId', {userId})
-        .leftJoinAndSelect('user.photos','userId','userId = user.id')
+        .loadRelationCountAndMap('user.followerCount', 'user.followers')
+        .cache(true)
         .getOne()
-    console.log(user)
+
+    const userPhoto = await Photo.find({where: {userId}, cache: true})
+    console.log(user, userPhoto)
 
 
     if (!user) {
       throw new ApolloError('User not found')
     }
 
-    return true
+    return user
   }
 }
