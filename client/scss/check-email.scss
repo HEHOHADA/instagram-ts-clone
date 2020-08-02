@@ -1,0 +1,28 @@
+.check-email__card {
+  display: flex;
+  margin-top: 50px;
+  flex-direction: column;
+  align-content: center;
+  padding: 20px;
+  justify-content: center;
+  max-width: 600px;
+  box-shadow: -9px 9px 12px #62606e,
+  9px -9px 12px #d4d2ee;
+  border-radius: 73px;
+
+  .check-email__header {
+    font-size: 40px;
+    text-align: center;
+  }
+
+  .check-email__text {
+    font-size: 20px;
+
+  }
+
+  .check-email__logo {
+    justify-content: center;
+    background: url("../public/static/img/instagram-removebg-preview.png") no-repeat center;
+    height: 400px;
+  }
+}

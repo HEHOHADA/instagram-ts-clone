@@ -207,16 +207,15 @@
   }
 
   .dashboard__recommendation {
-    position: fixed;
+    //position: ;
     top: 88px;
     max-width: 293px;
-    right: 0;
     height: 100vh;
-    left: 700px;
+    right: 300px;
 
     .user__profile {
       display: flex;
-      justify-content: start;
+      justify-content: flex-start;
       align-items: center;
       margin: 16px;
 
@@ -272,7 +271,6 @@
       }
 
       .recommendations {
-
         display: flex;
         flex-direction: column;
         position: relative;

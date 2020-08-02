@@ -1,18 +1,20 @@
 import { AuthenticationError } from 'apollo-server-express'
-import { Arg, Mutation, Resolver } from 'type-graphql'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import bcrypt from 'bcryptjs'
 import { redis } from '../../redis'
 import { User } from '../../entity/User'
-import { ChangePasswordInput } from './types/ChapgePasswordInputType'
+import { ChangeForgotPassword, ChangePassword } from './types/ChangePasswordInputType'
 import { expiredKeyError, invalidLogin } from './utils/errorMessages'
 import { forgotPasswordPrefix } from '../constants/redisPrefix'
+import { isAuth } from '../../middleware/isAuthMiddleware'
+import { MyContext } from '../../types/MyContext'
 
 @Resolver()
 export class ChangePasswordResolver {
   @Mutation(() => User)
-  async changePassword(
+  async changeForgotPassword(
       // @Ctx()ctx: MyContext,
-      @Arg('data'){token, password}: ChangePasswordInput
+      @Arg('data'){token, password}: ChangeForgotPassword
   ) {
 
     const userId = await redis.get(forgotPasswordPrefix + token)
@@ -32,9 +34,31 @@ export class ChangePasswordResolver {
 
     await user.save()
 
+    return user
+  }
 
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => User)
+  async changePassword(
+      @Ctx()ctx: MyContext,
+      @Arg('data'){ password,oldPassword}: ChangePassword
+  ) {
+
+    const user = await User.findOne(ctx.payload.userId)
+
+    if (!user) {
+      throw new AuthenticationError(invalidLogin)
+    }
+
+    if(!await bcrypt.compare(oldPassword,user.password)){
+      throw new AuthenticationError(invalidLogin)
+    }
+
+    user.password = await bcrypt.hash(password, 12)
+
+    await user.save()
 
     return user
-
   }
 }

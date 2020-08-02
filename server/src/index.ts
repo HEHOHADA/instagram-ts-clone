@@ -23,8 +23,8 @@ const server = async () => {
   }))
   app.use(cookieParser())
 
-  app.post('/refresh_token',refreshToken)
-  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+  app.post('/refresh_token', refreshToken)
+  app.use(graphqlUploadExpress({maxFileSize: 10000000, maxFiles: 10}))
   // app.use(
   //     session({
   //       store: new RedisStore({
@@ -51,12 +51,12 @@ const server = async () => {
       redis,
       req, res
     }),
-    formatError: ({message, path}) => ({
-      message, path
-    })
+    formatError: ({message, path}) => {
+      return {message, path}
+    }
   })
 
-  apolloServer.applyMiddleware({app})
+  apolloServer.applyMiddleware({app, cors: false})
 
   app.listen(4000, () => {
     console.log('server is running on 4000')

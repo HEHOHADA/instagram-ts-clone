@@ -1,40 +1,44 @@
 {
-  "name": "instagram-web",
-  "version": "0.1.0",
-  "description": "next scss react graphql",
-  "main": "webpack.config.js",
-  "author": "Bulat Khaibullin",
-  "license": "MIT",
+  "name": "instagram-ts-client",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --open",
-    "build": "cross-env NODE_ENV=production webpack --mode production"
-  },
-  "browserslist": "> 0.25%, not dead",
-  "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.1.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.0.1",
-    "cross-env": "^7.0.2",
-    "css-loader": "^3.5.3",
-    "eslint": "^7.0.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-loader": "^4.0.2",
-    "file-loader": "^6.0.0",
-    "html-webpack-plugin": "^4.3.0",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.14.1",
-    "sass-loader": "^8.0.2",
-    "style-loader": "^1.2.1",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "build": "next build",
+    "start": "next start",
+    "dev": "nodemon --exec ts-node --project tsconfig.server.json server/index.ts",
+    "type-check": "tsc",
+    "genql": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.8.3",
-    "normalize.css": "^8.0.1"
-  }
+    "@apollo/client": "^3.1.1",
+    "@apollo/react-hooks": "^4.0.0",
+    "@apollo/react-ssr": "^4.0.0",
+    "apollo-link-token-refresh": "^0.3.1",
+    "formik": "^2.1.5",
+    "graphql": "^15.3.0",
+    "jwt-decode": "^2.2.0",
+    "next": "latest",
+    "next-routes": "^1.4.2",
+    "normalize.css": "^8.0.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "sass": "^1.26.10"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.17.6",
+    "@graphql-codegen/introspection": "1.17.6",
+    "@graphql-codegen/typescript": "1.17.6",
+    "@graphql-codegen/typescript-operations": "1.17.6",
+    "@graphql-codegen/typescript-react-apollo": "1.17.6",
+    "@types/graphql": "^14.5.0",
+    "@types/jwt-decode": "^2.2.1",
+    "@types/node": "^14.0.27",
+    "@types/react": "^16.9.44",
+    "@types/react-dom": "^16.9.8",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
+    "ts-node-dev": "^1.0.0-pre.56",
+    "typescript": "^3.8.3"
+  },
+  "license": "ISC"
 }
