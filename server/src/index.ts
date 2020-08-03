@@ -17,11 +17,11 @@ const server = async () => {
   await createConnection()
   // const RedisStore = connectRedis(session)
   const app = Express()
+  app.use(cookieParser())
   app.use(cors({
     credentials: true,
     origin: 'http://localhost:3000'
   }))
-  app.use(cookieParser())
 
   app.post('/refresh_token', refreshToken)
   app.use(graphqlUploadExpress({maxFileSize: 10000000, maxFiles: 10}))

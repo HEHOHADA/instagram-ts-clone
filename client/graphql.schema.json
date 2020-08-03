@@ -685,7 +685,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "UserType",
+                    "name": "ForgotPasswordType",
                     "ofType": null
                   }
                 },
@@ -1106,7 +1106,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "UserType",
+        "name": "ForgotPasswordType",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -1179,7 +1179,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "email",
+            "name": "password",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -1193,7 +1193,7 @@
             "defaultValue": null
           },
           {
-            "name": "password",
+            "name": "email",
             "description": null,
             "type": {
               "kind": "NON_NULL",

@@ -1,0 +1,74 @@
+import React, { useCallback, useMemo } from 'react'
+import MainLayout from '../../../components/MainLayout'
+import { ForgotPasswordType, useForgotPasswordMutation } from '../../../geterated/apollo'
+import { InstagramForm } from '../../../components/form/InstagramForm'
+import { InputField } from '../../../components/utils/InputField'
+import { useRouter } from 'next/router'
+import RedirectComponent from '../../../components/auth/RedirectComponent'
+import OrComponentWithRedirect from '../../../components/auth/OrComponentWithRedirect'
+
+const ForgotPassword = () => {
+
+  const router = useRouter()
+  // const OrOptionsComponent = useMemo(() => {
+  //   return (
+  //       <>
+  //         <OrComponent/>
+  //         <Link href="/accounts/register">
+  //           <a className="auth__forgot__password">Создать новый</a>
+  //         </Link>
+  //       </>
+  //   )
+  // }, [])
+
+  const fieldsItems = useMemo(() => {
+    return [{
+      name: 'email',
+      id: 'email',
+      placeholder: 'Email',
+      type: 'text',
+      component: InputField
+    },
+    ]
+  }, [])
+
+  const [forgotPassword] = useForgotPasswordMutation()
+
+  const forgotPasswordHandler = useCallback(async (data, {setErrors}) => {
+
+    try {
+      const response = await forgotPassword({
+        variables: {
+          email: data
+        }
+      })
+      if (response.data) {
+        await router.push('/accounts/check-email')
+      }
+    } catch (e) {
+      // const errors: any = {}
+      console.log(e.graphQLErrors)
+      setErrors({password: e.graphQLErrors[0].message})
+    }
+  }, [])
+
+
+  return (
+      <MainLayout title="Forgot password">
+        <div className="change-password__container container">
+          <InstagramForm<ForgotPasswordType>
+              OrOptionsComponent={ <OrComponentWithRedirect link={ '/accounts/register' }
+                                                            text={ 'Create account' }/> }
+              RedirectComponent={ <RedirectComponent text={ 'Back to login' }
+                                                     link={ '/accounts/login' }/> }
+              submitHandler={ forgotPasswordHandler }
+              initialValues={ {email: ''} }
+              buttonText={ 'Reset' }
+              fields={ fieldsItems }/>
+        </div>
+      </MainLayout>
+  )
+}
+
+
+export default ForgotPassword

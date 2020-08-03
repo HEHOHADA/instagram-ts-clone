@@ -73,6 +73,23 @@
 
       .nav__container {
         display: flex;
+        align-items: center;
+
+        .nav__register {
+          font-weight: 600;
+          line-height: 28px;
+          color: #0095f6;
+          font-size: 14px;
+          margin-left: 10px;
+
+          .nav__login {
+            border: 1px solid transparent;
+            border-radius: 4px;
+            padding: 5px 9px;
+            background-color: #0095f6;
+            color: #ffffff;
+          }
+        }
 
         .nav_item {
           margin-left: 22px;

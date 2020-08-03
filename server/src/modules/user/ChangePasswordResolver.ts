@@ -13,7 +13,6 @@ import { MyContext } from '../../types/MyContext'
 export class ChangePasswordResolver {
   @Mutation(() => User)
   async changeForgotPassword(
-      // @Ctx()ctx: MyContext,
       @Arg('data'){token, password}: ChangeForgotPassword
   ) {
 
@@ -31,7 +30,7 @@ export class ChangePasswordResolver {
     await redis.del(forgotPasswordPrefix + token)
 
     user.password = await bcrypt.hash(password, 12)
-
+    user.forgotPasswordLocked = false
     await user.save()
 
     return user
@@ -42,7 +41,7 @@ export class ChangePasswordResolver {
   @Mutation(() => User)
   async changePassword(
       @Ctx()ctx: MyContext,
-      @Arg('data'){ password,oldPassword}: ChangePassword
+      @Arg('data'){password, oldPassword}: ChangePassword
   ) {
 
     const user = await User.findOne(ctx.payload.userId)
@@ -51,7 +50,7 @@ export class ChangePasswordResolver {
       throw new AuthenticationError(invalidLogin)
     }
 
-    if(!await bcrypt.compare(oldPassword,user.password)){
+    if (!await bcrypt.compare(oldPassword, user.password)) {
       throw new AuthenticationError(invalidLogin)
     }
 

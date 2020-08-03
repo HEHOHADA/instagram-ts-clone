@@ -5,7 +5,6 @@ import { createAccessToken, createRefreshToken } from '../modules/user/auth/crea
 
 export const refreshToken = async (req: any, res: any) => {
   const token = req.cookies.jid
-
   if (!token) {
     return res.send({ok: false, accessToken: ''})
   }
@@ -18,7 +17,7 @@ export const refreshToken = async (req: any, res: any) => {
     return res.send({ok: false, accessToken: ''})
   }
 
-  const user = await User.findOne({id: payload.userid})
+  const user = await User.findOne({id: payload.userId})
 
   if (!user || user.tokenVersion !== payload.tokenVersion) {
     return res.send({ok: false, accessToken: ''})

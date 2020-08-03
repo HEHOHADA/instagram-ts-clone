@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import AuthLayout from '../../components/AuthLayout'
-import { useLoginMutation } from '../../geterated/apollo'
-import { Field, Formik } from 'formik'
-import { InputField } from '../../components/form/InputField'
+import { LoginInput, MeDocument, MeQuery, useLoginMutation } from '../../geterated/apollo'
 import { setAccessToken } from '../../lib/token'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
-import AuthOptions from '../../components/auth/AuthOptions'
+import { InstagramForm } from '../../components/form/InstagramForm'
+import { InputField } from '../../components/utils/InputField'
+import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
+import RedirectComponent from '../../components/auth/RedirectComponent'
 
 const Login = () => {
   const [login] = useLoginMutation()
@@ -16,7 +16,19 @@ const Login = () => {
       const response = await login({
         variables: {
           data
+        }, update: (cache, {data}) => {
+          if (!data || !data.login) {
+            return
+          }
+
+          cache.writeQuery<MeQuery>({
+            query: MeDocument,
+            data: {
+              me: data.login.user
+            }
+          })
         }
+
       })
       if (response && response.data) {
         setAccessToken(response.data.login.accessToken)
@@ -30,62 +42,41 @@ const Login = () => {
       setErrors({email: e.graphQLErrors[0].message})
     }
   }, [])
+
+
+  const fieldsItems = useMemo(() => {
+    return [{
+      name: 'email',
+      id: 'email',
+      placeholder: 'Email',
+      type: 'text',
+      component: InputField
+    }, {
+      name: 'password',
+      id: 'password',
+      placeholder: 'Password',
+      type: 'password',
+      component: InputField
+    },
+    ]
+  }, [])
+
+
   return (
       <AuthLayout>
-        <div className="auth__content__container">
-          <div className="auth__form__container">
-            <div className="logo__item"/>
-            <Formik
-                validateOnBlur={ false }
-                validateOnChange={ false }
-                initialValues={ {
-                  email: '',
-                  password: ''
-                } }
-                onSubmit={ submitLoginHandler }
-            >{ ({handleSubmit}) => (
-                <form
-                    onSubmit={ handleSubmit }
-                    className="auth__form">
-                  <div className="form__container">
-                    <div className="form__inputs">
-                      <Field name="email" placeholder="Email" id="email" component={ InputField }/>
-                      <Field name="password"
-                             type="password"
-                             placeholder="Password"
-                             id="password"
-                             component={ InputField }/>
-                    </div>
-                    <div className="form__submit__btn">
-                      <button type="submit" className="submit__btn">
-                        Войти
-                      </button>
-                    </div>
-                  </div>
-                </form>) }
-            </Formik>
-            <AuthOptions/>
-          </div>
-          <div className="auth__change__page">
-            <div className="change__page__container">
-              <p className="change__page__items">Смените страницу
-                <Link href="/accounts/register">
-                  <a className="change__link"> Регистрация</a>
-                </Link>
-              </p>
-            </div>
-          </div>
-        </div>
+        <InstagramForm<LoginInput>
+            OrOptionsComponent={ <OrComponentWithRedirect link={ '/accounts/password/reset' }
+                                                          text={ 'Забыли пароль' }/> }
+            RedirectComponent={ <RedirectComponent text={ 'Регистрация' }
+                                                   link={ '/accounts/register' }/> }
+
+            buttonText={ 'Login' }
+            fields={ fieldsItems }
+            initialValues={ {password: '', email: ''} }
+            submitHandler={ submitLoginHandler }/>
       </AuthLayout>
   )
 }
 
-// export async function getServerSideProps(ctx: any) {
-//   console.log(ctx)
-//   const [login] = useLoginMutation()
-//   return {
-//     login
-//   }
-// }
 
 export default Login

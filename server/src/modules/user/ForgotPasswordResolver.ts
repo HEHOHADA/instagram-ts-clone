@@ -11,7 +11,7 @@ import ForgotPasswordType from './types/ForgotPasswordType'
 export class ForgotPasswordResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
-      @Arg('email')email: ForgotPasswordType
+      @Arg('email'){email}: ForgotPasswordType
   ) {
 
     const user = await User.findOne({where: {email}})

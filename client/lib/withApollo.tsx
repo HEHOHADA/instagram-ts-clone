@@ -1,14 +1,30 @@
 import React from 'react'
 import Head from 'next/head'
-
+import cookie from 'cookie'
 import initApollo from './initApollo'
 import { isBrowser } from './isBrowser'
+import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client'
+import { getAccessToken, setAccessToken } from './token'
+
+export const isServer = () => typeof window === 'undefined'
 
 const withApollo = (PageComponent: any, {ssr = true} = {}) => {
 
-  const WithApollo = ({apolloClient, apolloState, ...pageProps}: any) => {
+  const WithApollo = ({apolloClient, apolloState, serverAccessToken, ...pageProps}:
+                          {
+                            apolloClient: ApolloClient<NormalizedCacheObject>, serverAccessToken: string,
+                            apolloState: NormalizedCacheObject
+                          }) => {
+
+    if (!isServer() && !getAccessToken()) {
+      setAccessToken(serverAccessToken)
+    }
     const client = apolloClient || initApollo(apolloState)
-    return <PageComponent { ...pageProps } apolloClient={ client }/>
+    return (
+        <ApolloProvider client={ client }>
+          <PageComponent { ...pageProps } />
+        </ApolloProvider>
+    )
   }
 
   if (process.env.NODE_ENV !== 'production') {
@@ -28,13 +44,34 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
   if (ssr || PageComponent.getInitialProps) {
     WithApollo.getInitialProps = async (ctx: any) => {
       const {
-        Component,
-        ctx: {res}
+        AppTree,
+        ctx: {res, req}
       } = ctx
 
+
+      let serverAccessToken = ''
+
+      if (isServer()&&req.headers.cookie) {
+        const cookies = cookie.parse(req.headers.cookie)
+        console.log(cookies)
+        if (cookies.jid) {
+
+          const response = await fetch('http://localhost:4000/refresh_token', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              cookie: 'jid=' + cookies.jid
+            }
+          })
+
+          const data = await response.json()
+          serverAccessToken = data.accessToken
+        }
+
+      }
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
-      const apolloClient = (ctx.ctx.apolloClient = initApollo({}))
+      const apolloClient = (ctx.ctx.apolloClient = initApollo({}, serverAccessToken))
 
       const pageProps = PageComponent.getInitialProps
           ? await PageComponent.getInitialProps(ctx)
@@ -47,13 +84,13 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
         if (res && res.finished) {
           return pageProps
         }
-        if (ssr) {
+        if (ssr && AppTree) {
           try {
             // Run all GraphQL queries
             const {getDataFromTree} = await import('@apollo/react-ssr')
             // console.log('react apollo client',apolloClient)
-             await getDataFromTree(
-                <Component
+            await getDataFromTree(
+                <AppTree
                     pageProps={ {...pageProps, apolloClient} }
                 />
             )
@@ -75,7 +112,8 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
 
       return {
         ...pageProps,
-        apolloState
+        apolloState,
+        serverAccessToken
       }
     }
   }

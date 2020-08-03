@@ -10,10 +10,13 @@ export const InputField = ({field, form: {errors, touched}, ...props}: FieldProp
   return (
       <div className="form__group">
         { errorMessage && <div style={ {color: 'red'} }>{ errorMessage }</div> }
-        <input type="input"
-               { ...field }{ ...props }
-               className="form__field" placeholder={ props.placeholder } name={ props.name } id={ props.id }
-               required/>
+        <input
+            { ...field }{ ...props }
+            className="form__field"
+            placeholder={ props.placeholder }
+            name={ props.name }
+            id={ props.id }
+            required/>
         <label htmlFor={ props.id } className="form__label">{ props.placeholder }</label>
       </div>
 

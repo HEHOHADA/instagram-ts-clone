@@ -124,7 +124,7 @@ export type MutationConfirmUserArgs = {
 
 
 export type MutationForgotPasswordArgs = {
-  email: UserType;
+  email: ForgotPasswordType;
 };
 
 
@@ -173,7 +173,7 @@ export type ChangePassword = {
   oldPassword: Scalars['String'];
 };
 
-export type UserType = {
+export type ForgotPasswordType = {
   email: Scalars['String'];
 };
 
@@ -184,8 +184,8 @@ export type LoginResponseType = {
 };
 
 export type LoginInput = {
-  email: Scalars['String'];
   password: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -195,6 +195,19 @@ export type RegisterInput = {
   username: Scalars['String'];
 };
 
+export type ChangeForgotPasswordMutationVariables = Exact<{
+  data: ChangeForgotPassword;
+}>;
+
+
+export type ChangeForgotPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { changeForgotPassword: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
+);
+
 export type ConfirmUserMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
@@ -203,6 +216,16 @@ export type ConfirmUserMutationVariables = Exact<{
 export type ConfirmUserMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'confirmUser'>
+);
+
+export type ForgotPasswordMutationVariables = Exact<{
+  email: ForgotPasswordType;
+}>;
+
+
+export type ForgotPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'forgotPassword'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -235,7 +258,51 @@ export type RegisterMutation = (
   ) }
 );
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'email' | 'id' | 'username'>
+  )> }
+);
+
+
+export const ChangeForgotPasswordDocument = gql`
+    mutation ChangeForgotPassword($data: ChangeForgotPassword!) {
+  changeForgotPassword(data: $data) {
+    id
+    username
+  }
+}
+    `;
+export type ChangeForgotPasswordMutationFn = ApolloReactCommon.MutationFunction<ChangeForgotPasswordMutation, ChangeForgotPasswordMutationVariables>;
+
+/**
+ * __useChangeForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useChangeForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeForgotPasswordMutation, { data, loading, error }] = useChangeForgotPasswordMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useChangeForgotPasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeForgotPasswordMutation, ChangeForgotPasswordMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeForgotPasswordMutation, ChangeForgotPasswordMutationVariables>(ChangeForgotPasswordDocument, baseOptions);
+      }
+export type ChangeForgotPasswordMutationHookResult = ReturnType<typeof useChangeForgotPasswordMutation>;
+export type ChangeForgotPasswordMutationResult = ApolloReactCommon.MutationResult<ChangeForgotPasswordMutation>;
+export type ChangeForgotPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeForgotPasswordMutation, ChangeForgotPasswordMutationVariables>;
 export const ConfirmUserDocument = gql`
     mutation ConfirmUser($token: String!) {
   confirmUser(token: $token)
@@ -266,6 +333,36 @@ export function useConfirmUserMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type ConfirmUserMutationHookResult = ReturnType<typeof useConfirmUserMutation>;
 export type ConfirmUserMutationResult = ApolloReactCommon.MutationResult<ConfirmUserMutation>;
 export type ConfirmUserMutationOptions = ApolloReactCommon.BaseMutationOptions<ConfirmUserMutation, ConfirmUserMutationVariables>;
+export const ForgotPasswordDocument = gql`
+    mutation ForgotPassword($email: ForgotPasswordType!) {
+  forgotPassword(email: $email)
+}
+    `;
+export type ForgotPasswordMutationFn = ApolloReactCommon.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
+        return ApolloReactHooks.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, baseOptions);
+      }
+export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
+export type ForgotPasswordMutationResult = ApolloReactCommon.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
   login(data: $data) {
@@ -337,3 +434,37 @@ export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookO
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    email
+    id
+    username
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        return ApolloReactHooks.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+      }
+export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;

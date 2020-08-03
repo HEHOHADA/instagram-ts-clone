@@ -1,17 +1,75 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import AuthLayout from '../../components/AuthLayout'
-import { Field, Formik } from 'formik'
-import { InputField } from '../../components/form/InputField'
-import AuthOptions from '../../components/auth/AuthOptions'
+import { InputField } from '../../components/utils/InputField'
 import { useRouter } from 'next/router'
-import { useRegisterMutation } from '../../geterated/apollo'
-import Link from 'next/link'
+import { RegisterInput, useRegisterMutation } from '../../geterated/apollo'
+import { InstagramForm } from '../../components/form/InstagramForm'
+import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
+import RedirectComponent from '../../components/auth/RedirectComponent'
 
 const Register = () => {
 
   const [register] = useRegisterMutation()
   const router = useRouter()
-  const submitLoginHandler = useCallback(async (data, {setErrors}) => {
+
+
+  // const OrOptionsComponent = useMemo(() => {
+  //   return (
+  //       <>
+  //         <OrComponent/>
+  //         <button className="auth__login__with">With something</button>
+  //         <Link href="/accounts/password/reset">
+  //           <a className="auth__forgot__password">Забыли пароль</a>
+  //         </Link>
+  //       </>
+  //   )
+  // }, [])
+  //
+  // const RedirectComponent = useMemo(() => {
+  //   return (
+  //       <div className="auth__change__page">
+  //         <div className="change__page__container">
+  //           <p className="change__page__items">Смените страницу
+  //             <Link href="/accounts/login">
+  //               <a className="change__link">Login</a>
+  //             </Link>
+  //           </p>
+  //         </div>
+  //       </div>
+  //   )
+  // }, [])
+
+
+  const fieldsItems = useMemo(() => {
+    return [{
+      name: 'email',
+      id: 'email',
+      placeholder: 'Email',
+      type: 'text',
+      component: InputField
+    }, {
+      name: 'username',
+      id: 'username',
+      placeholder: 'Username',
+      type: 'text',
+      component: InputField
+    }, {
+      name: 'fullName',
+      id: 'fullName',
+      placeholder: 'FullName',
+      type: 'text',
+      component: InputField
+    }, {
+      name: 'password',
+      id: 'password',
+      placeholder: 'Password',
+      type: 'password',
+      component: InputField
+    },
+    ]
+  }, [])
+
+  const submitRegisterHandler = useCallback(async (data, {setErrors}) => {
     try {
       const response = await register({
         variables: {
@@ -38,54 +96,18 @@ const Register = () => {
 
   return (
       <AuthLayout>
-        <div className="auth__content__container">
-          <div className="auth__form__container">
-            <div className="logo__item"/>
-            <Formik
-                validateOnBlur={ false }
-                validateOnChange={ false }
-                initialValues={ {
-                  email: '',
-                  password: '',
-                  fullName: '',
-                  username: ''
-                } }
-                onSubmit={ submitLoginHandler }
-            >{ ({handleSubmit}) => (
-                <form
-                    onSubmit={ handleSubmit }
-                    className="auth__form">
-                  <div className="form__container">
-                    <div className="form__inputs">
-                      <Field name="email" placeholder="Email" id="email" component={ InputField }/>
-                      <Field name="fullName" placeholder="Full Name" id="fullName" component={ InputField }/>
-                      <Field name="username" placeholder="Username" id="username" component={ InputField }/>
-                      <Field name="password"
-                             type="password"
-                             placeholder="Password"
-                             id="password"
-                             component={ InputField }/>
-                    </div>
-                    <div className="form__submit__btn">
-                      <button type="submit" className="submit__btn">
-                        Зарегистрироваться
-                      </button>
-                    </div>
-                  </div>
-                </form>) }
-            </Formik>
-            <AuthOptions/>
-          </div>
-          <div className="auth__change__page">
-            <div className="change__page__container">
-              <p className="change__page__items">Смените страницу
-                <Link href="/accounts/login">
-                  <a className="change__link">логин</a>
-                </Link>
-              </p>
-            </div>
-          </div>
-        </div>
+        <InstagramForm<RegisterInput>
+            OrOptionsComponent={ <OrComponentWithRedirect
+                link={ '/accounts/password/reset' }
+                text={ 'Забыли пароль' }/> }
+            RedirectComponent={ <RedirectComponent
+                text={ 'Login' }
+                link={ '/accounts/login' }/> }
+
+            buttonText={ 'Register' }
+            fields={ fieldsItems }
+            initialValues={ {password: '', email: '', fullName: '', username: ''} }
+            submitHandler={ submitRegisterHandler }/>
       </AuthLayout>
   )
 }

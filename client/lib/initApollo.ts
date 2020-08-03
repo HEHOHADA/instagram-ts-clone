@@ -6,10 +6,11 @@ import { TokenRefreshLink } from 'apollo-link-token-refresh'
 import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 import { isBrowser } from './isBrowser'
 import { getAccessToken, setAccessToken } from './token'
+import { isServer } from './withApollo'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
-function create(initialState: any) {
+function create(initialState: any, serverAccessToken?: string) {
   const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include'
@@ -33,7 +34,7 @@ function create(initialState: any) {
       }
     },
     fetchAccessToken: () => {
-      return fetch('htttp://localhost:4000/refresh_token', {
+      return fetch('http://localhost:4000/refresh_token', {
         method: 'POST',
         credentials: 'include'
       })
@@ -48,7 +49,7 @@ function create(initialState: any) {
 
 
   const authLink = setContext((_req, {headers}) => {
-    const token = getAccessToken()
+    const token = isServer() ? serverAccessToken : getAccessToken()
     return {
       headers: {
         ...headers,
@@ -80,11 +81,11 @@ function create(initialState: any) {
   })
 }
 
-export default function initApollo(initialState: any) {
+export default function initApollo(initialState: any, serverAccessToken?: string) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
-  if (!isBrowser) {
-    return create(initialState)
+  if (isServer()) {
+    return create(initialState, serverAccessToken)
   }
 
   // Reuse client on the client-side
