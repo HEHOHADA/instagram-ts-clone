@@ -6,39 +6,12 @@ import { RegisterInput, useRegisterMutation } from '../../geterated/apollo'
 import { InstagramForm } from '../../components/form/InstagramForm'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
+import { blockRoute } from '../../utils/checkAuth'
 
 const Register = () => {
 
   const [register] = useRegisterMutation()
   const router = useRouter()
-
-
-  // const OrOptionsComponent = useMemo(() => {
-  //   return (
-  //       <>
-  //         <OrComponent/>
-  //         <button className="auth__login__with">With something</button>
-  //         <Link href="/accounts/password/reset">
-  //           <a className="auth__forgot__password">Забыли пароль</a>
-  //         </Link>
-  //       </>
-  //   )
-  // }, [])
-  //
-  // const RedirectComponent = useMemo(() => {
-  //   return (
-  //       <div className="auth__change__page">
-  //         <div className="change__page__container">
-  //           <p className="change__page__items">Смените страницу
-  //             <Link href="/accounts/login">
-  //               <a className="change__link">Login</a>
-  //             </Link>
-  //           </p>
-  //         </div>
-  //       </div>
-  //   )
-  // }, [])
-
 
   const fieldsItems = useMemo(() => {
     return [{
@@ -111,5 +84,7 @@ const Register = () => {
       </AuthLayout>
   )
 }
+Register.getInitialProps = blockRoute
+
 
 export default Register

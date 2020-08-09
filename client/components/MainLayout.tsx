@@ -45,7 +45,9 @@ const MainLayout = ({children, title = 'Main'}: Props) => {
                       <Link href="/accounts/register">
                         <a className="nav__register">Зарегистрироваться</a>
                       </Link>
-                    </div> : <NavbarItems/> }
+                    </div> : <NavbarItems
+                        username={ data.me.username }
+                        imageUrl={ data.me.pictureUrl }/> }
               </div>
             </div>
           </nav>

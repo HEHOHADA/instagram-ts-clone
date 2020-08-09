@@ -13,10 +13,11 @@ import { isAuth } from '../../middleware/isAuthMiddleware'
 export class PictureProfileResolver {
 
   @UseMiddleware(isAuth)
-  @Mutation(() => Boolean)
+  @Mutation(() => String)
   async setPictureProfile(
       @Ctx(){payload}: MyContext,
       @Arg('picture', () => GraphQLUpload)upload: UploadType) {
+
     const id = await processUpload(upload)
 
     if (!id) {
@@ -26,6 +27,6 @@ export class PictureProfileResolver {
     await User.update({id: payload.userId},
         {pictureUrl: id})
 
-    return true
+    return id
   }
 }

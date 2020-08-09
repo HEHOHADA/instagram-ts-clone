@@ -7,10 +7,14 @@ import { InstagramForm } from '../../components/form/InstagramForm'
 import { InputField } from '../../components/utils/InputField'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
+import { blockRoute } from '../../utils/checkAuth'
 
 const Login = () => {
   const [login] = useLoginMutation()
   const router = useRouter()
+  if (router.isFallback) {
+    router.push('/')
+  }
   const submitLoginHandler = useCallback(async (data, {setErrors}) => {
     try {
       const response = await login({
@@ -77,6 +81,14 @@ const Login = () => {
       </AuthLayout>
   )
 }
+
+Login.getInitialProps = blockRoute
+// export function getServerSideProps(ctx: MyContext) {
+//   console.log('client', ctx.apolloClient)
+//   return {
+//     props:{}
+//   }
+// }
 
 
 export default Login

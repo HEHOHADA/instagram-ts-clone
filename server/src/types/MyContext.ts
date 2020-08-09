@@ -6,4 +6,5 @@ export interface MyContext {
   res: Response
   payload: { userId: string }
   redis: Redis
+  url:string
 }

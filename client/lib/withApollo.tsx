@@ -1,9 +1,8 @@
 import React from 'react'
 import Head from 'next/head'
 import cookie from 'cookie'
-import initApollo from './initApollo'
-import { isBrowser } from './isBrowser'
 import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client'
+import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
 
 export const isServer = () => typeof window === 'undefined'
@@ -51,7 +50,7 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
 
       let serverAccessToken = ''
 
-      if (isServer()&&req.headers.cookie) {
+      if (isServer() && req.headers.cookie) {
         const cookies = cookie.parse(req.headers.cookie)
         console.log(cookies)
         if (cookies.jid) {
@@ -78,7 +77,7 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
           : {}
 
       // Only on the server
-      if (!isBrowser) {
+      if (isServer()) {
         // When redirecting, the response is finished.
         // No point in continuing to render
         if (res && res.finished) {
@@ -91,6 +90,7 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
             // console.log('react apollo client',apolloClient)
             await getDataFromTree(
                 <AppTree
+                    apolloClient={ apolloClient }
                     pageProps={ {...pageProps, apolloClient} }
                 />
             )

@@ -1,42 +1,45 @@
-import React from 'react'
-import Link from 'next/link'
+import React, { useMemo, useState } from 'react'
+import NavItem from './NavItem'
+import { DropdownMenu } from './DropdownMenu'
 
-const NavbarItems = () => {
+type PropsType = {
+  imageUrl: string | null | undefined
+  username: string
+}
+
+
+const NavbarItems = ({imageUrl, username}: PropsType) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const navItemArray = useMemo(() => {
+    return [
+      {link: '/', text: 'home'},
+      {link: '/explore/', text: 'compass_calibration'},
+      {link: '/direct/inbox', text: 'comment'},
+    ].map((n) => (
+        <NavItem key={ n.text } { ...n } />
+    ))
+  }, [])
+
   return (
       <div className="nav__container">
-        <div className="nav__home nav_item">
-          <Link href="/">
-              <a className="material-icons">
-                  home
+        { navItemArray }
+        <div className="nav__profile nav_item" onClick={ () => setIsOpen(!isOpen) }>
+          { imageUrl ?
+              <div className="image__item">
+                <img alt="Грузит" src={ imageUrl }/>
+              </div> :
+              <a className="material-icons material">
+                account_circle
               </a>
-          </Link>
-        </div>
-        <div className="nav__direct nav_item">
-          <Link href="/direct/inbox">
-              <a className="material-icons">
-                  comment
-              </a>
-          </Link>
-        </div>
-        <div className="nav__recommend nav_item">
-          <Link href="/explore">
-              <a className="material-icons">
-                  compass_calibration
-              </a>
-          </Link>
-        </div>
-        <div className="nav__profile nav_item">
-          <a className="material-icons">
-              account_circle
-          </a>
-          <div className="dropdown">
-            <div className="menu">
-              <a href="#" className="menu__item"/>
-            </div>
-          </div>
+          }
+
+          { isOpen && <DropdownMenu username={username}/> }
         </div>
       </div>
   )
 }
 
 export default React.memo(NavbarItems)
+// <img className="material-icons">
+//     account_circle
+//     </img>

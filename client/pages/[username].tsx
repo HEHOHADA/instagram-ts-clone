@@ -1,5 +1,6 @@
 import React from 'react'
 import MainLayout from '../components/MainLayout'
+import { MyContext } from '../interfaces/MyContext'
 
 export const Profile = () => {
   return (
@@ -77,6 +78,14 @@ export const Profile = () => {
         </div>
       </MainLayout>
   )
+}
+
+
+Profile.getInitialProps = async (ctx: MyContext) => {
+
+  const username = ctx.pathname
+
+  return {}
 }
 
 

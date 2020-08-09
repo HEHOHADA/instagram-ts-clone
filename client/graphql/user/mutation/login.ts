@@ -8,6 +8,8 @@ export const loginMutation = gql`
                 id
                 username
                 email
+                pictureUrl
+                fullName
             }
         }
     }

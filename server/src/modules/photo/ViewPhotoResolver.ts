@@ -1,20 +1,32 @@
-import { Arg, Ctx, Query, Resolver, UnauthorizedError } from 'type-graphql'
-import { MyContext } from '../../types/MyContext'
+import { Arg, Query, Resolver, UnauthorizedError } from 'type-graphql'
 import { Photo } from '../../entity/Photo'
-import { GetFollowType } from '../follow/types/GetFollowType'
+import { getConnection } from 'typeorm/index'
+import { User } from '../../entity/User'
 
 @Resolver()
 export class ViewPhotoResolver {
   @Query(() => [Photo])
   async viewUserPhoto(
-      @Ctx(){payload}: MyContext,
-      @Arg('userId', {nullable: true})userId?: GetFollowType
+      @Arg('username')username: string
   ) {
-    if (userId || payload.userId) {
+    if (!username) {
+      throw new UnauthorizedError()
+    }
+
+    const user = await getConnection()
+        .getRepository(User)
+        .createQueryBuilder('user')
+        .select('user')
+        .where('user.username ILIKE :username', {
+          username: username.replace(/_/g, '\\_')
+        })
+        .getOne()
+
+    if (!user) {
       throw new UnauthorizedError()
     }
 
     return Photo
-        .find({where: {userId: userId ?? payload.userId}})
+        .find({where: {userId: user.id}})
   }
 }

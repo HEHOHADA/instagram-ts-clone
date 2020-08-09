@@ -51,7 +51,6 @@ export class User extends BaseEntity {
   @Field()
   photoCount: number
 
-
   @ManyToMany(
       () => User,
       (user) => user.following

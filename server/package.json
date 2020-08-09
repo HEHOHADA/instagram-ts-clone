@@ -21,6 +21,7 @@
     "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.0",
+    "reflect-metadata": "^0.1.13",
     "shortid": "^2.2.15",
     "type-graphql": "^1.0.0-rc.3",
     "typedi": "^0.8.0",

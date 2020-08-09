@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import 'reflect-metadata'
 import cors from 'cors'
 import Express from 'express'
 import { ApolloServer } from 'apollo-server-express'
@@ -25,6 +26,8 @@ const server = async () => {
 
   app.post('/refresh_token', refreshToken)
   app.use(graphqlUploadExpress({maxFileSize: 10000000, maxFiles: 10}))
+  app.use('/images', Express.static('images'))
+
   // app.use(
   //     session({
   //       store: new RedisStore({
@@ -49,7 +52,8 @@ const server = async () => {
     tracing: true,
     context: ({req, res}: MyContext) => ({
       redis,
-      req, res
+      req, res,
+      url: req ? (req.protocol + '://' + req.get('host')) : ''
     }),
     formatError: ({message, path}) => {
       return {message, path}

@@ -3,6 +3,7 @@ import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Comment } from './Comment'
 import { Likes } from './Likes'
+import { JoinColumn } from 'typeorm/index'
 
 
 @Entity()
@@ -28,6 +29,7 @@ export class Photo extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User,
       user => user.photos)
+  @JoinColumn()
   user: User
 
   @OneToMany(() => Likes,

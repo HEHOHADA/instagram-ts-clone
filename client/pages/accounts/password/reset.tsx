@@ -6,6 +6,7 @@ import { InputField } from '../../../components/utils/InputField'
 import { useRouter } from 'next/router'
 import RedirectComponent from '../../../components/auth/RedirectComponent'
 import OrComponentWithRedirect from '../../../components/auth/OrComponentWithRedirect'
+import { blockRoute } from '../../../utils/checkAuth'
 
 const ForgotPassword = () => {
 
@@ -57,10 +58,12 @@ const ForgotPassword = () => {
       <MainLayout title="Forgot password">
         <div className="change-password__container container">
           <InstagramForm<ForgotPasswordType>
-              OrOptionsComponent={ <OrComponentWithRedirect link={ '/accounts/register' }
-                                                            text={ 'Create account' }/> }
-              RedirectComponent={ <RedirectComponent text={ 'Back to login' }
-                                                     link={ '/accounts/login' }/> }
+              OrOptionsComponent={ <OrComponentWithRedirect
+                  link={ '/accounts/register' }
+                  text={ 'Create account' }/> }
+              RedirectComponent={ <RedirectComponent
+                  text={ 'Back to login' }
+                  link={ '/accounts/login' }/> }
               submitHandler={ forgotPasswordHandler }
               initialValues={ {email: ''} }
               buttonText={ 'Reset' }
@@ -69,6 +72,6 @@ const ForgotPassword = () => {
       </MainLayout>
   )
 }
-
+ForgotPassword.getInitialProps = blockRoute
 
 export default ForgotPassword
