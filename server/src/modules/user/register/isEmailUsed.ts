@@ -1,10 +1,18 @@
-import { registerDecorator, ValidationOptions, ValidatorConstraintInterface } from 'class-validator'
+import {
+  registerDecorator,
+  ValidationOptions,
+  ValidatorConstraint,
+  ValidatorConstraintInterface
+} from 'class-validator'
 import { User } from '../../../entity/User'
 
+@ValidatorConstraint({async: true})
 export class isEmailUsed implements ValidatorConstraintInterface {
   validate(email: string): Promise<boolean> | boolean {
     return User.findOne({where: {email}})
-               .then(user => !user)
+               .then(user => {
+                 return !user
+               })
   }
 }
 

@@ -1,20 +1,48 @@
-import { Arg, Ctx, Query, Resolver, UnauthorizedError } from 'type-graphql'
-import { MyContext } from '../../types/MyContext'
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root, UnauthorizedError } from 'type-graphql'
 import { Photo } from '../../entity/Photo'
-import { GetFollowType } from '../follow/types/GetFollowType'
+import { getConnection } from 'typeorm/index'
+import { User } from '../../entity/User'
+import { MyContext } from '../../types/MyContext'
 
-@Resolver()
+@Resolver(()=>Photo)
 export class ViewPhotoResolver {
+
+  @FieldResolver(() => String, {nullable: true})
+  pictureUrl(@Root()photo: Photo, @Ctx()ctx: MyContext) {
+
+    if (photo.pictureUrl.includes('http')) {
+      return photo.pictureUrl
+    }
+    return `${ ctx.url }/images/${ photo.pictureUrl }`
+  }
+
   @Query(() => [Photo])
   async viewUserPhoto(
-      @Ctx(){payload}: MyContext,
-      @Arg('userId', {nullable: true})userId?: GetFollowType
+      @Arg('username')username: string
   ) {
-    if (userId || payload.userId) {
+    if (!username) {
       throw new UnauthorizedError()
     }
 
-    return Photo
-        .find({where: {userId: userId ?? payload.userId}})
+    const user = await getConnection()
+        .getRepository(User)
+        .createQueryBuilder('user')
+        .select('user')
+        .where('user.username ILIKE :username', {
+          username: username.replace(/_/g, '\\_')
+        })
+        .getOne()
+
+    if (!user) {
+      throw new UnauthorizedError()
+    }
+
+    return getConnection()
+        .getRepository(Photo)
+        .createQueryBuilder('photo')
+        .select('photo')
+        .where('photo.userId= :userId', {userId: user.id})
+        .cache(true)
+        .getMany()
   }
 }

@@ -1,9 +1,10 @@
-import { Ctx, Query, Resolver } from 'type-graphql'
+import 'dotenv/config'
+import { Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
 import { User } from '../../entity/User'
 import { MyContext } from '../../types/MyContext'
 import { verify } from 'jsonwebtoken'
 
-@Resolver()
+@Resolver(() => User)
 export class MeResolver {
   @Query(() => User, {nullable: true})
   async me(@Ctx() ctx: MyContext) {
@@ -20,6 +21,14 @@ export class MeResolver {
       console.log(e)
       return undefined
     }
+  }
 
+  @FieldResolver(() => String, {nullable: true})
+  pictureUrl(@Root()user: User, @Ctx()ctx: MyContext) {
+
+    if (user.pictureUrl.includes('http')) {
+      return user.pictureUrl
+    }
+    return `${ ctx.url }/images/${ user.pictureUrl }`
   }
 }

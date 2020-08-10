@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Comment } from './Comment'
@@ -14,6 +14,10 @@ export class Photo extends BaseEntity {
   photoId: string
 
   @Field()
+  @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
+  date: Date
+
+  @Field()
   @Column('varchar')
   pictureUrl: string
 
@@ -21,9 +25,10 @@ export class Photo extends BaseEntity {
   @Column('uuid')
   userId: string
 
+  @Field(() => User)
   @ManyToOne(() => User,
       user => user.photos)
-  @JoinColumn({name: 'userId', referencedColumnName: 'id'})
+  @JoinColumn()
   user: User
 
   @OneToMany(() => Likes,

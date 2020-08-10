@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+@import "~normalize.css";
+@import "header";
+@import "footer";
+@import "profile";
+@import "auth";
+@import "settings";
+@import "dashboard";
+@import "check-email";
+@import "modal";
+@import "direct";
+
+button {
+  cursor: pointer;
+}
+
+button:active, button:focus, textarea:active, textarea:focus, input:active, input:focus {
+  border: none;
+  outline: transparent none 0 !important;
+  box-shadow: 0 0 0 0 rgba(0, 123, 255, 0) !important;
+}
+
+.main {
+  padding-top: 54px;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+li {
+  list-style: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #next {
+  height: 100%;
+}
+
+body {
+  font-family: 'Merriweather', serif;
+  font-size: 12px;
+}
+

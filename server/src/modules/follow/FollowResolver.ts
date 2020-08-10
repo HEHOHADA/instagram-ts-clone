@@ -1,39 +1,36 @@
-import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
-import { SyntaxError } from 'apollo-server-express'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { MyContext } from '../../types/MyContext'
-import { Follower } from '../../entity/Follower'
-import { Following } from '../../entity/Following'
-import { somethingWentWrong } from '../user/utils/errorMessages'
 import { isAuth } from '../../middleware/isAuthMiddleware'
+import { User } from '../../entity/User'
+import { getConnection } from 'typeorm'
 
 @Resolver()
 export class FollowResolver {
+  //
+  // @Query(() => [Follow])
+  // async getFollowers(
+  //     @Ctx() ctx: MyContext,
+  //     @Arg('userId', {nullable: true})userId?: string
+  // ) {
+  //   const id = (userId ?? ctx.payload.userId) as string
+  //   if (!id) {
+  //     throw new SyntaxError(somethingWentWrong)
+  //   }
+  //
+  //   return Follow.find({where: {userId: id}, cache: true})
+  // }
 
-  @Query(() => [Follower])
-  async getFollowers(
-      @Ctx() ctx: MyContext,
-      @Arg('userId', {nullable: true})userId?: string
-  ) {
-    const id = (userId ?? ctx.payload.userId) as string
-    if (!id) {
-      throw new SyntaxError(somethingWentWrong)
-    }
-
-
-    return Follower.find({where: {userId: id}, cache: true})
-  }
-
-  @Query(() => [Following])
-  async getFollowings(
-      @Ctx() ctx: MyContext,
-      @Arg('userId', {nullable: true})userId?: string
-  ) {
-    const id = (userId ?? ctx.payload.userId) as string
-    if (!id) {
-      throw new SyntaxError(somethingWentWrong)
-    }
-    return Following.find({where: {userId: id}, cache: true})
-  }
+  // @Query(() => [Follow])
+  // async getFollowings(
+  //     @Ctx() ctx: MyContext,
+  //     @Arg('userId', {nullable: true})userId?: string
+  // ) {
+  //   const id = (userId ?? ctx.payload.userId) as string
+  //   if (!id) {
+  //     throw new SyntaxError(somethingWentWrong)
+  //   }
+  //   return Following.find({where: {userId: id}, cache: true})
+  // }
 
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
@@ -41,18 +38,17 @@ export class FollowResolver {
       @Ctx(){payload}: MyContext,
       @Arg('userId')userId: string
   ) {
-    const follower = await Follower.create({
-      userId,
-      followerId: payload.userId
-    })
+    if (payload.userId === userId) {
+      throw new Error('Cannot follow yourself')
+    }
 
-    const following = await Following.create({
-      followingId: userId,
-      userId: payload.userId
-    })
+      await getConnection()
+        .getRepository(User)
+        .createQueryBuilder()
+        .relation(User, 'following')
+        .of(payload.userId)
+        .add(userId)
 
-    await follower.save()
-    await following.save()
     return true
   }
 }
