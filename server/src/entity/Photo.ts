@@ -1,9 +1,8 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Comment } from './Comment'
 import { Likes } from './Likes'
-import { JoinColumn } from 'typeorm/index'
 
 
 @Entity()

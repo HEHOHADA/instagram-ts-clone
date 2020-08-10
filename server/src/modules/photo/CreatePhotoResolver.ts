@@ -23,7 +23,7 @@ export class CreatePhotoResolver {
     }
 
     const photo = await Photo.create({
-      userId: payload.userId,
+      userId: payload.userId!,
       pictureUrl: id
     })
 

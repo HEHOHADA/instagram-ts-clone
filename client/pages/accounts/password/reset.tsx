@@ -11,16 +11,6 @@ import { blockRoute } from '../../../utils/checkAuth'
 const ForgotPassword = () => {
 
   const router = useRouter()
-  // const OrOptionsComponent = useMemo(() => {
-  //   return (
-  //       <>
-  //         <OrComponent/>
-  //         <Link href="/accounts/register">
-  //           <a className="auth__forgot__password">Создать новый</a>
-  //         </Link>
-  //       </>
-  //   )
-  // }, [])
 
   const fieldsItems = useMemo(() => {
     return [{
@@ -29,8 +19,7 @@ const ForgotPassword = () => {
       placeholder: 'Email',
       type: 'text',
       component: InputField
-    },
-    ]
+      }]
   }, [])
 
   const [forgotPassword] = useForgotPasswordMutation()

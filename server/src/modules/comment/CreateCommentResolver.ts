@@ -10,12 +10,12 @@ export class CreateCommentResolver {
   @Mutation(() => Comment)
   async createComment(
       @Arg('data'){photoId, commentText}: CreateCommentType,
-      @Ctx()ctx: MyContext
+      @Ctx(){payload:{userId}}: MyContext
   ) {
     return await Comment.create({
       commentText,
       photoId,
-      userId: ctx.payload.userId
+      userId: userId!
     }).save()
   }
 }

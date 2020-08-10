@@ -4,16 +4,49 @@ import cookie from 'cookie'
 import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client'
 import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
+import { NextPageContext } from 'next'
+import App, { AppContext } from 'next/app'
+
+export interface NextPageContextWithApollo extends NextPageContext {
+  apolloClient: ApolloClient<NormalizedCacheObject> | null
+  apolloState: NormalizedCacheObject
+  ctx: NextPageContextApp
+}
+
+type NextPageContextApp = NextPageContextWithApollo & AppContext
+
 
 export const isServer = () => typeof window === 'undefined'
 
-const withApollo = (PageComponent: any, {ssr = true} = {}) => {
+export type WithApolloType = {
+  apolloClient: ApolloClient<NormalizedCacheObject>
+  apolloState: NormalizedCacheObject
+  serverAccessToken: string
+}
+export const initOnContext = (ctx: NextPageContextApp, serverAccessToken: string): NextPageContextApp => {
+  const inAppContext = Boolean(ctx.ctx)
+  if (process.env.NODE_ENV === 'development') {
+    if (inAppContext) {
+      console.warn(
+          'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.Read more: https://err.sh/next.js/opt-out-auto-static-optimization',
+      )
+    }
+  }
 
-  const WithApollo = ({apolloClient, apolloState, serverAccessToken, ...pageProps}:
-                          {
-                            apolloClient: ApolloClient<NormalizedCacheObject>, serverAccessToken: string,
-                            apolloState: NormalizedCacheObject
-                          }) => {
+  const apolloClient =
+      ctx.apolloClient || initApollo(ctx.apolloState || {}, serverAccessToken)
+
+  ctx.apolloClient = apolloClient
+  if (inAppContext) {
+    ctx.ctx.apolloClient = apolloClient
+  }
+  return ctx
+}
+
+
+function withApollo(PageComponent: any, {ssr = true}: { ssr?: boolean } = {}) {
+
+  const WithApollo = ({apolloClient, apolloState, serverAccessToken, ...pageProps}: WithApolloType) => {
 
     if (!isServer() && !getAccessToken()) {
       setAccessToken(serverAccessToken)
@@ -41,18 +74,16 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx: any) => {
+    WithApollo.getInitialProps = async (ctx: NextPageContextApp) => {
+      // console.log(ctx)
       const {
         AppTree,
         ctx: {res, req}
       } = ctx
-
-
       let serverAccessToken = ''
 
-      if (isServer() && req.headers.cookie) {
+      if (isServer() && req?.headers.cookie) {
         const cookies = cookie.parse(req.headers.cookie)
-        console.log(cookies)
         if (cookies.jid) {
 
           const response = await fetch('http://localhost:4000/refresh_token', {
@@ -62,7 +93,6 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
               cookie: 'jid=' + cookies.jid
             }
           })
-
           const data = await response.json()
           serverAccessToken = data.accessToken
         }
@@ -70,28 +100,37 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
       }
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
-      const apolloClient = (ctx.ctx.apolloClient = initApollo({}, serverAccessToken))
+      const inAppContext = Boolean(ctx.ctx)
+      const {apolloClient} = initOnContext(ctx, serverAccessToken)
 
-      const pageProps = PageComponent.getInitialProps
-          ? await PageComponent.getInitialProps(ctx)
-          : {}
+      let pageProps = {}
+      if (PageComponent.getInitialProps) {
+        pageProps = await PageComponent.getInitialProps(ctx)
+      } else if (inAppContext) {
+        pageProps = await App.getInitialProps(ctx)
+      }
 
       // Only on the server
       if (isServer()) {
         // When redirecting, the response is finished.
         // No point in continuing to render
-        if (res && res.finished) {
+        if (res?.finished) {
           return pageProps
         }
         if (ssr && AppTree) {
           try {
             // Run all GraphQL queries
             const {getDataFromTree} = await import('@apollo/react-ssr')
-            // console.log('react apollo client',apolloClient)
+
+            let props: any
+            if (inAppContext) {
+              props = {...pageProps, apolloClient}
+            } else {
+              props = {pageProps: {...pageProps, apolloClient}}
+            }
             await getDataFromTree(
                 <AppTree
-                    apolloClient={ apolloClient }
-                    pageProps={ {...pageProps, apolloClient} }
+                    { ...props }
                 />
             )
           } catch (error) {
@@ -108,7 +147,7 @@ const withApollo = (PageComponent: any, {ssr = true} = {}) => {
       }
 
       // Extract query data from the Apollo store
-      const apolloState = apolloClient.cache.extract()
+      const apolloState = apolloClient!.cache.extract()
 
       return {
         ...pageProps,

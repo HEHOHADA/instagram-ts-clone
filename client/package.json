@@ -21,6 +21,7 @@
     "jwt-decode": "^2.2.0",
     "next": "latest",
     "next-routes": "^1.4.2",
+    "nextjs-progressbar": "^0.0.5",
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

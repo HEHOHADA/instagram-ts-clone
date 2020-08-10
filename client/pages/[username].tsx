@@ -1,8 +1,53 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import Link from 'next/link'
 import MainLayout from '../components/MainLayout'
 import { MyContext } from '../interfaces/MyContext'
+import { GetUserInfoDocument, GetUserInfoQuery, ViewUserPhotoDocument, ViewUserPhotoQuery } from '../geterated/apollo'
+import redirect from '../lib/redirect'
+import ProfileInfoItems from '../components/profile/ProfileInfoItems'
+import { declOfNum } from '../utils/declOfNumb'
+import { PhotoItems } from '../components/profile/PhotoItems'
 
-export const Profile = () => {
+type PropsType = {
+  getUserInfo: {
+    email: string
+    id: string
+    username: string
+    pictureUrl: string
+    fullName: string
+    followerCount: number
+    followingCount: number
+    photoCount: number
+    isFollowing: boolean
+    isFollowed: boolean
+    isCurrentUser: boolean
+  },
+  viewUserPhoto: Array<{
+    pictureUrl: string
+    date: Date
+    userId: string
+    photoId: string
+  }>
+}
+
+const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
+  const {
+    photoCount,
+    followerCount,
+    isCurrentUser,
+    isFollowed,
+    username,followingCount,
+    pictureUrl,
+    fullName
+  } = getUserInfo
+  const infoItems = useMemo(() => {
+    return [
+      {count: photoCount, text: declOfNum(photoCount, ['Публикация', 'Публикации', 'Публикаций'])},
+      {count: followerCount, text: declOfNum(followerCount, ['Подписок', 'Подписка', 'Подписки'])},
+      {count: followingCount, text: declOfNum(followingCount, ['Подписчик', 'Подписчиков', 'Подписчика'])},
+    ]
+  }, [photoCount, followerCount])
+
   return (
       <MainLayout title="Profile">
         <div className="profile container">
@@ -11,35 +56,27 @@ export const Profile = () => {
               <div className="profile__image__center">
                 <img
                     className="profile__img"
-                    src="https://scontent-frx5-1.cdninstagram.com/v/t51.2885-19/s150x150/95942505_547262689269485_1395648643582656512_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&_nc_ohc=rTN8jjBYMNMAX-x74p7&oh=9b3723f799fc1412cccbca76fc5ff641&oe=5F3DF939"
+                    src={ pictureUrl }
                     alt=""/>
               </div>
             </div>
             <div className="profile__items">
               <div className="profile__item__header">
-                <h2 className="profile__name">bulat</h2>
-                <a className="profile__edit">Редиактировать пользователя</a>
+                <h2 className="profile__name">{ username }</h2>
+                { isCurrentUser ?
+                    <Link href="/accounts/settings">
+                      <a className="profile__edit">Редиактировать пользователя</a>
+                    </Link> : isFollowed ? <button className="profile__edit">Отписаться</button> :
+                        <button className="profile__edit">Подписаться</button>
+                }
                 <a className="profile__settings">
                             <span className="material-icons">
                                 settings
                             </span>
                 </a>
               </div>
-              <ul className="profile__item__info">
-                <li className="profile__item">
-                  <span className="profile__count__photo">3</span>
-                  <span className="profile__text__photo">публикации</span>
-                </li>
-                <li className="profile__item">
-                  <span className="profile__count__photo">62</span>
-                  <span className="profile__text__photo">подпискичка</span>
-                </li>
-                <li className="profile__item">
-                  <span className="profile__count__photo">25</span>
-                  <span className="profile__text__photo">подписокы</span>
-                </li>
-              </ul>
-              <div className="profile__item__name">Bulat</div>
+              <ProfileInfoItems navItems={ infoItems }/>
+              <div className="profile__item__name">{ fullName }</div>
             </div>
           </div>
 
@@ -52,29 +89,7 @@ export const Profile = () => {
               <div className="object__item">Публикация</div>
             </div>
           </div>
-
-          <div className="profile__photos">
-            <div className="profile__photo__container">
-              <img
-                  className="profile__photo"
-                  src="https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/83239681_620561308771120_905890002189152404_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&amp;_nc_cat=104&amp;_nc_ohc=Zr7K4wAQIFsAX-fx-YQ&amp;oh=594bf2e10ed5283a1c7d1e889f82376d&amp;oe=5F3ACA6F"
-              />
-            </div>
-            <div className="profile__photo__container">
-              <img
-                  className="profile__photo"
-                  src="https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/83239681_620561308771120_905890002189152404_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&amp;_nc_cat=104&amp;_nc_ohc=Zr7K4wAQIFsAX-fx-YQ&amp;oh=594bf2e10ed5283a1c7d1e889f82376d&amp;oe=5F3ACA6F"
-              />
-            </div>
-            <div className="profile__photo__container">
-              <img
-                  className="profile__photo"
-                  src="https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/83239681_620561308771120_905890002189152404_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&amp;_nc_cat=104&amp;_nc_ohc=Zr7K4wAQIFsAX-fx-YQ&amp;oh=594bf2e10ed5283a1c7d1e889f82376d&amp;oe=5F3ACA6F"
-              />
-            </div>
-
-          </div>
-
+          <PhotoItems photoItems={ viewUserPhoto }/>
         </div>
       </MainLayout>
   )
@@ -82,10 +97,25 @@ export const Profile = () => {
 
 
 Profile.getInitialProps = async (ctx: MyContext) => {
-
-  const username = ctx.pathname
-
-  return {}
+  const username = ctx.query.username
+  try {
+    const userInfo = await ctx.apolloClient.query<GetUserInfoQuery>({
+      query: GetUserInfoDocument, variables: {username}
+    })
+    const userPhotos = await ctx.apolloClient.query<ViewUserPhotoQuery>({
+      query: ViewUserPhotoDocument,
+      variables: {username}
+    })
+    return {
+      getUserInfo: {...userInfo.data!.getUserInfo},
+      viewUserPhoto: userPhotos.data!.viewUserPhoto
+    }
+  } catch (e) {
+    redirect(ctx, '/404')
+  }
+  return {
+    props: {}
+  }
 }
 
 

@@ -24,7 +24,7 @@ export class PictureProfileResolver {
       throw new ApolloError(somethingWentWrong)
     }
 
-    await User.update({id: payload.userId},
+    await User.update({id: payload.userId!},
         {pictureUrl: id})
 
     return id

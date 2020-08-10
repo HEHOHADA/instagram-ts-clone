@@ -39,16 +39,18 @@ export class User extends BaseEntity {
   @Column('text', {default: 0})
   tokenVersion: number
 
-  @OneToMany(() => Photo, photo => photo.userId)
+  @OneToMany(() => Photo, photo => photo.user)
   photos: Photo[]
 
-  @OneToMany(() => Comment, comment => comment.userId)
+  @OneToMany(() => Comment, comment => comment.user)
   comments: Comment[]
 
-  @Field()
+  @Field({defaultValue: 0})
   followerCount: number
+  @Field({defaultValue: 0})
+  followingCount: number
 
-  @Field()
+  @Field({defaultValue: 0})
   photoCount: number
 
   @ManyToMany(
@@ -64,5 +66,14 @@ export class User extends BaseEntity {
   )
   @JoinTable()
   following: User[]
+
+  @Field()
+  isFollowed: boolean
+
+  @Field()
+  isFollowing: boolean
+
+  @Field()
+  isCurrentUser: boolean
 
 }

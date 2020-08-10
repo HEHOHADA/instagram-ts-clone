@@ -20,7 +20,7 @@ const MainLayout = ({children, title = 'Main'}: Props) => {
         </Head>
         <header>
           <nav className="header">
-            <div className="header__items container">
+            <div className="header__items">
               <Link href="/">
                 <a className="header__logo">&nbsp;</a>
               </Link>

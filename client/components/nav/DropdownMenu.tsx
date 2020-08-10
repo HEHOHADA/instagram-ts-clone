@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { DropdownItem } from './DropdownItem'
 import { MeDocument, MeQuery, useLogoutMutation } from '../../geterated/apollo'
+import { useRouter } from 'next/router'
 
 type PropsType = {
   username: string
@@ -9,6 +10,7 @@ type PropsType = {
 export const DropdownMenu = ({username}: PropsType) => {
 
   const [logout] = useLogoutMutation()
+  const router = useRouter()
 
   const dropDownMenu = useMemo(() => {
     return [
@@ -25,7 +27,7 @@ export const DropdownMenu = ({username}: PropsType) => {
           { dropDownMenu }
           <hr/>
           <button onClick={ () => logout({
-            update: (cache, {data}) => {
+            update: async (cache, {data}) => {
               if (!data) {
                 return
               }
@@ -35,7 +37,7 @@ export const DropdownMenu = ({username}: PropsType) => {
                   me: null
                 }
               })
-
+              await router.push('/accounts/login')
             }
           }) } className="btn__logout">Выйти
           </button>

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const getUserInfoQuery = gql`
-    query GetUserInfo($username:String){
+    query GetUserInfo($username:String!){
         getUserInfo(username:$username){
             email
             id
@@ -9,6 +9,12 @@ export const getUserInfoQuery = gql`
             pictureUrl
             fullName
             followerCount
+            photoCount
+            followingCount
+            isCurrentUser
+            isFollowing
+            isFollowed
         }
     }
+
 `

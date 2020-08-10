@@ -15,7 +15,9 @@
       margin-right: 40px;
 
       .profile__image__center {
-        @include image__item(150px)
+        @include image__item(150px);
+        margin-left: auto;
+        margin-right: auto;
       }
     }
 
