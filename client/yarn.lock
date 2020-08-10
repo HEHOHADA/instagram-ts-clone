@@ -1565,6 +1565,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.27.tgz#a151873af5a5e851b51b3b065c9e63390a9e0eb1"
   integrity sha512-kVrqXhbclHNHGu9ztnAwSncIgJv/FaxmzXJvGXNdcCpV1b8u1/Mi6z6m0vwy0LzKeXFTPLH0NzwmoJ3fNCIq0g==
 
+"@types/nprogress@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@types/nprogress/-/nprogress-0.2.0.tgz#86c593682d4199212a0509cc3c4d562bbbd6e45f"
+  integrity sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -5850,13 +5855,6 @@ next@latest:
     web-vitals "0.2.1"
     webpack "4.44.0"
     webpack-sources "1.4.3"
-
-nextjs-progressbar@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/nextjs-progressbar/-/nextjs-progressbar-0.0.5.tgz#0116731b77838d05e9be520c3a894975fe4bf01c"
-  integrity sha512-TH2Xx84+/mJz3TQDrfobL3vwDFxHXnmHjsn3D1214ZpclBHDiZBfVbyWLnbaGNuTgJ9ww7T0ejWJj+jl0B2oLg==
-  dependencies:
-    nprogress "^0.2.0"
 
 no-case@^3.0.3:
   version "3.0.3"

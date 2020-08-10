@@ -11,8 +11,6 @@
   border-bottom-color: rgba(var(--b6a, 219, 219, 219), 1);
   display: flex;
   width: 100%;
-  z-index: 100000;
-
 }
 
 .header__items {
@@ -38,7 +36,7 @@
 
   &:hover > .header__searchInput {
     width: 240px;
-    padding: 0 6px;
+    padding: 0 10px;
   }
 
   &:hover > .header__searchButton {
@@ -68,7 +66,7 @@
     color: white;
     font-size: 16px;
     transition: 0.4s;
-    line-height: 40px;
+    line-height: 30px;
     width: 0;
   }
 }

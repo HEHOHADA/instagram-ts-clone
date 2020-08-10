@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
 import Link from 'next/link'
-import MainLayout from '../components/MainLayout'
-import { MyContext } from '../interfaces/MyContext'
-import { GetUserInfoDocument, GetUserInfoQuery, ViewUserPhotoDocument, ViewUserPhotoQuery } from '../geterated/apollo'
-import redirect from '../lib/redirect'
-import ProfileInfoItems from '../components/profile/ProfileInfoItems'
-import { declOfNum } from '../utils/declOfNumb'
-import { PhotoItems } from '../components/profile/PhotoItems'
+import MainLayout from '../../components/MainLayout'
+import { MyContext } from '../../interfaces/MyContext'
+import { GetUserInfoDocument, GetUserInfoQuery, ViewUserPhotoDocument, ViewUserPhotoQuery } from '../../geterated/apollo'
+import redirect from '../../lib/redirect'
+import ProfileInfoItems from '../../components/profile/ProfileInfoItems'
+import { declOfNum } from '../../utils/declOfNumb'
+import { PhotoItems } from '../../components/profile/PhotoItems'
 
 type PropsType = {
   getUserInfo: {
@@ -36,7 +36,7 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
     followerCount,
     isCurrentUser,
     isFollowed,
-    username,followingCount,
+    username, followingCount,
     pictureUrl,
     fullName
   } = getUserInfo
@@ -49,7 +49,7 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
   }, [photoCount, followerCount])
 
   return (
-      <MainLayout title="Profile">
+      <MainLayout title={ username }>
         <div className="profile container">
           <div className="profile__info">
             <div className="profile__image">

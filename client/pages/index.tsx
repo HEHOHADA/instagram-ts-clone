@@ -164,18 +164,4 @@ const IndexPage = () => (
     </MainLayout>
 )
 
-
-// export async function getServerSideProps(context: MyContext) {
-//   console.log(context)
-//   return {
-//     props: {a: 1}
-//   }
-// }
-
-// IndexPage.getInitialProps = async (context: MyContext) => {
-//   console.log(context)
-//   return {}
-// }
-
-
 export default IndexPage
