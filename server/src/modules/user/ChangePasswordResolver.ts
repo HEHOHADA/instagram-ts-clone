@@ -44,7 +44,7 @@ export class ChangePasswordResolver {
       @Arg('data'){password, oldPassword}: ChangePassword
   ) {
 
-    const user = await User.findOne(ctx.payload.userId)
+    const user = await User.findOne(ctx.payload.userId!)
 
     if (!user) {
       throw new AuthenticationError(invalidLogin)

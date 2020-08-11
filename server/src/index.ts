@@ -10,6 +10,7 @@ import { MyContext } from './types/MyContext'
 import { redis } from './redis'
 import { refreshToken } from './utils/refreshToken'
 import { graphqlUploadExpress } from 'graphql-upload'
+import { GraphQLError } from 'graphql'
 
 
 // typeorm.useContainer(Container)
@@ -55,8 +56,13 @@ const server = async () => {
       req, res,
       url: req ? (req.protocol + '://' + req.get('host')) : ''
     }),
-    formatError: ({message, path}) => {
-      return {message, path}
+    formatError: (error: GraphQLError) => {
+      const {message, path, extensions} = error
+      if (extensions?.exception?.validationErrors) {
+        return {message, path, extensions}
+      } else {
+        return {message, path}
+      }
     }
   })
 

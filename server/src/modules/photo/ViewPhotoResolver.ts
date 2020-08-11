@@ -1,4 +1,4 @@
-import { Arg, Ctx, FieldResolver, Query, Resolver, Root, UnauthorizedError } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
 import { Photo } from '../../entity/Photo'
 import { getConnection } from 'typeorm/index'
 import { User } from '../../entity/User'
@@ -21,7 +21,7 @@ export class ViewPhotoResolver {
       @Arg('username')username: string
   ) {
     if (!username) {
-      throw new UnauthorizedError()
+      throw new Error('User not found')
     }
 
     const user = await getConnection()
@@ -34,7 +34,7 @@ export class ViewPhotoResolver {
         .getOne()
 
     if (!user) {
-      throw new UnauthorizedError()
+      throw new Error('User not found')
     }
 
     return getConnection()

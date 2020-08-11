@@ -7,9 +7,9 @@ import { InstagramForm } from '../../components/form/InstagramForm'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
 import { blockRoute } from '../../utils/checkAuth'
+import { formatValidationErrors } from '../../utils/formatValidationErrors'
 
 const Register = () => {
-
   const [register] = useRegisterMutation()
   const router = useRouter()
 
@@ -54,16 +54,7 @@ const Register = () => {
       }
 
     } catch (e) {
-      console.log(JSON.stringify(e.graphQLErrors[0]))
-      const errors: any = {}
-      e.graphQLErrors[0]
-          .forEach((error: any) => {
-            Object.values(error.constraints).forEach((m: any) => {
-              errors[error.property] = m
-            })
-          })
-      console.log(errors)
-      setErrors(errors)
+      setErrors(formatValidationErrors(e.graphQLErrors[0], 'email'))
     }
   }, [])
 
@@ -76,7 +67,6 @@ const Register = () => {
             RedirectComponent={ <RedirectComponent
                 text={ 'Login' }
                 link={ '/accounts/login' }/> }
-
             buttonText={ 'Register' }
             fields={ fieldsItems }
             initialValues={ {password: '', email: '', fullName: '', username: ''} }

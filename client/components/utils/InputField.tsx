@@ -9,7 +9,7 @@ export const InputField = ({field, form: {errors, touched}, ...props}: FieldProp
 
   return (
       <div className="form__group">
-        { errorMessage && <div style={ {color: 'red'} }>{ errorMessage }</div> }
+        { errorMessage && <div className="form__validation-error">{ errorMessage }</div> }
         <input
             { ...field }{ ...props }
             className="form__field"

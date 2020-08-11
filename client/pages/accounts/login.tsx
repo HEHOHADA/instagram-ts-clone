@@ -8,6 +8,7 @@ import { InputField } from '../../components/utils/InputField'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
 import { blockRoute } from '../../utils/checkAuth'
+import { formatValidationErrors } from '../../utils/formatValidationErrors'
 
 const Login = () => {
   const [login] = useLoginMutation()
@@ -41,9 +42,7 @@ const Login = () => {
       await router.push('/')
 
     } catch (e) {
-      // const errors: any = {}
-      console.log(e.graphQLErrors)
-      setErrors({email: e.graphQLErrors[0].message})
+      setErrors(formatValidationErrors(e.graphQLErrors[0], 'email'))
     }
   }, [])
 
@@ -69,10 +68,12 @@ const Login = () => {
   return (
       <AuthLayout>
         <InstagramForm<LoginInput>
-            OrOptionsComponent={ <OrComponentWithRedirect link={ '/accounts/password/reset' }
-                                                          text={ 'Забыли пароль' }/> }
-            RedirectComponent={ <RedirectComponent text={ 'Регистрация' }
-                                                   link={ '/accounts/register' }/> }
+            OrOptionsComponent={ <OrComponentWithRedirect
+                link={ '/accounts/password/reset' }
+                text={ 'Забыли пароль' }/> }
+            RedirectComponent={ <RedirectComponent
+                text={ 'Регистрация' }
+                link={ '/accounts/register' }/> }
 
             buttonText={ 'Login' }
             fields={ fieldsItems }
@@ -83,12 +84,6 @@ const Login = () => {
 }
 
 Login.getInitialProps = blockRoute
-// export function getServerSideProps(ctx: MyContext) {
-//   console.log('client', ctx.apolloClient)
-//   return {
-//     props:{}
-//   }
-// }
 
 
 export default Login

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { AuthenticationError } from 'apollo-server-express'
+import { AuthenticationError, ValidationError } from 'apollo-server-express'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import { User } from '../../entity/User'
 import { LoginInput } from './login/LoginInput'
@@ -21,11 +21,11 @@ export class LoginResolver {
     const user = await User.findOne({where: {email}})
 
     if (!user) {
-      throw new AuthenticationError(invalidLogin)
+      throw new ValidationError(invalidLogin)
     }
 
     if (!user.confirmed) {
-      throw new AuthenticationError(confirmEmailError)
+      throw new ValidationError(confirmEmailError)
     }
 
     if (user.forgotPasswordLocked) {
