@@ -18,11 +18,23 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  getFollowers: Array<User>;
+  getFollowings: Array<User>;
   feed?: Maybe<Array<Photo>>;
   viewUserPhoto: Array<Photo>;
   getUserInfo: User;
   me?: Maybe<User>;
   refreshToken: RefreshResponseType;
+};
+
+
+export type QueryGetFollowersArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type QueryGetFollowingsArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -35,6 +47,21 @@ export type QueryGetUserInfoArgs = {
   username: Scalars['String'];
 };
 
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  fullName: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
+  pictureUrl?: Maybe<Scalars['String']>;
+  followerCount?: Maybe<Scalars['Float']>;
+  followingCount?: Maybe<Scalars['Float']>;
+  photoCount?: Maybe<Scalars['Float']>;
+  isFollowed: Scalars['Boolean'];
+  isFollowing: Scalars['Boolean'];
+  isCurrentUser: Scalars['Boolean'];
+};
+
 export type Photo = {
   __typename?: 'Photo';
   photoId: Scalars['ID'];
@@ -44,21 +71,6 @@ export type Photo = {
   user: User;
 };
 
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  fullName: Scalars['String'];
-  email: Scalars['String'];
-  username: Scalars['String'];
-  pictureUrl?: Maybe<Scalars['String']>;
-  followerCount: Scalars['Float'];
-  followingCount: Scalars['Float'];
-  photoCount: Scalars['Float'];
-  isFollowed: Scalars['Boolean'];
-  isFollowing: Scalars['Boolean'];
-  isCurrentUser: Scalars['Boolean'];
-};
 
 export type RefreshResponseType = {
   __typename?: 'RefreshResponseType';
@@ -202,6 +214,26 @@ export type RegisterInput = {
   username: Scalars['String'];
 };
 
+export type FollowUserMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type FollowUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'followUser'>
+);
+
+export type UnFollowUserMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type UnFollowUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'unFollowUser'>
+);
+
 export type ViewUserPhotoQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
@@ -332,6 +364,66 @@ export type MeQuery = (
 );
 
 
+export const FollowUserDocument = gql`
+    mutation FollowUser($userId: String!) {
+  followUser(userId: $userId)
+}
+    `;
+export type FollowUserMutationFn = ApolloReactCommon.MutationFunction<FollowUserMutation, FollowUserMutationVariables>;
+
+/**
+ * __useFollowUserMutation__
+ *
+ * To run a mutation, you first call `useFollowUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFollowUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [followUserMutation, { data, loading, error }] = useFollowUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useFollowUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<FollowUserMutation, FollowUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<FollowUserMutation, FollowUserMutationVariables>(FollowUserDocument, baseOptions);
+      }
+export type FollowUserMutationHookResult = ReturnType<typeof useFollowUserMutation>;
+export type FollowUserMutationResult = ApolloReactCommon.MutationResult<FollowUserMutation>;
+export type FollowUserMutationOptions = ApolloReactCommon.BaseMutationOptions<FollowUserMutation, FollowUserMutationVariables>;
+export const UnFollowUserDocument = gql`
+    mutation UnFollowUser($userId: String!) {
+  unFollowUser(userId: $userId)
+}
+    `;
+export type UnFollowUserMutationFn = ApolloReactCommon.MutationFunction<UnFollowUserMutation, UnFollowUserMutationVariables>;
+
+/**
+ * __useUnFollowUserMutation__
+ *
+ * To run a mutation, you first call `useUnFollowUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnFollowUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unFollowUserMutation, { data, loading, error }] = useUnFollowUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUnFollowUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnFollowUserMutation, UnFollowUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnFollowUserMutation, UnFollowUserMutationVariables>(UnFollowUserDocument, baseOptions);
+      }
+export type UnFollowUserMutationHookResult = ReturnType<typeof useUnFollowUserMutation>;
+export type UnFollowUserMutationResult = ApolloReactCommon.MutationResult<UnFollowUserMutation>;
+export type UnFollowUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UnFollowUserMutation, UnFollowUserMutationVariables>;
 export const ViewUserPhotoDocument = gql`
     query ViewUserPhoto($username: String!) {
   viewUserPhoto(username: $username) {
