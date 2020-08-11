@@ -93,7 +93,7 @@ function create(initialState: any, serverAccessToken?: string): ApolloClient<Nor
       graphQLErrors.forEach(({message, locations, path}) => {
         console.log(
             `[GraphQL error]: Message: ${ message }, Location: ${ locations }, Path: ${ path }`)
-        if (isBrowser) {
+        if (isBrowser && message.includes('AuthenticationError')) {
           Router.push('/accounts/login')
         }
       })

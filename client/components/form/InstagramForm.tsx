@@ -50,12 +50,6 @@ export const InstagramForm = <T extends {}>({
                 <div className="form__container">
                   <div className="form__inputs">
                     { fieldsItems }
-                    {/*<Field name="email" placeholder="Email" id="email" component={ InputField }/>*/ }
-                    {/*<Field name="password"*/ }
-                    {/*       type="password"*/ }
-                    {/*       placeholder="Password"*/ }
-                    {/*       id="password"*/ }
-                    {/*       component={ InputField }/>*/ }
                   </div>
                   <div className="form__submit__btn">
                     <button type="submit" className="submit__btn">
@@ -66,20 +60,9 @@ export const InstagramForm = <T extends {}>({
               </form>) }
           </Formik>
           { OrOptionsComponent }
-          {/*<AuthOptions/>*/ }
-          {/*<button className="auth__login__with">With something</button>*/ }
-          {/*<a className="auth__forgot__password">Забыли пароль</a>*/ }
+
         </div>
         { RedirectComponent }
-        {/*<div className="auth__change__page">*/ }
-        {/*  <div className="change__page__container">*/ }
-        {/*    <p className="change__page__items">Смените страницу*/ }
-        {/*      <Link href="/accounts/register">*/ }
-        {/*        <a className="change__link"> Регистрация</a>*/ }
-        {/*      </Link>*/ }
-        {/*    </p>*/ }
-        {/*  </div>*/ }
-        {/*</div>*/ }
       </div>
   )
 }
