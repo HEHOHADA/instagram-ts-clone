@@ -58,9 +58,9 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
   const [followUser] = useFollowUserMutation()
 
 
-  function followCallback<T>(cb: FollowCallbackType<T>, count: number): (userId: string) => Promise<void> {
+  function followCallback<T>(followCallback: FollowCallbackType<T>, count: number): (userId: string) => Promise<void> {
     return async (userId: string) => {
-      await cb({
+      await followCallback({
         variables: {userId},
         update: (cache) => {
           cache.identify({__ref: `User:${ userId }`})
@@ -79,7 +79,6 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
             }
           })
         }
-
       })
     }
   }

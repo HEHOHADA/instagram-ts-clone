@@ -1,5 +1,7 @@
 import React from 'react'
 import MainLayout from '../components/MainLayout'
+import { MyContext } from '../interfaces/MyContext'
+import { MeDocument } from '../geterated/apollo'
 
 const IndexPage = () => (
     <MainLayout title="Home | Instagram">
@@ -163,5 +165,16 @@ const IndexPage = () => (
       </div>
     </MainLayout>
 )
+
+
+IndexPage.getInitialProps = async (ctx: MyContext) => {
+
+  const me = ctx.apolloClient.readQuery({query: MeDocument})?.me
+
+
+
+  return {}
+
+}
 
 export default IndexPage

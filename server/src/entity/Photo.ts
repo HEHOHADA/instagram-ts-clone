@@ -1,4 +1,13 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Comment } from './Comment'
@@ -32,10 +41,17 @@ export class Photo extends BaseEntity {
   user: User
 
   @OneToMany(() => Likes,
-      like => like.photoId)
+      like => like.photo)
   likes: Likes[]
 
+  @Field({defaultValue: 0})
+  likeCount: number
+
+  @Field({defaultValue: 0})
+  commentCount: number
+
+  @Field(() => [Comment])
   @OneToMany(() => Comment,
-      comment => comment.photoId)
+      comment => comment.photo)
   comments: Comment[]
 }

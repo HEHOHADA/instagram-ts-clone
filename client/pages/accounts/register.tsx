@@ -50,7 +50,7 @@ const Register = () => {
         }
       })
       if (response?.data) {
-        await router.push('/check-email')
+        await router.push('/accounts/check-email')
       }
 
     } catch (e) {
