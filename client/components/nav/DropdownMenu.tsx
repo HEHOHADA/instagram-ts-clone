@@ -16,6 +16,7 @@ export const DropdownMenu = ({username}: PropsType) => {
     return [
       {link: `/${ username }`, iconName: 'home', text: 'Профиль'},
       {link: '/accounts/settings', iconName: 'settings', text: 'Настройки'},
+      {link: '/p/create', iconName: 'create', text: 'Создать пост'}
     ].map((n) => (
         <DropdownItem key={ n.text } { ...n } />
     ))

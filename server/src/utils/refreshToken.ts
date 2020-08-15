@@ -4,10 +4,7 @@ import { sendRefreshToken } from '../modules/user/auth/sendRefreshToken'
 import { createAccessToken, createRefreshToken } from '../modules/user/auth/createTokens'
 
 export const refreshToken = async (req: any, res: any) => {
-  console.log(req.options)
   const token = req.cookies.jid
-  console.log(token)
-  // console.log(res.send({ok: false, accessToken: ''}))
   if (!token) {
     return res.send({ok: false, accessToken: ''})
   }

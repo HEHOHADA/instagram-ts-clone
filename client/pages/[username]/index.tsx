@@ -20,10 +20,10 @@ import { ModalWindowContainer } from '../../components/modal/ModalWindowContaine
 import { SubscriptionModal } from '../../components/modal/SubscriptionModal'
 import { FollowButton } from '../../components/profile/FollowButton'
 import { FetchResult, MutationFunctionOptions } from '@apollo/client'
-import { UserInfoType } from '../../interfaces'
+import { IUserInfo } from '../../interfaces'
 
 type PropsType = {
-  getUserInfo: UserInfoType,
+  getUserInfo: IUserInfo,
   viewUserPhoto: Array<{
     pictureUrl: string
     date: Date
@@ -120,10 +120,10 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
           <div className="profile__info">
             <div className="profile__image">
               <div className="profile__image__center">
-                <img
+                { pictureUrl && <img
                     className="profile__img"
                     src={ pictureUrl }
-                    alt=""/>
+                    alt=""/> }
               </div>
             </div>
             <div className="profile__items">

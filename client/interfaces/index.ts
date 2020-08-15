@@ -1,9 +1,13 @@
-export type UserInfoType = {
+export interface IUserMe {
   email: string
   id: string
   username: string
-  pictureUrl: string
+  pictureUrl: string | null
   fullName: string
+}
+
+
+export interface IUserInfo extends IUserMe {
   followerCount: number
   followingCount: number
   photoCount: number

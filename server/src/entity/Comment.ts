@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Photo } from './Photo'
@@ -9,12 +9,12 @@ import { Photo } from './Photo'
 export class Comment extends BaseEntity {
 
   @Field(() => ID)
-  @PrimaryColumn('uuid')
-  photoId: string
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Field(() => ID)
-  @PrimaryGeneratedColumn('uuid')
-  commentId: string
+  @Column('uuid')
+  photoId: string
 
   @Field(() => String)
   @Column('text')

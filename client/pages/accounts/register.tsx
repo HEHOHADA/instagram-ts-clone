@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
 import AuthLayout from '../../components/AuthLayout'
-import { InputField } from '../../components/utils/InputField'
+import { InputAuthField } from '../../components/utils/InputAuthField'
 import { useRouter } from 'next/router'
 import { RegisterInput, useRegisterMutation } from '../../geterated/apollo'
-import { InstagramForm } from '../../components/form/InstagramForm'
+import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
 import { blockRoute } from '../../utils/checkAuth'
@@ -16,28 +16,24 @@ const Register = () => {
   const fieldsItems = useMemo(() => {
     return [{
       name: 'email',
-      id: 'email',
       placeholder: 'Email',
       type: 'text',
-      component: InputField
+      component: InputAuthField
     }, {
       name: 'username',
-      id: 'username',
       placeholder: 'Username',
       type: 'text',
-      component: InputField
+      component: InputAuthField
     }, {
       name: 'fullName',
-      id: 'fullName',
       placeholder: 'FullName',
       type: 'text',
-      component: InputField
+      component: InputAuthField
     }, {
       name: 'password',
-      id: 'password',
       placeholder: 'Password',
       type: 'password',
-      component: InputField
+      component: InputAuthField
     },
     ]
   }, [])
@@ -60,7 +56,7 @@ const Register = () => {
 
   return (
       <AuthLayout>
-        <InstagramForm<RegisterInput>
+        <InstagramAuthForm<RegisterInput>
             OrOptionsComponent={ <OrComponentWithRedirect
                 link={ '/accounts/password/reset' }
                 text={ 'Забыли пароль' }/> }

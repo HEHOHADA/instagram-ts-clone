@@ -3,22 +3,12 @@ import { FieldProps } from 'formik'
 
 type InputProps = DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
-export const InputField = ({field, form: {errors, touched}, ...props}: FieldProps & InputProps) => {
-
-  const errorMessage = touched[field.name] && errors[field.name]
+export const InputField = ({field, ...props}: FieldProps & InputProps) => {
 
   return (
-      <div className="form__group">
-        { errorMessage && <div className="form__validation-error">{ errorMessage }</div> }
-        <input
-            { ...field }{ ...props }
-            className="form__field"
-            placeholder={ props.placeholder }
-            name={ props.name }
-            id={ props.id }
-            required/>
-        <label htmlFor={ props.id } className="form__label">{ props.placeholder }</label>
-      </div>
-
+      <input
+          { ...field }{ ...props }
+          className="create__title"
+          required/>
   )
 }

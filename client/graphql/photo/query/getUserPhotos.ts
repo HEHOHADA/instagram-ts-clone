@@ -5,7 +5,7 @@ export const viewUserPhotoQuery = gql`
         viewUserPhoto(username:$username){
             date
             userId
-            photoId
+            id
             pictureUrl
         }
     }

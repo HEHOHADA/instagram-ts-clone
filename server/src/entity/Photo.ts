@@ -20,7 +20,7 @@ export class Photo extends BaseEntity {
 
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  photoId: string
+  id: string
 
   @Field()
   @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
@@ -29,6 +29,10 @@ export class Photo extends BaseEntity {
   @Field()
   @Column('varchar')
   pictureUrl: string
+
+  @Field()
+  @Column('varchar', {nullable: true})
+  postText: string
 
   @Field()
   @Column('uuid')

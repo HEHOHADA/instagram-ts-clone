@@ -9,45 +9,22 @@ import { User } from '../../entity/User'
 export class FeedResolver {
   @Query(() => [Photo], {nullable: true})
   @UseMiddleware(isAuth)
-  async feed(@Ctx()ctx: MyContext) {
+  async feed(@Ctx(){payload: {userId}}: MyContext) {
 
-
-    const qb = (await getConnection()
+    const qbFollow = (await getConnection()
         .getRepository(User)
-        .findOne(ctx.payload.userId!, {
+        .findOne(userId!, {
           relations: ['following']
         }))?.following.map(userItem => userItem.id)
 
-    console.log(qb)
 
-    const posts = await getConnection()
+    return await getConnection()
         .getRepository(Photo)
         .createQueryBuilder('photo')
-        .where('photo.userId in (:...followId)', {followId: qb})
-        .orderBy('photo.date', 'ASC')
-        .loadRelationCountAndMap('photo.likeCount','photo.likes')
-        .leftJoinAndMapOne('photo.user','photo.user','user')
-        .leftJoinAndMapMany('photo.comments', 'photo.comments','comments')
+        .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
+        .orderBy('photo.date', 'DESC')
+        .leftJoinAndMapOne('photo.user', 'photo.user', 'user')
+        .leftJoinAndMapMany('photo.comments', 'photo.comments', 'comments')
         .getMany()
-    console.log(posts)
-
-    return posts
-    // const qb = await getConnection()
-    //     .getRepository(User)
-    //     .createQueryBuilder('user')
-    //     .where('user.id = :userId', {userId: ctx.payload.userId})
-    //     .loadRelationIdAndMap('user.followIds', 'user.followers')
-    //     .getOne() as any
-    // console.log(qb?.followIds!)
-    // const posts = await getConnection()
-    //     .getRepository(Photo)
-    //     .createQueryBuilder('photo')
-    //     .where('photo.userId in (:...followId)', {followId: qb.followIds})
-    //     .orderBy('photo.date', 'ASC')
-    //     .leftJoin('photo.comments', 'comments','photo.photoId=comments.photoId')
-    //     .getMany()
-    //
-    // console.log(qb?.followIds!, posts)
-    // return posts
   }
 }
