@@ -1,21 +1,22 @@
 @import "mixins";
+@import "variables";
+@import "extented";
 
 .settings__container {
-  display: flex;
-  flex-direction: row;
+  @extend %direc-row;
   width: 100%;
   margin: 30px auto 0;
-  max-width: 935px;
+  max-width: $defaultContainer;
   border-radius: 3px;
-  border: 1px solid #dbdbdb;
+  border: $border;
 }
 
 .settings__side-bar {
-  border-right: 1px solid #dbdbdb;
+  border-right: $border;
   flex: 0 0 236px;
 
   .side-bar__item {
-    color: #262626;
+    color: $blackActive;
     font-size: 16px;
     font-weight: 600;
     display: block;
@@ -26,17 +27,13 @@
 
 
 .settings__main {
+  @extend %direc-column;
   flex: 1 1 400px;
   min-width: 50px;
-  display: flex;
-  flex-direction: column;
-
-
 }
 
 .user__picture__container {
-  display: flex;
-  flex-direction: row;
+  @extend %direc-row;
   width: 100%;
   margin: 32px 0;
   align-items: center;
@@ -48,8 +45,7 @@
 
 
 .user__change-picture {
-  display: flex;
-  flex-direction: column;
+  @extend %direc-column;
   padding: 5px;
 
   .username {
@@ -60,7 +56,7 @@
   }
 
   .change-picture {
-    color: #0095f6;
+    color: $link;
     border: 0;
     background: none;
     display: inline;
@@ -79,20 +75,18 @@
 
 
 .settings__change-info {
-  display: flex;
-  flex-direction: column;
+  @extend %direc-column;
   margin: 16px 0;
 }
 
 .change__item__container {
-  display: flex;
-  flex-direction: row;
+  @extend %direc-row;
   margin-bottom: 16px;
   justify-content: flex-start;
 
   .change__name {
     flex: 0 0 194px;
-    color: #262626;
+    color: $blackActive;
     font-size: 16px;
     font-weight: 600;
     line-height: 18px;
@@ -108,8 +102,8 @@
   padding-right: 60px;
 
   .input__field {
-    border: 1px solid #dbdbdb;
-    color: #262626;
+    border: $border;
+    color: $blackActive;
     width: 100%;
     height: 32px;
     border-radius: 3px;
@@ -132,16 +126,15 @@
 }
 
 .form__settings__submit {
-  display: flex;
-  flex-direction: row;
+  @extend %direc-row;
   justify-content: flex-end;
 
   .send__form {
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 5px 9px;
-    background-color: #0095f6;
-    color: #ffffff;
+    background-color: $link;
+    color: $white;
     margin-right: 20px;
 
     &:disabled {
@@ -153,7 +146,7 @@
   .block__account {
     font-weight: 600;
     line-height: 28px;
-    color: #0095f6;
+    color: $link;
     border: 0;
     background: none;
     font-size: 14px;
