@@ -1,27 +1,25 @@
 @import "mixins";
-
+@import "variables";
+@import "extented";
 .header {
   top: 0;
   font-size: 20px;
   position: fixed;
-  height: 54px;
+  height: $headerHeight;
   z-index: 1000;
   justify-content: center;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-bottom-color: rgba(var(--b6a, 219, 219, 219), 1);
+  border-bottom: $border;
   display: flex;
   width: 100%;
 }
 
 .header__items {
-  display: flex;
+  @extend %direc-row;
   width: 100%;
   background-color: white;
   align-items: center;
-  flex-direction: row;
   justify-content: center;
-  max-width: 925px;
+  max-width: $defaultContainer;
 }
 
 .header__logo {
@@ -46,13 +44,13 @@
   }
 
   .header__searchButton {
+    @extend %direc-row;
     color: white;
     float: right;
     width: 30px;
     height: 30px;
     border-radius: 50%;
     background: #2f3640;
-    display: flex;
     justify-content: center;
     align-items: center;
     transition: .4s;
@@ -73,13 +71,13 @@
 }
 
 .header__nav-items {
+  @extend %direc-row;
   flex: 1 0 0%;
-  display: flex;
   justify-content: flex-end;
 }
 
 .nav__container {
-  display: flex;
+  @extend %direc-row;
   align-items: center;
 }
 
@@ -134,7 +132,7 @@
 
 .menu-item {
   height: 50px;
-  display: flex;
+  @extend %direc-row;
   align-items: center;
   border-radius: 8px;
   transition: background 500ms;
@@ -148,10 +146,8 @@
 
 .container {
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto
+  padding: 0 15px;
+  margin: 0 auto;
 }
 
 @media (min-width: 576px) {
