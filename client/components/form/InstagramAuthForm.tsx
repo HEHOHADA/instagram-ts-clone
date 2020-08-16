@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Field, Formik, FormikHelpers } from 'formik'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
 
 
 export type FormType<T> = {
@@ -13,20 +13,19 @@ export type FormType<T> = {
 
 export type FieldItemsType = {
   type?: string
-  id: string
   name: string
   placeholder: string
   component: React.ComponentType<any>
 }
 
-export const InstagramForm = <T extends {}>({
-                                              submitHandler,
-                                              initialValues,
-                                              buttonText,
-                                              OrOptionsComponent,
-                                              RedirectComponent,
-                                              fields
-                                            }: FormType<T>) => {
+export const InstagramAuthForm = <T extends {}>({
+                                                  submitHandler,
+                                                  initialValues,
+                                                  buttonText,
+                                                  OrOptionsComponent,
+                                                  RedirectComponent,
+                                                  fields
+                                                }: FormType<T>) => {
 
   const fieldsItems = useMemo(() => {
     return fields.map((f: any, i: number) => (
@@ -43,9 +42,8 @@ export const InstagramForm = <T extends {}>({
               validateOnChange={ false }
               initialValues={ initialValues }
               onSubmit={ submitHandler }
-          >{ ({handleSubmit}) => (
-              <form
-                  onSubmit={ handleSubmit }
+          >{ () => (
+              <Form
                   className="auth__form">
                 <div className="form__container">
                   <div className="form__inputs">
@@ -57,10 +55,9 @@ export const InstagramForm = <T extends {}>({
                     </button>
                   </div>
                 </div>
-              </form>) }
+              </Form>) }
           </Formik>
           { OrOptionsComponent }
-
         </div>
         { RedirectComponent }
       </div>

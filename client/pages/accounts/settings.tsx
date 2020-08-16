@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 import { MyContext } from '../../interfaces/MyContext'
 import { MeDocument, MeQuery, useSetPictureProfileMutation } from '../../geterated/apollo'
-import { Dropzone } from '../../components/utils/DropzoneField'
+import { DropzonePictureProfile } from '../../components/utils/DropzoneField'
 
 
 type UserInfoPropsType = {
@@ -68,7 +68,7 @@ const Settings = ({userInfo}: UserInfoPropsType) => {
               </div>
               <div className="user__change-picture">
                 <div className="username">{ userInfo.username }</div>
-                <Dropzone
+                <DropzonePictureProfile
                     text={ 'Сменить фото' }
                     onDrop={ changePictureHandler }
                     className="change-picture"/>

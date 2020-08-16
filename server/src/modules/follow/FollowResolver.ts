@@ -1,36 +1,36 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { MyContext } from '../../types/MyContext'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { User } from '../../entity/User'
 import { getConnection } from 'typeorm'
+import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
 
 @Resolver()
 export class FollowResolver {
-  //
-  // @Query(() => [Follow])
-  // async getFollowers(
-  //     @Ctx() ctx: MyContext,
-  //     @Arg('userId', {nullable: true})userId?: string
-  // ) {
-  //   const id = (userId ?? ctx.payload.userId) as string
-  //   if (!id) {
-  //     throw new SyntaxError(somethingWentWrong)
-  //   }
-  //
-  //   return Follow.find({where: {userId: id}, cache: true})
-  // }
 
-  // @Query(() => [Follow])
-  // async getFollowings(
-  //     @Ctx() ctx: MyContext,
-  //     @Arg('userId', {nullable: true})userId?: string
-  // ) {
-  //   const id = (userId ?? ctx.payload.userId) as string
-  //   if (!id) {
-  //     throw new SyntaxError(somethingWentWrong)
-  //   }
-  //   return Following.find({where: {userId: id}, cache: true})
-  // }
+  @UseMiddleware(isUserAuthOrUndefined)
+  @Query(() => [User])
+  async getFollowers(
+      @Arg('userId')userId: string
+  ) {
+    return (await getConnection()
+        .getRepository(User)
+        .findOne(userId, {
+          relations: ['followers']
+        }))?.followers
+  }
+
+  @UseMiddleware(isUserAuthOrUndefined)
+  @Query(() => [User])
+  async getFollowings(
+      @Arg('userId')userId: string
+  ) {
+    return (await getConnection()
+        .getRepository(User)
+        .findOne(userId, {
+          relations: ['following']
+        }))?.following
+  }
 
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
@@ -42,7 +42,7 @@ export class FollowResolver {
       throw new Error('Cannot follow yourself')
     }
 
-      await getConnection()
+    await getConnection()
         .getRepository(User)
         .createQueryBuilder()
         .relation(User, 'following')

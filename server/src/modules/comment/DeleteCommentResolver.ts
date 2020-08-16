@@ -9,10 +9,10 @@ export class DeleteCommentResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
   async deleteComment(
-      @Arg('data'){commentId}: DeleteCommentType,
+      @Arg('data'){id}: DeleteCommentType,
   ) {
 
-    await Comment.delete(commentId)
+    await Comment.delete(id)
 
     return true
   }

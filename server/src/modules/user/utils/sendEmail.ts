@@ -1,11 +1,11 @@
-import SendGrid from '@sendgrid/mail'
 import 'dotenv/config'
+import SendGrid from '@sendgrid/mail'
 
 SendGrid.setApiKey(process.env.SEND_GRID_API_KEY!)
 
 export const sendEmail = async (recipient: string, url: string, linkText: string) => {
   const message = {
-    from: 'Sender Name <sender@example.com>',
+    from: 'Sender Name <hehohada@em68.hehohada.software>',
     to: `Recipient <${ recipient }>`,
     subject: 'SendGrid is unicode friendly ✔',
     text: 'Hello to myself!',

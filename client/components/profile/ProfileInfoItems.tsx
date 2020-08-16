@@ -5,6 +5,7 @@ type PropsType = {
   navItems: Array<{
     count: number
     text: string
+    onClick?: () => void
   }>
 }
 
@@ -13,14 +14,14 @@ const ProfileInfoItems = ({navItems}: PropsType) => {
   const renderInfoItems = useMemo(() => {
     return (
         navItems.map((item, i) =>
-          <ProfileInfoItem key={ item.text + i }{ ...item }/>
+            <ProfileInfoItem key={ item.text + i }{ ...item }/>
         )
     )
   }, [navItems])
 
   return (
       <ul className="profile__item__info">
-        {renderInfoItems}
+        { renderInfoItems }
       </ul>)
 }
 

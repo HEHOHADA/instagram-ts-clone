@@ -2,30 +2,29 @@ import { Ctx, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { getConnection } from 'typeorm'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { MyContext } from '../../types/MyContext'
-import { User } from '../../entity/User'
 import { Photo } from '../../entity/Photo'
+import { User } from '../../entity/User'
 
 @Resolver()
 export class FeedResolver {
   @Query(() => [Photo], {nullable: true})
   @UseMiddleware(isAuth)
-  async feed(@Ctx()ctx: MyContext) {
-    const qb = await getConnection()
+  async feed(@Ctx(){payload: {userId}}: MyContext) {
+
+    const qbFollow = (await getConnection()
         .getRepository(User)
-        .createQueryBuilder('user')
-        .where('user.id = :userId', {userId: ctx.payload.userId})
-        .loadRelationIdAndMap('user.followIds', 'user.followers')
-        .getOne() as any
-    console.log(qb?.followIds!)
-    const posts = await getConnection()
+        .findOne(userId!, {
+          relations: ['following']
+        }))?.following.map(userItem => userItem.id)
+
+
+    return await getConnection()
         .getRepository(Photo)
         .createQueryBuilder('photo')
-        .where('photo.userId in (:...followId)', {followId: qb.followIds})
-        .orderBy('photo.date', 'ASC')
-        .leftJoin('photo.comments', 'comments','photo.photoId=comments.photoId')
+        .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
+        .orderBy('photo.date', 'DESC')
+        .leftJoinAndMapOne('photo.user', 'photo.user', 'user')
+        .leftJoinAndMapMany('photo.comments', 'photo.comments', 'comments')
         .getMany()
-
-    console.log(qb?.followIds!, posts)
-    return posts
   }
 }

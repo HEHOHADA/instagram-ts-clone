@@ -26,6 +26,9 @@ export class MeResolver {
   @FieldResolver(() => String, {nullable: true})
   pictureUrl(@Root()user: User, @Ctx()ctx: MyContext) {
 
+    if(!user.pictureUrl){
+      return null
+    }
     if (user.pictureUrl.includes('http')) {
       return user.pictureUrl
     }

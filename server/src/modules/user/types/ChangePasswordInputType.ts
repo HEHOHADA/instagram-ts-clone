@@ -8,8 +8,6 @@ export class ChangeForgotPassword extends PasswordMixin(class {}) {
   token: string
 }
 
-
-
 @InputType()
 export class ChangePassword extends PasswordMixin(class {}) {
   @Field()

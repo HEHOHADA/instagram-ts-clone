@@ -1,0 +1,84 @@
+@import "mixins";
+
+.photo__create__container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  max-width: 950px;
+  padding: 20px;
+  margin: 30px auto 0;
+  justify-content: center;
+}
+
+
+.photo__create__form__container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.photo__create__form {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  margin: 0 0 10px;
+}
+
+.photo__create__title {
+  position: relative;
+  padding: 15px 0 0;
+  margin: 0 6px;
+}
+
+.create__title {
+  width: 100%;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  color: #131111;
+  background: #f8fafa;
+  font-size: 1.3rem;
+  padding: 7px 0;
+  margin: 7px 0;
+
+  &::placeholder {
+    color: #dadada;
+  }
+}
+
+.photo__create__image-upload {
+  position: relative;
+  padding: 15px 0 0;
+  margin: 0 6px;
+}
+
+.photo__create__image-upload__text {
+  width: 100%;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  color: #131111;
+  background: #f8fafa;
+  font-size: 1.3rem;
+  padding: 7px;
+  margin: 7px 0;
+}
+
+.photo__create__btn__container {
+  justify-content: flex-end;
+  display: flex;
+}
+
+.dropzone__btn {
+  @include button(20px);
+}
+
+.photo__create__btn {
+  @include button(25px);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 5px 9px;
+  background-color: #0095f6;
+  color: #ffffff;
+  margin: 10px;
+}
