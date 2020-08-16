@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 import MainLayout from '../../../components/MainLayout'
 import { ForgotPasswordType, useForgotPasswordMutation } from '../../../geterated/apollo'
-import { InstagramForm } from '../../../components/form/InstagramForm'
-import { InputField } from '../../../components/utils/InputField'
+import { InstagramAuthForm } from '../../../components/form/InstagramAuthForm'
+import { InputAuthField } from '../../../components/utils/InputAuthField'
 import { useRouter } from 'next/router'
 import RedirectComponent from '../../../components/auth/RedirectComponent'
 import OrComponentWithRedirect from '../../../components/auth/OrComponentWithRedirect'
@@ -18,7 +18,7 @@ const ForgotPassword = () => {
       id: 'email',
       placeholder: 'Email',
       type: 'text',
-      component: InputField
+      component: InputAuthField
       }]
   }, [])
 
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
   return (
       <MainLayout title="Forgot password">
         <div className="change-password__container container">
-          <InstagramForm<ForgotPasswordType>
+          <InstagramAuthForm<ForgotPasswordType>
               OrOptionsComponent={ <OrComponentWithRedirect
                   link={ '/accounts/register' }
                   text={ 'Create account' }/> }

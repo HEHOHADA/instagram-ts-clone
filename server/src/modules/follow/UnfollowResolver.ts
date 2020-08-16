@@ -25,16 +25,5 @@ export class FollowResolver {
         .remove(userId)
 
     return true
-    //
-    // const follower = await Follower.findOne({where: {followerId: payload.userId, userId}})
-    //
-    // const following = await Following.findOne({where: {followingId: userId, userId: payload.userId}})
-    //
-    // if (!follower || !following) {
-    //   throw new AuthenticationError(userNotFound)
-    // }
-    // await Follower.remove(follower)
-    // await Following.remove(following)
-    // return true
   }
 }

@@ -1,43 +1,39 @@
 import React, { useCallback, useMemo } from 'react'
 import AuthLayout from '../../components/AuthLayout'
-import { InputField } from '../../components/utils/InputField'
+import { InputAuthField } from '../../components/utils/InputAuthField'
 import { useRouter } from 'next/router'
 import { RegisterInput, useRegisterMutation } from '../../geterated/apollo'
-import { InstagramForm } from '../../components/form/InstagramForm'
+import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
 import { blockRoute } from '../../utils/checkAuth'
+import { formatValidationErrors } from '../../utils/formatValidationErrors'
 
 const Register = () => {
-
   const [register] = useRegisterMutation()
   const router = useRouter()
 
   const fieldsItems = useMemo(() => {
     return [{
       name: 'email',
-      id: 'email',
       placeholder: 'Email',
       type: 'text',
-      component: InputField
+      component: InputAuthField
     }, {
       name: 'username',
-      id: 'username',
       placeholder: 'Username',
       type: 'text',
-      component: InputField
+      component: InputAuthField
     }, {
       name: 'fullName',
-      id: 'fullName',
       placeholder: 'FullName',
       type: 'text',
-      component: InputField
+      component: InputAuthField
     }, {
       name: 'password',
-      id: 'password',
       placeholder: 'Password',
       type: 'password',
-      component: InputField
+      component: InputAuthField
     },
     ]
   }, [])
@@ -50,33 +46,23 @@ const Register = () => {
         }
       })
       if (response?.data) {
-        await router.push('/check-email')
+        await router.push('/accounts/check-email')
       }
 
     } catch (e) {
-      console.log(JSON.stringify(e.graphQLErrors[0]))
-      const errors: any = {}
-      e.graphQLErrors[0]
-          .forEach((error: any) => {
-            Object.values(error.constraints).forEach((m: any) => {
-              errors[error.property] = m
-            })
-          })
-      console.log(errors)
-      setErrors(errors)
+      setErrors(formatValidationErrors(e.graphQLErrors[0], 'email'))
     }
   }, [])
 
   return (
       <AuthLayout>
-        <InstagramForm<RegisterInput>
+        <InstagramAuthForm<RegisterInput>
             OrOptionsComponent={ <OrComponentWithRedirect
                 link={ '/accounts/password/reset' }
                 text={ 'Забыли пароль' }/> }
             RedirectComponent={ <RedirectComponent
                 text={ 'Login' }
                 link={ '/accounts/login' }/> }
-
             buttonText={ 'Register' }
             fields={ fieldsItems }
             initialValues={ {password: '', email: '', fullName: '', username: ''} }

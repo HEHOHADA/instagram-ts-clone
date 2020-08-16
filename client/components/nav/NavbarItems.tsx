@@ -40,6 +40,4 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
 }
 
 export default React.memo(NavbarItems)
-// <img className="material-icons">
-//     account_circle
-//     </img>
+

@@ -47,6 +47,7 @@ export class User extends BaseEntity {
 
   @Field({defaultValue: 0})
   followerCount: number
+
   @Field({defaultValue: 0})
   followingCount: number
 
@@ -64,7 +65,6 @@ export class User extends BaseEntity {
       () => User,
       (user) => user.followers
   )
-  @JoinTable()
   following: User[]
 
   @Field()

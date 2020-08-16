@@ -74,6 +74,13 @@ $gray: #9b9b9b;
   margin: 0 6px;
 }
 
+.form__validation-error {
+  color: #ff2a2a;
+  margin-top: 7px;
+  font-size: 14px;
+}
+
+
 .form__field {
   width: 100%;
   border: 1px solid #dbdbdb;
@@ -81,12 +88,12 @@ $gray: #9b9b9b;
   outline: 0;
   font-size: 1.3rem;
   color: $primary;
-  padding: 7px 0;
+  padding: 7px;
+  margin: 7px 0;
   background: transparent;
   transition: border-color 0.2s;
 
   &::placeholder {
-
     color: transparent;
   }
 
@@ -94,7 +101,7 @@ $gray: #9b9b9b;
     font-size: 1.3rem;
     cursor: text;
     margin-left: 5px;
-    top: 20px;
+    top: 30px;
   }
 }
 
