@@ -7,7 +7,7 @@ const OrComponentWithRedirect = ({link, text}: RedirectComponentType) => {
   return (
       <>
         <OrComponent/>
-        <Link href={ link }>
+        <Link href={ link } as="/">
           <a className="auth__forgot__password">{ text }</a>
         </Link>
       </>

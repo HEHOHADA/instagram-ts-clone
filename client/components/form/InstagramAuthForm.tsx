@@ -37,7 +37,7 @@ export const InstagramAuthForm = <T extends {}>({
       <div className="auth__content__container">
         <div className="auth__form__container">
           <div className="logo__item"/>
-          <Formik
+          <Formik<T>
               validateOnBlur={ false }
               validateOnChange={ false }
               initialValues={ initialValues }

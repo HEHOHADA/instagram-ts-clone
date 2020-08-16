@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react'
-import Link from 'next/link'
-
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { FetchResult, MutationFunctionOptions } from '@apollo/client'
+import redirect from '../../lib/redirect'
 import MainLayout from '../../components/MainLayout'
 import { MyContext } from '../../interfaces/MyContext'
 import {
@@ -12,24 +12,25 @@ import {
   ViewUserPhotoDocument,
   ViewUserPhotoQuery
 } from '../../geterated/apollo'
-import redirect from '../../lib/redirect'
-import ProfileInfoItems from '../../components/profile/ProfileInfoItems'
 import { declOfNum } from '../../utils/declOfNumb'
 import { PhotoItems } from '../../components/profile/PhotoItems'
-import { ModalWindowContainer } from '../../components/modal/ModalWindowContainer'
+import { ModalRefType, ModalWindowContainer } from '../../components/modal/ModalWindowContainer'
 import { SubscriptionModal } from '../../components/modal/SubscriptionModal'
 import { FollowButton } from '../../components/profile/FollowButton'
-import { FetchResult, MutationFunctionOptions } from '@apollo/client'
 import { IUserInfo } from '../../interfaces'
+import { IPhoto } from '../../interfaces/photo'
+import { ProfileItems } from '../../components/profile/ProfileItems'
+import { useRouter } from 'next/router'
 
 type PropsType = {
-  getUserInfo: IUserInfo,
-  viewUserPhoto: Array<{
-    pictureUrl: string
-    date: Date
-    userId: string
-    photoId: string
-  }>
+  getUserInfo: IUserInfo
+  viewUserPhoto: IPhoto[]
+}
+
+export type ProfileItemsType = {
+  onClick?: () => void | null | undefined
+  count: number
+  text: string
 }
 
 type FollowCallbackType<T> =
@@ -37,16 +38,28 @@ type FollowCallbackType<T> =
         => Promise<FetchResult<T>> | void
 
 const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
-  const [showSubsModal, setShowSubsModal] = useState(false)
+
+  const router = useRouter()
+
+  const modalRef = useRef<ModalRefType>(null)
+
+  const openModal = useCallback( () => {
+    router.push(`/${username}/subscription`)
+    modalRef.current?.openModal()
+  }, [modalRef])
+
+  const onCloseOutside = useCallback((e: any) => {
+    modalRef.current?.closeOutside(e)
+  }, [modalRef])
+
+  const closeModal = useCallback(() => {
+    modalRef.current?.closeModal()
+  }, [modalRef])
+
+
   const {
-    photoCount,
-    followerCount,
-    isCurrentUser,
-    id,
-    isFollowing,
-    username, followingCount,
-    pictureUrl,
-    fullName
+    photoCount, followerCount, isCurrentUser, id,
+    isFollowing, username, followingCount, pictureUrl, fullName
   } = getUserInfo
 
   const [followerInfo, setFollowerInfo] =
@@ -65,7 +78,10 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
         update: (cache) => {
           cache.identify({__ref: `User:${ userId }`})
           setFollowerInfo(prevState => {
-            return {isFollowing: !prevState.isFollowing, followerCount: prevState.followerCount + count}
+            return {
+              isFollowing: !prevState.isFollowing,
+              followerCount: prevState.followerCount + count
+            }
           })
           cache.modify({
             id: cache.identify({__ref: `User:${ userId }`}),
@@ -97,25 +113,26 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
   }, [followerInfo.isFollowing, id])
 
 
-  const infoItems = useMemo(() => {
+  const infoItems = useMemo<Array<ProfileItemsType>>(() => {
     return [
       {count: photoCount, text: declOfNum(photoCount, ['Публикация', 'Публикации', 'Публикаций'])},
       {
         count: followerInfo.followerCount,
-        onClick: () => setShowSubsModal(true),
+        onClick: openModal,
         text: declOfNum(followerInfo.followerCount, ['Подписок', 'Подписка', 'Подписки'])
       },
       {count: followingCount, text: declOfNum(followingCount, ['Подписчик', 'Подписчиков', 'Подписчика'])},
     ]
   }, [photoCount, followerInfo.followerCount, followingCount])
 
+
   return (
       <MainLayout title={ username }>
-        { showSubsModal &&
-        <ModalWindowContainer>
-          <SubscriptionModal onClick={ () => setShowSubsModal(false) }/>
+        <ModalWindowContainer ref={ modalRef }>
+          <SubscriptionModal
+              onClick={ closeModal }
+              onCloseOutside={ onCloseOutside }/>
         </ModalWindowContainer>
-        }
         <div className="profile container">
           <div className="profile__info">
             <div className="profile__image">
@@ -126,23 +143,12 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
                     alt=""/> }
               </div>
             </div>
-            <div className="profile__items">
-              <div className="profile__item__header">
-                <h2 className="profile__name">{ username }</h2>
-                { isCurrentUser ?
-                    <Link href="/accounts/settings">
-                      <a className="profile__edit">Редиактировать пользователя</a>
-                    </Link> : followButton
-                }
-                <a className="profile__settings">
-                            <span className="material-icons">
-                                settings
-                            </span>
-                </a>
-              </div>
-              <ProfileInfoItems navItems={ infoItems }/>
-              <div className="profile__item__name">{ fullName }</div>
-            </div>
+            <ProfileItems
+                username={ username }
+                isCurrentUser={ isCurrentUser }
+                followButton={ followButton }
+                infoItems={ infoItems }
+                fullName={ fullName }/>
           </div>
 
           <hr/>

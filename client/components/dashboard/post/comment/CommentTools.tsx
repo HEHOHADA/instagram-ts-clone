@@ -1,35 +1,33 @@
-import React from 'react'
+import React, { FC, useMemo } from 'react'
 
-export const CommentTools = () => {
+type PropsType = {
+  onLike:any
+  isLiked:boolean
+}
 
-  // const tools = useMemo(() => {
-  //
-  // }, [])
+export const CommentTools :FC<PropsType>= (props) => {
+
+  const tools = useMemo(() => {
+    return [
+      {onClick:props.onLike,iconName:'favorite',className:'tool',style:{color:props.isLiked? 'red' :'black'}},
+      {onClick:()=>{},iconName:'forum',className:'tool'},
+      {onClick:()=>{},iconName:'comment',className:'tool'},
+      {onClick:()=>{},iconName:'save_alt',className:'tool__save'}
+    ]
+  }, [props.isLiked])
 
   return (
       <div className="content__tools__options">
-        <div className="tool">
-                                <span className="material-icons">
-                                    favorite
-                                </span>
-
-        </div>
-        <div className="tool">
-                                <span className="material-icons">
-                                    forum
-                                </span>
-
-        </div>
-        <div className="tool">
-                                 <span className="material-icons">
-                                      comment
-                                 </span>
-        </div>
-        <div className="tool__save">
-                                <span className="material-icons">
-                                    save_alt
-                                </span>
-        </div>
+        {tools.map((tool)=>(
+            <div
+                className={tool.className}
+                 key={`${tool.iconName}_commentTool_${tool.className}`}
+                 onClick={tool.onClick}>
+              <span
+                  style={{...tool?.style}}
+                  className="material-icons">{tool.iconName}</span>
+            </div>
+        ))}
       </div>
   )
 }

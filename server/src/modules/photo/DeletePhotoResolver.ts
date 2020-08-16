@@ -8,9 +8,9 @@ export class CreatePhotoResolver {
   @Mutation(() => Boolean)
   async deletePhoto(
       @Ctx(){payload}: MyContext,
-      @Arg('pictureId') pictureId: string) {
+      @Arg('id') id: string) {
 
-    const photo = await Photo.findOne(pictureId)
+    const photo = await Photo.findOne(id)
 
     if (!photo) {
       throw new Error('not found')

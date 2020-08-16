@@ -20,7 +20,7 @@ export class LikeResolver {
 
     const user = await User.findOne(payload.userId!)
 
-    const existingLike = await Likes.findOne({where: {user: payload.userId!, photoId}})
+    const existingLike = await Likes.findOne({where: {userId: payload.userId!, photoId}})
 
     try {
       if (existingLike) {

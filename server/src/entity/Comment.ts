@@ -25,6 +25,9 @@ export class Comment extends BaseEntity {
   userId: string
 
   @Field()
+  isAuthor: boolean
+
+  @Field()
   @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
   date: Date
 
