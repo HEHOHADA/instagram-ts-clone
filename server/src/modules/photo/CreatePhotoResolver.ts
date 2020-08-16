@@ -10,6 +10,7 @@ import { User } from '../../entity/User'
 import { getConnection } from 'typeorm/index'
 import { Likes } from '../../entity/Likes'
 import { Comment } from '../../entity/Comment'
+import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
 
 @Resolver(() => Photo)
 export class CreatePhotoResolver {
@@ -22,6 +23,20 @@ export class CreatePhotoResolver {
         .where('like.photoId= :id', {id: photo.id})
         .getCount()
   }
+
+  @FieldResolver(() => Boolean)
+  @UseMiddleware(isUserAuthOrUndefined)
+  async isLiked(@Root()photo: Photo, @Ctx(){payload}: MyContext) {
+    const like = await Likes.findOne({photoId: photo.id,userId:payload.userId!})
+    return Boolean(like)
+  }
+
+  @FieldResolver(() => Boolean)
+  @UseMiddleware(isUserAuthOrUndefined)
+  async isAuthor(@Root()photo: Photo, @Ctx(){payload}: MyContext) {
+    return photo.userId === payload.userId
+  }
+
 
   @FieldResolver(() => [Comment])
   async comments(@Root()photo: Photo) {

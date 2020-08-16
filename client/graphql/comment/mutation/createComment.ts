@@ -6,6 +6,7 @@ export const createCommentMutation = gql`
             date
             userId
             id
+            isAuthor
             commentText
             photoId
             user{

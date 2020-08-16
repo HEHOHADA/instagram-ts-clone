@@ -3,13 +3,13 @@ import Link from 'next/link'
 
 type PropsType = {
   pictureUrl: string
-  photoId: string
+  id: string
 }
 
-export const PhotoItem = React.memo(({pictureUrl, photoId}: PropsType) => {
+export const PhotoItem = React.memo(({pictureUrl, id}: PropsType) => {
   return (
       <div className="profile__photo__container">
-        <Link href={ `/p/${ photoId }` }>
+        <Link href={ `/p/${ id }` }>
           <a>
             <img
                 src={ pictureUrl }

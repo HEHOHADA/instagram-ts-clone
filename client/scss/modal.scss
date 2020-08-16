@@ -68,7 +68,7 @@
 .modal-window__subscription__container {
   flex: 1 1;
   min-height: 200px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .subscription__items {

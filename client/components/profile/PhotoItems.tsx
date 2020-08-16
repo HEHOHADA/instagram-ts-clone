@@ -5,7 +5,7 @@ import { PhotoItem } from './PhotoItem'
 type PropsType = {
   photoItems: Array<{
     pictureUrl: string
-    photoId: string
+    id: string
     userId: string
     date: Date
   }>
@@ -19,9 +19,9 @@ export const PhotoItems = ({photoItems}: PropsType) => {
         (
             <div key={ `profile__photos_${ i }` } className="profile__photos">
               { array.map(item => (
-                  <PhotoItem key={ item.photoId }
+                  <PhotoItem key={ item.id }
                              pictureUrl={ item.pictureUrl }
-                             photoId={ item.photoId }/>
+                             id={ item.id }/>
               )) }
             </div>
         )

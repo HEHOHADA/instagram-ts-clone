@@ -131,6 +131,7 @@
 
 .tool {
   padding: 8px;
+  cursor: pointer;
 
   &:nth-child(1) {
     padding: 8px 8px 0 0;
@@ -230,7 +231,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 16px;
+  margin: 16px 0;
 
   .user__img {
     @include image__item(56px)
@@ -330,3 +331,9 @@
   @include button(12px)
 }
 
+.delete__comment {
+  position: absolute;
+  cursor: pointer;
+  margin-right: 10px;
+  right: 0;
+}

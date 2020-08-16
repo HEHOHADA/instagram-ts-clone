@@ -6,6 +6,8 @@ export const createPhotoMutation = gql`
             date
             userId
             id
+            isLiked
+            isAuthor
             pictureUrl
             likeCount
             commentCount
@@ -13,20 +15,6 @@ export const createPhotoMutation = gql`
                 pictureUrl
                 fullName
                 username
-            }
-            comments{
-                date
-                photoId
-                userId
-                user{
-                    pictureUrl
-                    username
-                    id
-                    email
-                    fullName
-                }
-                commentText
-                id
             }
         }
     }

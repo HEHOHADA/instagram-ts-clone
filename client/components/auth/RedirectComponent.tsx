@@ -11,7 +11,7 @@ const RedirectComponent = ({link, text}: RedirectComponentType) => {
       <div className="auth__change__page">
         <div className="change__page__container">
           <p className="change__page__items">
-            <Link href={ link }>
+            <Link href={ link } as="/">
               <a className="change__link">{ text }</a>
             </Link>
           </p>

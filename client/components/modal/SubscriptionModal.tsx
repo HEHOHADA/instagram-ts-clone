@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export const SubscriptionModal = ({onClick}: any) => {
+export const SubscriptionModal = ({onClick,onCloseOutside}: any) => {
+  useEffect(() => {
+    document.getElementById('modal-window-container')?.addEventListener('click', onCloseOutside)
+    return()=>{
+      document.getElementById('modal-window-container')?.removeEventListener('click', onCloseOutside)
+    }
+  }, [onClick])
+
   return (
       <>
         <div className="modal-window__subscription__header">

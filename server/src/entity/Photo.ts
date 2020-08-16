@@ -54,6 +54,12 @@ export class Photo extends BaseEntity {
   @Field({defaultValue: 0})
   commentCount: number
 
+  @Field()
+  isLiked: boolean
+
+  @Field()
+  isAuthor: boolean
+
   @Field(() => [Comment])
   @OneToMany(() => Comment,
       comment => comment.photo)

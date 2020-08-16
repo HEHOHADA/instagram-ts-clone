@@ -72,6 +72,8 @@ export type Photo = {
   user: User;
   likeCount?: Maybe<Scalars['Float']>;
   commentCount?: Maybe<Scalars['Float']>;
+  isLiked: Scalars['Boolean'];
+  isAuthor: Scalars['Boolean'];
   comments: Array<Comment>;
 };
 
@@ -82,6 +84,7 @@ export type Comment = {
   photoId: Scalars['ID'];
   commentText: Scalars['String'];
   userId: Scalars['String'];
+  isAuthor: Scalars['Boolean'];
   date: Scalars['DateTime'];
   user: User;
   photo: Photo;
@@ -145,7 +148,7 @@ export type MutationCreatePhotoArgs = {
 
 
 export type MutationDeletePhotoArgs = {
-  pictureId: Scalars['String'];
+  id: Scalars['String'];
 };
 
 
@@ -234,12 +237,22 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment: (
     { __typename?: 'Comment' }
-    & Pick<Comment, 'date' | 'userId' | 'id' | 'commentText' | 'photoId'>
+    & Pick<Comment, 'date' | 'userId' | 'id' | 'isAuthor' | 'commentText' | 'photoId'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'username' | 'id' | 'email' | 'pictureUrl' | 'fullName'>
     ) }
   ) }
+);
+
+export type DeleteCommentMutationVariables = Exact<{
+  data: DeleteCommentType;
+}>;
+
+
+export type DeleteCommentMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteComment'>
 );
 
 export type FollowUserMutationVariables = Exact<{
@@ -288,6 +301,16 @@ export type GetFollowingsQuery = (
   )> }
 );
 
+export type LikeMutationVariables = Exact<{
+  photoId: Scalars['String'];
+}>;
+
+
+export type LikeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'like'>
+);
+
 export type CreatePhotoMutationVariables = Exact<{
   picture: Scalars['Upload'];
   title: Scalars['String'];
@@ -298,19 +321,22 @@ export type CreatePhotoMutation = (
   { __typename?: 'Mutation' }
   & { createPhoto: (
     { __typename?: 'Photo' }
-    & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl' | 'likeCount' | 'commentCount'>
+    & Pick<Photo, 'date' | 'userId' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
-    ), comments: Array<(
-      { __typename?: 'Comment' }
-      & Pick<Comment, 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
-      & { user: (
-        { __typename?: 'User' }
-        & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
-      ) }
-    )> }
+    ) }
   ) }
+);
+
+export type DeletePhotoMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeletePhotoMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePhoto'>
 );
 
 export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
@@ -320,13 +346,13 @@ export type FeedQuery = (
   { __typename?: 'Query' }
   & { feed?: Maybe<Array<(
     { __typename?: 'Photo' }
-    & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl' | 'likeCount' | 'commentCount'>
+    & Pick<Photo, 'date' | 'userId' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
     ), comments: Array<(
       { __typename?: 'Comment' }
-      & Pick<Comment, 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
+      & Pick<Comment, 'isAuthor' | 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
       & { user: (
         { __typename?: 'User' }
         & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
@@ -515,6 +541,7 @@ export const CreateCommentDocument = gql`
     date
     userId
     id
+    isAuthor
     commentText
     photoId
     user {
@@ -552,6 +579,36 @@ export function useCreateCommentMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
 export type CreateCommentMutationResult = ApolloReactCommon.MutationResult<CreateCommentMutation>;
 export type CreateCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
+export const DeleteCommentDocument = gql`
+    mutation DeleteComment($data: DeleteCommentType!) {
+  deleteComment(data: $data)
+}
+    `;
+export type DeleteCommentMutationFn = ApolloReactCommon.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
+      }
+export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
+export type DeleteCommentMutationResult = ApolloReactCommon.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const FollowUserDocument = gql`
     mutation FollowUser($userId: String!) {
   followUser(userId: $userId)
@@ -686,12 +743,44 @@ export function useGetFollowingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type GetFollowingsQueryHookResult = ReturnType<typeof useGetFollowingsQuery>;
 export type GetFollowingsLazyQueryHookResult = ReturnType<typeof useGetFollowingsLazyQuery>;
 export type GetFollowingsQueryResult = ApolloReactCommon.QueryResult<GetFollowingsQuery, GetFollowingsQueryVariables>;
+export const LikeDocument = gql`
+    mutation Like($photoId: String!) {
+  like(photoId: $photoId)
+}
+    `;
+export type LikeMutationFn = ApolloReactCommon.MutationFunction<LikeMutation, LikeMutationVariables>;
+
+/**
+ * __useLikeMutation__
+ *
+ * To run a mutation, you first call `useLikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [likeMutation, { data, loading, error }] = useLikeMutation({
+ *   variables: {
+ *      photoId: // value for 'photoId'
+ *   },
+ * });
+ */
+export function useLikeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LikeMutation, LikeMutationVariables>) {
+        return ApolloReactHooks.useMutation<LikeMutation, LikeMutationVariables>(LikeDocument, baseOptions);
+      }
+export type LikeMutationHookResult = ReturnType<typeof useLikeMutation>;
+export type LikeMutationResult = ApolloReactCommon.MutationResult<LikeMutation>;
+export type LikeMutationOptions = ApolloReactCommon.BaseMutationOptions<LikeMutation, LikeMutationVariables>;
 export const CreatePhotoDocument = gql`
     mutation CreatePhoto($picture: Upload!, $title: String!) {
   createPhoto(picture: $picture, title: $title) {
     date
     userId
     id
+    isLiked
+    isAuthor
     pictureUrl
     likeCount
     commentCount
@@ -699,20 +788,6 @@ export const CreatePhotoDocument = gql`
       pictureUrl
       fullName
       username
-    }
-    comments {
-      date
-      photoId
-      userId
-      user {
-        pictureUrl
-        username
-        id
-        email
-        fullName
-      }
-      commentText
-      id
     }
   }
 }
@@ -743,12 +818,44 @@ export function useCreatePhotoMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type CreatePhotoMutationHookResult = ReturnType<typeof useCreatePhotoMutation>;
 export type CreatePhotoMutationResult = ApolloReactCommon.MutationResult<CreatePhotoMutation>;
 export type CreatePhotoMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePhotoMutation, CreatePhotoMutationVariables>;
+export const DeletePhotoDocument = gql`
+    mutation DeletePhoto($id: String!) {
+  deletePhoto(id: $id)
+}
+    `;
+export type DeletePhotoMutationFn = ApolloReactCommon.MutationFunction<DeletePhotoMutation, DeletePhotoMutationVariables>;
+
+/**
+ * __useDeletePhotoMutation__
+ *
+ * To run a mutation, you first call `useDeletePhotoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePhotoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePhotoMutation, { data, loading, error }] = useDeletePhotoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePhotoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeletePhotoMutation, DeletePhotoMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeletePhotoMutation, DeletePhotoMutationVariables>(DeletePhotoDocument, baseOptions);
+      }
+export type DeletePhotoMutationHookResult = ReturnType<typeof useDeletePhotoMutation>;
+export type DeletePhotoMutationResult = ApolloReactCommon.MutationResult<DeletePhotoMutation>;
+export type DeletePhotoMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePhotoMutation, DeletePhotoMutationVariables>;
 export const FeedDocument = gql`
     query Feed {
   feed {
     date
     userId
     id
+    isLiked
+    isAuthor
     pictureUrl
     likeCount
     commentCount
@@ -758,6 +865,7 @@ export const FeedDocument = gql`
       username
     }
     comments {
+      isAuthor
       date
       photoId
       userId
