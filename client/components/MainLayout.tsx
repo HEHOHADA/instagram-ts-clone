@@ -35,14 +35,14 @@ const MainLayout = ({children, title = 'Main'}: Props) => {
               <div className="header__nav-items">
                 { !data || loading || !data.me ?
                     <div className="nav__container">
-                      <Link href="/accounts/login">
+                      <Link href="/accounts/login" as="/">
                         <a className="nav__register">
                           <button className="nav__login">
                             Войти
                           </button>
                         </a>
                       </Link>
-                      <Link href="/accounts/register">
+                      <Link href="/accounts/register" as="/">
                         <a className="nav__register">Зарегистрироваться</a>
                       </Link>
                     </div> : <NavbarItems

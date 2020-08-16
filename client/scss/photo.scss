@@ -1,10 +1,12 @@
 @import "mixins";
+@import "variables";
+@import "extented";
 
 .photo__create__container {
-  display: flex;
+  @extend %direc-row;
   height: 100%;
   width: 100%;
-  max-width: 950px;
+  max-width: $defaultContainer;
   padding: 20px;
   margin: 30px auto 0;
   justify-content: center;
@@ -12,16 +14,14 @@
 
 
 .photo__create__form__container {
-  display: flex;
+  @extend %direc-column;
   width: 100%;
-  flex-direction: column;
-  background-color: #fff;
+  background-color: $white;
 }
 
 .photo__create__form {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #dbdbdb;
+  @extend %direc-column;
+  border: $border;
   border-radius: 1px;
   margin: 0 0 10px;
 }
@@ -34,9 +34,9 @@
 
 .create__title {
   width: 100%;
-  border: 1px solid #dbdbdb;
+  border: $border;
   border-radius: 10px;
-  color: #131111;
+  color: $primary;
   background: #f8fafa;
   font-size: 1.3rem;
   padding: 7px 0;
@@ -55,9 +55,9 @@
 
 .photo__create__image-upload__text {
   width: 100%;
-  border: 1px solid #dbdbdb;
+  border: $border;
   border-radius: 10px;
-  color: #131111;
+  color: $primary;
   background: #f8fafa;
   font-size: 1.3rem;
   padding: 7px;
@@ -65,8 +65,8 @@
 }
 
 .photo__create__btn__container {
+  @extend %direc-row;
   justify-content: flex-end;
-  display: flex;
 }
 
 .dropzone__btn {
@@ -78,7 +78,7 @@
   border: 1px solid transparent;
   border-radius: 4px;
   padding: 5px 9px;
-  background-color: #0095f6;
-  color: #ffffff;
+  background-color: $link;
+  color: $white;
   margin: 10px;
 }

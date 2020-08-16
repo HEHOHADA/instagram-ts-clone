@@ -7,6 +7,8 @@ export const feedQuery = gql`
             date
             userId
             id
+            isLiked
+            isAuthor
             pictureUrl
             likeCount
             commentCount
@@ -16,6 +18,7 @@ export const feedQuery = gql`
                 username
             }
             comments{
+                isAuthor
                 date
                 photoId
                 userId
