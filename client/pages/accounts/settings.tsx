@@ -41,7 +41,7 @@ const Settings = ({userInfo}: UserInfoPropsType) => {
       }
     })
 
-  }, [])
+  }, [pictureUrl, setPicture])
 
   return (
       <MainLayout title="Settings">

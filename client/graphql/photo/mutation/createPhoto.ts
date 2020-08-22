@@ -5,6 +5,7 @@ export const createPhotoMutation = gql`
         createPhoto(picture:$picture,title:$title){
             date
             userId
+            postText
             id
             isLiked
             isAuthor

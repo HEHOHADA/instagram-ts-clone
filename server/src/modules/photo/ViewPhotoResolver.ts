@@ -9,7 +9,6 @@ export class ViewPhotoResolver {
 
   @FieldResolver(() => String, {nullable: true})
   pictureUrl(@Root()photo: Photo, @Ctx()ctx: MyContext) {
-
     if (photo.pictureUrl.includes('http')) {
       return photo.pictureUrl
     }
@@ -41,6 +40,7 @@ export class ViewPhotoResolver {
         .getRepository(Photo)
         .createQueryBuilder('photo')
         .select('photo')
+        .orderBy('photo.date', 'DESC')
         .where('photo.userId= :userId', {userId: user.id})
         .cache(true)
         .getMany()

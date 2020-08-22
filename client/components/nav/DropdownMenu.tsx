@@ -1,16 +1,32 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { DropdownItem } from './DropdownItem'
 import { MeDocument, MeQuery, useLogoutMutation } from '../../geterated/apollo'
 import { useRouter } from 'next/router'
 
 type PropsType = {
   username: string
+  closeDropDown: () => void
 }
 
-export const DropdownMenu = ({username}: PropsType) => {
+export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
 
   const [logout] = useLogoutMutation()
+  const dropDownRef = useRef(null)
   const router = useRouter()
+
+  const closeOutside = useCallback((e: MouseEvent) => {
+    if (dropDownRef?.current && !((dropDownRef.current! as HTMLDivElement).contains(e.target as HTMLDivElement))) {
+      closeDropDown()
+    }
+  }, [closeDropDown, dropDownRef])
+
+  useEffect(() => {
+    document.addEventListener('click', closeOutside)
+    return () => {
+      closeDropDown()
+      document.removeEventListener('click', closeOutside)
+    }
+  }, [closeDropDown])
 
   const dropDownMenu = useMemo(() => {
     return [
@@ -23,7 +39,7 @@ export const DropdownMenu = ({username}: PropsType) => {
   }, [])
 
   return (
-      <div className="dropdown">
+      <div className="dropdown" ref={ dropDownRef }>
         <div className="menu">
           { dropDownMenu }
           <hr/>

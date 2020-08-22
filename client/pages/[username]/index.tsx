@@ -20,7 +20,6 @@ import { FollowButton } from '../../components/profile/FollowButton'
 import { IUserInfo } from '../../interfaces'
 import { IPhoto } from '../../interfaces/photo'
 import { ProfileItems } from '../../components/profile/ProfileItems'
-import { useRouter } from 'next/router'
 
 type PropsType = {
   getUserInfo: IUserInfo
@@ -39,21 +38,11 @@ type FollowCallbackType<T> =
 
 const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
 
-  const router = useRouter()
 
   const modalRef = useRef<ModalRefType>(null)
 
-  const openModal = useCallback( () => {
-    router.push(`/${username}/subscription`)
+  const openModal = useCallback(() => {
     modalRef.current?.openModal()
-  }, [modalRef])
-
-  const onCloseOutside = useCallback((e: any) => {
-    modalRef.current?.closeOutside(e)
-  }, [modalRef])
-
-  const closeModal = useCallback(() => {
-    modalRef.current?.closeModal()
   }, [modalRef])
 
 
@@ -119,7 +108,7 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
       {
         count: followerInfo.followerCount,
         onClick: openModal,
-        text: declOfNum(followerInfo.followerCount, ['Подписок', 'Подписка', 'Подписки'])
+        text: declOfNum(followerInfo.followerCount, ['Подписка', 'Подписок', 'Подписки'])
       },
       {count: followingCount, text: declOfNum(followingCount, ['Подписчик', 'Подписчиков', 'Подписчика'])},
     ]
@@ -129,9 +118,7 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
   return (
       <MainLayout title={ username }>
         <ModalWindowContainer ref={ modalRef }>
-          <SubscriptionModal
-              onClick={ closeModal }
-              onCloseOutside={ onCloseOutside }/>
+          { (ref: ModalRefType) => (<SubscriptionModal { ...ref }/>) }
         </ModalWindowContainer>
         <div className="profile container">
           <div className="profile__info">

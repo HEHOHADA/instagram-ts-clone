@@ -3,6 +3,7 @@ import MainLayout from '../../components/MainLayout'
 import { blockRoute } from '../../utils/checkAuth'
 
 const CheckEmail = () => {
+
   return (
       <MainLayout title="Check Email">
         <div className="check-email__card container">

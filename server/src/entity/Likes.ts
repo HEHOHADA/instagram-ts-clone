@@ -25,7 +25,9 @@ export class Likes extends BaseEntity {
   date: Date
 
   @ManyToOne(() => Photo,
-      photo => photo.likes)
+      photo => photo.likes,{
+        onDelete: 'CASCADE',
+      })
   photo: Photo
 
   @ManyToOne(() => User)

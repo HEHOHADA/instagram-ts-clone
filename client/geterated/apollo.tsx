@@ -74,7 +74,7 @@ export type Photo = {
   commentCount?: Maybe<Scalars['Float']>;
   isLiked: Scalars['Boolean'];
   isAuthor: Scalars['Boolean'];
-  comments: Array<Comment>;
+  comments?: Maybe<Array<Comment>>;
 };
 
 
@@ -321,7 +321,7 @@ export type CreatePhotoMutation = (
   { __typename?: 'Mutation' }
   & { createPhoto: (
     { __typename?: 'Photo' }
-    & Pick<Photo, 'date' | 'userId' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
+    & Pick<Photo, 'date' | 'userId' | 'postText' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
@@ -346,18 +346,18 @@ export type FeedQuery = (
   { __typename?: 'Query' }
   & { feed?: Maybe<Array<(
     { __typename?: 'Photo' }
-    & Pick<Photo, 'date' | 'userId' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
+    & Pick<Photo, 'date' | 'userId' | 'id' | 'postText' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
-    ), comments: Array<(
+    ), comments?: Maybe<Array<(
       { __typename?: 'Comment' }
       & Pick<Comment, 'isAuthor' | 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
       & { user: (
         { __typename?: 'User' }
         & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
       ) }
-    )> }
+    )>> }
   )>> }
 );
 
@@ -380,14 +380,14 @@ export type PhotFragmentFragment = (
   & { user: (
     { __typename?: 'User' }
     & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
-  ), comments: Array<(
+  ), comments?: Maybe<Array<(
     { __typename?: 'Comment' }
     & Pick<Comment, 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
     ) }
-  )> }
+  )>> }
 );
 
 export type ChangeForgotPasswordMutationVariables = Exact<{
@@ -778,6 +778,7 @@ export const CreatePhotoDocument = gql`
   createPhoto(picture: $picture, title: $title) {
     date
     userId
+    postText
     id
     isLiked
     isAuthor
@@ -854,6 +855,7 @@ export const FeedDocument = gql`
     date
     userId
     id
+    postText
     isLiked
     isAuthor
     pictureUrl

@@ -1,4 +1,4 @@
-import React  from 'react'
+import React from 'react'
 import MainLayout from '../components/MainLayout'
 import { MyContext } from '../interfaces/MyContext'
 import { History } from '../components/dashboard/History'
@@ -6,7 +6,10 @@ import {
   FeedDocument,
   FeedQuery,
   MeDocument,
-  MeQuery, useCreateCommentMutation, useDeleteCommentMutation,
+  MeQuery,
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
+  useDeletePhotoMutation,
   useLikeMutation
 } from '../geterated/apollo'
 import { UserProfileRecommendation } from '../components/dashboard/UserProfileRecommendation'
@@ -23,17 +26,19 @@ type PropsType = {
 const IndexPage = ({me, feed}: PropsType) => {
   const [createComment] = useCreateCommentMutation()
   const [like] = useLikeMutation()
+  const [deletePhoto] = useDeletePhotoMutation()
   const [deleteComment] = useDeleteCommentMutation()
 
   return (
-      <MainLayout title="Home | Instagram">
+      <MainLayout title="Home">
         <div className="container dashboard">
           <div className="dashboard__main">
             <History/>
             <div>
               <Posts
-                  deleteCommentMutation={deleteComment}
-                  likeMutation={like}
+                  deletePhotoMutation={ deletePhoto }
+                  deleteCommentMutation={ deleteComment }
+                  likeMutation={ like }
                   createCommentMutation={ createComment }
                   feed={ feed }/>
             </div>

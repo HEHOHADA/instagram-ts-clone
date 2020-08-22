@@ -1,28 +1,21 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useRef, useState } from 'react'
 import { PostHeader } from './PostHeader'
 import { IPhoto } from '../../../interfaces/photo'
 import { CommentTools } from './comment/CommentTools'
 import { Comments } from './comment/Comments'
-import {
-  CreateCommentMutation,
-  CreateCommentType,
-  DeleteCommentMutation,
-  DeleteCommentType,
-  Exact,
-  LikeMutation
-} from '../../../geterated/apollo'
+import { CreateCommentType } from '../../../geterated/apollo'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { IComment } from '../../../interfaces/comment'
 import { TextArea } from '../../utils/TextArea'
-import { MutationFunctionOptions } from '@apollo/client'
 import { dateOptions } from '../../../utils/config'
+import { ModalRefType, ModalWindowContainer } from '../../modal/ModalWindowContainer'
+import { PhotoSettingsModal } from '../../modal/PhotoSettingsModal'
+import { MutationPostType } from './Posts'
 
 
 type PropsType = {
   photo: IPhoto
-  deleteCommentMutation: (options?: (MutationFunctionOptions<DeleteCommentMutation, Exact<{ data: DeleteCommentType }>> | undefined)) => Promise<any>
-  likeMutation: (options?: (MutationFunctionOptions<LikeMutation, Exact<{ photoId: string }>> | undefined)) => Promise<any>
-  createCommentMutation: (options?: (MutationFunctionOptions<CreateCommentMutation, Exact<{ data: CreateCommentType }>> | undefined)) => Promise<any>
+  deletePhoto: (id: string) => Promise<void>
 }
 
 type LikeType = {
@@ -30,14 +23,21 @@ type LikeType = {
   isLiked: boolean
 }
 
-export const PostItem: FC<PropsType> = React.memo(
+export const PostItem: FC<PropsType & MutationPostType> = React.memo(
     ({
        photo,
-       createCommentMutation, deleteCommentMutation, likeMutation
+       createCommentMutation, deleteCommentMutation, deletePhoto, likeMutation
      }) => {
+
+      const modalRef = useRef<ModalRefType>(null)
+      const openModal = useCallback(() => {
+        modalRef.current?.openModal()
+      }, [modalRef])
+
 
       const [comments, setComments] = useState<IComment[]>(photo.comments)
       const [photoLikeInfo, setPhotoLikeInfo] = useState<LikeType>({likeCount: photo.likeCount, isLiked: photo.isLiked})
+
 
       const onDeleteComment = useCallback(async (id: string) => {
         try {
@@ -111,8 +111,16 @@ export const PostItem: FC<PropsType> = React.memo(
 
       return (
           <div className="dashboard__content">
+            <ModalWindowContainer ref={ modalRef }>
+              { (ref: ModalRefType) => (
+                  <PhotoSettingsModal
+                      isAuthor={ photo.isAuthor }
+                      deletePhoto={ () => deletePhoto(photo.id) }
+                      { ...ref }/>) }
+            </ModalWindowContainer>
             <PostHeader
-                isAuthor={photo.isAuthor}
+                onOpenModal={ openModal }
+                isAuthor={ photo.isAuthor }
                 pictureUrl={ photo.user.pictureUrl }
                 username={ photo.user.username }/>
             <div className="content__img">
@@ -128,7 +136,9 @@ export const PostItem: FC<PropsType> = React.memo(
                   isLiked={ photoLikeInfo.isLiked }
                   onLike={ onLikeHandler }
               />
-
+              <div className="content__likes">
+                <span>{ photo.postText }</span>
+              </div>
               <div className="content__likes">
                 <span>Нравится { photoLikeInfo.likeCount } людям</span>
               </div>
