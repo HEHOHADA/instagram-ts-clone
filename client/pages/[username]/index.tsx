@@ -154,28 +154,28 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
 }
 
 
-Profile.getInitialProps = async (ctx: MyContext) => {
-  const username = ctx.query.username
-  try {
-    const userInfo = await ctx.apolloClient.query<GetUserInfoQuery>({
-      query: GetUserInfoDocument, variables: {username}
-    })
-
-    const userPhotos = await ctx.apolloClient.query<ViewUserPhotoQuery>({
-      query: ViewUserPhotoDocument,
-      variables: {username}
-    })
-    return {
-      getUserInfo: {...userInfo.data!.getUserInfo},
-      viewUserPhoto: userPhotos.data!.viewUserPhoto
-    }
-  } catch (e) {
-    redirect(ctx, '/404')
-  }
-  return {
-    props: {}
-  }
-}
+// Profile.getInitialProps = async (ctx: MyContext) => {
+//   const username = ctx.query.username
+//   try {
+//     const userInfo = await ctx.apolloClient.query<GetUserInfoQuery>({
+//       query: GetUserInfoDocument, variables: {username}
+//     })
+//
+//     const userPhotos = await ctx.apolloClient.query<ViewUserPhotoQuery>({
+//       query: ViewUserPhotoDocument,
+//       variables: {username}
+//     })
+//     return {
+//       getUserInfo: {...userInfo.data!.getUserInfo},
+//       viewUserPhoto: userPhotos.data!.viewUserPhoto
+//     }
+//   } catch (e) {
+//     redirect(ctx, '/404')
+//   }
+//   return {
+//     props: {}
+//   }
+// }
 
 
 export default Profile

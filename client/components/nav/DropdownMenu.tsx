@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { DropdownItem } from './DropdownItem'
-import { MeDocument, MeQuery, useLogoutMutation } from '../../geterated/apollo'
+import { useLogoutMutation } from '../../geterated/apollo'
 import { useRouter } from 'next/router'
 
 type PropsType = {
@@ -30,7 +30,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
 
   const dropDownMenu = useMemo(() => {
     return [
-      {link: `/${ username }`, iconName: 'home', text: 'Профиль'},
+      {link: `/${ username }`, as:`/[username]`,iconName: 'home', text: 'Профиль'},
       {link: '/accounts/settings', iconName: 'settings', text: 'Настройки'},
       {link: '/p/create', iconName: 'create', text: 'Создать пост'}
     ].map((n) => (
@@ -48,12 +48,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
               if (!data) {
                 return
               }
-              cache.writeQuery<MeQuery>({
-                query: MeDocument,
-                data: {
-                  me: null
-                }
-              })
+              await cache.reset()
               await router.push('/accounts/login')
             }
           }) } className="btn__logout">Выйти

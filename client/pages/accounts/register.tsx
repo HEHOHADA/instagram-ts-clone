@@ -6,7 +6,6 @@ import { RegisterInput, useRegisterMutation } from '../../geterated/apollo'
 import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
-import { blockRoute } from '../../utils/checkAuth'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
 
 const Register = () => {
@@ -34,7 +33,7 @@ const Register = () => {
       placeholder: 'Password',
       type: 'password',
       component: InputAuthField
-    },
+    }
     ]
   }, [])
 
@@ -70,7 +69,6 @@ const Register = () => {
       </AuthLayout>
   )
 }
-Register.getInitialProps = blockRoute
 
 
 export default Register

@@ -61,6 +61,6 @@ const ForgotPassword = () => {
       </MainLayout>
   )
 }
-ForgotPassword.getInitialProps = blockRoute
+// ForgotPassword.getInitialProps = blockRoute
 
 export default ForgotPassword

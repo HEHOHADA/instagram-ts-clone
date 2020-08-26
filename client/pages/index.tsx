@@ -1,34 +1,32 @@
 import React from 'react'
 import MainLayout from '../components/MainLayout'
-import { MyContext } from '../interfaces/MyContext'
 import { History } from '../components/dashboard/History'
 import {
-  FeedDocument,
-  FeedQuery,
-  MeDocument,
-  MeQuery,
   useCreateCommentMutation,
   useDeleteCommentMutation,
   useDeletePhotoMutation,
-  useLikeMutation
+  useFeedQuery,
+  useLikeMutation,
+  useMeQuery
 } from '../geterated/apollo'
+import withApollo from '../lib/withApollo'
+import { useIsAuth } from '../utils/useIsAuth'
 import { UserProfileRecommendation } from '../components/dashboard/UserProfileRecommendation'
-import { IUserMe } from '../interfaces'
-import { IPhoto } from '../interfaces/photo'
 import { Posts } from '../components/dashboard/post/Posts'
-import Redirect from '../lib/redirect'
 
-type PropsType = {
-  me: IUserMe,
-  feed: IPhoto[]
-}
 
-const IndexPage = ({me, feed}: PropsType) => {
-  const [createComment] = useCreateCommentMutation()
-  const [like] = useLikeMutation()
-  const [deletePhoto] = useDeletePhotoMutation()
-  const [deleteComment] = useDeleteCommentMutation()
+const IndexPage = () => {
 
+  const {data} = useMeQuery()
+  useIsAuth()
+  const {data: dataFeed} = useFeedQuery()
+
+  if (!data) {
+    return null
+  }
+  if (!dataFeed) {
+    return null
+  }
   return (
       <MainLayout title="Home">
         <div className="container dashboard">
@@ -36,18 +34,14 @@ const IndexPage = ({me, feed}: PropsType) => {
             <History/>
             <div>
               <Posts
-                  deletePhotoMutation={ deletePhoto }
-                  deleteCommentMutation={ deleteComment }
-                  likeMutation={ like }
-                  createCommentMutation={ createComment }
-                  feed={ feed }/>
+                  feed={ dataFeed.feed as any }/>
             </div>
           </div>
           <div className="dashboard__recommendation">
             <UserProfileRecommendation
-                username={ me.username }
-                pictureUrl={ me.pictureUrl }
-                fullName={ me.fullName }
+                username={ data!.me!.username }
+                pictureUrl={ data!.me!.pictureUrl }
+                fullName={ data!.me!.fullName }
             />
             <div className="dashboard__recommendation__items">
               <div className="recommend__helper">
@@ -92,30 +86,26 @@ const IndexPage = ({me, feed}: PropsType) => {
 }
 
 
-IndexPage.getInitialProps = async (ctx: MyContext) => {
-  if (!ctx.apolloClient.readQuery({query: MeDocument})?.me) {
-    const meQueryData = await ctx.apolloClient.query({
-      query: MeDocument
-    })
-    if (meQueryData.data.me) {
-      ctx.apolloClient.writeQuery({query: MeDocument, data: meQueryData.data})
-    }
-  }
+// IndexPage.getInitialProps = async (ctx: MyContext) => {
+//   if (!ctx.apolloClient.readQuery({query: MeDocument})?.me) {
+//     const meQueryData = await ctx.apolloClient.query({
+//       query: MeDocument
+//     })
+//     if (meQueryData.data.me) {
+//       ctx.apolloClient.writeQuery({query: MeDocument, data: meQueryData.data})
+//     }
+//   }
+//
+//   const me = ctx.apolloClient.readQuery<MeQuery>({query: MeDocument})?.me
+//
+//   if (!me) {
+//     Redirect(ctx, '/accounts/login')
+//   }
+//
+//
+//   return {
+//     me, feed
+//   }
+// }
 
-  const me = ctx.apolloClient.readQuery<MeQuery>({query: MeDocument})?.me
-
-  if (!me) {
-    Redirect(ctx, '/accounts/login')
-  }
-  const feedResponse = await ctx.apolloClient.query<FeedQuery>({query: FeedDocument})
-
-  ctx.apolloClient.writeQuery({query: FeedDocument, data: feedResponse.data})
-
-  const feed = feedResponse.data?.feed
-
-  return {
-    me, feed
-  }
-}
-
-export default IndexPage
+export default withApollo({ssr: true})(IndexPage)

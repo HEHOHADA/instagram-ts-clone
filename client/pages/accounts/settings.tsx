@@ -97,19 +97,19 @@ const Settings = ({userInfo}: UserInfoPropsType) => {
   )
 }
 
-
-Settings.getInitialProps = async (ctx: MyContext) => {
-
-  let meDataQuery: MeQuery | null = ctx.apolloClient.cache.readQuery({query: MeDocument})
-  if (!meDataQuery) {
-    meDataQuery = (await ctx.apolloClient.query({
-      query: MeDocument
-    })).data
-  }
-  const {__typename, ...me} = meDataQuery?.me ?? {}
-  return {
-    userInfo: {...me} as UserInfoPropsType
-  }
-}
+//
+// Settings.getInitialProps = async (ctx: MyContext) => {
+//
+//   let meDataQuery: MeQuery | null = ctx.apolloClient.cache.readQuery({query: MeDocument})
+//   if (!meDataQuery) {
+//     meDataQuery = (await ctx.apolloClient.query({
+//       query: MeDocument
+//     })).data
+//   }
+//   const {__typename, ...me} = meDataQuery?.me ?? {}
+//   return {
+//     userInfo: {...me} as UserInfoPropsType
+//   }
+// }
 
 export default Settings

@@ -13,24 +13,14 @@ export const feedQuery = gql`
             likeCount
             commentCount
             user{
-                pictureUrl
-                fullName
-                username
+                ...userMe
             }
             comments{
-                isAuthor
-                date
-                photoId
-                userId
+                ...commentItem
                 user{
-                    pictureUrl
-                    username
-                    id
-                    email
-                    fullName
+                    ...userMe
                 }
-                commentText
-                id 
+               
             }
         }
     }

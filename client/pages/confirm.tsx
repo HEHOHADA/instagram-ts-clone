@@ -12,20 +12,20 @@ const Confirm = () => {
       </MainLayout>
   )
 }
-
-Confirm.getInitialProps = async ({query: {token}, apolloClient, ...ctx}: MyContext) => {
-  if (!token) {
-    return {}
-  }
-  await apolloClient.mutate<ConfirmUserMutation,
-      ConfirmUserMutationVariables>({
-    mutation: confirmUserMutation,
-    variables: {
-      token: token as string
-    }
-  })
-  redirect(ctx, '/accounts/login')
-  return {}
-}
+//
+// Confirm.getInitialProps = async ({query: {token}, apolloClient, ...ctx}: MyContext) => {
+//   if (!token) {
+//     return {}
+//   }
+//   await apolloClient.mutate<ConfirmUserMutation,
+//       ConfirmUserMutationVariables>({
+//     mutation: confirmUserMutation,
+//     variables: {
+//       token: token as string
+//     }
+//   })
+//   redirect(ctx, '/accounts/login')
+//   return {}
+// }
 
 export default Confirm

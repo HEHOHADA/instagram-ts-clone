@@ -1,6 +1,5 @@
 import React from 'react'
 import MainLayout from '../../components/MainLayout'
-import { blockRoute } from '../../utils/checkAuth'
 
 const CheckEmail = () => {
 
@@ -14,6 +13,5 @@ const CheckEmail = () => {
       </MainLayout>
   )
 }
-CheckEmail.getInitialProps = blockRoute
 
 export default CheckEmail

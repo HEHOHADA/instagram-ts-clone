@@ -7,8 +7,8 @@ import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
 import { InputAuthField } from '../../components/utils/InputAuthField'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
-import { blockRoute } from '../../utils/checkAuth'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
+import withApollo from '../../lib/withApollo'
 
 const Login = () => {
   const [login] = useLoginMutation()
@@ -83,7 +83,6 @@ const Login = () => {
   )
 }
 
-Login.getInitialProps = blockRoute
 
 
-export default Login
+export default withApollo({ssr:false})(Login)

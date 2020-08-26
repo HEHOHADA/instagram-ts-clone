@@ -5,11 +5,7 @@ export const loginMutation = gql`
         login(data:$data) {
             accessToken
             user {
-                id
-                username
-                email
-                pictureUrl
-                fullName
+              ...userMe 
             }
         }
     }

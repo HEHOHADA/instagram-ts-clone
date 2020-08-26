@@ -228,6 +228,11 @@ export type RegisterInput = {
   username: Scalars['String'];
 };
 
+export type CommentItemFragment = (
+  { __typename?: 'Comment' }
+  & Pick<Comment, 'date' | 'userId' | 'id' | 'isAuthor' | 'commentText' | 'photoId'>
+);
+
 export type CreateCommentMutationVariables = Exact<{
   data: CreateCommentType;
 }>;
@@ -240,7 +245,7 @@ export type CreateCommentMutation = (
     & Pick<Comment, 'date' | 'userId' | 'id' | 'isAuthor' | 'commentText' | 'photoId'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'username' | 'id' | 'email' | 'pictureUrl' | 'fullName'>
+      & UserMeFragment
     ) }
   ) }
 );
@@ -349,13 +354,13 @@ export type FeedQuery = (
     & Pick<Photo, 'date' | 'userId' | 'id' | 'postText' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
+      & UserMeFragment
     ), comments?: Maybe<Array<(
       { __typename?: 'Comment' }
-      & Pick<Comment, 'isAuthor' | 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
+      & Pick<Comment, 'isAuthor' | 'id' | 'date' | 'photoId' | 'userId' | 'commentText'>
       & { user: (
         { __typename?: 'User' }
-        & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
+        & UserMeFragment
       ) }
     )>> }
   )>> }
@@ -388,6 +393,11 @@ export type PhotFragmentFragment = (
       & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
     ) }
   )>> }
+);
+
+export type UserMeFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'email' | 'id' | 'username' | 'pictureUrl' | 'fullName'>
 );
 
 export type ChangeForgotPasswordMutationVariables = Exact<{
@@ -435,7 +445,7 @@ export type LoginMutation = (
     & Pick<LoginResponseType, 'accessToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'email' | 'pictureUrl' | 'fullName'>
+      & UserMeFragment
     ) }
   ) }
 );
@@ -468,7 +478,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'email' | 'username'>
+    & UserMeFragment
   ) }
 );
 
@@ -491,7 +501,8 @@ export type GetUserInfoQuery = (
   { __typename?: 'Query' }
   & { getUserInfo: (
     { __typename?: 'User' }
-    & Pick<User, 'email' | 'id' | 'username' | 'pictureUrl' | 'fullName' | 'followerCount' | 'photoCount' | 'followingCount' | 'isCurrentUser' | 'isFollowing' | 'isFollowed'>
+    & Pick<User, 'followerCount' | 'photoCount' | 'followingCount' | 'isCurrentUser' | 'isFollowing' | 'isFollowed'>
+    & UserMeFragment
   ) }
 );
 
@@ -502,10 +513,20 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'email' | 'id' | 'username' | 'pictureUrl' | 'fullName'>
+    & UserMeFragment
   )> }
 );
 
+export const CommentItemFragmentDoc = gql`
+    fragment commentItem on Comment {
+  date
+  userId
+  id
+  isAuthor
+  commentText
+  photoId
+}
+    `;
 export const PhotFragmentFragmentDoc = gql`
     fragment photFragment on Photo {
   date
@@ -535,6 +556,15 @@ export const PhotFragmentFragmentDoc = gql`
   }
 }
     `;
+export const UserMeFragmentDoc = gql`
+    fragment userMe on User {
+  email
+  id
+  username
+  pictureUrl
+  fullName
+}
+    `;
 export const CreateCommentDocument = gql`
     mutation CreateComment($data: CreateCommentType!) {
   createComment(data: $data) {
@@ -545,15 +575,11 @@ export const CreateCommentDocument = gql`
     commentText
     photoId
     user {
-      username
-      id
-      email
-      pictureUrl
-      fullName
+      ...userMe
     }
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
 
 /**
@@ -862,28 +888,22 @@ export const FeedDocument = gql`
     likeCount
     commentCount
     user {
-      pictureUrl
-      fullName
-      username
+      ...userMe
     }
     comments {
       isAuthor
+      id
       date
       photoId
       userId
-      user {
-        pictureUrl
-        username
-        id
-        email
-        fullName
-      }
       commentText
-      id
+      user {
+        ...userMe
+      }
     }
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 
 /**
  * __useFeedQuery__
@@ -1043,15 +1063,11 @@ export const LoginDocument = gql`
   login(data: $data) {
     accessToken
     user {
-      id
-      username
-      email
-      pictureUrl
-      fullName
+      ...userMe
     }
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -1141,12 +1157,10 @@ export type RefreshTokenQueryResult = ApolloReactCommon.QueryResult<RefreshToken
 export const RegisterDocument = gql`
     mutation Register($data: RegisterInput!) {
   register(data: $data) {
-    id
-    email
-    username
+    ...userMe
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
@@ -1205,11 +1219,7 @@ export type SetPictureProfileMutationOptions = ApolloReactCommon.BaseMutationOpt
 export const GetUserInfoDocument = gql`
     query GetUserInfo($username: String!) {
   getUserInfo(username: $username) {
-    email
-    id
-    username
-    pictureUrl
-    fullName
+    ...userMe
     followerCount
     photoCount
     followingCount
@@ -1218,7 +1228,7 @@ export const GetUserInfoDocument = gql`
     isFollowed
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 
 /**
  * __useGetUserInfoQuery__
@@ -1248,14 +1258,10 @@ export type GetUserInfoQueryResult = ApolloReactCommon.QueryResult<GetUserInfoQu
 export const MeDocument = gql`
     query Me {
   me {
-    email
-    id
-    username
-    pictureUrl
-    fullName
+    ...userMe
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 
 /**
  * __useMeQuery__
