@@ -10,6 +10,9 @@ import RedirectComponent from '../../components/auth/RedirectComponent'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
 import withApollo from '../../lib/withApollo'
 import { useBlockRoute } from '../../utils/useBlockRoute'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '../../lib/redirect'
 
 const Login = () => {
   useBlockRoute()
@@ -85,5 +88,16 @@ const Login = () => {
   )
 }
 
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (jid()['jid']) {
+      Redirect(ctx, '/')
+    }
+  }
+  return {
+    props: {}
+  }
+}
 
-export default withApollo({ssr: true})(Login)
+export default withApollo({ssr: false})(Login)

@@ -4,7 +4,7 @@ export const cacheConfig = {
   typePolicies: {
     Query: {
       fields: {
-        photos: {
+        feed: {
           keyArgs: [],
           merge(
               existing: PaginatedPhotos | undefined,
@@ -14,9 +14,9 @@ export const cacheConfig = {
               ...incoming,
               photos: [...(existing?.photos || []), ...incoming.photos],
             }
-          },
-        },
-      },
-    },
-  },
+          }
+        }
+      }
+    }
+  }
 }

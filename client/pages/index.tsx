@@ -25,7 +25,6 @@ const IndexPage = () => {
   if (!dataFeed) {
     return null
   }
-  console.log('photos',dataFeed.feed.photos)
   return (
       <MainLayout title="Home">
         <div className="container dashboard">
@@ -39,6 +38,7 @@ const IndexPage = () => {
                 <button
                     disabled={ loading }
                     onClick={ async () => {
+                      console.log('date,', dataFeed?.feed.photos[dataFeed?.feed.photos.length - 1].date)
                       await fetchMore({
                         variables: {
                           limit: variables!.limit,

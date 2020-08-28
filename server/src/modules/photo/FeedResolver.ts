@@ -29,14 +29,15 @@ export class FeedResolver {
         .getRepository(Photo)
         .createQueryBuilder('photo')
         .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
-        .orderBy('photo.date', 'DESC')
-        .leftJoinAndMapMany('photo.comments', 'photo.comments', 'comments')
 
     if (cursor) {
       qb.where('photo.date < :cursor', {cursor: new Date(cursor)})
     }
-    const photos = await qb.limit(realLimitPlusOne)
-                           .getMany()
+    const photos = await qb
+        .orderBy('photo.date', 'DESC')
+        .leftJoinAndMapMany('photo.comments', 'photo.comments', 'comments')
+        .limit(realLimitPlusOne)
+        .getMany()
     return {
       photos: photos.slice(0, realLimit),
       hasMore: photos.length === realLimitPlusOne

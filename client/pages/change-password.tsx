@@ -3,16 +3,19 @@ import { useChangeForgotPasswordMutation } from '../geterated/apollo'
 import { InputAuthField } from '../components/utils/InputAuthField'
 import { useRouter } from 'next/router'
 import { InstagramAuthForm } from '../components/form/InstagramAuthForm'
-import { MyContext } from '../interfaces/MyContext'
 import AuthLayout from '../components/AuthLayout'
 import OrComponentWithRedirect from '../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../components/auth/RedirectComponent'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '../lib/redirect'
+import withApollo from '../lib/withApollo'
 
-const ChangePassword = ({token}: { token: string }) => {
+const ChangePassword = () => {
 
   const [changeForgotPassword] = useChangeForgotPasswordMutation()
   const router = useRouter()
-
+  const token = typeof router.query.token === 'string' ? router.query.token : -1
   const changePasswordHandler = useCallback(async (data, {setErrors}) => {
     try {
       const response = await changeForgotPassword({
@@ -59,10 +62,16 @@ const ChangePassword = ({token}: { token: string }) => {
   )
 }
 
-ChangePassword.getInitialProps = async ({query: {token}}: MyContext) => {
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (jid()['jid']) {
+      Redirect(ctx, '/')
+    }
+  }
   return {
-    token
+    props: {}
   }
 }
 
-export default ChangePassword
+export default withApollo({ssr: false})(ChangePassword)
