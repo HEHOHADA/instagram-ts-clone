@@ -1,25 +1,23 @@
 import React from 'react'
 import MainLayout from '../components/MainLayout'
 import { History } from '../components/dashboard/History'
-import {
-  useCreateCommentMutation,
-  useDeleteCommentMutation,
-  useDeletePhotoMutation,
-  useFeedQuery,
-  useLikeMutation,
-  useMeQuery
-} from '../geterated/apollo'
-import withApollo from '../lib/withApollo'
+import { useFeedQuery, useMeQuery } from '../geterated/apollo'
 import { useIsAuth } from '../utils/useIsAuth'
-import { UserProfileRecommendation } from '../components/dashboard/UserProfileRecommendation'
 import { Posts } from '../components/dashboard/post/Posts'
+import { UserProfileRecommendation } from '../components/dashboard/UserProfileRecommendation'
+import withApollo from '../lib/withApollo'
 
 
 const IndexPage = () => {
-
   const {data} = useMeQuery()
+  const {data: dataFeed, loading, fetchMore, variables} = useFeedQuery({
+    variables: {
+      limit: 2,
+      cursor: null as null | string
+    },
+    notifyOnNetworkStatusChange: true
+  })
   useIsAuth()
-  const {data: dataFeed} = useFeedQuery()
 
   if (!data) {
     return null
@@ -27,15 +25,29 @@ const IndexPage = () => {
   if (!dataFeed) {
     return null
   }
+  console.log('photos',dataFeed.feed.photos)
   return (
       <MainLayout title="Home">
         <div className="container dashboard">
           <div className="dashboard__main">
             <History/>
-            <div>
+            <div className="dashboard__container_el">
               <Posts
-                  feed={ dataFeed.feed as any }/>
+                  feed={ dataFeed.feed.photos as any }/>
             </div>
+            { dataFeed.feed.hasMore ? (
+                <button
+                    disabled={ loading }
+                    onClick={ async () => {
+                      await fetchMore({
+                        variables: {
+                          limit: variables!.limit,
+                          cursor: dataFeed?.feed.photos[dataFeed?.feed.photos.length - 1].date
+                        }
+                      })
+                    } }
+                    className="comment__btn">load more</button>
+            ) : null }
           </div>
           <div className="dashboard__recommendation">
             <UserProfileRecommendation
@@ -85,27 +97,5 @@ const IndexPage = () => {
   )
 }
 
-
-// IndexPage.getInitialProps = async (ctx: MyContext) => {
-//   if (!ctx.apolloClient.readQuery({query: MeDocument})?.me) {
-//     const meQueryData = await ctx.apolloClient.query({
-//       query: MeDocument
-//     })
-//     if (meQueryData.data.me) {
-//       ctx.apolloClient.writeQuery({query: MeDocument, data: meQueryData.data})
-//     }
-//   }
-//
-//   const me = ctx.apolloClient.readQuery<MeQuery>({query: MeDocument})?.me
-//
-//   if (!me) {
-//     Redirect(ctx, '/accounts/login')
-//   }
-//
-//
-//   return {
-//     me, feed
-//   }
-// }
 
 export default withApollo({ssr: true})(IndexPage)

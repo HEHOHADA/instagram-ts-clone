@@ -1,6 +1,6 @@
 import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
 import { Photo } from '../../entity/Photo'
-import { getConnection } from 'typeorm/index'
+import { getConnection } from 'typeorm'
 import { User } from '../../entity/User'
 import { MyContext } from '../../types/MyContext'
 

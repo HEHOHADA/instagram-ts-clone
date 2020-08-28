@@ -1,24 +1,25 @@
 import React, { FC, useCallback, useRef } from 'react'
 import { PostHeader } from './PostHeader'
-import { IPhoto } from '../../../interfaces/photo'
 import { CommentTools } from './comment/CommentTools'
 import { Comments } from './comment/Comments'
 import {
+  CommentItemFragment,
   CreateCommentType,
   useCreateCommentMutation,
   useDeleteCommentMutation,
   useLikeMutation
 } from '../../../geterated/apollo'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { IComment } from '../../../interfaces/comment'
 import { TextArea } from '../../utils/TextArea'
 import { dateOptions } from '../../../utils/config'
 import { ModalRefType, ModalWindowContainer } from '../../modal/ModalWindowContainer'
 import { PhotoSettingsModal } from '../../modal/PhotoSettingsModal'
+import { PhotoFeedType } from './Posts'
+import { gql } from '@apollo/client'
 
 
 type PropsType = {
-  photo: IPhoto
+  photo: PhotoFeedType
   deletePhoto: (id: string) => Promise<void>
 }
 
@@ -27,6 +28,7 @@ export const PostItem: FC<PropsType> = React.memo(
     ({
        photo, deletePhoto
      }) => {
+
       const [createCommentMutation] = useCreateCommentMutation()
       const modalRef = useRef<ModalRefType>(null)
       const openModal = useCallback(() => {
@@ -41,13 +43,8 @@ export const PostItem: FC<PropsType> = React.memo(
           await deleteCommentMutation({
             variables: {data: {id}},
             update: (cache) => {
-              cache.modify({
-                id: cache.identify({__ref: `Photo:${ photo.id }`}),
-                fields: {
-                  comments(cacheValue) {
-                    return cacheValue.filter((v: IComment) => v.id !== id)
-                  }
-                }
+              cache.evict({
+                id: cache.identify({__ref: `Comment:${ id }`})
               })
             }
           })
@@ -63,17 +60,33 @@ export const PostItem: FC<PropsType> = React.memo(
               photoId: photo.id
             }, update: (cache) => {
               const counting = photo.isLiked ? -1 : 1
-              cache.modify({
-                id: cache.identify({__ref: `Photo:${ photo.id }`}),
-                fields: {
-                  isLiked(cacheValue) {
-                    return !cacheValue
-                  },
-                  followerCount(cacheValue) {
-                    return cacheValue + counting
-                  }
-                }
+              const data = cache.readFragment<{
+                id: string,
+                likeCount: number,
+                isLiked: boolean
+              }>({
+                id: `Photo:${ photo.id }`,
+                fragment: gql`
+                    fragment _ on Photo {
+                        id
+                        likeCount
+                        isLiked
+                    }
+                `,
               })
+
+              if (data) {
+                cache.writeFragment({
+                  id: `Photo:${ photo.id }`,
+                  fragment: gql`
+                      fragment __ on Photo {
+                          likeCount
+                          isLiked
+                      }
+                  `,
+                  data: {likeCount: data.likeCount + counting, isLiked: !data.isLiked}
+                })
+              }
             }
           })
         } catch (e) {
@@ -87,12 +100,35 @@ export const PostItem: FC<PropsType> = React.memo(
             variables: {
               data
             },
-            update: (cache) => {
-              cache.evict({fieldName: 'feed:{}'})
+            update: (cache, {data}) => {
+              const cacheFragment = cache.readFragment<{
+                id: string,
+                comments: CommentItemFragment[]
+              }>({
+                id: `Photo:${ photo.id }`,
+                fragment: gql`
+                    fragment _ on Photo {
+                        id
+                        comments
+                    }
+                `,
+              })
+
+              if (cacheFragment && data?.createComment) {
+                const newComments = [...cacheFragment.comments].push(data?.createComment)
+                cache.writeFragment({
+                  id: `Photo:${ photo.id }`,
+                  fragment: gql`
+                      fragment __ on Photo {
+                          comments
+                      }
+                  `,
+                  data: {comments: newComments}
+                })
+              }
             },
           })
           if (response && response.data) {
-
             resetForm()
           }
         } catch (e) {
@@ -134,9 +170,10 @@ export const PostItem: FC<PropsType> = React.memo(
               <div className="content__likes">
                 <span>Нравится { photo.likeCount } людям</span>
               </div>
-              <Comments
+              { photo.comments
+              && <Comments
                   onDeleteComment={ onDeleteComment }
-                  comments={ photo.comments }/>
+                  comments={ photo.comments }/> }
               <div className="content__created">{ new Date(photo.date).toLocaleString('ru', dateOptions) }</div>
               <Formik<CreateCommentType>
                   onSubmit={ createCommentHandler }

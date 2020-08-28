@@ -20,7 +20,7 @@ export type Query = {
   __typename?: 'Query';
   getFollowers: Array<User>;
   getFollowings: Array<User>;
-  feed?: Maybe<Array<Photo>>;
+  feed: PaginatedPhotos;
   viewUserPhoto: Array<Photo>;
   getUserInfo: User;
   me?: Maybe<User>;
@@ -35,6 +35,12 @@ export type QueryGetFollowersArgs = {
 
 export type QueryGetFollowingsArgs = {
   userId: Scalars['String'];
+};
+
+
+export type QueryFeedArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -60,6 +66,12 @@ export type User = {
   isFollowed: Scalars['Boolean'];
   isFollowing: Scalars['Boolean'];
   isCurrentUser: Scalars['Boolean'];
+};
+
+export type PaginatedPhotos = {
+  __typename?: 'PaginatedPhotos';
+  photos: Array<Photo>;
+  hasMore: Scalars['Boolean'];
 };
 
 export type Photo = {
@@ -242,11 +254,11 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment: (
     { __typename?: 'Comment' }
-    & Pick<Comment, 'date' | 'userId' | 'id' | 'isAuthor' | 'commentText' | 'photoId'>
     & { user: (
       { __typename?: 'User' }
       & UserMeFragment
     ) }
+    & CommentItemFragment
   ) }
 );
 
@@ -344,26 +356,39 @@ export type DeletePhotoMutation = (
   & Pick<Mutation, 'deletePhoto'>
 );
 
-export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
+export type PhotoItemFragment = (
+  { __typename?: 'Photo' }
+  & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl' | 'likeCount' | 'commentCount'>
+  & { user: (
+    { __typename?: 'User' }
+    & UserMeFragment
+  ), comments?: Maybe<Array<(
+    { __typename?: 'Comment' }
+    & { user: (
+      { __typename?: 'User' }
+      & UserMeFragment
+    ) }
+    & CommentItemFragment
+  )>> }
+);
+
+export type FeedQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type FeedQuery = (
   { __typename?: 'Query' }
-  & { feed?: Maybe<Array<(
-    { __typename?: 'Photo' }
-    & Pick<Photo, 'date' | 'userId' | 'id' | 'postText' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
-    & { user: (
-      { __typename?: 'User' }
-      & UserMeFragment
-    ), comments?: Maybe<Array<(
-      { __typename?: 'Comment' }
-      & Pick<Comment, 'isAuthor' | 'id' | 'date' | 'photoId' | 'userId' | 'commentText'>
-      & { user: (
-        { __typename?: 'User' }
-        & UserMeFragment
-      ) }
-    )>> }
-  )>> }
+  & { feed: (
+    { __typename?: 'PaginatedPhotos' }
+    & Pick<PaginatedPhotos, 'hasMore'>
+    & { photos: Array<(
+      { __typename?: 'Photo' }
+      & Pick<Photo, 'isLiked' | 'isAuthor' | 'postText'>
+      & PhotoItemFragment
+    )> }
+  ) }
 );
 
 export type ViewUserPhotoQueryVariables = Exact<{
@@ -377,22 +402,6 @@ export type ViewUserPhotoQuery = (
     { __typename?: 'Photo' }
     & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl'>
   )> }
-);
-
-export type PhotFragmentFragment = (
-  { __typename?: 'Photo' }
-  & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl' | 'likeCount' | 'commentCount'>
-  & { user: (
-    { __typename?: 'User' }
-    & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
-  ), comments?: Maybe<Array<(
-    { __typename?: 'Comment' }
-    & Pick<Comment, 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
-    ) }
-  )>> }
 );
 
 export type UserMeFragment = (
@@ -517,6 +526,15 @@ export type MeQuery = (
   )> }
 );
 
+export const UserMeFragmentDoc = gql`
+    fragment userMe on User {
+  email
+  id
+  username
+  pictureUrl
+  fullName
+}
+    `;
 export const CommentItemFragmentDoc = gql`
     fragment commentItem on Comment {
   date
@@ -527,8 +545,8 @@ export const CommentItemFragmentDoc = gql`
   photoId
 }
     `;
-export const PhotFragmentFragmentDoc = gql`
-    fragment photFragment on Photo {
+export const PhotoItemFragmentDoc = gql`
+    fragment photoItem on Photo {
   date
   userId
   id
@@ -536,50 +554,28 @@ export const PhotFragmentFragmentDoc = gql`
   likeCount
   commentCount
   user {
-    pictureUrl
-    fullName
-    username
+    ...userMe
   }
   comments {
-    date
-    photoId
-    userId
-    user {
-      pictureUrl
-      username
-      id
-      email
-      fullName
-    }
-    commentText
-    id
-  }
-}
-    `;
-export const UserMeFragmentDoc = gql`
-    fragment userMe on User {
-  email
-  id
-  username
-  pictureUrl
-  fullName
-}
-    `;
-export const CreateCommentDocument = gql`
-    mutation CreateComment($data: CreateCommentType!) {
-  createComment(data: $data) {
-    date
-    userId
-    id
-    isAuthor
-    commentText
-    photoId
+    ...commentItem
     user {
       ...userMe
     }
   }
 }
-    ${UserMeFragmentDoc}`;
+    ${UserMeFragmentDoc}
+${CommentItemFragmentDoc}`;
+export const CreateCommentDocument = gql`
+    mutation CreateComment($data: CreateCommentType!) {
+  createComment(data: $data) {
+    ...commentItem
+    user {
+      ...userMe
+    }
+  }
+}
+    ${CommentItemFragmentDoc}
+${UserMeFragmentDoc}`;
 export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
 
 /**
@@ -876,34 +872,18 @@ export type DeletePhotoMutationHookResult = ReturnType<typeof useDeletePhotoMuta
 export type DeletePhotoMutationResult = ApolloReactCommon.MutationResult<DeletePhotoMutation>;
 export type DeletePhotoMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePhotoMutation, DeletePhotoMutationVariables>;
 export const FeedDocument = gql`
-    query Feed {
-  feed {
-    date
-    userId
-    id
-    postText
-    isLiked
-    isAuthor
-    pictureUrl
-    likeCount
-    commentCount
-    user {
-      ...userMe
-    }
-    comments {
+    query Feed($limit: Int!, $cursor: String) {
+  feed(limit: $limit, cursor: $cursor) {
+    photos {
+      isLiked
       isAuthor
-      id
-      date
-      photoId
-      userId
-      commentText
-      user {
-        ...userMe
-      }
+      postText
+      ...photoItem
     }
+    hasMore
   }
 }
-    ${UserMeFragmentDoc}`;
+    ${PhotoItemFragmentDoc}`;
 
 /**
  * __useFeedQuery__
@@ -917,6 +897,8 @@ export const FeedDocument = gql`
  * @example
  * const { data, loading, error } = useFeedQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */

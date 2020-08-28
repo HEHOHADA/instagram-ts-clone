@@ -9,6 +9,7 @@ import { createUploadLink } from 'apollo-upload-client'
 import { isBrowser } from './isBrowser'
 import { getAccessToken, setAccessToken } from './token'
 import { isServer } from './withApollo'
+import { cacheConfig } from './cacheConfig'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
@@ -92,7 +93,7 @@ function create(
     ssrMode: Boolean(ctx), // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
     link: ApolloLink.from([authLink, refreshLink, errorLink, httpLink as any]),
-    cache: new InMemoryCache().restore(initialState || {})
+    cache: new InMemoryCache(cacheConfig).restore(initialState || {})
   })
 }
 

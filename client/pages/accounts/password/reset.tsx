@@ -6,7 +6,6 @@ import { InputAuthField } from '../../../components/utils/InputAuthField'
 import { useRouter } from 'next/router'
 import RedirectComponent from '../../../components/auth/RedirectComponent'
 import OrComponentWithRedirect from '../../../components/auth/OrComponentWithRedirect'
-import { blockRoute } from '../../../utils/checkAuth'
 
 const ForgotPassword = () => {
 

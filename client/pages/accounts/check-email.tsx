@@ -1,8 +1,9 @@
 import React from 'react'
 import MainLayout from '../../components/MainLayout'
+import { useBlockRoute } from '../../utils/useBlockRoute'
 
 const CheckEmail = () => {
-
+  useBlockRoute()
   return (
       <MainLayout title="Check Email">
         <div className="check-email__card container">

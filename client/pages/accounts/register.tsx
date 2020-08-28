@@ -7,11 +7,13 @@ import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
+import withApollo from '../../lib/withApollo'
+import { useBlockRoute } from '../../utils/useBlockRoute'
 
 const Register = () => {
   const [register] = useRegisterMutation()
   const router = useRouter()
-
+  useBlockRoute()
   const fieldsItems = useMemo(() => {
     return [{
       name: 'email',
@@ -71,4 +73,4 @@ const Register = () => {
 }
 
 
-export default Register
+export default withApollo({ssr: false})(Register)

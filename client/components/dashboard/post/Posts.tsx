@@ -1,11 +1,12 @@
 import React, { FC, useCallback } from 'react'
-import { IPhoto } from '../../../interfaces/photo'
 import { PostItem } from './PostItem'
-import { FeedDocument, FeedQuery, useDeletePhotoMutation } from '../../../geterated/apollo'
+import { PhotoItemFragment, useDeletePhotoMutation } from '../../../geterated/apollo'
 
+export type PhotoFeedType = PhotoItemFragment &
+    { isAuthor: boolean, isLiked: boolean, postText: string }
 
 type PropsType = {
-  feed: IPhoto[]
+  feed: PhotoFeedType[]
 }
 
 export const Posts: FC<PropsType> = ({feed, ...props}) => {
@@ -14,11 +15,7 @@ export const Posts: FC<PropsType> = ({feed, ...props}) => {
     await deletePhotoMutation({
       variables: {id},
       update: (cache) => {
-        const oldCache: any = cache.readQuery<FeedQuery>({query: FeedDocument})
-        if (oldCache) {
-          const newArray = [...oldCache.feed].filter((item) => item.id !== id)
-          cache.writeQuery<FeedQuery>({query: FeedDocument, data: {feed: newArray}})
-        }
+        cache.evict({ id: cache.identify({__ref: `Photo:${ id }`})})
       }
     })
   }, [deletePhotoMutation])

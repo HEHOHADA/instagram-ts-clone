@@ -75,7 +75,11 @@
   border: 1px solid #dbdbdb;
   position: relative;
 }
-
+.dashboard__container_el{
+  :last-child {
+    margin-bottom: 0;
+  }
+}
 .dashboard__content__header {
   height: 60px;
   flex-direction: row;

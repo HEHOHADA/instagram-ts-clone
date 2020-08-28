@@ -1,29 +1,45 @@
-import { Ctx, Query, Resolver, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, Int, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { getConnection } from 'typeorm'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { MyContext } from '../../types/MyContext'
 import { Photo } from '../../entity/Photo'
 import { User } from '../../entity/User'
+import { PaginatedPhotos } from './types/PaginatedPhotos'
 
 @Resolver()
 export class FeedResolver {
-  @Query(() => [Photo], {nullable: true})
+  @Query(() => PaginatedPhotos)
   @UseMiddleware(isAuth)
-  async feed(@Ctx(){payload: {userId}}: MyContext) {
+  async feed(
+      @Arg('limit', () => Int) limit: number,
+      @Arg('cursor', () => String, {nullable: true}) cursor: string | null,
+      @Ctx(){payload: {userId}}: MyContext
+  ): Promise<PaginatedPhotos> {
+    const realLimit = Math.min(50, limit)
+
+    const realLimitPlusOne = realLimit + 1
+
     const qbFollow = (await getConnection()
         .getRepository(User)
         .findOne(userId!, {
           relations: ['following']
         }))?.following.map(userItem => userItem.id)
 
-    return await getConnection()
+    const qb = getConnection()
         .getRepository(Photo)
         .createQueryBuilder('photo')
         .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
         .orderBy('photo.date', 'DESC')
-        .innerJoinAndMapOne('photo.user', 'photo.user', 'user')
-        .cache(true)
         .leftJoinAndMapMany('photo.comments', 'photo.comments', 'comments')
-        .getMany()
+
+    if (cursor) {
+      qb.where('photo.date < :cursor', {cursor: new Date(cursor)})
+    }
+    const photos = await qb.limit(realLimitPlusOne)
+                           .getMany()
+    return {
+      photos: photos.slice(0, realLimit),
+      hasMore: photos.length === realLimitPlusOne
+    }
   }
 }

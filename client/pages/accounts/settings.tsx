@@ -1,47 +1,28 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import MainLayout from '../../components/MainLayout'
-import { MyContext } from '../../interfaces/MyContext'
-import { MeDocument, MeQuery, useSetPictureProfileMutation } from '../../geterated/apollo'
+import { useMeQuery, useSetPictureProfileMutation } from '../../geterated/apollo'
 import { DropzonePictureProfile } from '../../components/utils/DropzoneField'
+import withApollo from '../../lib/withApollo'
 
-
-type UserInfoPropsType = {
-  userInfo: {
-    username: string
-    id: string
-    pictureUrl: string | null
-    email: string
-  }
-}
-
-const Settings = ({userInfo}: UserInfoPropsType) => {
+const Settings = () => {
 
   const [setPicture] = useSetPictureProfileMutation()
-  const [pictureUrl, setPictureUrl] = useState(userInfo.pictureUrl)
+  const {data} = useMeQuery()
+  if (!data) {
+    return null
+  }
+
   const changePictureHandler = useCallback(async ([picture]) => {
     await setPicture({
       variables: {
         picture
       },
-      update: (cache, {data}) => {
-        const meData = cache.readQuery<MeQuery>({query: MeDocument})
-        if (meData?.me) {
-          let picture = meData.me.pictureUrl?.split('/')
-          if (picture) {
-            picture.pop()
-            picture.push(data?.setPictureProfile!)
-            const pictureUrlCache = picture.join('/')
-            setPictureUrl(pictureUrlCache)
-            cache.writeQuery<MeQuery>({
-              query: MeDocument,
-              data: {me: {...meData.me, pictureUrl: pictureUrlCache ?? meData.me?.pictureUrl}}
-            })
-          }
-        }
+      update: (cache) => {
+        cache.evict({id:`User:${ data.me?.id }`})
       }
     })
 
-  }, [pictureUrl, setPicture])
+  }, [setPicture])
 
   return (
       <MainLayout title="Settings">
@@ -64,10 +45,10 @@ const Settings = ({userInfo}: UserInfoPropsType) => {
             <div className="user__picture__container">
               <div className="user__url">
                 <img
-                    src={ pictureUrl ?? userInfo.pictureUrl ?? '' } alt=""/>
+                    src={ data.me?.pictureUrl ?? data.me?.pictureUrl ?? '' } alt=""/>
               </div>
               <div className="user__change-picture">
-                <div className="username">{ userInfo.username }</div>
+                <div className="username">{ data.me?.username }</div>
                 <DropzonePictureProfile
                     text={ 'Сменить фото' }
                     onDrop={ changePictureHandler }
@@ -111,5 +92,5 @@ const Settings = ({userInfo}: UserInfoPropsType) => {
 //     userInfo: {...me} as UserInfoPropsType
 //   }
 // }
+export default withApollo({ssr: true})(Settings)
 
-export default Settings

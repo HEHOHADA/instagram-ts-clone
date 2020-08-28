@@ -30,7 +30,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
 
   const dropDownMenu = useMemo(() => {
     return [
-      {link: `/${ username }`, as:`/[username]`,iconName: 'home', text: 'Профиль'},
+      {link: `/${ username }` ,iconName: 'home', text: 'Профиль'},
       {link: '/accounts/settings', iconName: 'settings', text: 'Настройки'},
       {link: '/p/create', iconName: 'create', text: 'Создать пост'}
     ].map((n) => (
