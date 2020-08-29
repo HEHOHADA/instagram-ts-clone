@@ -3,7 +3,6 @@ import { PostHeader } from './PostHeader'
 import { CommentTools } from './comment/CommentTools'
 import { Comments } from './comment/Comments'
 import {
-  CommentItemFragment,
   CreateCommentType,
   useCreateCommentMutation,
   useDeleteCommentMutation,
@@ -43,6 +42,17 @@ export const PostItem: FC<PropsType> = React.memo(
           await deleteCommentMutation({
             variables: {data: {id}},
             update: (cache) => {
+              cache.modify({
+                id: `Photo:${ photo.id }`,
+                fields: {
+                  commentCount(cachedValue) {
+                    return cachedValue - 1
+                  },
+                  comments(cachedValue) {
+                    return [...cachedValue].filter(t => !t.__ref.includes(id))
+                  }
+                }
+              })
               cache.evict({
                 id: cache.identify({__ref: `Comment:${ id }`})
               })
@@ -100,33 +110,64 @@ export const PostItem: FC<PropsType> = React.memo(
             variables: {
               data
             },
-            update: (cache, {data}) => {
-              const cacheFragment = cache.readFragment<{
-                id: string,
-                comments: CommentItemFragment[]
-              }>({
-                id: `Photo:${ photo.id }`,
-                fragment: gql`
-                    fragment _ on Photo {
-                        id
-                        comments
-                    }
-                `,
-              })
 
-              if (cacheFragment && data?.createComment) {
-                const newComments = [...cacheFragment.comments].push(data?.createComment)
-                cache.writeFragment({
-                  id: `Photo:${ photo.id }`,
-                  fragment: gql`
-                      fragment __ on Photo {
-                          comments
-                      }
-                  `,
-                  data: {comments: newComments}
-                })
-              }
-            },
+            update: (cache, {data}) => {
+              cache.modify({
+                id: `Photo:${ photo.id }`,
+                fields: {
+                  commentCount(cachedValue) {
+                    return cachedValue + 1
+                  },
+                  comments(cachedValue) {
+                    const commentRef = {'__ref': `Comment:${ data?.createComment?.id }`}
+                    return [...cachedValue, commentRef]
+                  }
+                }
+              })
+            }
+            // update: (cache, {data}) => {
+            //   //   console.log('photoid', photo.id)
+            //   //   cache.modify({
+            //   //     id: `Photo:${ photo.id }`,
+            //   //     fields: {
+            //   //       commentCount(cachedValue) {
+            //   //         return cachedValue + 1
+            //   //       },
+            //   //       comments(cachedValue) {
+            //   //         const commentRef = {'__ref': `Comment:${ data?.createComment?.id }`}
+            //   //         return [...cachedValue].push(commentRef)
+            //   //       }
+            //   //     }
+            //   //   })
+            //   console.log(data)
+            //
+            //   const cacheFragment = cache.readFragment<{
+            //     id: string,
+            //     commentCount: number
+            //   }>({
+            //     id: `Photo:${ photo.id }`,
+            //     fragment: gql`
+            //         fragment _ on Photo {
+            //             id
+            //             commentCount
+            //         }
+            //     `,
+            //   })
+            //   console.log(cacheFragment)
+            //
+            //   if (cacheFragment && data?.createComment) {
+            //     // const newComments = [cacheFragment.comments, data?.createComment]
+            //     cache.writeFragment({
+            //       id: `Photo:${ photo.id }`,
+            //       fragment: gql`
+            //           fragment __ on Photo {
+            //               commentCount
+            //           }
+            //       `,
+            //       data: {commentCount: cacheFragment.commentCount + 1}
+            //     })
+            //   }
+            // },
           })
           if (response && response.data) {
             resetForm()

@@ -26,8 +26,8 @@ export class CreatePhotoResolver {
 
   @FieldResolver(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
-  async isLiked(@Root()photo: Photo, @Ctx(){payload, likeLoader}: MyContext) {
-    const like = await likeLoader.load({photoId: photo.id, userId: payload.userId!})
+  async isLiked(@Root()photo: Photo, @Ctx(){payload}: MyContext) {
+    const like = await Likes.findOne({photoId: photo.id, userId: payload.userId!})
     return Boolean(like)
   }
 

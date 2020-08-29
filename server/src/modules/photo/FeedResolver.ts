@@ -31,13 +31,14 @@ export class FeedResolver {
         .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
 
     if (cursor) {
+      console.log('date', cursor)
       qb.where('photo.date < :cursor', {cursor: new Date(cursor)})
     }
     const photos = await qb
         .orderBy('photo.date', 'DESC')
-        .leftJoinAndMapMany('photo.comments', 'photo.comments', 'comments')
         .limit(realLimitPlusOne)
         .getMany()
+    console.log('postss witout slicing ', photos)
     return {
       photos: photos.slice(0, realLimit),
       hasMore: photos.length === realLimitPlusOne
