@@ -27,8 +27,8 @@ export class Comment extends BaseEntity {
   @Field()
   isAuthor: boolean
 
-  @Field()
-  @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
+  @Field(()=>String)
+  @CreateDateColumn()
   date: Date
 
   @Field(() => User)
@@ -38,6 +38,8 @@ export class Comment extends BaseEntity {
 
   @Field(() => Photo)
   @ManyToOne(() => Photo,
-      photo => photo.comments)
+      photo => photo.comments, {
+        onDelete: 'CASCADE',
+      })
   photo: Photo
 }

@@ -22,8 +22,8 @@ export class Photo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Field()
-  @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
+  @Field(() => String)
+  @CreateDateColumn()
   date: Date
 
   @Field()
@@ -45,7 +45,9 @@ export class Photo extends BaseEntity {
   user: User
 
   @OneToMany(() => Likes,
-      like => like.photo)
+      like => like.photo, {
+        cascade: true
+      })
   likes: Likes[]
 
   @Field({defaultValue: 0})
@@ -60,8 +62,10 @@ export class Photo extends BaseEntity {
   @Field()
   isAuthor: boolean
 
-  @Field(() => [Comment])
+  @Field(() => [Comment], {nullable: true})
   @OneToMany(() => Comment,
-      comment => comment.photo)
+      comment => comment.photo, {
+        cascade: true
+      })
   comments: Comment[]
 }

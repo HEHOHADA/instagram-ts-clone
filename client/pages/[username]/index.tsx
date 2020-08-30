@@ -1,31 +1,23 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { FetchResult, MutationFunctionOptions } from '@apollo/client'
-import redirect from '../../lib/redirect'
+import React, { useCallback, useMemo, useRef } from 'react'
+import { FetchResult, gql, MutationFunctionOptions } from '@apollo/client'
 import MainLayout from '../../components/MainLayout'
-import { MyContext } from '../../interfaces/MyContext'
 import {
   Exact,
-  GetUserInfoDocument,
   GetUserInfoQuery,
   useFollowUserMutation,
+  useGetUserInfoQuery,
   useUnFollowUserMutation,
-  ViewUserPhotoDocument,
-  ViewUserPhotoQuery
+  useViewUserPhotoQuery
 } from '../../geterated/apollo'
 import { declOfNum } from '../../utils/declOfNumb'
 import { PhotoItems } from '../../components/profile/PhotoItems'
 import { ModalRefType, ModalWindowContainer } from '../../components/modal/ModalWindowContainer'
 import { SubscriptionModal } from '../../components/modal/SubscriptionModal'
 import { FollowButton } from '../../components/profile/FollowButton'
-import { IUserInfo } from '../../interfaces'
-import { IPhoto } from '../../interfaces/photo'
 import { ProfileItems } from '../../components/profile/ProfileItems'
 import { useRouter } from 'next/router'
+import withApollo from '../../lib/withApollo'
 
-type PropsType = {
-  getUserInfo: IUserInfo
-  viewUserPhoto: IPhoto[]
-}
 
 export type ProfileItemsType = {
   onClick?: () => void | null | undefined
@@ -37,36 +29,28 @@ type FollowCallbackType<T> =
     (options?: (MutationFunctionOptions<T, Exact<{ userId: string }>> | undefined))
         => Promise<FetchResult<T>> | void
 
-const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
-
+const Profile = () => {
   const router = useRouter()
+  const {username: queryUserName} = router.query
+  const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
+  const {data: PhotoData} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
+  if (!data || !PhotoData) {
+    return null
+  }
 
   const modalRef = useRef<ModalRefType>(null)
 
-  const openModal = useCallback( () => {
-    router.push(`/${username}/subscription`)
+  const openModal = useCallback(() => {
     modalRef.current?.openModal()
-  }, [modalRef])
-
-  const onCloseOutside = useCallback((e: any) => {
-    modalRef.current?.closeOutside(e)
-  }, [modalRef])
-
-  const closeModal = useCallback(() => {
-    modalRef.current?.closeModal()
   }, [modalRef])
 
 
   const {
-    photoCount, followerCount, isCurrentUser, id,
+    photoCount, followerCount,
+    isCurrentUser, id,
     isFollowing, username, followingCount, pictureUrl, fullName
-  } = getUserInfo
+  }: GetUserInfoQuery['getUserInfo'] = data!.getUserInfo
 
-  const [followerInfo, setFollowerInfo] =
-      useState<{ isFollowing: boolean, followerCount: number }>({
-        isFollowing,
-        followerCount
-      })
   const [unFollowUser] = useUnFollowUserMutation()
   const [followUser] = useFollowUserMutation()
 
@@ -76,62 +60,76 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
       await followCallback({
         variables: {userId},
         update: (cache) => {
-          cache.identify({__ref: `User:${ userId }`})
-          setFollowerInfo(prevState => {
-            return {
-              isFollowing: !prevState.isFollowing,
-              followerCount: prevState.followerCount + count
-            }
+          const data = cache.readFragment<{
+            id: string,
+            isFollowing: boolean,
+            followerCount: number
+          }>({
+            id: `User:${ userId }`,
+            fragment: gql`
+                fragment _ on User {
+                    id
+                    isFollowing
+                    followerCount
+                }
+            `,
           })
-          cache.modify({
-            id: cache.identify({__ref: `User:${ userId }`}),
-            fields: {
-              isFollowing(cacheValue) {
-                return !cacheValue
-              },
-              followerCount(cacheValue) {
-                return cacheValue + count
-              }
-            }
-          })
+
+          if (data) {
+            cache.writeFragment({
+              id: `User:${ userId }`,
+              fragment: gql`
+                  fragment __ on User {
+                      isFollowing
+                      followerCount
+                  }
+              `,
+              data: {followerCount: data.followerCount + count, isFollowing: !data.isFollowing}
+            })
+          }
+          cache.evict({fieldName: 'feed:{}'})
         }
       })
     }
   }
 
   const followButton = useMemo(() => {
-    const onClick = followerInfo.isFollowing
+    const onClick = isFollowing
         ? followCallback(unFollowUser, -1)
         : followCallback(followUser, 1)
-    const text = followerInfo.isFollowing ? 'Отписаться' : 'Подписаться'
+    const text = isFollowing ? 'Отписаться' : 'Подписаться'
     return (
         <FollowButton
             text={ text }
             className={ 'profile__edit' }
             onClick={ () => onClick(id) }/>
     )
-  }, [followerInfo.isFollowing, id])
+  }, [isFollowing, id])
 
 
   const infoItems = useMemo<Array<ProfileItemsType>>(() => {
     return [
-      {count: photoCount, text: declOfNum(photoCount, ['Публикация', 'Публикации', 'Публикаций'])},
       {
-        count: followerInfo.followerCount,
-        onClick: openModal,
-        text: declOfNum(followerInfo.followerCount, ['Подписок', 'Подписка', 'Подписки'])
+        count: (photoCount as number),
+        text: declOfNum((photoCount as number), ['Публикация', 'Публикации', 'Публикаций'])
       },
-      {count: followingCount, text: declOfNum(followingCount, ['Подписчик', 'Подписчиков', 'Подписчика'])},
+      {
+        count: (followerCount as number),
+        onClick: openModal,
+        text: declOfNum((followerCount as number), ['Подписка', 'Подписок', 'Подписки'])
+      },
+      {
+        count: (followingCount as number),
+        text: declOfNum((followingCount as number), ['Подписчик', 'Подписчиков', 'Подписчика'])
+      },
     ]
-  }, [photoCount, followerInfo.followerCount, followingCount])
+  }, [photoCount, followerCount, followingCount])
 
 
   return (
       <MainLayout title={ username }>
         <ModalWindowContainer ref={ modalRef }>
-          <SubscriptionModal
-              onClick={ closeModal }
-              onCloseOutside={ onCloseOutside }/>
+          { (ref: ModalRefType) => (<SubscriptionModal { ...ref }/>) }
         </ModalWindowContainer>
         <div className="profile container">
           <div className="profile__info">
@@ -160,35 +158,11 @@ const Profile = ({getUserInfo, viewUserPhoto}: PropsType) => {
               <div className="object__item">Публикация</div>
             </div>
           </div>
-          <PhotoItems photoItems={ viewUserPhoto }/>
+          <PhotoItems photoItems={ PhotoData?.viewUserPhoto as any }/>
         </div>
       </MainLayout>
   )
 }
 
 
-Profile.getInitialProps = async (ctx: MyContext) => {
-  const username = ctx.query.username
-  try {
-    const userInfo = await ctx.apolloClient.query<GetUserInfoQuery>({
-      query: GetUserInfoDocument, variables: {username}
-    })
-
-    const userPhotos = await ctx.apolloClient.query<ViewUserPhotoQuery>({
-      query: ViewUserPhotoDocument,
-      variables: {username}
-    })
-    return {
-      getUserInfo: {...userInfo.data!.getUserInfo},
-      viewUserPhoto: userPhotos.data!.viewUserPhoto
-    }
-  } catch (e) {
-    redirect(ctx, '/404')
-  }
-  return {
-    props: {}
-  }
-}
-
-
-export default Profile
+export default withApollo({ssr: true})(Profile)

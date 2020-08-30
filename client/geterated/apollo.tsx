@@ -20,8 +20,9 @@ export type Query = {
   __typename?: 'Query';
   getFollowers: Array<User>;
   getFollowings: Array<User>;
-  feed?: Maybe<Array<Photo>>;
+  feed: PaginatedPhotos;
   viewUserPhoto: Array<Photo>;
+  viewPhotoById: Photo;
   getUserInfo: User;
   me?: Maybe<User>;
   refreshToken: RefreshResponseType;
@@ -38,8 +39,19 @@ export type QueryGetFollowingsArgs = {
 };
 
 
+export type QueryFeedArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
+
 export type QueryViewUserPhotoArgs = {
   username: Scalars['String'];
+};
+
+
+export type QueryViewPhotoByIdArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -62,10 +74,16 @@ export type User = {
   isCurrentUser: Scalars['Boolean'];
 };
 
+export type PaginatedPhotos = {
+  __typename?: 'PaginatedPhotos';
+  photos: Array<Photo>;
+  feedInfo: FeedInfo;
+};
+
 export type Photo = {
   __typename?: 'Photo';
   id: Scalars['ID'];
-  date: Scalars['DateTime'];
+  date: Scalars['String'];
   pictureUrl: Scalars['String'];
   postText: Scalars['String'];
   userId: Scalars['String'];
@@ -74,9 +92,8 @@ export type Photo = {
   commentCount?: Maybe<Scalars['Float']>;
   isLiked: Scalars['Boolean'];
   isAuthor: Scalars['Boolean'];
-  comments: Array<Comment>;
+  comments?: Maybe<Array<Comment>>;
 };
-
 
 export type Comment = {
   __typename?: 'Comment';
@@ -85,10 +102,17 @@ export type Comment = {
   commentText: Scalars['String'];
   userId: Scalars['String'];
   isAuthor: Scalars['Boolean'];
-  date: Scalars['DateTime'];
+  date: Scalars['String'];
   user: User;
   photo: Photo;
 };
+
+export type FeedInfo = {
+  __typename?: 'FeedInfo';
+  hasMore: Scalars['Boolean'];
+  endCursor: Scalars['DateTime'];
+};
+
 
 export type RefreshResponseType = {
   __typename?: 'RefreshResponseType';
@@ -228,6 +252,11 @@ export type RegisterInput = {
   username: Scalars['String'];
 };
 
+export type CommentItemFragment = (
+  { __typename?: 'Comment' }
+  & Pick<Comment, 'date' | 'userId' | 'id' | 'isAuthor' | 'commentText' | 'photoId'>
+);
+
 export type CreateCommentMutationVariables = Exact<{
   data: CreateCommentType;
 }>;
@@ -237,11 +266,11 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment: (
     { __typename?: 'Comment' }
-    & Pick<Comment, 'date' | 'userId' | 'id' | 'isAuthor' | 'commentText' | 'photoId'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'username' | 'id' | 'email' | 'pictureUrl' | 'fullName'>
+      & UserMeFragment
     ) }
+    & CommentItemFragment
   ) }
 );
 
@@ -321,7 +350,7 @@ export type CreatePhotoMutation = (
   { __typename?: 'Mutation' }
   & { createPhoto: (
     { __typename?: 'Photo' }
-    & Pick<Photo, 'date' | 'userId' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
+    & Pick<Photo, 'date' | 'userId' | 'postText' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
@@ -339,26 +368,41 @@ export type DeletePhotoMutation = (
   & Pick<Mutation, 'deletePhoto'>
 );
 
-export type FeedQueryVariables = Exact<{ [key: string]: never; }>;
+export type PhotoItemFragment = (
+  { __typename?: 'Photo' }
+  & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl' | 'likeCount' | 'commentCount'>
+  & { user: (
+    { __typename?: 'User' }
+    & UserMeFragment
+  ), comments?: Maybe<Array<(
+    { __typename?: 'Comment' }
+    & { user: (
+      { __typename?: 'User' }
+      & UserMeFragment
+    ) }
+    & CommentItemFragment
+  )>> }
+);
+
+export type FeedQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type FeedQuery = (
   { __typename?: 'Query' }
-  & { feed?: Maybe<Array<(
-    { __typename?: 'Photo' }
-    & Pick<Photo, 'date' | 'userId' | 'id' | 'isLiked' | 'isAuthor' | 'pictureUrl' | 'likeCount' | 'commentCount'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
-    ), comments: Array<(
-      { __typename?: 'Comment' }
-      & Pick<Comment, 'isAuthor' | 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
-      & { user: (
-        { __typename?: 'User' }
-        & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
-      ) }
-    )> }
-  )>> }
+  & { feed: (
+    { __typename?: 'PaginatedPhotos' }
+    & { photos: Array<(
+      { __typename?: 'Photo' }
+      & Pick<Photo, 'isLiked' | 'isAuthor' | 'postText'>
+      & PhotoItemFragment
+    )>, feedInfo: (
+      { __typename?: 'FeedInfo' }
+      & Pick<FeedInfo, 'hasMore' | 'endCursor'>
+    ) }
+  ) }
 );
 
 export type ViewUserPhotoQueryVariables = Exact<{
@@ -374,20 +418,23 @@ export type ViewUserPhotoQuery = (
   )> }
 );
 
-export type PhotFragmentFragment = (
-  { __typename?: 'Photo' }
-  & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl' | 'likeCount' | 'commentCount'>
-  & { user: (
-    { __typename?: 'User' }
-    & Pick<User, 'pictureUrl' | 'fullName' | 'username'>
-  ), comments: Array<(
-    { __typename?: 'Comment' }
-    & Pick<Comment, 'date' | 'photoId' | 'userId' | 'commentText' | 'id'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'pictureUrl' | 'username' | 'id' | 'email' | 'fullName'>
-    ) }
-  )> }
+export type ViewPhotoByIdQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ViewPhotoByIdQuery = (
+  { __typename?: 'Query' }
+  & { viewPhotoById: (
+    { __typename?: 'Photo' }
+    & Pick<Photo, 'isLiked' | 'isAuthor' | 'postText'>
+    & PhotoItemFragment
+  ) }
+);
+
+export type UserMeFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'email' | 'id' | 'username' | 'pictureUrl' | 'fullName'>
 );
 
 export type ChangeForgotPasswordMutationVariables = Exact<{
@@ -435,7 +482,7 @@ export type LoginMutation = (
     & Pick<LoginResponseType, 'accessToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'email' | 'pictureUrl' | 'fullName'>
+      & UserMeFragment
     ) }
   ) }
 );
@@ -468,7 +515,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'email' | 'username'>
+    & UserMeFragment
   ) }
 );
 
@@ -491,7 +538,8 @@ export type GetUserInfoQuery = (
   { __typename?: 'Query' }
   & { getUserInfo: (
     { __typename?: 'User' }
-    & Pick<User, 'email' | 'id' | 'username' | 'pictureUrl' | 'fullName' | 'followerCount' | 'photoCount' | 'followingCount' | 'isCurrentUser' | 'isFollowing' | 'isFollowed'>
+    & Pick<User, 'followerCount' | 'photoCount' | 'followingCount' | 'isCurrentUser' | 'isFollowing' | 'isFollowed'>
+    & UserMeFragment
   ) }
 );
 
@@ -502,12 +550,31 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'email' | 'id' | 'username' | 'pictureUrl' | 'fullName'>
+    & UserMeFragment
   )> }
 );
 
-export const PhotFragmentFragmentDoc = gql`
-    fragment photFragment on Photo {
+export const UserMeFragmentDoc = gql`
+    fragment userMe on User {
+  email
+  id
+  username
+  pictureUrl
+  fullName
+}
+    `;
+export const CommentItemFragmentDoc = gql`
+    fragment commentItem on Comment {
+  date
+  userId
+  id
+  isAuthor
+  commentText
+  photoId
+}
+    `;
+export const PhotoItemFragmentDoc = gql`
+    fragment photoItem on Photo {
   date
   userId
   id
@@ -515,45 +582,28 @@ export const PhotFragmentFragmentDoc = gql`
   likeCount
   commentCount
   user {
-    pictureUrl
-    fullName
-    username
+    ...userMe
   }
   comments {
-    date
-    photoId
-    userId
+    ...commentItem
     user {
-      pictureUrl
-      username
-      id
-      email
-      fullName
+      ...userMe
     }
-    commentText
-    id
   }
 }
-    `;
+    ${UserMeFragmentDoc}
+${CommentItemFragmentDoc}`;
 export const CreateCommentDocument = gql`
     mutation CreateComment($data: CreateCommentType!) {
   createComment(data: $data) {
-    date
-    userId
-    id
-    isAuthor
-    commentText
-    photoId
+    ...commentItem
     user {
-      username
-      id
-      email
-      pictureUrl
-      fullName
+      ...userMe
     }
   }
 }
-    `;
+    ${CommentItemFragmentDoc}
+${UserMeFragmentDoc}`;
 export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
 
 /**
@@ -778,6 +828,7 @@ export const CreatePhotoDocument = gql`
   createPhoto(picture: $picture, title: $title) {
     date
     userId
+    postText
     id
     isLiked
     isAuthor
@@ -849,39 +900,21 @@ export type DeletePhotoMutationHookResult = ReturnType<typeof useDeletePhotoMuta
 export type DeletePhotoMutationResult = ApolloReactCommon.MutationResult<DeletePhotoMutation>;
 export type DeletePhotoMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePhotoMutation, DeletePhotoMutationVariables>;
 export const FeedDocument = gql`
-    query Feed {
-  feed {
-    date
-    userId
-    id
-    isLiked
-    isAuthor
-    pictureUrl
-    likeCount
-    commentCount
-    user {
-      pictureUrl
-      fullName
-      username
-    }
-    comments {
+    query Feed($limit: Int!, $cursor: String) {
+  feed(limit: $limit, cursor: $cursor) {
+    photos {
+      isLiked
       isAuthor
-      date
-      photoId
-      userId
-      user {
-        pictureUrl
-        username
-        id
-        email
-        fullName
-      }
-      commentText
-      id
+      postText
+      ...photoItem
+    }
+    feedInfo {
+      hasMore
+      endCursor
     }
   }
 }
-    `;
+    ${PhotoItemFragmentDoc}`;
 
 /**
  * __useFeedQuery__
@@ -895,6 +928,8 @@ export const FeedDocument = gql`
  * @example
  * const { data, loading, error } = useFeedQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */
@@ -943,6 +978,42 @@ export function useViewUserPhotoLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type ViewUserPhotoQueryHookResult = ReturnType<typeof useViewUserPhotoQuery>;
 export type ViewUserPhotoLazyQueryHookResult = ReturnType<typeof useViewUserPhotoLazyQuery>;
 export type ViewUserPhotoQueryResult = ApolloReactCommon.QueryResult<ViewUserPhotoQuery, ViewUserPhotoQueryVariables>;
+export const ViewPhotoByIdDocument = gql`
+    query ViewPhotoById($id: String!) {
+  viewPhotoById(id: $id) {
+    isLiked
+    isAuthor
+    postText
+    ...photoItem
+  }
+}
+    ${PhotoItemFragmentDoc}`;
+
+/**
+ * __useViewPhotoByIdQuery__
+ *
+ * To run a query within a React component, call `useViewPhotoByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewPhotoByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewPhotoByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useViewPhotoByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, baseOptions);
+      }
+export function useViewPhotoByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, baseOptions);
+        }
+export type ViewPhotoByIdQueryHookResult = ReturnType<typeof useViewPhotoByIdQuery>;
+export type ViewPhotoByIdLazyQueryHookResult = ReturnType<typeof useViewPhotoByIdLazyQuery>;
+export type ViewPhotoByIdQueryResult = ApolloReactCommon.QueryResult<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>;
 export const ChangeForgotPasswordDocument = gql`
     mutation ChangeForgotPassword($data: ChangeForgotPassword!) {
   changeForgotPassword(data: $data) {
@@ -1041,15 +1112,11 @@ export const LoginDocument = gql`
   login(data: $data) {
     accessToken
     user {
-      id
-      username
-      email
-      pictureUrl
-      fullName
+      ...userMe
     }
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -1139,12 +1206,10 @@ export type RefreshTokenQueryResult = ApolloReactCommon.QueryResult<RefreshToken
 export const RegisterDocument = gql`
     mutation Register($data: RegisterInput!) {
   register(data: $data) {
-    id
-    email
-    username
+    ...userMe
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
@@ -1203,11 +1268,7 @@ export type SetPictureProfileMutationOptions = ApolloReactCommon.BaseMutationOpt
 export const GetUserInfoDocument = gql`
     query GetUserInfo($username: String!) {
   getUserInfo(username: $username) {
-    email
-    id
-    username
-    pictureUrl
-    fullName
+    ...userMe
     followerCount
     photoCount
     followingCount
@@ -1216,7 +1277,7 @@ export const GetUserInfoDocument = gql`
     isFollowed
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 
 /**
  * __useGetUserInfoQuery__
@@ -1246,14 +1307,10 @@ export type GetUserInfoQueryResult = ApolloReactCommon.QueryResult<GetUserInfoQu
 export const MeDocument = gql`
     query Me {
   me {
-    email
-    id
-    username
-    pictureUrl
-    fullName
+    ...userMe
   }
 }
-    `;
+    ${UserMeFragmentDoc}`;
 
 /**
  * __useMeQuery__

@@ -1,30 +1,65 @@
-import { Ctx, Query, Resolver, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, Int, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { getConnection } from 'typeorm'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { MyContext } from '../../types/MyContext'
-import { Photo } from '../../entity/Photo'
 import { User } from '../../entity/User'
+import { PaginatedPhotos } from './types/PaginatedPhotos'
 
 @Resolver()
 export class FeedResolver {
-  @Query(() => [Photo], {nullable: true})
+  @Query(() => PaginatedPhotos)
   @UseMiddleware(isAuth)
-  async feed(@Ctx(){payload: {userId}}: MyContext) {
+  async feed(
+      @Arg('limit', () => Int) limit: number,
+      @Arg('cursor', () => String, {nullable: true}) cursor: string | null,
+      @Ctx(){payload: {userId}}: MyContext
+  ): Promise<PaginatedPhotos> {
+    const realLimit = Math.min(50, limit)
+
+    const realLimitPlusOne = realLimit + 1
 
     const qbFollow = (await getConnection()
         .getRepository(User)
         .findOne(userId!, {
-          relations: ['following']
+          relations: ['following'],
+          cache: true
         }))?.following.map(userItem => userItem.id)
+    //
+    // const qb = getConnection()
+    //     .getRepository(Photo)
+    //     .createQueryBuilder('photo')
+    //     .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
 
+    const replacements: any[] = [[...qbFollow!, userId].join(','), realLimitPlusOne]
+    if (cursor) {
+      console.log('cursor', cursor)
+      replacements.push(new Date(parseInt(cursor)))
+    }
+    const photosPlusOne = await getConnection().query(`
+      select p.* from photo p 
+      where p."userId" in ($1)
+      ${ cursor ? `and p.date < $3` : '' }
+      order by p.date DESC
+      limit $2
+      `, replacements)
+    // if (cursor) {
+    //   qb.where('photo.date < :cursor', {cursor: new Date(cursor)})
+    // }
 
-    return await getConnection()
-        .getRepository(Photo)
-        .createQueryBuilder('photo')
-        .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
-        .orderBy('photo.date', 'DESC')
-        .leftJoinAndMapOne('photo.user', 'photo.user', 'user')
-        .leftJoinAndMapMany('photo.comments', 'photo.comments', 'comments')
-        .getMany()
+    // const photosPlusOne = await qb
+    //     .orderBy('photo.date', 'DESC')
+    //     .limit(realLimitPlusOne)
+    //     .getMany()
+    // console.log('postss witout slicing ', photosPlusOne)
+    const photos = photosPlusOne.slice(0, realLimit)
+    const endCursor = photos[photos.length - 1].date
+
+    return {
+      photos,
+      feedInfo: {
+        hasMore: photos.length === realLimitPlusOne,
+        endCursor
+      }
+    }
   }
 }

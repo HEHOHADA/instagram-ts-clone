@@ -6,13 +6,17 @@ import { RegisterInput, useRegisterMutation } from '../../geterated/apollo'
 import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
-import { blockRoute } from '../../utils/checkAuth'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
+import withApollo from '../../lib/withApollo'
+import { useBlockRoute } from '../../utils/useBlockRoute'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '../../lib/redirect'
 
 const Register = () => {
   const [register] = useRegisterMutation()
   const router = useRouter()
-
+  useBlockRoute()
   const fieldsItems = useMemo(() => {
     return [{
       name: 'email',
@@ -34,7 +38,7 @@ const Register = () => {
       placeholder: 'Password',
       type: 'password',
       component: InputAuthField
-    },
+    }
     ]
   }, [])
 
@@ -70,7 +74,16 @@ const Register = () => {
       </AuthLayout>
   )
 }
-Register.getInitialProps = blockRoute
 
-
-export default Register
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (jid()['jid']) {
+      Redirect(ctx, '/')
+    }
+  }
+  return {
+    props: {}
+  }
+}
+export default withApollo({ssr: false})(Register)

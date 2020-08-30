@@ -1,36 +1,17 @@
 import { gql } from '@apollo/client'
 
-
 export const feedQuery = gql`
-    query Feed{
-        feed{
-            date
-            userId
-            id
-            isLiked
-            isAuthor
-            pictureUrl
-            likeCount
-            commentCount
-            user{
-                pictureUrl
-                fullName
-                username
-            }
-            comments{
+    query Feed($limit:Int!,$cursor:String){
+        feed(limit:$limit,cursor:$cursor){
+            photos{
+                isLiked
                 isAuthor
-                date
-                photoId
-                userId
-                user{
-                    pictureUrl
-                    username
-                    id
-                    email
-                    fullName
-                }
-                commentText
-                id 
+                postText
+                ...photoItem
+            }
+            feedInfo{
+                hasMore
+                endCursor
             }
         }
     }

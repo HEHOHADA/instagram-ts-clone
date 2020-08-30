@@ -1,34 +1,33 @@
-import React, { FC } from 'react'
-import { IPhoto } from '../../../interfaces/photo'
+import React, { FC, useCallback } from 'react'
 import { PostItem } from './PostItem'
-import { MutationFunctionOptions } from '@apollo/client'
-import {
-  CreateCommentMutation,
-  CreateCommentType,
-  DeleteCommentMutation,
-  DeleteCommentType,
-  Exact,
-  LikeMutation
-} from '../../../geterated/apollo'
+import { PhotoItemFragment, useDeletePhotoMutation } from '../../../geterated/apollo'
+
+export type PhotoFeedType = PhotoItemFragment &
+    { isAuthor: boolean, isLiked: boolean, postText: string }
 
 type PropsType = {
-  feed: IPhoto[]
-  deleteCommentMutation: (options?: (MutationFunctionOptions<DeleteCommentMutation, Exact<{ data: DeleteCommentType }>> | undefined)) => Promise<any>
-  createCommentMutation: (options?: (MutationFunctionOptions<CreateCommentMutation, Exact<{ data: CreateCommentType }>> | undefined)) => Promise<any>
-  likeMutation: (options?: (MutationFunctionOptions<LikeMutation, Exact<{ photoId: string }>> | undefined)) => Promise<any>
+  feed: PhotoFeedType[]
 }
 
-export const Posts: FC<PropsType> = ({feed, deleteCommentMutation, createCommentMutation, likeMutation}) => {
-
+export const Posts: FC<PropsType> = ({feed, ...props}) => {
+  const [deletePhotoMutation] = useDeletePhotoMutation()
+  const deletePhoto = useCallback(async (id: string) => {
+    await deletePhotoMutation({
+      variables: {id},
+      update: (cache) => {
+        cache.evict({ id: cache.identify({__ref: `Photo:${ id }`})})
+      }
+    })
+  }, [deletePhotoMutation])
   return (
       <>
         { feed.map(photo => (
             <PostItem
-                deleteCommentMutation={ deleteCommentMutation }
-                likeMutation={ likeMutation }
-                createCommentMutation={ createCommentMutation }
+                deletePhoto={ deletePhoto }
+                photo={ photo }
+                { ...props }
                 key={ photo.id }
-                photo={ photo }/>
+            />
         )) }
       </>
 

@@ -2,6 +2,7 @@ import { Arg, Ctx, Mutation, Resolver, UnauthorizedError, UseMiddleware } from '
 import { MyContext } from '../../types/MyContext'
 import { Photo } from '../../entity/Photo'
 import { isAuth } from '../../middleware/isAuthMiddleware'
+
 @Resolver()
 export class CreatePhotoResolver {
   @UseMiddleware(isAuth)

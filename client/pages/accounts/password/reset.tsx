@@ -6,7 +6,10 @@ import { InputAuthField } from '../../../components/utils/InputAuthField'
 import { useRouter } from 'next/router'
 import RedirectComponent from '../../../components/auth/RedirectComponent'
 import OrComponentWithRedirect from '../../../components/auth/OrComponentWithRedirect'
-import { blockRoute } from '../../../utils/checkAuth'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '../../../lib/redirect'
+import withApollo from '../../../lib/withApollo'
 
 const ForgotPassword = () => {
 
@@ -19,7 +22,7 @@ const ForgotPassword = () => {
       placeholder: 'Email',
       type: 'text',
       component: InputAuthField
-      }]
+    }]
   }, [])
 
   const [forgotPassword] = useForgotPasswordMutation()
@@ -36,7 +39,6 @@ const ForgotPassword = () => {
         await router.push('/accounts/check-email')
       }
     } catch (e) {
-      // const errors: any = {}
       console.log(e.graphQLErrors)
       setErrors({password: e.graphQLErrors[0].message})
     }
@@ -61,6 +63,17 @@ const ForgotPassword = () => {
       </MainLayout>
   )
 }
-ForgotPassword.getInitialProps = blockRoute
 
-export default ForgotPassword
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (jid()['jid']) {
+      Redirect(ctx, '/')
+    }
+  }
+  return {
+    props: {}
+  }
+}
+
+export default withApollo({ssr: false})(ForgotPassword)

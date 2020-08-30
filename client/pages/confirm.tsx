@@ -1,9 +1,9 @@
 import React from 'react'
-import { MyContext } from '../interfaces/MyContext'
 import MainLayout from '../components/MainLayout'
+import { MyContext } from '../interfaces/MyContext'
 import { ConfirmUserMutation, ConfirmUserMutationVariables } from '../geterated/apollo'
-import redirect from '../lib/redirect'
 import { confirmUserMutation } from '../graphql/user/mutation/confirmUser'
+import Redirect from '../lib/redirect'
 
 const Confirm = () => {
   return (
@@ -24,8 +24,9 @@ Confirm.getInitialProps = async ({query: {token}, apolloClient, ...ctx}: MyConte
       token: token as string
     }
   })
-  redirect(ctx, '/accounts/login')
+  Redirect(ctx, '/accounts/login')
   return {}
 }
+
 
 export default Confirm

@@ -1,8 +1,12 @@
 import React from 'react'
 import MainLayout from '../../components/MainLayout'
-import { blockRoute } from '../../utils/checkAuth'
+import { useBlockRoute } from '../../utils/useBlockRoute'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '../../lib/redirect'
 
 const CheckEmail = () => {
+  useBlockRoute()
   return (
       <MainLayout title="Check Email">
         <div className="check-email__card container">
@@ -13,6 +17,15 @@ const CheckEmail = () => {
       </MainLayout>
   )
 }
-CheckEmail.getInitialProps = blockRoute
-
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (jid()['jid']) {
+      Redirect(ctx, '/')
+    }
+  }
+  return {
+    props: {}
+  }
+}
 export default CheckEmail

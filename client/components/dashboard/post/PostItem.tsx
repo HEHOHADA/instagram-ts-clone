@@ -1,118 +1,152 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useRef } from 'react'
 import { PostHeader } from './PostHeader'
-import { IPhoto } from '../../../interfaces/photo'
 import { CommentTools } from './comment/CommentTools'
 import { Comments } from './comment/Comments'
 import {
-  CreateCommentMutation,
   CreateCommentType,
-  DeleteCommentMutation,
-  DeleteCommentType,
-  Exact,
-  LikeMutation
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
+  useLikeMutation
 } from '../../../geterated/apollo'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { IComment } from '../../../interfaces/comment'
 import { TextArea } from '../../utils/TextArea'
-import { MutationFunctionOptions } from '@apollo/client'
 import { dateOptions } from '../../../utils/config'
+import { ModalRefType, ModalWindowContainer } from '../../modal/ModalWindowContainer'
+import { PhotoSettingsModal } from '../../modal/PhotoSettingsModal'
+import { PhotoFeedType } from './Posts'
+import { gql } from '@apollo/client'
 
 
 type PropsType = {
-  photo: IPhoto
-  deleteCommentMutation: (options?: (MutationFunctionOptions<DeleteCommentMutation, Exact<{ data: DeleteCommentType }>> | undefined)) => Promise<any>
-  likeMutation: (options?: (MutationFunctionOptions<LikeMutation, Exact<{ photoId: string }>> | undefined)) => Promise<any>
-  createCommentMutation: (options?: (MutationFunctionOptions<CreateCommentMutation, Exact<{ data: CreateCommentType }>> | undefined)) => Promise<any>
+  photo: PhotoFeedType
+  deletePhoto: (id: string) => Promise<void>
 }
 
-type LikeType = {
-  likeCount: number
-  isLiked: boolean
-}
 
 export const PostItem: FC<PropsType> = React.memo(
     ({
-       photo,
-       createCommentMutation, deleteCommentMutation, likeMutation
+       photo, deletePhoto
      }) => {
 
-      const [comments, setComments] = useState<IComment[]>(photo.comments)
-      const [photoLikeInfo, setPhotoLikeInfo] = useState<LikeType>({likeCount: photo.likeCount, isLiked: photo.isLiked})
+      const [createCommentMutation] = useCreateCommentMutation()
+      const modalRef = useRef<ModalRefType>(null)
+      const openModal = useCallback(() => {
+        modalRef.current?.openModal()
+      }, [modalRef])
+
+      const [likeMutation] = useLikeMutation()
+      const [deleteCommentMutation] = useDeleteCommentMutation()
 
       const onDeleteComment = useCallback(async (id: string) => {
         try {
           await deleteCommentMutation({
             variables: {data: {id}},
             update: (cache) => {
-              const newComments = [...comments].filter(comment => comment.id !== id)
-              setComments(newComments)
               cache.modify({
-                id: cache.identify({__ref: `Photo:${ photo.id }`}),
+                id: `Photo:${ photo.id }`,
                 fields: {
-                  comments(cacheValue) {
-                    return cacheValue.filter((v: IComment) => v.id !== id)
+                  commentCount(cachedValue) {
+                    return cachedValue - 1
+                  },
+                  comments(cachedValue) {
+                    return [...cachedValue].filter(t => !t.__ref.includes(id))
                   }
                 }
+              })
+              cache.evict({
+                id: cache.identify({__ref: `Comment:${ id }`})
               })
             }
           })
         } catch (e) {
           console.log(e)
         }
-      }, [comments])
+      }, [])
 
-      const onLikeHandler = useCallback(async () => {
+      const onLikeHandler = async () => {
         try {
           await likeMutation({
             variables: {
               photoId: photo.id
             }, update: (cache) => {
-              const counting = photoLikeInfo.isLiked ? -1 : 1
-              setPhotoLikeInfo({
-                likeCount: photoLikeInfo.likeCount + counting,
-                isLiked: !photoLikeInfo.isLiked
+              const counting = photo.isLiked ? -1 : 1
+              const data = cache.readFragment<{
+                id: string,
+                likeCount: number,
+                isLiked: boolean
+              }>({
+                id: `Photo:${ photo.id }`,
+                fragment: gql`
+                    fragment _ on Photo {
+                        id
+                        likeCount
+                        isLiked
+                    }
+                `,
               })
-              cache.modify({
-                id: cache.identify({__ref: `Photo:${ photo.id }`}),
-                fields: {
-                  isLiked(cacheValue) {
-                    return !cacheValue
-                  },
-                  followerCount(cacheValue) {
-                    return cacheValue + counting
-                  }
-                }
-              })
+
+              if (data) {
+                cache.writeFragment({
+                  id: `Photo:${ photo.id }`,
+                  fragment: gql`
+                      fragment __ on Photo {
+                          likeCount
+                          isLiked
+                      }
+                  `,
+                  data: {likeCount: data.likeCount + counting, isLiked: !data.isLiked}
+                })
+              }
             }
           })
         } catch (e) {
           console.log(e)
         }
-      }, [photoLikeInfo])
+      }
 
       const createCommentHandler = useCallback(async (data: CreateCommentType, {resetForm}: FormikHelpers<any>) => {
         try {
           const response = await createCommentMutation({
             variables: {
               data
+            },
+
+            update: (cache, {data}) => {
+              cache.modify({
+                id: `Photo:${ photo.id }`,
+                fields: {
+                  commentCount(cachedValue) {
+                    return cachedValue + 1
+                  },
+                  comments(cachedValue) {
+                    const commentRef = {'__ref': `Comment:${ data?.createComment?.id }`}
+                    return [...cachedValue, commentRef]
+                  }
+                }
+              })
             }
           })
           if (response && response.data) {
-            const newComments = [...comments]
-            newComments.push(response.data.createComment as IComment)
-            setComments(newComments)
             resetForm()
           }
         } catch (e) {
           console.log(e)
         }
-      }, [comments])
+      }, [])
 
 
       return (
           <div className="dashboard__content">
+            <ModalWindowContainer ref={ modalRef }>
+              { (ref: ModalRefType) => (
+                  <PhotoSettingsModal
+                      isAuthor={ photo.isAuthor }
+                      deletePhoto={ () => deletePhoto(photo.id) }
+                      { ...ref }/>) }
+            </ModalWindowContainer>
             <PostHeader
-                isAuthor={photo.isAuthor}
+                onOpenModal={ openModal }
+                isAuthor={ photo.isAuthor }
                 pictureUrl={ photo.user.pictureUrl }
                 username={ photo.user.username }/>
             <div className="content__img">
@@ -125,17 +159,20 @@ export const PostItem: FC<PropsType> = React.memo(
 
             <div className="content__tools">
               <CommentTools
-                  isLiked={ photoLikeInfo.isLiked }
+                  isLiked={ photo.isLiked }
                   onLike={ onLikeHandler }
               />
-
               <div className="content__likes">
-                <span>Нравится { photoLikeInfo.likeCount } людям</span>
+                <span>{ photo.postText }</span>
               </div>
-              <Comments
+              <div className="content__likes">
+                <span>Нравится { photo.likeCount } людям</span>
+              </div>
+              { photo.comments
+              && <Comments
                   onDeleteComment={ onDeleteComment }
-                  comments={ comments }/>
-              <div className="content__created">{ new Date(photo.date).toLocaleString('ru', dateOptions) }</div>
+                  comments={ photo.comments }/> }
+              <div className="content__created">{ new Date(parseInt(photo.date)).toLocaleString('ru', dateOptions) }</div>
               <Formik<CreateCommentType>
                   onSubmit={ createCommentHandler }
                   initialValues={ {commentText: '', photoId: photo.id} }
