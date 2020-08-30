@@ -1,10 +1,9 @@
-import React, { PropsWithChildren, useImperativeHandle, useRef, useState } from 'react'
+import React, { FC, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 
 export type ModalRefType = {
   openModal: () => void
   closeModal: () => void
-  closeOutside: (e: MouseEvent) => void
 }
 
 export const ModalWindowContainer = React.forwardRef<ModalRefType,
@@ -18,7 +17,15 @@ export const ModalWindowContainer = React.forwardRef<ModalRefType,
       close()
     }
   }
-
+  useEffect(() => {
+    document.getElementById('modal-window-container')?.addEventListener('click', closeOutside)
+    return () => {
+      if (showSubsModal) {
+        close()
+      }
+      document.getElementById('modal-window-container')?.removeEventListener('click', closeOutside)
+    }
+  }, [showSubsModal])
   const open = () => {
     setShowSubsModal(true)
   }
@@ -29,18 +36,22 @@ export const ModalWindowContainer = React.forwardRef<ModalRefType,
 
   useImperativeHandle(ref, () => ({
     openModal: open,
-    closeModal: close,
-    closeOutside: closeOutside
+    closeModal: close
   }), [])
 
+
   if (showSubsModal) {
+    const children = props.children as FC<ModalRefType>
+
     return (
-        <div className="modal-window__background"
+        <div className="modal-window__background modal-animate"
              id="modal-window-container">
           <div ref={ modalRef }
                className="modal-window__container">
             <div className="modal-window">
-              { props.children }
+              {
+                // @ts-ignore
+                children(ref.current) }
             </div>
           </div>
         </div>)

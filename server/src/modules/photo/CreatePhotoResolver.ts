@@ -7,7 +7,7 @@ import { somethingWentWrong } from '../user/utils/errorMessages'
 import { Photo } from '../../entity/Photo'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { User } from '../../entity/User'
-import { getConnection } from 'typeorm/index'
+import { getConnection } from 'typeorm'
 import { Likes } from '../../entity/Likes'
 import { Comment } from '../../entity/Comment'
 import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
@@ -27,7 +27,7 @@ export class CreatePhotoResolver {
   @FieldResolver(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
   async isLiked(@Root()photo: Photo, @Ctx(){payload}: MyContext) {
-    const like = await Likes.findOne({photoId: photo.id,userId:payload.userId!})
+    const like = await Likes.findOne({photoId: photo.id, userId: payload.userId!})
     return Boolean(like)
   }
 
@@ -56,6 +56,13 @@ export class CreatePhotoResolver {
         .getCount()
   }
 
+  @FieldResolver(() => User)
+  async user(
+      @Root()photo: Photo,
+      @Ctx(){userLoader}: MyContext
+  ) {
+    return userLoader.load(photo.userId)
+  }
 
   @UseMiddleware(isAuth)
   @Mutation(() => Photo)

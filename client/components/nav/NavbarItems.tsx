@@ -9,7 +9,11 @@ type PropsType = {
 
 
 const NavbarItems = ({imageUrl, username}: PropsType) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(() => false)
+
+
+  const changeIsOpen = () => setIsOpen(!isOpen)
+
   const navItemArray = useMemo(() => {
     return [
       {link: '/', text: 'home'},
@@ -23,7 +27,7 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
   return (
       <div className="nav__container">
         { navItemArray }
-        <div className="nav__profile nav_item" onClick={ () => setIsOpen(!isOpen) }>
+        <div className="nav__profile nav_item" onClick={ changeIsOpen }>
           { imageUrl ?
               <div className="image__item">
                 <img alt="Грузит" src={ imageUrl }/>
@@ -33,7 +37,9 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
               </a>
           }
 
-          { isOpen && <DropdownMenu username={username}/> }
+          { isOpen && <DropdownMenu
+              closeDropDown={ changeIsOpen }
+              username={ username }/> }
         </div>
       </div>
   )

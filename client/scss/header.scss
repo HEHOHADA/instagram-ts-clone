@@ -1,6 +1,7 @@
 @import "mixins";
 @import "variables";
 @import "extented";
+
 .header {
   top: 0;
   font-size: 20px;
@@ -110,12 +111,13 @@
   position: absolute;
   top: 58px;
   width: 250px;
+  right: 10px;
+  animation: scaleForward .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
   transform: translateX(-45%);
   background-color: #ffffff;
   border: 1px solid #474a4d;
   border-radius: 8px;
   overflow: hidden;
-  transition: height 500ms ease;
 
   .btn__logout {
     background-color: white;
@@ -171,5 +173,14 @@
 @media (min-width: 1200px) {
   .container {
     max-width: 1140px
+  }
+}
+
+@keyframes scaleForward {
+  0% {
+    transform: scale(.85);
+  }
+  100% {
+    transform: scale(1);
   }
 }

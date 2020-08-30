@@ -27,6 +27,7 @@
 
 .modal-window {
   @extend %direc-column;
+  animation: scaleForward .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
   background-color: #fff;
   max-height: 100%;
   border-radius: 12px;
@@ -137,5 +138,84 @@
     border: $border;
     font-size: 14px;
     line-height: 18px;
+  }
+}
+
+
+.photo__settings__modal {
+  border-bottom: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: $border;
+  cursor: pointer;
+  line-height: 1.5;
+  min-height: 48px;
+  padding: 4px 8px;
+  text-align: center;
+  font-size: 14px;
+  background-color: transparent;
+  font-weight: 500;
+
+  &:first-child {
+    border: 0;
+  }
+}
+
+
+@keyframes scaleBack {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(.85);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    background: rgba(0, 0, 0, .0);
+  }
+  100% {
+    background: rgba(0, 0, 0, .7);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    background: rgba(0, 0, 0, .7);
+  }
+  100% {
+    background: rgba(0, 0, 0, .0);
+  }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(.8) translateY(1000px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleForward {
+  0% {
+    transform: scale(.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleDown {
+  0% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(.8) translateY(1000px);
+    opacity: 0;
   }
 }

@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
-import { IComment } from '../../../../interfaces/comment'
 import { CommentItem } from './CommentItem'
+import { CommentItemFragment, UserMeFragment } from '../../../../geterated/apollo'
 
+export type CommentWithUserType = CommentItemFragment & { user: UserMeFragment }
 
 type ProsType = {
-  comments: IComment[],
+  comments: CommentWithUserType[],
   onDeleteComment: (id: string) => Promise<void>
 }
 
@@ -14,7 +15,7 @@ export const Comments: FC<ProsType> = ({comments, onDeleteComment}) => {
         <ul>
           { comments.map(comment => (
               <CommentItem
-                  onDelete={onDeleteComment}
+                  onDelete={ onDeleteComment }
                   id={ comment.id }
                   isAuthor={ comment.isAuthor }
                   key={ comment.id }

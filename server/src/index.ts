@@ -11,6 +11,10 @@ import { redis } from './redis'
 import { refreshToken } from './utils/refreshToken'
 import { graphqlUploadExpress } from 'graphql-upload'
 import { GraphQLError } from 'graphql'
+import { createUserLoader } from './utils/createUserLoader'
+import { createLikeLoader } from './utils/createLikeLoader'
+import { createCommentLoader } from './utils/createCommentLoader'
+import { createPhotoLoader } from './utils/createPhotoLoader'
 
 
 // typeorm.useContainer(Container)
@@ -54,6 +58,10 @@ const server = async () => {
     context: ({req, res}: MyContext) => ({
       redis,
       req, res,
+      userLoader: createUserLoader(),
+      likeLoader: createLikeLoader(),
+      commentLoader: createCommentLoader(),
+      photoLoader: createPhotoLoader(),
       url: req ? (req.protocol + '://' + req.get('host')) : ''
     }),
     formatError: (error: GraphQLError) => {

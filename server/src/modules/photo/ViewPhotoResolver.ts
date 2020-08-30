@@ -1,15 +1,14 @@
 import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
 import { Photo } from '../../entity/Photo'
-import { getConnection } from 'typeorm/index'
+import { getConnection } from 'typeorm'
 import { User } from '../../entity/User'
 import { MyContext } from '../../types/MyContext'
 
-@Resolver(()=>Photo)
+@Resolver(() => Photo)
 export class ViewPhotoResolver {
 
   @FieldResolver(() => String, {nullable: true})
   pictureUrl(@Root()photo: Photo, @Ctx()ctx: MyContext) {
-
     if (photo.pictureUrl.includes('http')) {
       return photo.pictureUrl
     }
@@ -41,8 +40,17 @@ export class ViewPhotoResolver {
         .getRepository(Photo)
         .createQueryBuilder('photo')
         .select('photo')
+        .orderBy('photo.date', 'DESC')
         .where('photo.userId= :userId', {userId: user.id})
         .cache(true)
         .getMany()
+  }
+
+
+  @Query(() => Photo)
+  async viewPhotoById(
+      @Arg('id') id: string
+  ) {
+    return Photo.findOne(id)
   }
 }

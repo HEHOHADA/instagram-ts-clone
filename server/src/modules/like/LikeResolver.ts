@@ -24,8 +24,6 @@ export class LikeResolver {
 
     try {
       if (existingLike) {
-        photo.likeCount--
-        await photo.save()
         await Likes.remove(existingLike)
       } else {
         await Likes.create({user, photo}).save()

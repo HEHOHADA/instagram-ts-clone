@@ -1,21 +1,19 @@
 import React from 'react'
 import App from 'next/app'
 import '../scss/index.scss'
-import { MyContext } from '../interfaces/MyContext'
-import withApollo from '../lib/withApollo'
 import { NpTopProgressBar } from '../components/utils/NpProgressBar'
 
 
-class MyApp extends App<MyContext> {
+class MyApp extends App{
   render() {
-    const {Component, pageProps, apolloClient} = this.props
+    const {Component, pageProps} = this.props
     return (
         <>
           <NpTopProgressBar/>
-          <Component apolloClient={ apolloClient } { ...pageProps }/>
+          <Component { ...pageProps }/>
         </>
     )
   }
 }
 
-export default withApollo(MyApp)
+export default MyApp

@@ -1,20 +1,36 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { DropdownItem } from './DropdownItem'
-import { MeDocument, MeQuery, useLogoutMutation } from '../../geterated/apollo'
+import { useLogoutMutation } from '../../geterated/apollo'
 import { useRouter } from 'next/router'
 
 type PropsType = {
   username: string
+  closeDropDown: () => void
 }
 
-export const DropdownMenu = ({username}: PropsType) => {
+export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
 
   const [logout] = useLogoutMutation()
+  const dropDownRef = useRef(null)
   const router = useRouter()
+
+  const closeOutside = useCallback((e: MouseEvent) => {
+    if (dropDownRef?.current && !((dropDownRef.current! as HTMLDivElement).contains(e.target as HTMLDivElement))) {
+      closeDropDown()
+    }
+  }, [closeDropDown, dropDownRef])
+
+  useEffect(() => {
+    document.addEventListener('click', closeOutside)
+    return () => {
+      closeDropDown()
+      document.removeEventListener('click', closeOutside)
+    }
+  }, [closeDropDown])
 
   const dropDownMenu = useMemo(() => {
     return [
-      {link: `/${ username }`, iconName: 'home', text: 'Профиль'},
+      {link: `/${ username }` ,iconName: 'home', text: 'Профиль'},
       {link: '/accounts/settings', iconName: 'settings', text: 'Настройки'},
       {link: '/p/create', iconName: 'create', text: 'Создать пост'}
     ].map((n) => (
@@ -23,7 +39,7 @@ export const DropdownMenu = ({username}: PropsType) => {
   }, [])
 
   return (
-      <div className="dropdown">
+      <div className="dropdown" ref={ dropDownRef }>
         <div className="menu">
           { dropDownMenu }
           <hr/>
@@ -32,12 +48,7 @@ export const DropdownMenu = ({username}: PropsType) => {
               if (!data) {
                 return
               }
-              cache.writeQuery<MeQuery>({
-                query: MeDocument,
-                data: {
-                  me: null
-                }
-              })
+              await cache.reset()
               await router.push('/accounts/login')
             }
           }) } className="btn__logout">Выйти

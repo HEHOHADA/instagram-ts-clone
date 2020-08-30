@@ -7,10 +7,15 @@ import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
 import { InputAuthField } from '../../components/utils/InputAuthField'
 import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
 import RedirectComponent from '../../components/auth/RedirectComponent'
-import { blockRoute } from '../../utils/checkAuth'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
+import withApollo from '../../lib/withApollo'
+import { useBlockRoute } from '../../utils/useBlockRoute'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '../../lib/redirect'
 
 const Login = () => {
+  useBlockRoute()
   const [login] = useLoginMutation()
   const router = useRouter()
   if (router.isFallback) {
@@ -83,7 +88,16 @@ const Login = () => {
   )
 }
 
-Login.getInitialProps = blockRoute
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (jid()['jid']) {
+      Redirect(ctx, '/')
+    }
+  }
+  return {
+    props: {}
+  }
+}
 
-
-export default Login
+export default withApollo({ssr: false})(Login)

@@ -1,17 +1,13 @@
-import React, { useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { splitArray } from '../../utils/splitArray'
 import { PhotoItem } from './PhotoItem'
+import { PhotoItemFragment } from '../../geterated/apollo'
 
 type PropsType = {
-  photoItems: Array<{
-    pictureUrl: string
-    id: string
-    userId: string
-    date: Date
-  }>
+  photoItems: PhotoItemFragment[]
 }
 
-export const PhotoItems = ({photoItems}: PropsType) => {
+export const PhotoItems: FC<PropsType> = ({photoItems}) => {
 
   const renderPhotoItem = useMemo(() => {
     const splitedPhotoArray = splitArray(photoItems, 3)
@@ -34,10 +30,3 @@ export const PhotoItems = ({photoItems}: PropsType) => {
       </>
   )
 }
-// <div className="profile__photos">
-//   { photoItems.map(item => (
-//       <PhotoItem key={ item.photoId }
-//                  pictureUrl={ item.pictureUrl }
-//                  photoId={ item.photoId }/>
-//   )) }
-// </div>)
