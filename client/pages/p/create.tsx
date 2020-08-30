@@ -1,13 +1,16 @@
 import React from 'react'
 import MainLayout from '../../components/MainLayout'
 import { DropzoneField } from '../../components/utils/DropzoneField'
-import { CreatePhotoMutationVariables, FeedDocument, FeedQuery, useCreatePhotoMutation } from '../../geterated/apollo'
+import { CreatePhotoMutationVariables, useCreatePhotoMutation } from '../../geterated/apollo'
 import { Field, Form, Formik } from 'formik'
 import { InputAuthField } from '../../components/utils/InputAuthField'
 import { useRouter } from 'next/router'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
+import withApollo from '../../lib/withApollo'
+import { useIsAuth } from '../../utils/useIsAuth'
 
 const Create = () => {
+  useIsAuth()
   const [createPhoto] = useCreatePhotoMutation()
   const router = useRouter()
 
@@ -16,15 +19,27 @@ const Create = () => {
       const response = await createPhoto({
         variables: {
           ...data
-        }, update: (cache, {data}) => {
-          const oldCache: any = cache.readQuery({query: FeedDocument})
-          if (oldCache) {
-            const newArray = [...oldCache.feed]
-            newArray.unshift(data!.createPhoto)
-            cache.writeQuery<FeedQuery>({query: FeedDocument, data: {feed: newArray}})
-          } else {
-            cache.writeQuery<FeedQuery>({query: FeedDocument, data: {feed: [data!.createPhoto]}})
-          }
+        }, update: (cache) => {
+
+          cache.evict({fieldName: 'feed:{}'})
+          // const oldCache: any = cache.readQuery({query: FeedDocument})
+          // if (oldCache) {
+          //   const newArray = [...oldCache.feed]
+          //   newArray.unshift(data!.createPhoto)
+          //   cache.writeQuery<FeedQuery>({
+          //     query: FeedDocument,
+          //     data: {feed: {photos: newArray, ...oldCache.feed.feedInfo}}
+          //   })
+          // } else {
+          //   cache.writeQuery<FeedQuery>({query: FeedDocument,
+          //     data: {
+          //       feed: {
+          //         feedInfo: {endCursor: data?.createPhoto.date, hasMore: false},
+          //         photos: [data!.createPhoto as any]
+          //       }
+          //     }
+          //   })
+          // }
         }
       })
       if (response) {
@@ -74,4 +89,4 @@ const Create = () => {
   )
 }
 
-export default Create
+export default withApollo()(Create)

@@ -4,7 +4,7 @@ import { getConnection } from 'typeorm'
 import { User } from '../../entity/User'
 import { MyContext } from '../../types/MyContext'
 
-@Resolver(()=>Photo)
+@Resolver(() => Photo)
 export class ViewPhotoResolver {
 
   @FieldResolver(() => String, {nullable: true})
@@ -44,5 +44,13 @@ export class ViewPhotoResolver {
         .where('photo.userId= :userId', {userId: user.id})
         .cache(true)
         .getMany()
+  }
+
+
+  @Query(() => Photo)
+  async viewPhotoById(
+      @Arg('id') id: string
+  ) {
+    return Photo.findOne(id)
   }
 }

@@ -22,6 +22,7 @@ export type Query = {
   getFollowings: Array<User>;
   feed: PaginatedPhotos;
   viewUserPhoto: Array<Photo>;
+  viewPhotoById: Photo;
   getUserInfo: User;
   me?: Maybe<User>;
   refreshToken: RefreshResponseType;
@@ -49,6 +50,11 @@ export type QueryViewUserPhotoArgs = {
 };
 
 
+export type QueryViewPhotoByIdArgs = {
+  id: Scalars['String'];
+};
+
+
 export type QueryGetUserInfoArgs = {
   username: Scalars['String'];
 };
@@ -71,13 +77,13 @@ export type User = {
 export type PaginatedPhotos = {
   __typename?: 'PaginatedPhotos';
   photos: Array<Photo>;
-  hasMore: Scalars['Boolean'];
+  feedInfo: FeedInfo;
 };
 
 export type Photo = {
   __typename?: 'Photo';
   id: Scalars['ID'];
-  date: Scalars['DateTime'];
+  date: Scalars['String'];
   pictureUrl: Scalars['String'];
   postText: Scalars['String'];
   userId: Scalars['String'];
@@ -89,7 +95,6 @@ export type Photo = {
   comments?: Maybe<Array<Comment>>;
 };
 
-
 export type Comment = {
   __typename?: 'Comment';
   id: Scalars['ID'];
@@ -97,10 +102,17 @@ export type Comment = {
   commentText: Scalars['String'];
   userId: Scalars['String'];
   isAuthor: Scalars['Boolean'];
-  date: Scalars['DateTime'];
+  date: Scalars['String'];
   user: User;
   photo: Photo;
 };
+
+export type FeedInfo = {
+  __typename?: 'FeedInfo';
+  hasMore: Scalars['Boolean'];
+  endCursor: Scalars['DateTime'];
+};
+
 
 export type RefreshResponseType = {
   __typename?: 'RefreshResponseType';
@@ -382,12 +394,14 @@ export type FeedQuery = (
   { __typename?: 'Query' }
   & { feed: (
     { __typename?: 'PaginatedPhotos' }
-    & Pick<PaginatedPhotos, 'hasMore'>
     & { photos: Array<(
       { __typename?: 'Photo' }
       & Pick<Photo, 'isLiked' | 'isAuthor' | 'postText'>
       & PhotoItemFragment
-    )> }
+    )>, feedInfo: (
+      { __typename?: 'FeedInfo' }
+      & Pick<FeedInfo, 'hasMore' | 'endCursor'>
+    ) }
   ) }
 );
 
@@ -402,6 +416,20 @@ export type ViewUserPhotoQuery = (
     { __typename?: 'Photo' }
     & Pick<Photo, 'date' | 'userId' | 'id' | 'pictureUrl'>
   )> }
+);
+
+export type ViewPhotoByIdQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ViewPhotoByIdQuery = (
+  { __typename?: 'Query' }
+  & { viewPhotoById: (
+    { __typename?: 'Photo' }
+    & Pick<Photo, 'isLiked' | 'isAuthor' | 'postText'>
+    & PhotoItemFragment
+  ) }
 );
 
 export type UserMeFragment = (
@@ -880,7 +908,10 @@ export const FeedDocument = gql`
       postText
       ...photoItem
     }
-    hasMore
+    feedInfo {
+      hasMore
+      endCursor
+    }
   }
 }
     ${PhotoItemFragmentDoc}`;
@@ -947,6 +978,42 @@ export function useViewUserPhotoLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type ViewUserPhotoQueryHookResult = ReturnType<typeof useViewUserPhotoQuery>;
 export type ViewUserPhotoLazyQueryHookResult = ReturnType<typeof useViewUserPhotoLazyQuery>;
 export type ViewUserPhotoQueryResult = ApolloReactCommon.QueryResult<ViewUserPhotoQuery, ViewUserPhotoQueryVariables>;
+export const ViewPhotoByIdDocument = gql`
+    query ViewPhotoById($id: String!) {
+  viewPhotoById(id: $id) {
+    isLiked
+    isAuthor
+    postText
+    ...photoItem
+  }
+}
+    ${PhotoItemFragmentDoc}`;
+
+/**
+ * __useViewPhotoByIdQuery__
+ *
+ * To run a query within a React component, call `useViewPhotoByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewPhotoByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewPhotoByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useViewPhotoByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, baseOptions);
+      }
+export function useViewPhotoByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, baseOptions);
+        }
+export type ViewPhotoByIdQueryHookResult = ReturnType<typeof useViewPhotoByIdQuery>;
+export type ViewPhotoByIdLazyQueryHookResult = ReturnType<typeof useViewPhotoByIdLazyQuery>;
+export type ViewPhotoByIdQueryResult = ApolloReactCommon.QueryResult<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>;
 export const ChangeForgotPasswordDocument = gql`
     mutation ChangeForgotPassword($data: ChangeForgotPassword!) {
   changeForgotPassword(data: $data) {

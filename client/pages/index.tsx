@@ -3,12 +3,13 @@ import MainLayout from '../components/MainLayout'
 import { History } from '../components/dashboard/History'
 import { useFeedQuery, useMeQuery } from '../geterated/apollo'
 import { useIsAuth } from '../utils/useIsAuth'
-import { Posts } from '../components/dashboard/post/Posts'
+import { PhotoFeedType, Posts } from '../components/dashboard/post/Posts'
 import { UserProfileRecommendation } from '../components/dashboard/UserProfileRecommendation'
 import withApollo from '../lib/withApollo'
 
 
 const IndexPage = () => {
+  useIsAuth()
   const {data} = useMeQuery()
   const {data: dataFeed, loading, fetchMore, variables} = useFeedQuery({
     variables: {
@@ -17,28 +18,26 @@ const IndexPage = () => {
     },
     notifyOnNetworkStatusChange: true
   })
-  useIsAuth()
 
   if (!data) {
     return null
   }
-  if (!dataFeed) {
-    return null
-  }
+  const {me} = data
+
   return (
       <MainLayout title="Home">
         <div className="container dashboard">
           <div className="dashboard__main">
             <History/>
             <div className="dashboard__container_el">
-              <Posts
-                  feed={ dataFeed.feed.photos as any }/>
+              { dataFeed?.feed && <Posts
+                  feed={ dataFeed?.feed.photos as PhotoFeedType[] }/> }
             </div>
-            { dataFeed.feed.hasMore ? (
+            { dataFeed?.feed.feedInfo.hasMore ? (
                 <button
                     disabled={ loading }
-                    onClick={ async () => {
-                      await fetchMore({
+                    onClick={ () => {
+                      fetchMore({
                         variables: {
                           limit: variables!.limit,
                           cursor: dataFeed?.feed.photos[dataFeed?.feed.photos.length - 1].date
@@ -50,9 +49,9 @@ const IndexPage = () => {
           </div>
           <div className="dashboard__recommendation">
             <UserProfileRecommendation
-                username={ data!.me!.username }
-                pictureUrl={ data!.me!.pictureUrl }
-                fullName={ data!.me!.fullName }
+                username={ me!.username }
+                pictureUrl={ me!.pictureUrl }
+                fullName={ me!.fullName }
             />
             <div className="dashboard__recommendation__items">
               <div className="recommend__helper">

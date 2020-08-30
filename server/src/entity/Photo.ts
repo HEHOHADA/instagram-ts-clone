@@ -22,8 +22,8 @@ export class Photo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Field()
-  @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
+  @Field(() => String)
+  @CreateDateColumn()
   date: Date
 
   @Field()

@@ -20,8 +20,8 @@ export class Likes extends BaseEntity {
   @Column('uuid')
   userId: string
 
-  @Field(() => Date)
-  @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
+  @Field(()=>String)
+  @CreateDateColumn()
   date: Date
 
   @ManyToOne(() => Photo,

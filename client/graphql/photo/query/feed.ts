@@ -9,7 +9,10 @@ export const feedQuery = gql`
                 postText
                 ...photoItem
             }
-            hasMore
+            feedInfo{
+                hasMore
+                endCursor
+            }
         }
     }
 `

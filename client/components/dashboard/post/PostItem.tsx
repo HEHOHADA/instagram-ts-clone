@@ -125,49 +125,6 @@ export const PostItem: FC<PropsType> = React.memo(
                 }
               })
             }
-            // update: (cache, {data}) => {
-            //   //   console.log('photoid', photo.id)
-            //   //   cache.modify({
-            //   //     id: `Photo:${ photo.id }`,
-            //   //     fields: {
-            //   //       commentCount(cachedValue) {
-            //   //         return cachedValue + 1
-            //   //       },
-            //   //       comments(cachedValue) {
-            //   //         const commentRef = {'__ref': `Comment:${ data?.createComment?.id }`}
-            //   //         return [...cachedValue].push(commentRef)
-            //   //       }
-            //   //     }
-            //   //   })
-            //   console.log(data)
-            //
-            //   const cacheFragment = cache.readFragment<{
-            //     id: string,
-            //     commentCount: number
-            //   }>({
-            //     id: `Photo:${ photo.id }`,
-            //     fragment: gql`
-            //         fragment _ on Photo {
-            //             id
-            //             commentCount
-            //         }
-            //     `,
-            //   })
-            //   console.log(cacheFragment)
-            //
-            //   if (cacheFragment && data?.createComment) {
-            //     // const newComments = [cacheFragment.comments, data?.createComment]
-            //     cache.writeFragment({
-            //       id: `Photo:${ photo.id }`,
-            //       fragment: gql`
-            //           fragment __ on Photo {
-            //               commentCount
-            //           }
-            //       `,
-            //       data: {commentCount: cacheFragment.commentCount + 1}
-            //     })
-            //   }
-            // },
           })
           if (response && response.data) {
             resetForm()
@@ -215,7 +172,7 @@ export const PostItem: FC<PropsType> = React.memo(
               && <Comments
                   onDeleteComment={ onDeleteComment }
                   comments={ photo.comments }/> }
-              <div className="content__created">{ new Date(photo.date).toLocaleString('ru', dateOptions) }</div>
+              <div className="content__created">{ new Date(parseInt(photo.date)).toLocaleString('ru', dateOptions) }</div>
               <Formik<CreateCommentType>
                   onSubmit={ createCommentHandler }
                   initialValues={ {commentText: '', photoId: photo.id} }
