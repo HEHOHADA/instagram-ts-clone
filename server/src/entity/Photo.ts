@@ -1,13 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn
-} from 'typeorm'
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Comment } from './Comment'
@@ -23,7 +14,7 @@ export class Photo extends BaseEntity {
   id: string
 
   @Field(() => String)
-  @CreateDateColumn()
+  @Column()
   date: Date
 
   @Field()

@@ -60,7 +60,7 @@ const Create = () => {
                 initialValues={ {title: '', picture: null} }
                 onSubmit={ createPhotoHandler }
             >{ () => (
-                <Form className="photo__create__form">
+                <Form  className="photo__create__form">
                   <Field
                       type="text"
                       name="title"

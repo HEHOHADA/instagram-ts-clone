@@ -82,3 +82,23 @@
   color: $white;
   margin: 10px;
 }
+
+
+.photo__container {
+  max-width: $defaultContainer;
+  padding: 4vh 20px 0;
+  margin: 0 auto;
+  @extend %direc-row;
+  justify-content: center;
+}
+
+.content__img__info {
+  width: 335px;
+  height: 600px;
+  border: $border;
+}
+
+.content__img__comments {
+  display: block;
+  height: 370px;
+}

@@ -1,6 +1,4 @@
 import React, { FC, useCallback, useRef } from 'react'
-import { PostHeader } from './PostHeader'
-import { CommentTools } from './comment/CommentTools'
 import { Comments } from './comment/Comments'
 import {
   CreateCommentType,
@@ -15,6 +13,8 @@ import { ModalRefType, ModalWindowContainer } from '../../modal/ModalWindowConta
 import { PhotoSettingsModal } from '../../modal/PhotoSettingsModal'
 import { PhotoFeedType } from './Posts'
 import { gql } from '@apollo/client'
+import { CommentTools } from './comment/CommentTools'
+import { PostHeader } from './PostHeader'
 
 
 type PropsType = {

@@ -1,4 +1,4 @@
-import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware, Subscription } from 'type-graphql'
 import { MyContext } from '../../types/MyContext'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { processUpload } from '../shared/processUpload'
@@ -14,6 +14,7 @@ import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddlewar
 
 @Resolver(() => Photo)
 export class CreatePhotoResolver {
+
 
   @FieldResolver(() => Number, {defaultValue: 0})
   async likeCount(@Root()photo: Photo) {
@@ -79,6 +80,7 @@ export class CreatePhotoResolver {
     const user = await User.findOne(payload.userId!)
     const photo = await Photo.create({
       user,
+      date: new Date(),
       pictureUrl: id,
       postText: title
     })

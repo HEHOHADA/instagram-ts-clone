@@ -81,6 +81,7 @@
   }
 }
 .dashboard__content__header {
+  position: relative;
   height: 60px;
   flex-direction: row;
   display: flex;
@@ -125,6 +126,7 @@
 }
 
 .content__tools__options {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: flex-start;

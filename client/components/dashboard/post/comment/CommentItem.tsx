@@ -6,12 +6,16 @@ type PropsType = {
   commentText: string
   id: string
   isAuthor: boolean
+  pictureUrl: string
   onDelete?: (id: string) => Promise<void>
 }
 
-export const CommentItem = ({username, commentText, onDelete, id, isAuthor}: PropsType) => {
+export const CommentItem = ({username, pictureUrl,commentText, onDelete, id, isAuthor}: PropsType) => {
   return (
       <li className="comment__item">
+        {pictureUrl&&<div className="comment__img">
+          <img src={pictureUrl} alt="picture"/>
+        </div>}
         <Link href={ `/${ username }` }>
           <a className="comment__username">{ username }</a>
         </Link>

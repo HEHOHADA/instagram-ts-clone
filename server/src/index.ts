@@ -48,13 +48,16 @@ const server = async () => {
   //       resave: true,
   //       saveUninitialized: true
   //     }))
-
+  const pubsub = new PubSub()
   const schema = await createSchema()
 
   const apolloServer = new ApolloServer({
     schema,
     uploads: false,
     tracing: true,
+    subscriptions:{
+
+    },
     context: ({req, res}: MyContext) => ({
       redis,
       req, res,

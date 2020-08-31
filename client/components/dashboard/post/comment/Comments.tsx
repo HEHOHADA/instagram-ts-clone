@@ -6,7 +6,7 @@ export type CommentWithUserType = CommentItemFragment & { user: UserMeFragment }
 
 type ProsType = {
   comments: CommentWithUserType[],
-  onDeleteComment: (id: string) => Promise<void>
+  onDeleteComment?: (id: string) => Promise<void>
 }
 
 export const Comments: FC<ProsType> = ({comments, onDeleteComment}) => {

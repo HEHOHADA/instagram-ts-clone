@@ -33,6 +33,7 @@ export class CreateCommentResolver {
 
     return await Comment.create({
       commentText,
+      date: new Date(),
       photoId,
       user
     }).save()

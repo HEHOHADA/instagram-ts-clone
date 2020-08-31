@@ -26,7 +26,7 @@ export class LikeResolver {
       if (existingLike) {
         await Likes.remove(existingLike)
       } else {
-        await Likes.create({user, photo}).save()
+        await Likes.create({user, date: new Date(), photo}).save()
       }
     } catch {
       throw new ApolloError('Something went wrong')

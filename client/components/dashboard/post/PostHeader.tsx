@@ -6,7 +6,7 @@ type PropsType = {
   username: string
   pictureUrl?: string | null
   isAuthor: boolean
-  onOpenModal: () => void
+  onOpenModal?: () => void
 }
 
 export const PostHeader: FC<PropsType> = React.memo(({username, onOpenModal, pictureUrl}) => {
