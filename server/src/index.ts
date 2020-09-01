@@ -2,7 +2,7 @@ import 'dotenv/config'
 import 'reflect-metadata'
 import cors from 'cors'
 import Express from 'express'
-import { ApolloServer } from 'apollo-server-express'
+import { ApolloServer, PubSub } from 'apollo-server-express'
 import { createConnection } from 'typeorm'
 import cookieParser from 'cookie-parser'
 import { createSchema } from './utils/createSchema'
@@ -48,18 +48,17 @@ const server = async () => {
   //       resave: true,
   //       saveUninitialized: true
   //     }))
-  const pubsub = new PubSub()
   const schema = await createSchema()
 
+  const pubsub = new PubSub()
   const apolloServer = new ApolloServer({
     schema,
     uploads: false,
     tracing: true,
-    subscriptions:{
-
-    },
+    subscriptions: {},
     context: ({req, res}: MyContext) => ({
       redis,
+      pubsub,
       req, res,
       userLoader: createUserLoader(),
       likeLoader: createLikeLoader(),

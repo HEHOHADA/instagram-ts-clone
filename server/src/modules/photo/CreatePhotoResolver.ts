@@ -1,4 +1,4 @@
-import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware, Subscription } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
 import { MyContext } from '../../types/MyContext'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { processUpload } from '../shared/processUpload'
