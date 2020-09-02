@@ -57,6 +57,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn src/index.ts",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "biuld": "tsc",
     "migration:gen": "yarn typeorm migration:generate -n",
     "migration:run": "yarn typeorm migration:run",
     "db:setup": "ts-node ./src/test-utils/setup.ts",

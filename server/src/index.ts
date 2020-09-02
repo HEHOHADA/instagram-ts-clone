@@ -15,6 +15,7 @@ import { createUserLoader } from './utils/createUserLoader'
 import { createLikeLoader } from './utils/createLikeLoader'
 import { createCommentLoader } from './utils/createCommentLoader'
 import { createPhotoLoader } from './utils/createPhotoLoader'
+import { verify } from 'jsonwebtoken'
 
 
 // typeorm.useContainer(Container)
@@ -55,7 +56,16 @@ const server = async () => {
     schema,
     uploads: false,
     tracing: true,
-    subscriptions: {},
+    subscriptions: {
+      onConnect: async (_connectionParams: any) => {
+        const token = (_connectionParams as any).authorization.split(' ')[1]
+        // const {cookie} = ws.upgradeReq.headers
+        // const token = cookie.replace('token=Bearer%20', '')
+        const verifiedToken = verify(token, process.env.ACCESS_TOKEN_SECRET as string)
+        const {userId}: any = verifiedToken
+        return {userId}
+      },
+    },
     context: ({req, res}: MyContext) => ({
       redis,
       pubsub,

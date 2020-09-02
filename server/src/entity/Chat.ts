@@ -1,8 +1,9 @@
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { Ctx, Field, ID, ObjectType, Root } from 'type-graphql'
+import { Ctx, Field, ID, ObjectType, Root, UseMiddleware } from 'type-graphql'
 import { User } from './User'
 import { Message } from './Message'
-import { Context } from 'vm'
+import { MyContext } from '../types/MyContext'
+import { isAuth } from '../middleware/isAuthMiddleware'
 
 
 @Entity()
@@ -28,8 +29,9 @@ export class Chat extends BaseEntity {
   }
 
   @Field(() => Boolean)
-  unread(@Root() parent: Chat, @Ctx() ctx: Context): Boolean {
-    const {userId} = ctx.req
+  @UseMiddleware(isAuth)
+  unread(@Root() parent: Chat, @Ctx() ctx: MyContext): Boolean {
+    const {payload: {userId}} = ctx
     const lastMessage = parent.messages[parent.messages.length - 1]
     const isUnread = !lastMessage.readTime
     const isSentByMe = userId === lastMessage.userId
