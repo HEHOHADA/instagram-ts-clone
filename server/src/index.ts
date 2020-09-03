@@ -6,7 +6,6 @@ import { ApolloServer, PubSub } from 'apollo-server-express'
 import { createConnection } from 'typeorm'
 import cookieParser from 'cookie-parser'
 import { createSchema } from './utils/createSchema'
-import { MyContext } from './types/MyContext'
 import { redis } from './redis'
 import { refreshToken } from './utils/refreshToken'
 import { graphqlUploadExpress } from 'graphql-upload'
@@ -16,6 +15,7 @@ import { createLikeLoader } from './utils/createLikeLoader'
 import { createCommentLoader } from './utils/createCommentLoader'
 import { createPhotoLoader } from './utils/createPhotoLoader'
 import { verify } from 'jsonwebtoken'
+import * as http from 'http'
 
 
 // typeorm.useContainer(Container)
@@ -58,7 +58,7 @@ const server = async () => {
     tracing: true,
     subscriptions: {
       onConnect: async (_connectionParams: any) => {
-        const token = (_connectionParams as any).authorization.split(' ')[1]
+        const token = (_connectionParams as any).Authorization.split(' ')[1]
         // const {cookie} = ws.upgradeReq.headers
         // const token = cookie.replace('token=Bearer%20', '')
         const verifiedToken = verify(token, process.env.ACCESS_TOKEN_SECRET as string)
@@ -66,9 +66,10 @@ const server = async () => {
         return {userId}
       },
     },
-    context: ({req, res}: MyContext) => ({
+    context: ({req, res, connection}) => ({
       redis,
       pubsub,
+      connection,
       req, res,
       userLoader: createUserLoader(),
       likeLoader: createLikeLoader(),
@@ -87,8 +88,9 @@ const server = async () => {
   })
 
   apolloServer.applyMiddleware({app, cors: false})
-
-  app.listen(4000, () => {
+  const httpServer = http.createServer(app)
+  apolloServer.installSubscriptionHandlers(httpServer)
+  httpServer.listen(4000, () => {
     console.log('server is running on 4000')
   })
 }

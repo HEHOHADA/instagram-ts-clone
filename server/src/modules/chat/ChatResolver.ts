@@ -4,13 +4,13 @@ import { MyContext } from '../../types/MyContext'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { User } from '../../entity/User'
 
-@Resolver()
+@Resolver(() => Chat)
 export class ChatResolver {
+
   @Query(() => Chat)
   @UseMiddleware(isAuth)
   async chat(@Arg('id') id: string, @Ctx() ctx: MyContext) {
     const {payload: {userId}} = ctx
-    console.log('userId: ', userId)
     const chat = await Chat.findOneOrFail({
       where: {id},
       relations: ['users', 'messages', 'messages.user'],

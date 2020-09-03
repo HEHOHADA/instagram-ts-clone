@@ -4,7 +4,11 @@ import { MyContext } from '../types/MyContext'
 
 export const isAuth: MiddlewareFn<MyContext> = async ({context}, next) => {
 
-  const auth = context.req.headers.authorization
+  if (context.connection?.context.userId) {
+    context.payload = context.connection.context
+    return next()
+  }
+  const auth = context.req?.headers.authorization
   if (!auth) {
     throw new UnauthorizedError()
   }

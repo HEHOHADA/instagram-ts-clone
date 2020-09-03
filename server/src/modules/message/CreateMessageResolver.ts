@@ -4,6 +4,7 @@ import { Message } from '../../entity/Message'
 import { CreateMessageInput } from './type/CreateMessageType'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { MyContext } from '../../types/MyContext'
+import { User } from '../../entity/User'
 
 @Resolver(() => Message)
 export class CreateMessageResolver {
@@ -14,6 +15,11 @@ export class CreateMessageResolver {
     return message.userId === payload.userId
   }
 
+  @FieldResolver(() => User)
+  user(@Root()message: Message, @Ctx(){userLoader}: MyContext) {
+    return userLoader.load(message.userId)
+  }
+
   @Mutation(() => Message)
   @UseMiddleware(isAuth)
   async createMessage(
@@ -22,7 +28,7 @@ export class CreateMessageResolver {
       @Ctx() ctx: Context,
       @PubSub() pubSub: PubSubEngine
   ) {
-    const {userId} = ctx.req
+    const {payload: {userId}} = ctx
 
     const message = await Message.create({
       text,
