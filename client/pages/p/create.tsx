@@ -89,4 +89,4 @@ const Create = () => {
   )
 }
 
-export default withApollo()(Create)
+export default withApollo({ssr:false})(Create)

@@ -49,7 +49,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
                 return
               }
               await cache.reset()
-              await router.push('/accounts/login')
+           router.push('/accounts/login')
             }
           }) } className="btn__logout">Выйти
           </button>

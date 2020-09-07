@@ -57,6 +57,7 @@ const server = async () => {
     uploads: false,
     tracing: true,
     subscriptions: {
+      path:'/subscription',
       onConnect: async (_connectionParams: any) => {
         const token = (_connectionParams as any).Authorization.split(' ')[1]
         // const {cookie} = ws.upgradeReq.headers
@@ -91,7 +92,8 @@ const server = async () => {
   const httpServer = http.createServer(app)
   apolloServer.installSubscriptionHandlers(httpServer)
   httpServer.listen(4000, () => {
-    console.log('server is running on 4000')
+    console.log(`🚀 Server ready at http://localhost:${4000}${apolloServer.graphqlPath}`)
+    console.log(`🚀 Subscriptions ready at ws://localhost:${4000}${apolloServer.subscriptionsPath}`)
   })
 }
 

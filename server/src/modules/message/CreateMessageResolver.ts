@@ -1,7 +1,6 @@
 import { Context } from 'vm'
 import { Arg, Ctx, FieldResolver, Mutation, PubSub, PubSubEngine, Resolver, Root, UseMiddleware } from 'type-graphql'
 import { Message } from '../../entity/Message'
-import { CreateMessageInput } from './type/CreateMessageType'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { MyContext } from '../../types/MyContext'
 import { User } from '../../entity/User'
@@ -23,7 +22,7 @@ export class CreateMessageResolver {
   @Mutation(() => Message)
   @UseMiddleware(isAuth)
   async createMessage(
-      @Arg('text') {text}: CreateMessageInput,
+      @Arg('text') text: string,
       @Arg('chatId') chatId: string,
       @Ctx() ctx: Context,
       @PubSub() pubSub: PubSubEngine

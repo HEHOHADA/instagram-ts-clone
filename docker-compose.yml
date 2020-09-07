@@ -2,9 +2,7 @@ version: "3"
 services:
   graphql:
     container_name: graphql
-      build:
-        context: .
-        dockerfile: Dockerfile.dev
+      build: ./server
       restart: unless-stopped
       working_dir: "/go/src/token-svc"
       command: [ "./scripts/build/wait-for-it.sh", "postgres:5432" ]
@@ -15,6 +13,8 @@ services:
         - "./:/go/src/token-svc"
         - "/tmp/certs:/tmp/certs:ro"
         - "/tmp/log:/tmp/log"
+  client:
+    build:
 
   postgres:
     container_name: postgres

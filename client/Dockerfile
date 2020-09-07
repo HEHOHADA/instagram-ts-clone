@@ -12,11 +12,12 @@ COPY yarn.lock ./
 RUN yarn
 
 COPY . .
+#COPY .env.production .env
 
-RUN yarn build
+#RUN yarn dev
 
-ENV NODE_ENV production
+#ENV NODE_ENV production
 
-EXPOSE 4000
-CMD [ "node", "dist/index.js" ]
+#EXPOSE 3000
+CMD [ "yarn", "dev" ]
 USER node

@@ -1,4 +1,3 @@
-import ws from 'ws'
 import Router from 'next/router'
 import cookie from 'cookie'
 import jwtDecode from 'jwt-decode'
@@ -6,12 +5,20 @@ import { onError } from '@apollo/client/link/error'
 import { setContext } from '@apollo/client/link/context'
 import { TokenRefreshLink } from 'apollo-link-token-refresh'
 import { createUploadLink } from 'apollo-upload-client'
-import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+  OperationVariables,
+  split
+} from '@apollo/client'
 import { isBrowser } from './isBrowser'
 import { getAccessToken, setAccessToken } from './token'
 import { isServer } from './withApollo'
 import { cacheConfig } from './cacheConfig'
 import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
@@ -23,13 +30,18 @@ function create(
     uri: 'http://localhost:4000/graphql',
     credentials: 'include'
   })
-
+  // const wsClient = !isServer() ? new SubscriptionClient(`ws://localhost:4000/graphql`, {
+  //   reconnect: true
+  // }, ws) : null
   const wsLink = new WebSocketLink({
-    uri: `ws://localhost:4000/graphql`,
+    uri: `ws://localhost:4000/subscription`,
     options: {
-      reconnect: true
-    },
-    webSocketImpl: ws
+      reconnect: true,
+      connectionParams: () => ({
+        authorization: `Bearer ${ getAccessToken() }`,
+      })
+    }
+
   })
 
   const refreshLink = new TokenRefreshLink({
@@ -48,10 +60,14 @@ function create(
     },
     accessTokenField: 'accessToken',
     fetchAccessToken: () => {
-      const cookies = cookie.parse(ctx.req.headers.cookie)
       let fetchProps: any = {}
-      if (isServer() && cookies.jid) {
-        fetchProps['headers']['cookie'] = 'jid=' + cookies.jid
+      if (ctx && ctx.req) {
+        const cookies = cookie.parse(ctx.req.headers.cookie)
+        if (isServer() && cookies?.jid) {
+          fetchProps['headers'] = {
+            cookie: 'jid=' + cookies.jid
+          }
+        }
       }
       return fetch('http://localhost:4000/refresh_token', {
         method: 'POST',
@@ -79,7 +95,7 @@ function create(
     return {
       headers: {
         ...headers,
-        authorization: token ? `Bearer ${ token }` : ''
+        Authorization: token ? `Bearer ${ token }` : ''
       }
     }
   })
@@ -90,19 +106,39 @@ function create(
       graphQLErrors.forEach(({message, locations, path}) => {
         console.log(
             `[GraphQL error]: Message: ${ message }, Location: ${ locations }, Path: ${ path }`)
-        if (isBrowser && message.includes('AuthenticationError')) {
+        if (isBrowser && (message.includes('AuthenticationError') || message.includes('Access denied!'))) {
           Router.push('/accounts/login', '/')
         }
       })
 
     if (networkError) console.log(`[Network error]: ${ networkError }`)
   })
+  const ssrMode = Boolean(ctx)
+
+  const linkArray = ApolloLink.from([
+    refreshLink,
+    errorLink,
+    authLink,
+    httpLink as any])
+
+  const link = ssrMode
+      ? linkArray
+      : process.browser
+          ? split(
+              ({query}: any) => {
+                const {kind, operation}: OperationVariables = getMainDefinition(query)
+                return kind === 'OperationDefinition' && operation === 'subscription'
+              },
+              wsLink,
+              linkArray as any
+          )
+          : linkArray as any
 
   return new ApolloClient({
     connectToDevTools: isBrowser,
-    ssrMode: Boolean(ctx), // Disables forceFetch on the server (so queries are only run once)
+    ssrMode, // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link: ApolloLink.from([authLink, refreshLink, wsLink, errorLink, httpLink as any]),
+    link,
     cache: new InMemoryCache(cacheConfig).restore(initialState || {})
   })
 }

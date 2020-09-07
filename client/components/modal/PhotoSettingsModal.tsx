@@ -1,5 +1,5 @@
 import React from 'react'
-import { ModalRefType } from './ModalWindowContainer'
+import { ModalRefType } from '../../hoc/ModalWindowContainer'
 
 type PropsType = {
   deletePhoto: () => void
