@@ -20,8 +20,8 @@ type PropsType = {
 
 export const ConversationItem: FC<PropsType> = ({id}) => {
 
-  const {data, loading, subscribeToMore, client} = useChatQuery({variables: {id}})
-  const [createMessage] = useCreateMessageMutation()
+  const {data, loading, subscribeToMore, client} = useChatQuery({variables: {id}, fetchPolicy: 'network-only'})
+  const [createMessage] = useCreateMessageMutation({})
   // useEffect(() => {
   //   subscribe()
   //   return () => {

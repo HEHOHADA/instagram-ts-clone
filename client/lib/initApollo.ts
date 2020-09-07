@@ -33,15 +33,15 @@ function create(
   // const wsClient = !isServer() ? new SubscriptionClient(`ws://localhost:4000/graphql`, {
   //   reconnect: true
   // }, ws) : null
-  const wsLink = new WebSocketLink({
+  const wsLink = () => new WebSocketLink({
     uri: `ws://localhost:4000/subscription`,
+    webSocketImpl: WebSocket,
     options: {
       reconnect: true,
       connectionParams: () => ({
         authorization: `Bearer ${ getAccessToken() }`,
       })
     }
-
   })
 
   const refreshLink = new TokenRefreshLink({
@@ -107,7 +107,7 @@ function create(
         console.log(
             `[GraphQL error]: Message: ${ message }, Location: ${ locations }, Path: ${ path }`)
         if (isBrowser && (message.includes('AuthenticationError') || message.includes('Access denied!'))) {
-          Router.push('/accounts/login', '/')
+          Router.replace('/accounts/login')
         }
       })
 
@@ -115,30 +115,29 @@ function create(
   })
   const ssrMode = Boolean(ctx)
 
-  const linkArray = ApolloLink.from([
-    refreshLink,
-    errorLink,
-    authLink,
-    httpLink as any])
 
   const link = ssrMode
-      ? linkArray
-      : process.browser
+      ? httpLink as any
+      : isBrowser
           ? split(
               ({query}: any) => {
                 const {kind, operation}: OperationVariables = getMainDefinition(query)
                 return kind === 'OperationDefinition' && operation === 'subscription'
               },
-              wsLink,
-              linkArray as any
+              wsLink(),
+              httpLink as any
           )
-          : linkArray as any
-
+          : httpLink as any
   return new ApolloClient({
     connectToDevTools: isBrowser,
-    ssrMode, // Disables forceFetch on the server (so queries are only run once)
+    ssrMode: isServer(), // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link,
+    link: ApolloLink.from([
+      refreshLink,
+      authLink,
+      errorLink,
+      link
+    ]),
     cache: new InMemoryCache(cacheConfig).restore(initialState || {})
   })
 }

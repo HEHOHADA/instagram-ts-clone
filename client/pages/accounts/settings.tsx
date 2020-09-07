@@ -22,7 +22,7 @@ const Settings = () => {
       }
     })
 
-  }, [setPicture])
+  }, [])
 
   return (
       <MainLayout title="Settings">

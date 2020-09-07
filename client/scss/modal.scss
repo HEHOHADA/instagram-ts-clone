@@ -3,7 +3,8 @@
 @import "extented";
 
 .modal-window__background {
-  @extend %direc-column;
+  display: flex;
+  flex-direction: column;
   justify-content: space-around;
   background: rgba(0, 0, 0, 0.65);
   align-items: center;
