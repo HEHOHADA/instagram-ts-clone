@@ -5,10 +5,10 @@ type PropsType = {
   pictureUrl?: string | null
   username: string
   date?: string
-  id: string
+  id:string
 }
 
-export const DialogItem: FC<PropsType> = ({pictureUrl, id, username, date}) => {
+export const DialogItem: FC<PropsType> = ({pictureUrl,id, username, date}) => {
   return (
       <Link href={ `/direct/t/${ id }` }>
         <a className="direct__conversation">

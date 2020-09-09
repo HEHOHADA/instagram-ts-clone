@@ -1,15 +1,13 @@
 import React from 'react'
-
-import { useRouter } from 'next/router'
-import { useIsAuth } from '../../../../utils/useIsAuth'
-import { useChatsQuery } from '../../../../geterated/apollo'
+import { ChatDocument, MeDocument, useChatsQuery } from '../../../../geterated/apollo'
 import { ConversationItem } from '../../../../components/direct/ConversationItem'
 import MainLayout from '../../../../components/MainLayout'
 import { ConversationList } from '../../../../components/direct/ConversationList'
 import withApollo from '../../../../lib/withApollo'
+import { useApolloClient } from '@apollo/client'
 
 
-const DirectPages = ({id}:{id:string}) => {
+const DirectPages = ({id}: { id: string }) => {
   const {data, loading, error} = useChatsQuery({
     skip: !id,
     fetchPolicy: 'network-only'
@@ -33,11 +31,15 @@ const DirectPages = ({id}:{id:string}) => {
 }
 
 
-export function getServerSideProps(ctx: any) {
-  console.log('ctx', ctx)
+export async function getStaticProps() {
+  const apolloClient = useApolloClient()
+
+  await apolloClient.query({
+    query: MeDocument
+  })
+
   return {
     props: {
-      id: ctx.query.id
     }
   }
 }

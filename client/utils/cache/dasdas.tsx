@@ -1,11 +1,10 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { InfoMark } from '../utils/svg/InfoMark'
 import {
-  ChatDocument,
   CreateMessageMutationVariables,
+  MessageReceivedDocument,
   useChatQuery,
-  useCreateMessageMutation,
-  useMessageReceivedSubscription
+  useCreateMessageMutation
 } from '../../geterated/apollo'
 import { Smile } from '../utils/svg/Smile'
 import { Picture } from '../utils/svg/Picture'
@@ -13,7 +12,6 @@ import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { TextArea } from '../utils/TextArea'
-import { useApolloClient } from '@apollo/client'
 
 type PropsType = {
   id: string
@@ -21,26 +19,84 @@ type PropsType = {
 
 export const ConversationItem: FC<PropsType> = ({id}) => {
 
-  const {data} = useChatQuery({
+  const {data,loading,error, subscribeToMore} = useChatQuery({
     variables: {id}
   })
   const [createMessage] = useCreateMessageMutation()
-  const client = useApolloClient()
-  const {data: das, variables} = useMessageReceivedSubscription({
-    onSubscriptionData: ({subscriptionData}) => {
-      console.log('sybs', subscriptionData)
-      const messageReceived = subscriptionData.data?.messageReceived
-      if (messageReceived) {
-        client.writeQuery({
-          query: ChatDocument,
-          variables: {id},
-          data: {
-            chat: {...data?.chat, messages: [...(data?.chat.messages || []), messageReceived]},
-          },
-        })
+  useEffect(() => {
+    const unsubscribe = subscribeToMore({
+      document: MessageReceivedDocument,
+      // @ts-ignore
+      updateQuery: (cache, {subscriptionData}: any) => {
+        debugger
+        if (subscriptionData.data) {
+          return {
+            ...cache,
+            chat: {
+              messages(cachedValue: any): any[] {
+                return [...cachedValue, subscriptionData.data.chat.text]
+              }
+            }
+          }
+        }
+        return cache
+        // const messageReceived = subscriptionData.data.messageReceived
+        //     if (messageReceived) {
+        //       return{
+        //         ...cache,
+        //         chat:{
+        //           messages(cachedValue){
+        //             return[...cachedValue,
+        //               (subscriptionData.subscriptionData. as any).chat.text ]
+        //           }
+        //         }
+        //       }}else return cache
+        // cache.chat({
+        //
+        //   variables: {id},
+        //   data: {
+        //     chat: {...data?.chat, messages: [...(data?.chat.messages || []), messageReceived]},
+        //   },
+        // })
       }
-    },
-  })
+      // debugger
+      // console.log('cache', cache)
+      // console.log('subsc data ', subscriptionData)
+      // return cache
+      //
+      // if (!subscriptionData.data) {
+      //   return cache
+      // }
+      // return {
+      //   ...cache,
+      //   messages: [
+      //     ...cache.chat.messages,
+      //     (subscriptionData.data as any).chat.text
+      //   ]
+      // }
+
+    })
+    return () => unsubscribe()
+  }, [subscribeToMore])
+  if (loading || !data || error) {
+    return null
+  }
+  // const {data: das, variables} = useMessageReceivedSubscription({
+  //   onSubscriptionData: ({subscriptionData}) => {
+  //     console.log('sybs', subscriptionData)
+  //     const messageReceived = subscriptionData.data?.messageReceived
+  //     if (messageReceived) {
+  //       client.writeQuery({
+  //         query: ChatDocument,
+  //         variables: {id},
+  //         data: {
+  //           chat: {...data?.chat, messages: [...(data?.chat.messages || []), messageReceived]},
+  //         },
+  //       })
+  //     }
+  //   },
+  // })
+  // console.log('var', variables)
 
   const createMessageHandler = async (data: any, {resetForm}: FormikHelpers<any>) => {
     const response = await createMessage({

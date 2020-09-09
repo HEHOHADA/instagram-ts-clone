@@ -20,26 +20,7 @@ const Create = () => {
         variables: {
           ...data
         }, update: (cache) => {
-
           cache.evict({fieldName: 'feed:{}'})
-          // const oldCache: any = cache.readQuery({query: FeedDocument})
-          // if (oldCache) {
-          //   const newArray = [...oldCache.feed]
-          //   newArray.unshift(data!.createPhoto)
-          //   cache.writeQuery<FeedQuery>({
-          //     query: FeedDocument,
-          //     data: {feed: {photos: newArray, ...oldCache.feed.feedInfo}}
-          //   })
-          // } else {
-          //   cache.writeQuery<FeedQuery>({query: FeedDocument,
-          //     data: {
-          //       feed: {
-          //         feedInfo: {endCursor: data?.createPhoto.date, hasMore: false},
-          //         photos: [data!.createPhoto as any]
-          //       }
-          //     }
-          //   })
-          // }
         }
       })
       if (response) {
