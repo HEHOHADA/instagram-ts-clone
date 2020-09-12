@@ -742,67 +742,67 @@ export type MeQuery = (
 
 export const UserMeFragmentDoc = gql`
     fragment userMe on User {
-        email
-        id
-        username
-        pictureUrl
-        fullName
-    }
-`
+  email
+  id
+  username
+  pictureUrl
+  fullName
+}
+    `
 export const CommentItemFragmentDoc = gql`
     fragment commentItem on Comment {
-        date
-        userId
-        id
-        isAuthor
-        commentText
-        photoId
-    }
-`
+  date
+  userId
+  id
+  isAuthor
+  commentText
+  photoId
+}
+    `
 export const PhotoItemFragmentDoc = gql`
     fragment photoItem on Photo {
-        date
-        userId
-        id
-        pictureUrl
-        likeCount
-        commentCount
-        user {
-            ...userMe
-        }
-        comments {
-            ...commentItem
-            user {
-                ...userMe
-            }
-        }
+  date
+  userId
+  id
+  pictureUrl
+  likeCount
+  commentCount
+  user {
+    ...userMe
+  }
+  comments {
+    ...commentItem
+    user {
+      ...userMe
     }
+  }
+}
     ${UserMeFragmentDoc}
 ${CommentItemFragmentDoc}`
 export const ChatDocument = gql`
     query Chat($id: String!) {
-        chat(id: $id) {
-            users {
-                username
-                id
-                isCurrentUser
-                pictureUrl
-            }
-            id
-            messages {
-                text
-                id
-                user {
-                    username
-                    pictureUrl
-                }
-                date
-                readTime
-                isAuthor
-            }
-        }
+  chat(id: $id) {
+    users {
+      username
+      id
+      isCurrentUser
+      pictureUrl
     }
-`
+    id
+    messages {
+      text
+      id
+      user {
+        username
+        pictureUrl
+      }
+      date
+      readTime
+      isAuthor
+    }
+  }
+}
+    `
 
 /**
  * __useChatQuery__
@@ -833,20 +833,20 @@ export type ChatLazyQueryHookResult = ReturnType<typeof useChatLazyQuery>;
 export type ChatQueryResult = ApolloReactCommon.QueryResult<ChatQuery, ChatQueryVariables>;
 export const ChatsDocument = gql`
     query Chats {
-        chats {
-            id
-            unread
-            users {
-                pictureUrl
-                username
-            }
-            lastMessage {
-                date
-                text
-            }
-        }
+  chats {
+    id
+    unread
+    users {
+      pictureUrl
+      username
     }
-`
+    lastMessage {
+      date
+      text
+    }
+  }
+}
+    `
 
 /**
  * __useChatsQuery__
@@ -876,19 +876,19 @@ export type ChatsLazyQueryHookResult = ReturnType<typeof useChatsLazyQuery>;
 export type ChatsQueryResult = ApolloReactCommon.QueryResult<ChatsQuery, ChatsQueryVariables>;
 export const MessageReceivedDocument = gql`
     subscription MessageReceived {
-        messageReceived {
-            text
-            date
-            chatId
-            isAuthor
-            user {
-                id
-                pictureUrl
-                username
-            }
-        }
+  messageReceived {
+    text
+    date
+    chatId
+    isAuthor
+    user {
+      id
+      pictureUrl
+      username
     }
-`
+  }
+}
+    `
 
 /**
  * __useMessageReceivedSubscription__
@@ -913,13 +913,13 @@ export type MessageReceivedSubscriptionHookResult = ReturnType<typeof useMessage
 export type MessageReceivedSubscriptionResult = ApolloReactCommon.SubscriptionResult<MessageReceivedSubscription>;
 export const CreateCommentDocument = gql`
     mutation CreateComment($data: CreateCommentType!) {
-        createComment(data: $data) {
-            ...commentItem
-            user {
-                ...userMe
-            }
-        }
+  createComment(data: $data) {
+    ...commentItem
+    user {
+      ...userMe
     }
+  }
+}
     ${CommentItemFragmentDoc}
 ${UserMeFragmentDoc}`
 export type CreateCommentMutationFn = ApolloReactCommon.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
@@ -950,9 +950,9 @@ export type CreateCommentMutationResult = ApolloReactCommon.MutationResult<Creat
 export type CreateCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const DeleteCommentDocument = gql`
     mutation DeleteComment($data: DeleteCommentType!) {
-        deleteComment(data: $data)
-    }
-`
+  deleteComment(data: $data)
+}
+    `
 export type DeleteCommentMutationFn = ApolloReactCommon.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
 
 /**
@@ -981,9 +981,9 @@ export type DeleteCommentMutationResult = ApolloReactCommon.MutationResult<Delet
 export type DeleteCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
 export const FollowUserDocument = gql`
     mutation FollowUser($userId: String!) {
-        followUser(userId: $userId)
-    }
-`
+  followUser(userId: $userId)
+}
+    `
 export type FollowUserMutationFn = ApolloReactCommon.MutationFunction<FollowUserMutation, FollowUserMutationVariables>;
 
 /**
@@ -1012,9 +1012,9 @@ export type FollowUserMutationResult = ApolloReactCommon.MutationResult<FollowUs
 export type FollowUserMutationOptions = ApolloReactCommon.BaseMutationOptions<FollowUserMutation, FollowUserMutationVariables>;
 export const UnFollowUserDocument = gql`
     mutation UnFollowUser($userId: String!) {
-        unFollowUser(userId: $userId)
-    }
-`
+  unFollowUser(userId: $userId)
+}
+    `
 export type UnFollowUserMutationFn = ApolloReactCommon.MutationFunction<UnFollowUserMutation, UnFollowUserMutationVariables>;
 
 /**
@@ -1043,15 +1043,15 @@ export type UnFollowUserMutationResult = ApolloReactCommon.MutationResult<UnFoll
 export type UnFollowUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UnFollowUserMutation, UnFollowUserMutationVariables>;
 export const GetFollowersDocument = gql`
     query GetFollowers($userId: String!) {
-        getFollowers(userId: $userId) {
-            id
-            isFollowed
-            isFollowing
-            username
-            pictureUrl
-        }
-    }
-`
+  getFollowers(userId: $userId) {
+    id
+    isFollowed
+    isFollowing
+    username
+    pictureUrl
+  }
+}
+    `
 
 /**
  * __useGetFollowersQuery__
@@ -1082,15 +1082,15 @@ export type GetFollowersLazyQueryHookResult = ReturnType<typeof useGetFollowersL
 export type GetFollowersQueryResult = ApolloReactCommon.QueryResult<GetFollowersQuery, GetFollowersQueryVariables>;
 export const GetFollowingsDocument = gql`
     query GetFollowings($userId: String!) {
-        getFollowings(userId: $userId) {
-            id
-            isFollowed
-            isFollowing
-            username
-            pictureUrl
-        }
-    }
-`
+  getFollowings(userId: $userId) {
+    id
+    isFollowed
+    isFollowing
+    username
+    pictureUrl
+  }
+}
+    `
 
 /**
  * __useGetFollowingsQuery__
@@ -1121,9 +1121,9 @@ export type GetFollowingsLazyQueryHookResult = ReturnType<typeof useGetFollowing
 export type GetFollowingsQueryResult = ApolloReactCommon.QueryResult<GetFollowingsQuery, GetFollowingsQueryVariables>;
 export const LikeDocument = gql`
     mutation Like($photoId: String!) {
-        like(photoId: $photoId)
-    }
-`
+  like(photoId: $photoId)
+}
+    `
 export type LikeMutationFn = ApolloReactCommon.MutationFunction<LikeMutation, LikeMutationVariables>;
 
 /**
@@ -1152,19 +1152,19 @@ export type LikeMutationResult = ApolloReactCommon.MutationResult<LikeMutation>;
 export type LikeMutationOptions = ApolloReactCommon.BaseMutationOptions<LikeMutation, LikeMutationVariables>;
 export const CreateMessageDocument = gql`
     mutation CreateMessage($chatId: String!, $text: String!) {
-        createMessage(chatId: $chatId, text: $text) {
-            text
-            id
-            user {
-                username
-                pictureUrl
-            }
-            date
-            readTime
-            isAuthor
-        }
+  createMessage(chatId: $chatId, text: $text) {
+    text
+    id
+    user {
+      username
+      pictureUrl
     }
-`
+    date
+    readTime
+    isAuthor
+  }
+}
+    `
 export type CreateMessageMutationFn = ApolloReactCommon.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
 
 /**
@@ -1194,24 +1194,24 @@ export type CreateMessageMutationResult = ApolloReactCommon.MutationResult<Creat
 export type CreateMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const CreatePhotoDocument = gql`
     mutation CreatePhoto($picture: Upload!, $title: String!) {
-        createPhoto(picture: $picture, title: $title) {
-            date
-            userId
-            postText
-            id
-            isLiked
-            isAuthor
-            pictureUrl
-            likeCount
-            commentCount
-            user {
-                pictureUrl
-                fullName
-                username
-            }
-        }
+  createPhoto(picture: $picture, title: $title) {
+    date
+    userId
+    postText
+    id
+    isLiked
+    isAuthor
+    pictureUrl
+    likeCount
+    commentCount
+    user {
+      pictureUrl
+      fullName
+      username
     }
-`
+  }
+}
+    `
 export type CreatePhotoMutationFn = ApolloReactCommon.MutationFunction<CreatePhotoMutation, CreatePhotoMutationVariables>;
 
 /**
@@ -1241,9 +1241,9 @@ export type CreatePhotoMutationResult = ApolloReactCommon.MutationResult<CreateP
 export type CreatePhotoMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePhotoMutation, CreatePhotoMutationVariables>;
 export const DeletePhotoDocument = gql`
     mutation DeletePhoto($id: String!) {
-        deletePhoto(id: $id)
-    }
-`
+  deletePhoto(id: $id)
+}
+    `
 export type DeletePhotoMutationFn = ApolloReactCommon.MutationFunction<DeletePhotoMutation, DeletePhotoMutationVariables>;
 
 /**
@@ -1272,20 +1272,20 @@ export type DeletePhotoMutationResult = ApolloReactCommon.MutationResult<DeleteP
 export type DeletePhotoMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePhotoMutation, DeletePhotoMutationVariables>;
 export const FeedDocument = gql`
     query Feed($limit: Int!, $cursor: String) {
-        feed(limit: $limit, cursor: $cursor) {
-            photos {
-                isLiked
-                isAuthor
-                postText
-                ...photoItem
-            }
-            feedInfo {
-                hasMore
-                endCursor
-            }
-        }
+  feed(limit: $limit, cursor: $cursor) {
+    photos {
+      isLiked
+      isAuthor
+      postText
+      ...photoItem
     }
-${PhotoItemFragmentDoc}`
+    feedInfo {
+      hasMore
+      endCursor
+    }
+  }
+}
+    ${PhotoItemFragmentDoc}`
 
 /**
  * __useFeedQuery__
@@ -1317,14 +1317,14 @@ export type FeedLazyQueryHookResult = ReturnType<typeof useFeedLazyQuery>;
 export type FeedQueryResult = ApolloReactCommon.QueryResult<FeedQuery, FeedQueryVariables>;
 export const ViewUserPhotoDocument = gql`
     query ViewUserPhoto($username: String!) {
-        viewUserPhoto(username: $username) {
-            date
-            userId
-            id
-            pictureUrl
-        }
-    }
-`
+  viewUserPhoto(username: $username) {
+    date
+    userId
+    id
+    pictureUrl
+  }
+}
+    `
 
 /**
  * __useViewUserPhotoQuery__
@@ -1355,14 +1355,14 @@ export type ViewUserPhotoLazyQueryHookResult = ReturnType<typeof useViewUserPhot
 export type ViewUserPhotoQueryResult = ApolloReactCommon.QueryResult<ViewUserPhotoQuery, ViewUserPhotoQueryVariables>;
 export const ViewPhotoByIdDocument = gql`
     query ViewPhotoById($id: String!) {
-        viewPhotoById(id: $id) {
-            isLiked
-            isAuthor
-            postText
-            ...photoItem
-        }
-    }
-${PhotoItemFragmentDoc}`
+  viewPhotoById(id: $id) {
+    isLiked
+    isAuthor
+    postText
+    ...photoItem
+  }
+}
+    ${PhotoItemFragmentDoc}`
 
 /**
  * __useViewPhotoByIdQuery__
@@ -1393,12 +1393,12 @@ export type ViewPhotoByIdLazyQueryHookResult = ReturnType<typeof useViewPhotoByI
 export type ViewPhotoByIdQueryResult = ApolloReactCommon.QueryResult<ViewPhotoByIdQuery, ViewPhotoByIdQueryVariables>;
 export const ChangeForgotPasswordDocument = gql`
     mutation ChangeForgotPassword($data: ChangeForgotPassword!) {
-        changeForgotPassword(data: $data) {
-            id
-            username
-        }
-    }
-`
+  changeForgotPassword(data: $data) {
+    id
+    username
+  }
+}
+    `
 export type ChangeForgotPasswordMutationFn = ApolloReactCommon.MutationFunction<ChangeForgotPasswordMutation, ChangeForgotPasswordMutationVariables>;
 
 /**
@@ -1427,9 +1427,9 @@ export type ChangeForgotPasswordMutationResult = ApolloReactCommon.MutationResul
 export type ChangeForgotPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeForgotPasswordMutation, ChangeForgotPasswordMutationVariables>;
 export const ConfirmUserDocument = gql`
     mutation ConfirmUser($token: String!) {
-        confirmUser(token: $token)
-    }
-`
+  confirmUser(token: $token)
+}
+    `
 export type ConfirmUserMutationFn = ApolloReactCommon.MutationFunction<ConfirmUserMutation, ConfirmUserMutationVariables>;
 
 /**
@@ -1458,9 +1458,9 @@ export type ConfirmUserMutationResult = ApolloReactCommon.MutationResult<Confirm
 export type ConfirmUserMutationOptions = ApolloReactCommon.BaseMutationOptions<ConfirmUserMutation, ConfirmUserMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: ForgotPasswordType!) {
-        forgotPassword(email: $email)
-    }
-`
+  forgotPassword(email: $email)
+}
+    `
 export type ForgotPasswordMutationFn = ApolloReactCommon.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 
 /**
@@ -1489,14 +1489,14 @@ export type ForgotPasswordMutationResult = ApolloReactCommon.MutationResult<Forg
 export type ForgotPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($data: LoginInput!) {
-        login(data: $data) {
-            accessToken
-            user {
-                ...userMe
-            }
-        }
+  login(data: $data) {
+    accessToken
+    user {
+      ...userMe
     }
-${UserMeFragmentDoc}`
+  }
+}
+    ${UserMeFragmentDoc}`
 export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -1525,9 +1525,9 @@ export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
-        logout
-    }
-`
+  logout
+}
+    `
 export type LogoutMutationFn = ApolloReactCommon.MutationFunction<LogoutMutation, LogoutMutationVariables>;
 
 /**
@@ -1555,11 +1555,11 @@ export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutati
 export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RefreshTokenDocument = gql`
     query RefreshToken {
-        refreshToken {
-            accessToken
-        }
-    }
-`
+  refreshToken {
+    accessToken
+  }
+}
+    `
 
 /**
  * __useRefreshTokenQuery__
@@ -1589,11 +1589,11 @@ export type RefreshTokenLazyQueryHookResult = ReturnType<typeof useRefreshTokenL
 export type RefreshTokenQueryResult = ApolloReactCommon.QueryResult<RefreshTokenQuery, RefreshTokenQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($data: RegisterInput!) {
-        register(data: $data) {
-            ...userMe
-        }
-    }
-${UserMeFragmentDoc}`
+  register(data: $data) {
+    ...userMe
+  }
+}
+    ${UserMeFragmentDoc}`
 export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
@@ -1622,9 +1622,9 @@ export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMu
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const SetPictureProfileDocument = gql`
     mutation SetPictureProfile($picture: Upload!) {
-        setPictureProfile(picture: $picture)
-    }
-`
+  setPictureProfile(picture: $picture)
+}
+    `
 export type SetPictureProfileMutationFn = ApolloReactCommon.MutationFunction<SetPictureProfileMutation, SetPictureProfileMutationVariables>;
 
 /**
@@ -1653,17 +1653,17 @@ export type SetPictureProfileMutationResult = ApolloReactCommon.MutationResult<S
 export type SetPictureProfileMutationOptions = ApolloReactCommon.BaseMutationOptions<SetPictureProfileMutation, SetPictureProfileMutationVariables>;
 export const GetUserInfoDocument = gql`
     query GetUserInfo($username: String!) {
-        getUserInfo(username: $username) {
-            ...userMe
-            followerCount
-            photoCount
-            followingCount
-            isCurrentUser
-            isFollowing
-            isFollowed
-        }
-    }
-${UserMeFragmentDoc}`
+  getUserInfo(username: $username) {
+    ...userMe
+    followerCount
+    photoCount
+    followingCount
+    isCurrentUser
+    isFollowing
+    isFollowed
+  }
+}
+    ${UserMeFragmentDoc}`
 
 /**
  * __useGetUserInfoQuery__
@@ -1694,11 +1694,11 @@ export type GetUserInfoLazyQueryHookResult = ReturnType<typeof useGetUserInfoLaz
 export type GetUserInfoQueryResult = ApolloReactCommon.QueryResult<GetUserInfoQuery, GetUserInfoQueryVariables>;
 export const MeDocument = gql`
     query Me {
-        me {
-            ...userMe
-        }
-    }
-${UserMeFragmentDoc}`
+  me {
+    ...userMe
+  }
+}
+    ${UserMeFragmentDoc}`
 
 /**
  * __useMeQuery__

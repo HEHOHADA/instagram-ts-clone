@@ -1,10 +1,10 @@
 import React from 'react'
+import { useApolloClient } from '@apollo/client'
 import withApollo from '../../lib/withApollo'
 import MainLayout from '../../components/MainLayout'
 import { ConversationList } from '../../components/direct/ConversationList'
-import { ChatDocument, useChatsQuery, useMessageReceivedSubscription } from '../../geterated/apollo'
 import { ConversationItem } from '../../components/direct/ConversationItem'
-import { useApolloClient } from '@apollo/client'
+import { ChatDocument, useChatsQuery, useMessageReceivedSubscription } from '../../geterated/apollo'
 
 
 const DirectInbox = () => {
