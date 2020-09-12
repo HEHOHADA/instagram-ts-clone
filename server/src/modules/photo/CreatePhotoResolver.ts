@@ -15,6 +15,7 @@ import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddlewar
 @Resolver(() => Photo)
 export class CreatePhotoResolver {
 
+
   @FieldResolver(() => Number, {defaultValue: 0})
   async likeCount(@Root()photo: Photo) {
     return await getConnection()
@@ -79,6 +80,7 @@ export class CreatePhotoResolver {
     const user = await User.findOne(payload.userId!)
     const photo = await Photo.create({
       user,
+      date: new Date(),
       pictureUrl: id,
       postText: title
     })

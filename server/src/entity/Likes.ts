@@ -1,8 +1,7 @@
-import { BaseEntity, CreateDateColumn, Entity, ManyToOne } from 'typeorm'
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Photo } from './Photo'
-import { Column, PrimaryGeneratedColumn } from 'typeorm/index'
 
 @Entity()
 @ObjectType()
@@ -20,12 +19,12 @@ export class Likes extends BaseEntity {
   @Column('uuid')
   userId: string
 
-  @Field(()=>String)
-  @CreateDateColumn()
+  @Field(() => String)
+  @Column()
   date: Date
 
   @ManyToOne(() => Photo,
-      photo => photo.likes,{
+      photo => photo.likes, {
         onDelete: 'CASCADE',
       })
   photo: Photo

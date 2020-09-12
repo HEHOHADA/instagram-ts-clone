@@ -18,6 +18,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "graphql": "^15.3.0",
+    "graphql-redis-subscriptions": "^2.2.2",
     "graphql-upload": "^11.0.0",
     "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
@@ -56,6 +57,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn src/index.ts",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "build": "tsc",
     "migration:gen": "yarn typeorm migration:generate -n",
     "migration:run": "yarn typeorm migration:run",
     "db:setup": "ts-node ./src/test-utils/setup.ts",

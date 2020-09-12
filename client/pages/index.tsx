@@ -36,11 +36,11 @@ const IndexPage = () => {
             { dataFeed?.feed.feedInfo.hasMore ? (
                 <button
                     disabled={ loading }
-                    onClick={ () => {
-                      fetchMore({
+                    onClick={ async () => {
+                      await fetchMore({
                         variables: {
                           limit: variables!.limit,
-                          cursor: dataFeed?.feed.photos[dataFeed?.feed.photos.length - 1].date
+                          cursor:dataFeed?.feed.photos[dataFeed?.feed.photos.length-1].date
                         }
                       })
                     } }

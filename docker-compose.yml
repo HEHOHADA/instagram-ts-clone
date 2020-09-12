@@ -1,0 +1,72 @@
+version: "3"
+services:
+  graphql:
+    build: ./server
+    networks:
+      - postgres
+    depends_on:
+      - postgres
+      - redis
+    links:
+      - postgres
+    ports:
+      - "4000:4000"
+      - "4001:40001"
+  #    container_name: graphql
+  #      build: ./server
+  #      restart: unless-stopped
+  #      working_dir: "/go/src/token-svc"
+  #      command: [ "./scripts/build/wait-for-it.sh", "postgres:5432" ]
+  #      depends_on:
+  #        -
+  #      ports:
+  #        - "4000:4000"
+  #        - "4001:4001"
+  #      volumes:
+  #        - "./:/go/src/token-svc"
+  #        - "/tmp/certs:/tmp/certs:ro"
+  #        - "/tmp/log:/tmp/log"
+
+  client:
+    build: ./client
+    image: 'instagram-client'
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgvol:/var/lib/postgresql/data
+    networks:
+      - postgres
+    environment:
+      POSTGRES_PASSWORD: bulat551
+
+  redis:
+#    image: "redis:alpine"
+#    image: redis:latest
+#    command: [ "redis-server", "--appendonly", "yes" ]
+#    hostname: redis
+#    networks:
+#      - redis-net
+#    volumes:
+#      - redis-data:/data
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+volumes:
+  pgvol:
+#  redis-data:
+
+networks:
+#  redis-net:
+  postgres:
+    driver: bridge

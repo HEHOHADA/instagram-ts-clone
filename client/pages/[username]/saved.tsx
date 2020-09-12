@@ -3,8 +3,8 @@ import MainLayout from '../../components/MainLayout'
 
 const Saved = () => {
   return (
-      <MainLayout>
-
+      <MainLayout title="Saved">
+        <div>hello</div>
       </MainLayout>
   )
 }

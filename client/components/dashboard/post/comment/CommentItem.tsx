@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import Link from 'next/link'
 
 type PropsType = {
@@ -6,14 +6,18 @@ type PropsType = {
   commentText: string
   id: string
   isAuthor: boolean
+  pictureUrl?: string
   onDelete?: (id: string) => Promise<void>
 }
 
-export const CommentItem = ({username, commentText, onDelete, id, isAuthor}: PropsType) => {
+export const CommentItem: FC<PropsType> = ({username, pictureUrl, commentText, onDelete, id, isAuthor}) => {
   return (
       <li className="comment__item">
+        { pictureUrl && <div className="comment__img">
+          <img src={ pictureUrl } alt="picture"/>
+        </div> }
         <Link href={ `/${ username }` }>
-          <a className="comment__username">{ username }</a>
+          <a className="comment__username">{ username }:</a>
         </Link>
         <p className="comment__text">{ commentText }</p>
         { isAuthor && onDelete &&

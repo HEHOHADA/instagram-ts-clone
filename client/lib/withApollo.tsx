@@ -51,7 +51,6 @@ export const initOnContext = (ctx: NextPageContextApp, serverAccessToken: string
 const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any) => {
 
   const WithApollo = ({apolloClient, apolloState, serverAccessToken, ...pageProps}: WithApolloType) => {
-
     if (!isServer() && !getAccessToken()) {
       setAccessToken(serverAccessToken)
     }

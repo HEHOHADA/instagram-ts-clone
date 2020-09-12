@@ -1,8 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react'
-import { FetchResult, gql, MutationFunctionOptions } from '@apollo/client'
 import MainLayout from '../../components/MainLayout'
 import {
-  Exact,
   GetUserInfoQuery,
   useFollowUserMutation,
   useGetUserInfoQuery,
@@ -11,12 +9,13 @@ import {
 } from '../../geterated/apollo'
 import { declOfNum } from '../../utils/declOfNumb'
 import { PhotoItems } from '../../components/profile/PhotoItems'
-import { ModalRefType, ModalWindowContainer } from '../../components/modal/ModalWindowContainer'
+import { ModalRefType, ModalWindowContainer } from '../../hoc/ModalWindowContainer'
 import { SubscriptionModal } from '../../components/modal/SubscriptionModal'
 import { FollowButton } from '../../components/profile/FollowButton'
 import { ProfileItems } from '../../components/profile/ProfileItems'
 import { useRouter } from 'next/router'
 import withApollo from '../../lib/withApollo'
+import { followCallback } from '../../utils/followFunction'
 
 
 export type ProfileItemsType = {
@@ -25,16 +24,15 @@ export type ProfileItemsType = {
   text: string
 }
 
-type FollowCallbackType<T> =
-    (options?: (MutationFunctionOptions<T, Exact<{ userId: string }>> | undefined))
-        => Promise<FetchResult<T>> | void
-
 const Profile = () => {
   const router = useRouter()
   const {username: queryUserName} = router.query
-  const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
-  const {data: PhotoData} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
+  const {data, error} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
+  const {data: PhotoData, error: errorPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
   if (!data || !PhotoData) {
+    return null
+  }
+  if (error || errorPhoto) {
     return null
   }
 
@@ -44,7 +42,6 @@ const Profile = () => {
     modalRef.current?.openModal()
   }, [modalRef])
 
-
   const {
     photoCount, followerCount,
     isCurrentUser, id,
@@ -53,45 +50,6 @@ const Profile = () => {
 
   const [unFollowUser] = useUnFollowUserMutation()
   const [followUser] = useFollowUserMutation()
-
-
-  function followCallback<T>(followCallback: FollowCallbackType<T>, count: number): (userId: string) => Promise<void> {
-    return async (userId: string) => {
-      await followCallback({
-        variables: {userId},
-        update: (cache) => {
-          const data = cache.readFragment<{
-            id: string,
-            isFollowing: boolean,
-            followerCount: number
-          }>({
-            id: `User:${ userId }`,
-            fragment: gql`
-                fragment _ on User {
-                    id
-                    isFollowing
-                    followerCount
-                }
-            `,
-          })
-
-          if (data) {
-            cache.writeFragment({
-              id: `User:${ userId }`,
-              fragment: gql`
-                  fragment __ on User {
-                      isFollowing
-                      followerCount
-                  }
-              `,
-              data: {followerCount: data.followerCount + count, isFollowing: !data.isFollowing}
-            })
-          }
-          cache.evict({fieldName: 'feed:{}'})
-        }
-      })
-    }
-  }
 
   const followButton = useMemo(() => {
     const onClick = isFollowing
@@ -127,7 +85,7 @@ const Profile = () => {
 
 
   return (
-      <MainLayout title={ username }>
+      <MainLayout title={ fullName }>
         <ModalWindowContainer ref={ modalRef }>
           { (ref: ModalRefType) => (<SubscriptionModal { ...ref }/>) }
         </ModalWindowContainer>

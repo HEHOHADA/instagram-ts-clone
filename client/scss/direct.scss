@@ -1,5 +1,6 @@
 @import "mixins";
 @import "variables";
+@import "extented";
 
 .direct {
   height: 100%;
@@ -35,7 +36,6 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border-right: $border;
 }
 
 .direct__conversations__header {
@@ -92,7 +92,7 @@
   @include image__item(54px)
 }
 
-.conversation__user {
+.conversation__user__dialog {
   display: flex;
   flex-direction: column;
 }
@@ -114,8 +114,9 @@
 
 .conversation__item {
   height: 100%;
+  border-right: $border;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex: 1 1 auto;
 }
 
@@ -153,8 +154,112 @@
   justify-content: flex-end;
 }
 
-
-.conversation__messages {
-
+.conversation__messages__container {
+  height: 650px;
+  overflow: auto;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  flex-direction: row;
 }
 
+.conversation__messages {
+  padding: 20px 20px 0;
+  flex: 2 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.conversation__date {
+  margin-top: 12px;
+  text-align: center;
+  margin-bottom: 24px;
+  white-space: nowrap;
+}
+
+.message__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+
+.message__user__image {
+  @include image__item(30px)
+}
+
+.message__text__container {
+  border: 1px solid #efefef;
+  max-width: 236px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  justify-content: center;
+  display: flex;
+  padding: 16px;
+  border-radius: 22px;
+  min-height: 44px;
+}
+
+.message__text {
+  color: #262626;
+  font-weight: 400;
+  line-height: 18px;
+  font-size: 14px;
+  margin: -3px 0 -4px;
+}
+
+.conversation__form__container {
+  display: flex;
+  padding: 20px;
+}
+
+.conversation__form__items {
+  @extend %direc-row;
+  min-height: 44px;
+  border-radius: 22px;
+  border: $border;
+  padding-left: 11px;
+  padding-right: 8px;
+}
+
+.message__smile {
+  padding: 10px;
+}
+
+.message__input__container {
+
+  margin-right: 4px;
+}
+
+.message__input {
+  background-color: transparent;
+  border: 0;
+  color: #262626;
+  overflow: auto;
+  flex: 1 1 auto;
+  width: 400px;
+  font-size: 14px;
+  line-height: 18px;
+  padding: 8px 9px;
+  resize: none;
+}
+
+.message__photo {
+  padding: 10px;
+}
+
+.message__like {
+  padding: 10px;
+}
+
+.message___text__send {
+  @include button(20px)
+}
+
+.message__container__left {
+  justify-content: flex-end;
+}
+.message__text-color{
+ background: #efefef;
+}

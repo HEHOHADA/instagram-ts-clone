@@ -1,15 +1,24 @@
-import Router from 'next/router'
-import cookie from 'cookie'
 import jwtDecode from 'jwt-decode'
+import { NextPageContext } from 'next'
 import { onError } from '@apollo/client/link/error'
-import { setContext } from '@apollo/client/link/context'
-import { TokenRefreshLink } from 'apollo-link-token-refresh'
-import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import { WebSocketLink } from '@apollo/client/link/ws'
 import { createUploadLink } from 'apollo-upload-client'
+import { setContext } from '@apollo/client/link/context'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { TokenRefreshLink } from 'apollo-link-token-refresh'
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+  OperationVariables,
+  split,
+} from '@apollo/client'
 import { isBrowser } from './isBrowser'
 import { getAccessToken, setAccessToken } from './token'
 import { isServer } from './withApollo'
 import { cacheConfig } from './cacheConfig'
+import Redirect from './redirect'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
@@ -17,9 +26,21 @@ function create(
     initialState: NormalizedCacheObject,
     ctx?: any,
     serverAccessToken?: string): ApolloClient<NormalizedCacheObject> {
+
   const httpLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include'
+  })
+
+  const wsLink = ()=>new WebSocketLink({
+    uri: `ws://localhost:4000/subscription`,
+    options: {
+      reconnect: true,
+      lazy: true,
+      connectionParams: () => ({
+        authorization: `Bearer ${ getAccessToken() }`,
+      })
+    }
   })
 
   const refreshLink = new TokenRefreshLink({
@@ -38,15 +59,9 @@ function create(
     },
     accessTokenField: 'accessToken',
     fetchAccessToken: () => {
-      const cookies = cookie.parse(ctx.req.headers.cookie)
-      let fetchProps: any = {}
-      if (isServer() && cookies.jid) {
-        fetchProps['headers']['cookie'] = 'jid=' + cookies.jid
-      }
       return fetch('http://localhost:4000/refresh_token', {
         method: 'POST',
-        credentials: 'include',
-        ...fetchProps
+        credentials: 'include'
       })
     },
     handleResponse: (_, accessTokenField) => async (response: any) => {
@@ -63,13 +78,12 @@ function create(
     }
   }) as ApolloLink
 
-
   const authLink = setContext((_req, {headers}) => {
     const token = isServer() ? serverAccessToken : getAccessToken()
     return {
       headers: {
         ...headers,
-        authorization: token ? `Bearer ${ token }` : ''
+        Authorization: token ? `Bearer ${ token }` : ''
       }
     }
   })
@@ -80,24 +94,42 @@ function create(
       graphQLErrors.forEach(({message, locations, path}) => {
         console.log(
             `[GraphQL error]: Message: ${ message }, Location: ${ locations }, Path: ${ path }`)
-        if (isBrowser && message.includes('AuthenticationError')) {
-          Router.push('/accounts/login', '/')
+        if (isBrowser && (message.includes('AuthenticationError') || message.includes('Access denied!'))) {
+          // Router.replace('/accounts/login')
+          Redirect(ctx, '/accounts/login')
         }
       })
 
-    if (networkError) console.log(`[Network error]: ${ networkError }`)
+    if (networkError) console.log(`[Network error]: ${ JSON.stringify(networkError) }`)
   })
 
+  const ssrMode = Boolean(ctx)
+  const linkHttp = ApolloLink.from([refreshLink, authLink, httpLink as any])
+  const link = ssrMode
+      ? linkHttp
+      : isBrowser
+          ? split(
+              ({query}: any) => {
+                const {kind, operation}: OperationVariables = getMainDefinition(query)
+                return kind === 'OperationDefinition' && operation === 'subscription'
+              },
+              wsLink(),
+              linkHttp
+          )
+          : linkHttp
   return new ApolloClient({
     connectToDevTools: isBrowser,
-    ssrMode: Boolean(ctx), // Disables forceFetch on the server (so queries are only run once)
+    ssrMode, // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link: ApolloLink.from([authLink, refreshLink, errorLink, httpLink as any]),
-    cache: new InMemoryCache(cacheConfig).restore(initialState || {})
+    link: ApolloLink.from([errorLink, link]),
+    cache: new InMemoryCache(cacheConfig)
+        .restore(initialState || {})
   })
 }
 
-export default function initApollo(initialState: NormalizedCacheObject, ctx: any, serverAccessToken?: string): ApolloClient<NormalizedCacheObject> {
+export default function initApollo(initialState: NormalizedCacheObject,
+                                   ctx?: NextPageContext,
+                                   serverAccessToken?: string): ApolloClient<NormalizedCacheObject> {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (isServer()) {

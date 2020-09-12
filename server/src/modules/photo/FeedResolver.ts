@@ -4,6 +4,7 @@ import { isAuth } from '../../middleware/isAuthMiddleware'
 import { MyContext } from '../../types/MyContext'
 import { User } from '../../entity/User'
 import { PaginatedPhotos } from './types/PaginatedPhotos'
+import { Photo } from '../../entity/Photo'
 
 @Resolver()
 export class FeedResolver {
@@ -24,40 +25,41 @@ export class FeedResolver {
           relations: ['following'],
           cache: true
         }))?.following.map(userItem => userItem.id)
-    //
-    // const qb = getConnection()
-    //     .getRepository(Photo)
-    //     .createQueryBuilder('photo')
-    //     .where('photo.userId in (:...followId)', {followId: [...qbFollow!, userId]})
 
-    const replacements: any[] = [[...qbFollow!, userId].join(','), realLimitPlusOne]
-    if (cursor) {
-      console.log('cursor', cursor)
-      replacements.push(new Date(parseInt(cursor)))
-    }
-    const photosPlusOne = await getConnection().query(`
-      select p.* from photo p 
-      where p."userId" in ($1)
-      ${ cursor ? `and p.date < $3` : '' }
-      order by p.date DESC
-      limit $2
-      `, replacements)
+    // const replacements: any[] = [[...qbFollow!, userId].join(','), realLimitPlusOne]
+    //
     // if (cursor) {
-    //   qb.where('photo.date < :cursor', {cursor: new Date(cursor)})
+    //
+    //   replacements.push(new Date(parseInt(cursor)))
     // }
 
-    // const photosPlusOne = await qb
-    //     .orderBy('photo.date', 'DESC')
-    //     .limit(realLimitPlusOne)
-    //     .getMany()
-    // console.log('postss witout slicing ', photosPlusOne)
+    const queryBuilder = getConnection()
+        .getRepository(Photo)
+        .createQueryBuilder('p')
+        .where('p.userId in (:...ids)', {ids: [...qbFollow!, userId]})
+
+    if (cursor) {
+      queryBuilder.andWhere('p.date < :date', {date: new Date(parseInt(cursor))})
+    }
+    const photosPlusOne = await queryBuilder
+        .orderBy('p.date', 'DESC')
+        .limit(realLimitPlusOne)
+        .getMany()
+    // const photosPlusOne = await getConnection().query(`
+    //   select p.* from photo p
+    //   where p."userId" IN ($1)
+    //   ${ cursor ? `and p.date < $3` : '' }
+    //   order by p.date DESC
+    //   limit $2
+    //   `, replacements)
+
     const photos = photosPlusOne.slice(0, realLimit)
     const endCursor = photos[photos.length - 1].date
 
     return {
       photos,
       feedInfo: {
-        hasMore: photos.length === realLimitPlusOne,
+        hasMore: photosPlusOne.length === realLimitPlusOne,
         endCursor
       }
     }

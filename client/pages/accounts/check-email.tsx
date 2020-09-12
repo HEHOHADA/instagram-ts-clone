@@ -4,6 +4,7 @@ import { useBlockRoute } from '../../utils/useBlockRoute'
 import { NextPageContext } from 'next'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import Redirect from '../../lib/redirect'
+import withApollo from '../../lib/withApollo'
 
 const CheckEmail = () => {
   useBlockRoute()
@@ -28,4 +29,4 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     props: {}
   }
 }
-export default CheckEmail
+export default withApollo({ssr: false})(CheckEmail)

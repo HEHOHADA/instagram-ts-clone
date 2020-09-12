@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Photo } from './Photo'
@@ -27,8 +27,8 @@ export class Comment extends BaseEntity {
   @Field()
   isAuthor: boolean
 
-  @Field(()=>String)
-  @CreateDateColumn()
+  @Field(() => String)
+  @Column()
   date: Date
 
   @Field(() => User)

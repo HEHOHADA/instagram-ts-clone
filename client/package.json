@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "dev2": "next dev",
     "start": "next start",
     "dev": "nodemon --exec ts-node --project tsconfig.server.json server/index.ts",
     "type-check": "tsc",
@@ -26,7 +27,9 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.2",
-    "sass": "^1.26.10"
+    "react-router-dom": "^5.2.0",
+    "sass": "^1.26.10",
+    "ws": "^7.3.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.17.6",
@@ -43,6 +46,8 @@
     "@types/react": "^16.9.44",
     "@types/react-dom": "^16.9.8",
     "@types/react-dropzone": "^5.1.0",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/ws": "^7.2.6",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.56",

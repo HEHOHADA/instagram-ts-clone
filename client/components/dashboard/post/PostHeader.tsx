@@ -6,13 +6,13 @@ type PropsType = {
   username: string
   pictureUrl?: string | null
   isAuthor: boolean
-  onOpenModal: () => void
+  onOpenModal?: () => void
 }
 
 export const PostHeader: FC<PropsType> = React.memo(({username, onOpenModal, pictureUrl}) => {
   return (
       <header className="dashboard__content__header">
-        <Link as={ `/${ username }` } href={ `/[username]` }>
+        <Link href={ `/${ username }` } >
           <a className="content__header_img">
             { pictureUrl && <img
                 alt="Нет фото"
@@ -21,7 +21,7 @@ export const PostHeader: FC<PropsType> = React.memo(({username, onOpenModal, pic
             /> }
           </a>
         </Link>
-        <Link as={ `/${ username }` } href={ `/[username]` }>
+        <Link href={ `/${ username }` }>
           <a className="content__header__name">{ username }</a>
         </Link>
         <div onClick={ onOpenModal }

@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGe
 import { Field, ID, ObjectType } from 'type-graphql'
 import { Photo } from './Photo'
 import { Comment } from './Comment'
+import { Chat } from './Chat'
 
 @Entity()
 @ObjectType({isAbstract: true})
@@ -66,6 +67,12 @@ export class User extends BaseEntity {
       (user) => user.followers
   )
   following: User[]
+
+  @Field(() => Chat)
+  @ManyToMany(
+      () => Chat,
+      (chat) => chat.users)
+  chats: Chat[]
 
   @Field()
   isFollowed: boolean
