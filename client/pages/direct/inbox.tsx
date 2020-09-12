@@ -1,30 +1,25 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import withApollo from '../../lib/withApollo'
 import MainLayout from '../../components/MainLayout'
 import { ConversationList } from '../../components/direct/ConversationList'
-import { ChatDocument, useChatsLazyQuery, useMessageReceivedSubscription } from '../../geterated/apollo'
+import { ChatDocument, useChatsQuery, useMessageReceivedSubscription } from '../../geterated/apollo'
 import { ConversationItem } from '../../components/direct/ConversationItem'
+import { useApolloClient } from '@apollo/client'
 
 
-const DirectInbox = (props: any) => {
-  const [loadChats, {called, loading, data}] = useChatsLazyQuery({
-    fetchPolicy: 'cache-first'
-  })
-  useEffect(() => {
-    if (props.apolloClient) {
-      loadChats()
-    }
-  }, [])
-
-
-  const {data: das, variables} = useMessageReceivedSubscription({
+const DirectInbox = () => {
+  const {data} = useChatsQuery()
+  const client = useApolloClient()
+   useMessageReceivedSubscription({
     onSubscriptionData: ({subscriptionData}) => {
-      console.log('sybs', subscriptionData)
       const messageReceived = subscriptionData.data?.messageReceived
       if (messageReceived) {
-        props.apolloClient.writeQuery({
+        client.writeQuery({
           query: ChatDocument,
-          variables: {id: 'e737011d-ee80-4118-9b4c-511144c768db'}
+          variables: {id: messageReceived.chatId},
+          data: {
+            chat: {messages: [messageReceived]},
+          },
         })
       }
     },

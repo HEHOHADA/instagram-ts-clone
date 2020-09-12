@@ -3,6 +3,7 @@ import { Chat } from '../../entity/Chat'
 import { MyContext } from '../../types/MyContext'
 import { isAuth } from '../../middleware/isAuthMiddleware'
 import { User } from '../../entity/User'
+import { getConnection } from 'typeorm'
 
 @Resolver(() => Chat)
 export class ChatResolver {
@@ -11,11 +12,22 @@ export class ChatResolver {
   @UseMiddleware(isAuth)
   async chat(@Arg('id') id: string, @Ctx() ctx: MyContext) {
     const {payload: {userId}} = ctx
-    const chat = await Chat.findOneOrFail({
-      where: {id},
-      relations: ['users', 'messages', 'messages.user'],
-    })
-
+    // const chat = await Chat.findOneOrFail({
+    //   where: {id},
+    //   relations: ['users', 'messages'],
+    //
+    // })
+    const chat = await getConnection()
+        .getRepository(Chat)
+        .createQueryBuilder('c')
+        .where('c.id = :id', {id})
+        .leftJoinAndSelect('c.users', 'users')
+        .leftJoinAndSelect('c.messages', 'messages')
+        .orderBy('messages.date', 'ASC')
+        .getOne()
+    if (!chat) {
+      throw new Error('Chat not found')
+    }
     // mark as read all messages received by the authenticated user
     chat.messages = chat.messages.map((message) => {
       const isMeReceiver = message.userId !== userId
@@ -46,7 +58,6 @@ export class ChatResolver {
     })
 
     const nonEmptyChats = chats.filter((chat) => chat.messages.length > 0)
-
     const previewChats = nonEmptyChats.map((chat) => {
       // get rid of me (user) from the users array
       // to not have to filter out me on the client side
@@ -54,7 +65,6 @@ export class ChatResolver {
 
       return chat
     })
-
     // sort by sent time of the last message (latest message' chat first in the array)
     previewChats.sort((chatA, chatB) => {
       const lastMessageOfChatA = chatA.messages[chatA.messages.length - 1]
@@ -66,7 +76,6 @@ export class ChatResolver {
           lastMessageOfChatA.date.getTime()
       )
     })
-
     return previewChats
   }
 

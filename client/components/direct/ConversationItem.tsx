@@ -1,19 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { InfoMark } from '../utils/svg/InfoMark'
-import {
-  ChatDocument,
-  CreateMessageMutationVariables,
-  useChatQuery,
-  useCreateMessageMutation,
-  useMessageReceivedSubscription
-} from '../../geterated/apollo'
+import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '../../geterated/apollo'
 import { Smile } from '../utils/svg/Smile'
 import { Picture } from '../utils/svg/Picture'
 import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { TextArea } from '../utils/TextArea'
-import { useApolloClient } from '@apollo/client'
 
 type PropsType = {
   id: string
@@ -25,22 +18,17 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
     variables: {id}
   })
   const [createMessage] = useCreateMessageMutation()
-  const client = useApolloClient()
-  const {data: das, variables} = useMessageReceivedSubscription({
-    onSubscriptionData: ({subscriptionData}) => {
-      console.log('sybs', subscriptionData)
-      const messageReceived = subscriptionData.data?.messageReceived
-      if (messageReceived) {
-        client.writeQuery({
-          query: ChatDocument,
-          variables: {id},
-          data: {
-            chat: {...data?.chat, messages: [...(data?.chat.messages || []), messageReceived]},
-          },
-        })
-      }
-    },
-  })
+  const ref = useRef<HTMLDivElement | null>(null)
+  const scrollToBottom = () => {
+    if(ref.current) {
+      const scrollHeight = ref.current.scrollHeight;
+      const height = ref.current.clientHeight;
+      const maxScrollTop = scrollHeight - height;
+      ref.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
+  }
+
+  useEffect(scrollToBottom, [])
 
   const createMessageHandler = async (data: any, {resetForm}: FormikHelpers<any>) => {
     const response = await createMessage({
@@ -63,7 +51,6 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
       resetForm()
     }
   }
-
   return (
       <div className="conversation__item">
         <div className="conversation__info">
@@ -80,7 +67,7 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
             <InfoMark/>
           </div>
         </div>
-        <div className="conversation__messages__container">
+        <div className="conversation__messages__container"  ref={ ref }>
           <div className="conversation__messages">
             { data?.chat.messages.map((m) => (
                 <ChatMessage
@@ -124,7 +111,6 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
                       :
                       <button
                           type="submit"
-
                           className="comment__btn">Отправить
                       </button>
                   }

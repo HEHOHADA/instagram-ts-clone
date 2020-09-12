@@ -32,7 +32,7 @@ function create(
     credentials: 'include'
   })
 
-  const wsLink = () => new WebSocketLink({
+  const wsLink = ()=>new WebSocketLink({
     uri: `ws://localhost:4000/subscription`,
     options: {
       reconnect: true,
@@ -102,9 +102,11 @@ function create(
 
     if (networkError) console.log(`[Network error]: ${ JSON.stringify(networkError) }`)
   })
+
   const ssrMode = Boolean(ctx)
+  const linkHttp = ApolloLink.from([refreshLink, authLink, httpLink as any])
   const link = ssrMode
-      ? httpLink
+      ? linkHttp
       : isBrowser
           ? split(
               ({query}: any) => {
@@ -112,14 +114,14 @@ function create(
                 return kind === 'OperationDefinition' && operation === 'subscription'
               },
               wsLink(),
-              httpLink as any
+              linkHttp
           )
-          : httpLink
+          : linkHttp
   return new ApolloClient({
     connectToDevTools: isBrowser,
     ssrMode, // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link: ApolloLink.from([refreshLink, authLink, errorLink, link as ApolloLink]),
+    link: ApolloLink.from([errorLink, link]),
     cache: new InMemoryCache(cacheConfig)
         .restore(initialState || {})
   })
@@ -130,7 +132,6 @@ export default function initApollo(initialState: NormalizedCacheObject,
                                    serverAccessToken?: string): ApolloClient<NormalizedCacheObject> {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
-  console.log('here', isServer() ? 'true' : 'false')
   if (isServer()) {
     return create(initialState, ctx, serverAccessToken)
   }

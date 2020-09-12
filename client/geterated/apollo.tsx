@@ -367,7 +367,7 @@ export type MessageReceivedSubscription = (
     & {
   messageReceived: (
       { __typename?: 'Message' }
-      & Pick<Message, 'text' | 'date' | 'isAuthor'>
+      & Pick<Message, 'text' | 'date' | 'chatId' | 'isAuthor'>
       & {
     user: (
         { __typename?: 'User' }
@@ -879,6 +879,7 @@ export const MessageReceivedDocument = gql`
         messageReceived {
             text
             date
+            chatId
             isAuthor
             user {
                 id

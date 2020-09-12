@@ -5,6 +5,7 @@ export const messageReceivedSubscription = gql`
         messageReceived{
             text
             date
+            chatId
             isAuthor
             user{
                 id

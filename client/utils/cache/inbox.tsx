@@ -20,7 +20,7 @@ const DirectPages = () => {
           <div className="direct__container">
             <div className="direct__items__container">
               <ConversationList chats={ data?.chats }/>
-              <ConversationItem/>
+              {/*<ConversationItem/>*/}
               {/*<Switch>*/ }
               {/*  <Route exact path={ `/t/:id` } component={ ConversationItem }/>*/ }
               {/*  <Route exact path={ `/inbox` } component={ ConversationNew }/>*/ }
