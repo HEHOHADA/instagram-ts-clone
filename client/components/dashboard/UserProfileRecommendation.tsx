@@ -10,14 +10,14 @@ type ProsType = {
 export const UserProfileRecommendation: FC<ProsType> = React.memo(({pictureUrl, username, fullName}) => {
   return (
       <div className="user__profile">
-        <Link href={ `/${ username }` } >
+        <Link passHref href={ `/${ username }` } >
           <a className="user__img">
             { pictureUrl && <img alt="Фото профиля bulat.khai"
                                  src={ pictureUrl }/> }
           </a>
         </Link>
         <div className="user__info">
-          <Link href={ `/${ username }` } >
+          <Link passHref href={ `/${ username }` }>
             <a className="user__username">{ username }</a>
           </Link>
           <div className="user__name">{ fullName }</div>

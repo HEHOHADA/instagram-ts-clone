@@ -1,12 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import MainLayout from '../../components/MainLayout'
-import {
-  GetUserInfoQuery,
-  useFollowUserMutation,
-  useGetUserInfoQuery,
-  useUnFollowUserMutation,
-  useViewUserPhotoQuery
-} from '../../geterated/apollo'
+
 import { declOfNum } from '../../utils/declOfNumb'
 import { PhotoItems } from '../../components/profile/PhotoItems'
 import { ModalRefType, ModalWindowContainer } from '../../hoc/ModalWindowContainer'
@@ -16,6 +10,13 @@ import { ProfileItems } from '../../components/profile/ProfileItems'
 import { useRouter } from 'next/router'
 import withApollo from '../../lib/withApollo'
 import { followCallback } from '../../utils/followFunction'
+import {
+  GetUserInfoQuery,
+  useFollowUserMutation,
+  useGetUserInfoQuery,
+  useUnFollowUserMutation,
+  useViewUserPhotoQuery
+} from '../../geterated/apollo'
 
 
 export type ProfileItemsType = {
@@ -23,7 +24,7 @@ export type ProfileItemsType = {
   count: number
   text: string
 }
-
+type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
 const Profile = () => {
   const router = useRouter()
   const {username: queryUserName} = router.query
@@ -46,7 +47,7 @@ const Profile = () => {
     photoCount, followerCount,
     isCurrentUser, id,
     isFollowing, username, followingCount, pictureUrl, fullName
-  }: GetUserInfoQuery['getUserInfo'] = data!.getUserInfo
+  }:GetUserInfoQueryType = data!.getUserInfo
 
   const [unFollowUser] = useUnFollowUserMutation()
   const [followUser] = useFollowUserMutation()

@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { DropdownItem } from './DropdownItem'
 import { useLogoutMutation } from '../../geterated/apollo'
 import { useRouter } from 'next/router'
+import { setAccessToken } from '../../lib/token'
+import Link from 'next/link'
 
 type PropsType = {
   username: string
@@ -30,7 +32,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
 
   const dropDownMenu = useMemo(() => {
     return [
-      {link: `/${ username }` ,iconName: 'home', text: 'Профиль'},
+      {link: `/${ username }` ,passHref:true,iconName: 'home', text: 'Профиль'},
       {link: '/accounts/settings', iconName: 'settings', text: 'Настройки'},
       {link: '/p/create', iconName: 'create', text: 'Создать пост'}
     ].map((n) => (
@@ -49,6 +51,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
                 return
               }
               await cache.reset()
+              setAccessToken('')
            router.push('/accounts/login')
             }
           }) } className="btn__logout">Выйти

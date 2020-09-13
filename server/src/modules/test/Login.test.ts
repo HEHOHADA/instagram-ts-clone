@@ -12,3 +12,8 @@ mutation Login($data:LoginInput!){
   }
 }
 `
+describe('Registe2r', () => {
+  it('should create user', async () => {
+
+  })
+})
