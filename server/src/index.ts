@@ -14,8 +14,8 @@ import { createUserLoader } from './utils/createUserLoader'
 import { createLikeLoader } from './utils/createLikeLoader'
 import { createCommentLoader } from './utils/createCommentLoader'
 import { createPhotoLoader } from './utils/createPhotoLoader'
-import { verify } from 'jsonwebtoken'
 import * as http from 'http'
+import { verify } from 'jsonwebtoken'
 
 
 // typeorm.useContainer(Container)
@@ -59,7 +59,7 @@ const server = async () => {
     subscriptions: {
       path:'/subscription',
       onConnect: async (_connectionParams: any) => {
-        const token = (_connectionParams as any).Authorization.split(' ')[1]
+        const token = (_connectionParams as any).authorization.split(' ')[1]
         // const {cookie} = ws.upgradeReq.headers
         // const token = cookie.replace('token=Bearer%20', '')
         const verifiedToken = verify(token, process.env.ACCESS_TOKEN_SECRET as string)

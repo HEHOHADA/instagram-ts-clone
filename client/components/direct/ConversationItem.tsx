@@ -7,6 +7,7 @@ import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { TextArea } from '../utils/TextArea'
+import { messageReceivedSubscription } from '../../graphql/chat/subscription/messageReceived'
 
 type PropsType = {
   id: string
@@ -14,17 +15,17 @@ type PropsType = {
 
 export const ConversationItem: FC<PropsType> = ({id}) => {
 
-  const {data} = useChatQuery({
+  const {data, subscribeToMore} = useChatQuery({
     variables: {id}
   })
   const [createMessage] = useCreateMessageMutation()
   const ref = useRef<HTMLDivElement | null>(null)
   const scrollToBottom = () => {
-    if(ref.current) {
-      const scrollHeight = ref.current.scrollHeight;
-      const height = ref.current.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      ref.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    if (ref.current) {
+      const scrollHeight = ref.current.scrollHeight
+      const height = ref.current.clientHeight
+      const maxScrollTop = scrollHeight - height
+      ref.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0
     }
   }
 
@@ -67,7 +68,7 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
             <InfoMark/>
           </div>
         </div>
-        <div className="conversation__messages__container"  ref={ ref }>
+        <div className="conversation__messages__container" ref={ ref }>
           <div className="conversation__messages">
             { data?.chat.messages.map((m) => (
                 <ChatMessage
