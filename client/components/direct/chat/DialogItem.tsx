@@ -10,7 +10,7 @@ type PropsType = {
 
 export const DialogItem: FC<PropsType> = ({pictureUrl,id, username, date}) => {
   return (
-      <Link href={ `/direct/t/${ id }` }>
+      <Link passHref href={ `/direct/t/${ id }` }>
         <a className="direct__conversation">
           <div className="conversation__img">
             { pictureUrl && <img

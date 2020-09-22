@@ -1,19 +1,45 @@
 import React from 'react'
-import { ChatDocument, MeDocument, useChatsQuery } from '../../../../geterated/apollo'
+import { useApolloClient } from '@apollo/client'
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { useChatsQuery, useMessageReceivedSubscription } from '../../../../geterated/apollo'
 import { ConversationItem } from '../../../../components/direct/ConversationItem'
 import MainLayout from '../../../../components/MainLayout'
 import { ConversationList } from '../../../../components/direct/ConversationList'
 import withApollo from '../../../../lib/withApollo'
-import { useApolloClient } from '@apollo/client'
 
 
-const DirectPages = ({id}: { id: string }) => {
+const DirectPages = ({id}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const {data, loading, error} = useChatsQuery({
-    skip: !id,
-    fetchPolicy: 'network-only'
+    skip: !id
   })
-
-  if (loading) {
+  const client = useApolloClient()
+  useMessageReceivedSubscription({
+    onSubscriptionData: ({subscriptionData}) => {
+      const messageReceived = subscriptionData.data?.messageReceived
+      if (messageReceived) {
+        client.cache.modify({
+          id: `Chat:${ messageReceived.chatId }`,
+          fields: {
+            messages(cachedValue) {
+              const messageRef = {'__ref': `Message:${ messageReceived.id }`}
+              return [...cachedValue, messageRef]
+            },
+            lastMessage() {
+              return {
+                '__typename': 'Message',
+                date: messageReceived.date,
+                text: messageReceived.text
+              }
+            },
+            unread() {
+              return messageReceived.isAuthor
+            }
+          }
+        })
+      }
+    },
+  })
+  if (loading || error) {
     return <p>loading</p>
   }
   return (
@@ -22,7 +48,7 @@ const DirectPages = ({id}: { id: string }) => {
           <div className="direct__container">
             <div className="direct__items__container">
               <ConversationList chats={ data?.chats }/>
-              <ConversationItem id={ id }/>
+              <ConversationItem id={ id as string }/>
             </div>
           </div>
         </div>
@@ -31,15 +57,11 @@ const DirectPages = ({id}: { id: string }) => {
 }
 
 
-export async function getStaticProps() {
-  const apolloClient = useApolloClient()
-
-  await apolloClient.query({
-    query: MeDocument
-  })
-
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const id = ctx.params!.id
   return {
     props: {
+      id
     }
   }
 }

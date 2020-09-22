@@ -31,7 +31,6 @@ const ChangePassword = () => {
         await router.push('/accounts/login')
       }
     } catch (e) {
-      // const errors: any = {}
       setErrors({password: e.graphQLErrors[0].message})
     }
   }, [])

@@ -2,14 +2,12 @@ import React from 'react'
 import MainLayout from '../components/MainLayout'
 import { History } from '../components/dashboard/History'
 import { useFeedQuery, useMeQuery } from '../geterated/apollo'
-import { useIsAuth } from '../utils/useIsAuth'
 import { PhotoFeedType, Posts } from '../components/dashboard/post/Posts'
 import { UserProfileRecommendation } from '../components/dashboard/UserProfileRecommendation'
 import withApollo from '../lib/withApollo'
 
 
 const IndexPage = () => {
-  useIsAuth()
   const {data} = useMeQuery()
   const {data: dataFeed, loading, fetchMore, variables} = useFeedQuery({
     variables: {

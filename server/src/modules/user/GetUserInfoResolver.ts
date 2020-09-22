@@ -10,56 +10,6 @@ export class GetUserInfoResolver {
 
   @FieldResolver(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
-  async isFollowing(@Root() user: User, @Ctx() {payload: {userId}}: MyContext) {
-    if (!userId) return false
-
-    // @ts-ignore
-    user = await getConnection()
-        .getRepository(User)
-        .createQueryBuilder('user')
-        .where('user.id = :userId', {userId: userId})
-        .leftJoinAndSelect(
-            'user.following',
-            'targetUser',
-            'targetUser.id = :targetId',
-            {
-              targetId: user.id
-            }
-        )
-        .getOne()
-
-    if (!user) return false
-
-    return Boolean((user.following).length)
-  }
-
-  @FieldResolver(() => Boolean)
-  @UseMiddleware(isUserAuthOrUndefined)
-  async isFollowed(@Root() user: User, @Ctx() {payload: {userId}}: MyContext) {
-    if (!userId) return false
-
-    // @ts-ignore
-    user = await getConnection()
-        .getRepository(User)
-        .createQueryBuilder('user')
-        .where('user.id = :userId', {userId: user.id})
-        .leftJoinAndSelect(
-            'user.following',
-            'targetUser',
-            'targetUser.id = :targetId',
-            {
-              targetId: userId
-            }
-        )
-        .getOne()
-
-    if (!user) return false
-
-    return Boolean((user.following).length)
-  }
-
-  @FieldResolver(() => Boolean)
-  @UseMiddleware(isUserAuthOrUndefined)
   async isCurrentUser(@Root() user: User, @Ctx() {payload: {userId}}: MyContext) {
     return user.id === userId
   }

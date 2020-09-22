@@ -9,13 +9,11 @@ import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedire
 import RedirectComponent from '../../components/auth/RedirectComponent'
 import { formatValidationErrors } from '../../utils/formatValidationErrors'
 import withApollo from '../../lib/withApollo'
-import { useBlockRoute } from '../../utils/useBlockRoute'
 import { NextPageContext } from 'next'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import Redirect from '../../lib/redirect'
 
 const Login = () => {
-  useBlockRoute()
   const [login] = useLoginMutation()
   const router = useRouter()
   if (router.isFallback) {

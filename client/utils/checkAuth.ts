@@ -9,7 +9,6 @@ export const blockRoute = async (ctx: MyContext) => {
     })
     if (meQueryData.data.me) {
       ctx.apolloClient.writeQuery({query: MeDocument, data: meQueryData.data})
-      console.log(ctx.apolloClient.readQuery({query: MeDocument}))
       redirect(ctx, '/')
     }
   } else {

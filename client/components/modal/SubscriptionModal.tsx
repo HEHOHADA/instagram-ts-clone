@@ -2,7 +2,7 @@ import React from 'react'
 import { ModalRefType } from '../../hoc/ModalWindowContainer'
 import { CloseModalButton } from './CloseModalButton'
 
-export const SubscriptionModal = ({closeModal}: ModalRefType) => {
+export const SubscriptionModal = ({closeModal}: ModalRefType & { id: string }) => {
 
   return (
       <>
@@ -22,8 +22,8 @@ export const SubscriptionModal = ({closeModal}: ModalRefType) => {
                         alt="Фото"/>
                   </div>
                   <div className="subscription__username__container">
-                    {/*<a className="subscription__username">anastasiya__shahova</a>*/}
-                    {/*<div className="subscription__full__name">Анастасия Шахова</div>*/}
+                    {/*<a className="subscription__username">anastasiya__shahova</a>*/ }
+                    {/*<div className="subscription__full__name">Анастасия Шахова</div>*/ }
                   </div>
                 </div>
                 <div className="subscription__info__btn__container">

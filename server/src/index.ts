@@ -1,21 +1,20 @@
 import 'dotenv/config'
 import 'reflect-metadata'
 import cors from 'cors'
+import * as http from 'http'
 import Express from 'express'
-import { ApolloServer, PubSub } from 'apollo-server-express'
-import { createConnection } from 'typeorm'
-import cookieParser from 'cookie-parser'
-import { createSchema } from './utils/createSchema'
-import { redis } from './redis'
-import { refreshToken } from './utils/refreshToken'
-import { graphqlUploadExpress } from 'graphql-upload'
+import { verify } from 'jsonwebtoken'
 import { GraphQLError } from 'graphql'
+import cookieParser from 'cookie-parser'
+import { createConnection } from 'typeorm'
+import { graphqlUploadExpress } from 'graphql-upload'
+import { ApolloServer, PubSub } from 'apollo-server-express'
+import { redis } from './redis'
+import { createSchema } from './utils/createSchema'
+import { refreshToken } from './utils/refreshToken'
 import { createUserLoader } from './utils/createUserLoader'
-import { createLikeLoader } from './utils/createLikeLoader'
 import { createCommentLoader } from './utils/createCommentLoader'
 import { createPhotoLoader } from './utils/createPhotoLoader'
-import * as http from 'http'
-import { verify } from 'jsonwebtoken'
 
 
 // typeorm.useContainer(Container)
@@ -73,9 +72,9 @@ const server = async () => {
       connection,
       req, res,
       userLoader: createUserLoader(),
-      likeLoader: createLikeLoader(),
       commentLoader: createCommentLoader(),
       photoLoader: createPhotoLoader(),
+      imageUrl:'http://localhost:4000',
       url: req ? (req.protocol + '://' + req.get('host')) : ''
     }),
     formatError: (error: GraphQLError) => {

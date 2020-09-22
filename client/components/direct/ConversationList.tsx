@@ -15,7 +15,8 @@ export const ConversationList: FC<PropsType> = ({chats}) => {
       <div className="direct__conversations__container">
         <div className="direct__conversations__header">
           <div className="header__text">Direct</div>
-          <div className="header__add-new">
+          <div className="header__add-new" onClick={ () => {
+          } }>
             <CreateDialog/>
           </div>
         </div>
@@ -23,14 +24,14 @@ export const ConversationList: FC<PropsType> = ({chats}) => {
           { chats && <ul className="direct__conversations">
             { chats.map((c) => (
                 <DialogItem
-                    id={c.id}
+                    id={ c.id }
                     username={ c.users[0].username }
                     date={ c.lastMessage?.date }
                     pictureUrl={ c.users[0].pictureUrl }
                     key={ c.id }/>
             )) }
-
-          </ul> }
+          </ul>
+          }
         </div>
       </div>
   )

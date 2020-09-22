@@ -7,7 +7,6 @@ import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { TextArea } from '../utils/TextArea'
-import { messageReceivedSubscription } from '../../graphql/chat/subscription/messageReceived'
 
 type PropsType = {
   id: string
@@ -15,9 +14,10 @@ type PropsType = {
 
 export const ConversationItem: FC<PropsType> = ({id}) => {
 
-  const {data, subscribeToMore} = useChatQuery({
+  const {data} = useChatQuery({
     variables: {id}
   })
+
   const [createMessage] = useCreateMessageMutation()
   const ref = useRef<HTMLDivElement | null>(null)
   const scrollToBottom = () => {
@@ -29,25 +29,11 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
     }
   }
 
-  useEffect(scrollToBottom, [])
+  useEffect(scrollToBottom, [data?.chat.messages])
 
-  const createMessageHandler = async (data: any, {resetForm}: FormikHelpers<any>) => {
-    const response = await createMessage({
-      variables: {
-        ...data
-      },
-      update: (cache, {data}) => {
-        cache.modify({
-          id: `Chat:${ id }`,
-          fields: {
-            messages(cachedValue) {
-              const messageRef = {'__ref': `Message:${ data?.createMessage.id }`}
-              return [...cachedValue, messageRef]
-            }
-          }
-        })
-      }
-    })
+  const createMessageHandler = async (data: CreateMessageMutationVariables,
+                                      {resetForm}: FormikHelpers<CreateMessageMutationVariables>) => {
+    const response = await createMessage({variables: {...data}})
     if (response && response.data) {
       resetForm()
     }
@@ -77,7 +63,6 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
                     text={ m.text }
                     pictureUrl={ m.user.pictureUrl }
                     isAuthor={ m.isAuthor }/>
-
             )) }
           </div>
         </div>

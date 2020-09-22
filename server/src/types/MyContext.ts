@@ -15,5 +15,6 @@ export interface MyContext extends ExpressContext {
   commentLoader: ReturnType<typeof createCommentLoader>
   photoLoader: ReturnType<typeof createPhotoLoader>
   url: string
+  imageUrl: string
 }
 

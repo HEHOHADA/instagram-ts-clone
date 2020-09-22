@@ -7,7 +7,6 @@ import Redirect from '../../lib/redirect'
 import withApollo from '../../lib/withApollo'
 
 const CheckEmail = () => {
-  useBlockRoute()
   return (
       <MainLayout title="Check Email">
         <div className="check-email__card container">

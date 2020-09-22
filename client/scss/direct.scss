@@ -59,6 +59,7 @@
 .header__add-new {
   flex-basis: 32px;
   display: flex;
+  cursor: pointer;
   align-items: center;
   justify-content: center;
 }
@@ -260,6 +261,7 @@
 .message__container__left {
   justify-content: flex-end;
 }
-.message__text-color{
- background: #efefef;
+
+.message__text-color {
+  background: #efefef;
 }

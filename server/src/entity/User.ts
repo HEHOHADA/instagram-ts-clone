@@ -1,8 +1,19 @@
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { Field, ID, ObjectType } from 'type-graphql'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  getConnection,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
+import { Ctx, Field, ID, ObjectType, Root, UseMiddleware } from 'type-graphql'
 import { Photo } from './Photo'
 import { Comment } from './Comment'
 import { Chat } from './Chat'
+import { isUserAuthOrUndefined } from '../middleware/isAuthenticatedMiddleware'
+import { MyContext } from '../types/MyContext'
 
 @Entity()
 @ObjectType({isAbstract: true})
@@ -74,13 +85,58 @@ export class User extends BaseEntity {
       (chat) => chat.users)
   chats: Chat[]
 
-  @Field()
-  isFollowed: boolean
+  @Field(()=>Boolean)
+  @UseMiddleware(isUserAuthOrUndefined)
+  async isFollowed(@Root() parent: User, @Ctx() {payload: {userId}}: MyContext) {
+    if (!userId) return false
 
-  @Field()
-  isFollowing: boolean
+   const user = await getConnection()
+        .getRepository(User)
+        .createQueryBuilder('user')
+        .where('user.id = :userId', {userId: parent.id})
+        .leftJoinAndSelect(
+            'user.following',
+            'targetUser',
+            'targetUser.id = :targetId',
+            {
+              targetId: userId
+            }
+        )
+        .getOne()
 
-  @Field()
-  isCurrentUser: boolean
+    if (!user) return false
+
+    return Boolean((user.following).length)
+  }
+
+  @Field(()=>Boolean)
+  @UseMiddleware(isUserAuthOrUndefined)
+  async isFollowing(@Root() parent: User, @Ctx() {payload: {userId}}: MyContext) {
+    if (!userId) return false
+
+    const user = await getConnection()
+        .getRepository(User)
+        .createQueryBuilder('user')
+        .where('user.id = :userId', {userId: userId})
+        .leftJoinAndSelect(
+            'user.following',
+            'targetUser',
+            'targetUser.id = :targetId',
+            {
+              targetId: parent.id
+            }
+        )
+        .getOne()
+
+    if (!user) return false
+
+    return Boolean((user.following).length)
+  }
+
+  @Field(()=>Boolean)
+  @UseMiddleware(isUserAuthOrUndefined)
+  isCurrentUser(@Root() user: User, @Ctx() {payload: {userId}}: MyContext) {
+    return user.id === userId
+  }
 
 }

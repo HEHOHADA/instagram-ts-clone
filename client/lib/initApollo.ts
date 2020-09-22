@@ -81,7 +81,7 @@ function create(
     return {
       headers: {
         ...headers,
-        Authorization: token ? `Bearer ${ token }` : ''
+        authorization: token ? `Bearer ${ token }` : ''
       }
     }
   })
@@ -102,7 +102,7 @@ function create(
   })
 
   const ssrMode = Boolean(ctx)
-  const linkHttp = ApolloLink.from([refreshLink,httpLink as any])
+  const linkHttp = ApolloLink.from([refreshLink, httpLink as any])
   const link = ssrMode
       ? linkHttp
       : isBrowser

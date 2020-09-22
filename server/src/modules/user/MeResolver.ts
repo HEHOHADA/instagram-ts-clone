@@ -24,7 +24,7 @@ export class MeResolver {
   }
 
   @FieldResolver(() => String, {nullable: true})
-  pictureUrl(@Root()user: User, @Ctx()ctx: MyContext) {
+  pictureUrl(@Root()user: User, @Ctx(){imageUrl}: MyContext) {
 
     if(!user.pictureUrl){
       return null
@@ -32,6 +32,6 @@ export class MeResolver {
     if (user.pictureUrl.includes('http')) {
       return user.pictureUrl
     }
-    return `${ ctx.url }/images/${ user.pictureUrl }`
+    return `${ imageUrl }/images/${ user.pictureUrl }`
   }
 }

@@ -1,37 +1,22 @@
 import React from 'react'
-import { useApolloClient } from '@apollo/client'
 import withApollo from '../../lib/withApollo'
 import MainLayout from '../../components/MainLayout'
 import { ConversationList } from '../../components/direct/ConversationList'
-import { ConversationItem } from '../../components/direct/ConversationItem'
-import { ChatDocument, useChatsQuery, useMessageReceivedSubscription } from '../../geterated/apollo'
+import { useChatsQuery } from '../../geterated/apollo'
+import { ConversationNew } from '../../components/direct/ConversationNew'
 
 
 const DirectInbox = () => {
   const {data} = useChatsQuery()
-  const client = useApolloClient()
-   useMessageReceivedSubscription({
-    onSubscriptionData: ({subscriptionData}) => {
-      const messageReceived = subscriptionData.data?.messageReceived
-      if (messageReceived) {
-        client.writeQuery({
-          query: ChatDocument,
-          variables: {id: messageReceived.chatId},
-          data: {
-            chat: {messages: [messageReceived]},
-          },
-        })
-      }
-    },
-  })
-
   return (
       <MainLayout title="Direct">
         <div className="direct">
           <div className="direct__container">
             <div className="direct__items__container">
-              <ConversationList chats={ data?.chats }/>
-              { data?.chats && <ConversationItem id={ data?.chats[0].id }/> }
+              { !data ?
+                  <div>Somethimng went Wrong</div> :
+                  <ConversationList chats={ data.chats }/> }
+              <ConversationNew/>
             </div>
           </div>
         </div>

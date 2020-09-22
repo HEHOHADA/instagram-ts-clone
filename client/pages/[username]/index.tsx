@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 
 import { declOfNum } from '../../utils/declOfNumb'
@@ -12,6 +12,7 @@ import withApollo from '../../lib/withApollo'
 import { followCallback } from '../../utils/followFunction'
 import {
   GetUserInfoQuery,
+  PhotoItemFragment,
   useFollowUserMutation,
   useGetUserInfoQuery,
   useUnFollowUserMutation,
@@ -24,8 +25,12 @@ export type ProfileItemsType = {
   count: number
   text: string
 }
+
+type ModalUserPageType = 'subscribers' | 'subscriptions' | null
 type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
+
 const Profile = () => {
+  const [currentModalName, serCurrentModalName] = useState<ModalUserPageType>(() => null)
   const router = useRouter()
   const {username: queryUserName} = router.query
   const {data, error} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
@@ -33,6 +38,7 @@ const Profile = () => {
   if (!data || !PhotoData) {
     return null
   }
+
   if (error || errorPhoto) {
     return null
   }
@@ -47,7 +53,7 @@ const Profile = () => {
     photoCount, followerCount,
     isCurrentUser, id,
     isFollowing, username, followingCount, pictureUrl, fullName
-  }:GetUserInfoQueryType = data!.getUserInfo
+  }: GetUserInfoQueryType = data.getUserInfo
 
   const [unFollowUser] = useUnFollowUserMutation()
   const [followUser] = useFollowUserMutation()
@@ -74,11 +80,18 @@ const Profile = () => {
       },
       {
         count: (followerCount as number),
-        onClick: openModal,
+        onClick: () => {
+          serCurrentModalName('subscribers')
+          openModal()
+        },
         text: declOfNum((followerCount as number), ['Подписка', 'Подписок', 'Подписки'])
       },
       {
         count: (followingCount as number),
+        onClick: () => {
+          serCurrentModalName('subscriptions')
+          openModal()
+        },
         text: declOfNum((followingCount as number), ['Подписчик', 'Подписчиков', 'Подписчика'])
       },
     ]
@@ -88,7 +101,16 @@ const Profile = () => {
   return (
       <MainLayout title={ fullName }>
         <ModalWindowContainer ref={ modalRef }>
-          { (ref: ModalRefType) => (<SubscriptionModal { ...ref }/>) }
+          { (ref: ModalRefType) => {
+            switch (currentModalName) {
+              case'subscribers':
+                return (<SubscriptionModal id={ id } { ...ref }/>)
+              case 'subscriptions':
+                return <SubscriptionModal id={ id } { ...ref }/>
+              default:
+                return null
+            }
+          } }
         </ModalWindowContainer>
         <div className="profile container">
           <div className="profile__info">
@@ -117,7 +139,7 @@ const Profile = () => {
               <div className="object__item">Публикация</div>
             </div>
           </div>
-          <PhotoItems photoItems={ PhotoData?.viewUserPhoto as any }/>
+          <PhotoItems photoItems={ PhotoData.viewUserPhoto as PhotoItemFragment[] }/>
         </div>
       </MainLayout>
   )
