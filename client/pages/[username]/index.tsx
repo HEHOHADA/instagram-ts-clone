@@ -33,16 +33,11 @@ const Profile = () => {
   const [currentModalName, serCurrentModalName] = useState<ModalUserPageType>(() => null)
   const router = useRouter()
   const {username: queryUserName} = router.query
-  const {data, error} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
-  const {data: PhotoData, error: errorPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
+  const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
+  const {data: PhotoData} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
   if (!data || !PhotoData) {
     return null
   }
-
-  if (error || errorPhoto) {
-    return null
-  }
-
   const modalRef = useRef<ModalRefType>(null)
 
   const openModal = useCallback(() => {

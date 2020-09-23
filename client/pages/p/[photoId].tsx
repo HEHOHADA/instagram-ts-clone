@@ -1,7 +1,12 @@
 import React, { useCallback } from 'react'
 import MainLayout from '../../components/MainLayout'
 import withApollo from '../../lib/withApollo'
-import { CreateCommentType, useDeletePhotoMutation, useViewPhotoByIdQuery } from '../../geterated/apollo'
+import {
+  CreateCommentType,
+  useDeletePhotoMutation,
+  useViewPhotoByIdQuery,
+  ViewPhotoByIdQuery
+} from '../../geterated/apollo'
 import { useRouter } from 'next/router'
 import { PostHeader } from '../../components/dashboard/post/PostHeader'
 import { CommentTools } from '../../components/dashboard/post/comment/CommentTools'
@@ -9,6 +14,8 @@ import { Comments } from '../../components/dashboard/post/comment/Comments'
 import { Field, Form, Formik } from 'formik'
 import { TextArea } from '../../components/utils/TextArea'
 import { PhotoItemContainer, PhotoItemType } from '../../hoc/PhotoItemContainer'
+
+type ViewPhotoByIdType = ViewPhotoByIdQuery['viewPhotoById']
 
 const PhotoViewPost = () => {
   const router = useRouter()
@@ -29,6 +36,13 @@ const PhotoViewPost = () => {
     }
   })
 
+  const {
+    pictureUrl,
+    user, isLiked, isAuthor,
+    likeCount,
+    postText, id, comments
+  }: ViewPhotoByIdType = data!.viewPhotoById
+
   return (
       <MainLayout title={ 'Photo by ...' }>
         { !data ?
@@ -42,43 +56,46 @@ const PhotoViewPost = () => {
                   <PhotoItemContainer
                       photo={ data.viewPhotoById }
                       deletePhoto={ deletePhoto }>
-                    { ({openModal, onLikeHandler,
+                    { ({
+                         openModal, onLikeHandler,
                          onDeleteComment,
-                         createCommentHandler}: PhotoItemType) => (
+                         createCommentHandler
+                       }: PhotoItemType) => (
                         <>
-                            <div className="content__img">
-                              <img
-                                  alt="Не загрузилось"
-                                  src={ data.viewPhotoById.pictureUrl }
-                                  className="content__img__item" sizes="610px"
-                              />
-                            </div>
+                          <div className="content__img">
+                            <img
+                                alt="Не загрузилось"
+                                src={ pictureUrl }
+                                className="content__img__item" sizes="610px"
+                            />
+                          </div>
                           <div className="content__img__info">
                             <PostHeader
                                 onOpenModal={ openModal }
-                                isAuthor={ data.viewPhotoById.isAuthor }
-                                pictureUrl={ data.viewPhotoById.user.pictureUrl }
-                                username={ data.viewPhotoById.user.username }/>
-                            <div className="content__img__comments"> { data.viewPhotoById.comments
-                            && <Comments
-                                onDeleteComment={onDeleteComment}
-                                comments={ data.viewPhotoById.comments }/> }</div>
+                                isAuthor={ isAuthor }
+                                pictureUrl={ user.pictureUrl }
+                                username={ user.username }/>
+                            <div className="content__img__comments">
+                              { comments && <Comments
+                                  onDeleteComment={ onDeleteComment }
+                                  comments={ comments }/> }
+                            </div>
                             <div className="content__tools">
                               <CommentTools
                                   onLike={ onLikeHandler }
-                                  isLiked={ data.viewPhotoById.isLiked }
+                                  isLiked={ isLiked }
                               />
                               <div className="content__likes">
-                                <span>{ data.viewPhotoById.postText }</span>
+                                <span>{ postText }</span>
                               </div>
                               <div className="content__likes">
-                                <span>Нравится { data.viewPhotoById.likeCount } людям</span>
+                                <span>Нравится { likeCount } людям</span>
                               </div>
 
                               <div className="content__created">dsadsa</div>
                               <Formik<CreateCommentType>
                                   onSubmit={ createCommentHandler }
-                                  initialValues={ {commentText: '', photoId: data.viewPhotoById.id} }
+                                  initialValues={ {commentText: '', photoId: id} }
                               >
                                 { () => (
                                     <Form className="comment__create">

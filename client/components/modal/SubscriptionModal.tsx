@@ -2,7 +2,7 @@ import React from 'react'
 import { ModalRefType } from '../../hoc/ModalWindowContainer'
 import { CloseModalButton } from './CloseModalButton'
 
-export const SubscriptionModal = ({closeModal}: ModalRefType & { id: string }) => {
+export const SubscriptionModal = ({closeModal}: ModalRefType & { id?: string }) => {
 
   return (
       <>
