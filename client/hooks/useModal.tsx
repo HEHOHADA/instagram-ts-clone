@@ -8,6 +8,10 @@ export const useModal = () => {
     modalRef.current?.openModal()
   }, [modalRef])
 
+  const closeModal = useCallback(() => {
+    modalRef.current?.closeModal
+  }, [modalRef])
+
   const ModalWindow: FC<{ children: FC<ModalRefType> }> = ({children}) => {
     return (
         <ModalWindowContainer ref={ modalRef }>
@@ -16,5 +20,5 @@ export const useModal = () => {
     )
   }
 
-  return {modalRef, openModal, ModalWindow}
+  return {modalRef, openModal, closeModal, ModalWindow}
 }

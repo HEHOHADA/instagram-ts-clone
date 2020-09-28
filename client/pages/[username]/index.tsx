@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 
 import { declOfNum } from '../../utils/declOfNumb'
 import { PhotoItems } from '../../components/profile/PhotoItems'
-import { ModalRefType, ModalWindowContainer } from '../../hoc/ModalWindowContainer'
+import { ModalRefType } from '../../hoc/ModalWindowContainer'
 import { SubscriptionModal } from '../../components/modal/SubscriptionModal'
 import { FollowButton } from '../../components/profile/FollowButton'
 import { ProfileItems } from '../../components/profile/ProfileItems'
@@ -18,6 +18,7 @@ import {
   useUnFollowUserMutation,
   useViewUserPhotoQuery
 } from '../../geterated/apollo'
+import { useModal } from '../../hooks/useModal'
 
 
 export type ProfileItemsType = {
@@ -30,19 +31,24 @@ type ModalUserPageType = 'subscribers' | 'subscriptions' | null
 type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
 
 const Profile = () => {
+  const {openModal, ModalWindow} = useModal()
   const [currentModalName, serCurrentModalName] = useState<ModalUserPageType>(() => null)
   const router = useRouter()
   const {username: queryUserName} = router.query
   const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
-  const {data: PhotoData} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
-  if (!data || !PhotoData) {
-    return null
-  }
-  const modalRef = useRef<ModalRefType>(null)
+  const {data: dataPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
 
-  const openModal = useCallback(() => {
-    modalRef.current?.openModal()
-  }, [modalRef])
+  if (!data) {
+    return <MainLayout title={ 'Ошибка' }>
+      <h1 style={ {
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        fontSize: '40px'
+      } }>Такого пользователя нет</h1>
+    </MainLayout>
+  } else {
+  }
 
   const {
     photoCount, followerCount,
@@ -95,7 +101,7 @@ const Profile = () => {
 
   return (
       <MainLayout title={ fullName }>
-        <ModalWindowContainer ref={ modalRef }>
+        <ModalWindow>
           { (ref: ModalRefType) => {
             switch (currentModalName) {
               case'subscribers':
@@ -106,7 +112,7 @@ const Profile = () => {
                 return null
             }
           } }
-        </ModalWindowContainer>
+        </ModalWindow>
         <div className="profile container">
           <div className="profile__info">
             <div className="profile__image">
@@ -124,7 +130,6 @@ const Profile = () => {
                 infoItems={ infoItems }
                 fullName={ fullName }/>
           </div>
-
           <hr/>
           <div className="profile__objects">
             <div className="profile__objects__lin">
@@ -134,7 +139,7 @@ const Profile = () => {
               <div className="object__item">Публикация</div>
             </div>
           </div>
-          <PhotoItems photoItems={ PhotoData.viewUserPhoto as PhotoItemFragment[] }/>
+          { dataPhoto?.viewUserPhoto && <PhotoItems photoItems={ dataPhoto.viewUserPhoto as PhotoItemFragment[] }/> }
         </div>
       </MainLayout>
   )

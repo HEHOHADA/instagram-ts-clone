@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useRef } from 'react'
+import React, { FC } from 'react'
 import { CreateDialog } from '../utils/svg/CreateDialog'
-import { ChatsQuery } from '../../geterated/apollo'
+import { ChatsQuery, useMeQuery } from '../../geterated/apollo'
 import { DialogItem } from './chat/DialogItem'
-import { ModalRefType, ModalWindowContainer } from '../../hoc/ModalWindowContainer'
-import { SubscriptionModal } from '../modal/SubscriptionModal'
+import { ModalRefType } from '../../hoc/ModalWindowContainer'
+import { useModal } from '../../hooks/useModal'
+import { CreateMessageModal } from '../modal/CreateMessageModal'
 
 type ChatsType = ChatsQuery['chats']
 
@@ -12,18 +13,15 @@ type PropsType = {
 }
 
 export const ConversationList: FC<PropsType> = ({chats}) => {
-  const modalRef = useRef<ModalRefType>(null)
-  const openModal = useCallback(() => {
-    modalRef.current?.openModal()
-  }, [modalRef])
+  const {ModalWindow, openModal} = useModal()
+  const {data} = useMeQuery()
   return (
       <>
-        <ModalWindowContainer ref={ modalRef }>
+        <ModalWindow>
           { (ref: ModalRefType) => {
-            return <SubscriptionModal { ...ref }/>
-          }
+            return <CreateMessageModal id={ data!.me!.id } { ...ref }/>
           } }
-        </ModalWindowContainer>
+        </ModalWindow>
         <div className="direct__conversations__container">
           <div className="direct__conversations__header">
             <div className="header__text">Direct</div>

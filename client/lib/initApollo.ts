@@ -39,7 +39,7 @@ function create(
       authorization: `Bearer ${ getAccessToken() }`
     })
   })
-  const wsLink =()=> new WebSocketLink(wsClient())
+  const wsLink = () => new WebSocketLink(wsClient())
 
   const refreshLink = new TokenRefreshLink({
     isTokenValidOrUndefined: () => {

@@ -14,7 +14,7 @@ const DirectInbox = () => {
           <div className="direct__container">
             <div className="direct__items__container">
               { !data ?
-                  <div>Somethimng went Wrong</div> :
+                  <h1>Somethimng went Wrong</h1> :
                   <ConversationList chats={ data.chats }/> }
               <ConversationNew/>
             </div>

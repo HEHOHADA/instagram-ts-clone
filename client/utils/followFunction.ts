@@ -2,8 +2,7 @@ import { ApolloCache, gql } from '@apollo/client'
 import { FollowUserMutationFn, UnFollowUserMutationFn } from '../geterated/apollo'
 
 type FollowCallbackType = UnFollowUserMutationFn | FollowUserMutationFn
-// (options?: (MutationFunctionOptions<T, Exact<{ userId: string }>> | undefined))
-//     => Promise<FetchResult<T>> | void
+
 
 export function followCallback(followCallback: FollowCallbackType, count: number): (userId: string) => Promise<void> {
   return async (userId: string) => {

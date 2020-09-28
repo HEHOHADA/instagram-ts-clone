@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { FC, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 
 export type ModalRefType = {
@@ -6,8 +6,10 @@ export type ModalRefType = {
   closeModal: () => void
 }
 
+type PropsWithChildrenModalType = { children: FC<ModalRefType> }
+
 export const ModalWindowContainer = React.forwardRef<ModalRefType,
-    PropsWithChildren<{}>>((props, ref) => {
+    PropsWithChildrenModalType>((props, ref) => {
   const [showSubsModal, setShowSubsModal] = useState(false)
 
   const modalRef = useRef<HTMLDivElement>(null)

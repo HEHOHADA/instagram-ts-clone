@@ -3,6 +3,9 @@ import MainLayout from '../../components/MainLayout'
 import { useMeQuery, useSetPictureProfileMutation } from '../../geterated/apollo'
 import { DropzonePictureProfile } from '../../components/utils/DropzoneField'
 import withApollo from '../../lib/withApollo'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '../../lib/redirect'
 
 const Settings = () => {
 
@@ -18,7 +21,7 @@ const Settings = () => {
         picture
       },
       update: (cache) => {
-        cache.evict({id:`User:${ data.me?.id }`})
+        cache.evict({id: `User:${ data.me?.id }`})
       }
     })
 
@@ -44,8 +47,8 @@ const Settings = () => {
           <article className="settings__main">
             <div className="user__picture__container">
               <div className="user__url">
-                <img
-                    src={ data.me?.pictureUrl ?? data.me?.pictureUrl ?? '' } alt=""/>
+                { data.me?.pictureUrl && <img
+                    src={ data.me.pictureUrl } alt=""/> }
               </div>
               <div className="user__change-picture">
                 <div className="username">{ data.me?.username }</div>
@@ -68,7 +71,7 @@ const Settings = () => {
                 </div>
               </div>
               <div className="form__settings__submit">
-                <button className="send__form">Отправить</button>
+                <button type='submit' className="send__form">Отправить</button>
                 <button className="block__account">Заблокировать аккаунт</button>
               </div>
             </form>
@@ -78,19 +81,17 @@ const Settings = () => {
   )
 }
 
-//
-// Settings.getInitialProps = async (ctx: MyContext) => {
-//
-//   let meDataQuery: MeQuery | null = ctx.apolloClient.cache.readQuery({query: MeDocument})
-//   if (!meDataQuery) {
-//     meDataQuery = (await ctx.apolloClient.query({
-//       query: MeDocument
-//     })).data
-//   }
-//   const {__typename, ...me} = meDataQuery?.me ?? {}
-//   return {
-//     userInfo: {...me} as UserInfoPropsType
-//   }
-// }
-export default withApollo({ssr: true})(Settings)
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (jid()['jid']) {
+      Redirect(ctx, '/')
+    }
+  }
+  return {
+    props: {}
+  }
+}
+
+export default withApollo({ssr: false})(Settings)
 

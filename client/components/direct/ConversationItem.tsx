@@ -29,7 +29,7 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
     }
   }
 
-  useEffect(scrollToBottom, [data?.chat.messages])
+  useEffect(scrollToBottom, [data?.chat.messages.length])
 
   const createMessageHandler = async (data: CreateMessageMutationVariables,
                                       {resetForm}: FormikHelpers<CreateMessageMutationVariables>) => {
