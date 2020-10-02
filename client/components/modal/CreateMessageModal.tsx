@@ -1,10 +1,35 @@
 import React from 'react'
 import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '../../hoc/ModalWindowContainer'
-import { useGetFollowersQuery } from '../../geterated/apollo'
+import { ChatDocument, useFindOrCreateChatMutation, useGetFollowersQuery } from '../../geterated/apollo'
+import { useRouter } from 'next/router'
 
-export const CreateMessageModal = ({closeModal,id}: ModalRefType & { id: string }) => {
-  const {data} = useGetFollowersQuery({variables: {userId:id}})
+export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string }) => {
+  const {data} = useGetFollowersQuery({variables: {userId: id}})
+  const [findOrCreateMutation] = useFindOrCreateChatMutation()
+  const router = useRouter()
+  const findOrCreateChat = async (userId: string) => {
+
+    const response = await findOrCreateMutation({
+      variables: {userId},
+      update: (cache, {data}) => {
+        if (data) {
+          const {id, ...chatData} = data.findOrCreateChat
+          cache.writeQuery({
+            query: ChatDocument,
+            variables: {id: data.findOrCreateChat.id},
+            data: chatData
+          })
+        }
+      }
+    })
+
+    if (response.data) {
+      closeModal()
+      router.replace(`/direct/t/${ response.data.findOrCreateChat.id }`)
+    }
+  }
+
   return (
       <>
         <div className="modal-window__subscription__header">
@@ -18,30 +43,28 @@ export const CreateMessageModal = ({closeModal,id}: ModalRefType & { id: string 
         </div>
         <div className="modal-window__subscription__container">
           <ul className="subscription__items">
-            { data?.getFollowers.map(item => {
-              return (
-                  <li className="subscription__item" key={ item.id }>
-                    <div className="subscription__item__container">
-                      <div className="subscription__user__info">
-                        <div className="subscription__user__img">
-                          { item.pictureUrl && <img
-                              src={ item.pictureUrl }
-                              alt="Фото"/> }
+            { data?.getFollowers.map(item => (
+                    <li className="subscription__item" key={ item.id }>
+                      <div className="subscription__item__container" onClick={ () => findOrCreateChat(item.id) }>
+                        <div className="subscription__user__info">
+                          <div className="subscription__user__img">
+                            { item.pictureUrl && <img
+                                src={ item.pictureUrl }
+                                alt="Фото"/> }
+                          </div>
+                          <div className="subscription__username__container">
+                            <a className="subscription__username">{ item.username }</a>
+                          </div>
                         </div>
-                        <div className="subscription__username__container">
-                          <a className="subscription__username">{ item.username }</a>
+                        <div className="subscription__info__btn__container">
+                          <input type="checkbox" className="subscription__info__btn"/>
                         </div>
                       </div>
-                      <div className="subscription__info__btn__container">
-                        <input type="checkbox" className="subscription__info__btn"/>
-                      </div>
-                    </div>
-                  </li>
-              )
-            }) }
+                    </li>
+                )
+            ) }
           </ul>
         </div>
-
       </>
   )
 }

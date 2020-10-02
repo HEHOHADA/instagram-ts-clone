@@ -306,6 +306,26 @@ export type Subscription = {
   messageReceived: Message;
 };
 
+export type FindOrCreateChatMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type FindOrCreateChatMutation = (
+  { __typename?: 'Mutation' }
+  & { findOrCreateChat: (
+    { __typename?: 'Chat' }
+    & Pick<Chat, 'id'>
+    & { users: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'username' | 'id' | 'isCurrentUser' | 'pictureUrl'>
+    )>, messages: Array<(
+      { __typename?: 'Message' }
+      & Pick<Message, 'text' | 'date' | 'readTime' | 'isAuthor'>
+    )> }
+  ) }
+);
+
 export type ChatQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -424,7 +444,7 @@ export type GetFollowersQuery = (
   { __typename?: 'Query' }
   & { getFollowers: Array<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'isFollowed' | 'isFollowing' | 'username' | 'pictureUrl'>
+    & Pick<User, 'id' | 'isFollowed' | 'isFollowing' | 'username' | 'fullName' | 'followerCount' | 'pictureUrl'>
   )> }
 );
 
@@ -437,7 +457,7 @@ export type GetFollowingsQuery = (
   { __typename?: 'Query' }
   & { getFollowings: Array<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'isFollowed' | 'isFollowing' | 'username' | 'pictureUrl'>
+    & Pick<User, 'id' | 'isFollowed' | 'isFollowing' | 'username' | 'fullName' | 'followerCount' | 'pictureUrl'>
   )> }
 );
 
@@ -722,6 +742,50 @@ export const PhotoItemFragmentDoc = gql`
 }
     ${UserMeFragmentDoc}
 ${CommentItemFragmentDoc}`;
+export const FindOrCreateChatDocument = gql`
+    mutation FindOrCreateChat($userId: String!) {
+  findOrCreateChat(userId: $userId) {
+    id
+    users {
+      username
+      id
+      isCurrentUser
+      pictureUrl
+    }
+    messages {
+      text
+      date
+      readTime
+      isAuthor
+    }
+  }
+}
+    `;
+export type FindOrCreateChatMutationFn = ApolloReactCommon.MutationFunction<FindOrCreateChatMutation, FindOrCreateChatMutationVariables>;
+
+/**
+ * __useFindOrCreateChatMutation__
+ *
+ * To run a mutation, you first call `useFindOrCreateChatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFindOrCreateChatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [findOrCreateChatMutation, { data, loading, error }] = useFindOrCreateChatMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useFindOrCreateChatMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<FindOrCreateChatMutation, FindOrCreateChatMutationVariables>) {
+        return ApolloReactHooks.useMutation<FindOrCreateChatMutation, FindOrCreateChatMutationVariables>(FindOrCreateChatDocument, baseOptions);
+      }
+export type FindOrCreateChatMutationHookResult = ReturnType<typeof useFindOrCreateChatMutation>;
+export type FindOrCreateChatMutationResult = ApolloReactCommon.MutationResult<FindOrCreateChatMutation>;
+export type FindOrCreateChatMutationOptions = ApolloReactCommon.BaseMutationOptions<FindOrCreateChatMutation, FindOrCreateChatMutationVariables>;
 export const ChatDocument = gql`
     query Chat($id: String!) {
   chat(id: $id) {
@@ -984,6 +1048,8 @@ export const GetFollowersDocument = gql`
     isFollowed
     isFollowing
     username
+    fullName
+    followerCount
     pictureUrl
   }
 }
@@ -1021,6 +1087,8 @@ export const GetFollowingsDocument = gql`
     isFollowed
     isFollowing
     username
+    fullName
+    followerCount
     pictureUrl
   }
 }

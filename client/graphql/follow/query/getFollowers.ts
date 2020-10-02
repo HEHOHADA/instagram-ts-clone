@@ -7,6 +7,8 @@ export const getFollowersQuery = gql`
             isFollowed
             isFollowing
             username
+            fullName
+            followerCount
             pictureUrl
         }
     }

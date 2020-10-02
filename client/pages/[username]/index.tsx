@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 
 import { declOfNum } from '../../utils/declOfNumb'
@@ -15,10 +15,12 @@ import {
   PhotoItemFragment,
   useFollowUserMutation,
   useGetUserInfoQuery,
+  useMeQuery,
   useUnFollowUserMutation,
   useViewUserPhotoQuery
 } from '../../geterated/apollo'
 import { useModal } from '../../hooks/useModal'
+import Link from 'next/link'
 
 
 export type ProfileItemsType = {
@@ -37,7 +39,7 @@ const Profile = () => {
   const {username: queryUserName} = router.query
   const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
   const {data: dataPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
-
+  const {data: meData} = useMeQuery()
   if (!data) {
     return <MainLayout title={ 'Ошибка' }>
       <h1 style={ {
@@ -47,30 +49,38 @@ const Profile = () => {
         fontSize: '40px'
       } }>Такого пользователя нет</h1>
     </MainLayout>
-  } else {
   }
 
+  const meId =meData?.me?.id
   const {
     photoCount, followerCount,
     isCurrentUser, id,
-    isFollowing, username, followingCount, pictureUrl, fullName
+    isFollowing, username,
+    followingCount, pictureUrl, fullName
   }: GetUserInfoQueryType = data.getUserInfo
 
   const [unFollowUser] = useUnFollowUserMutation()
   const [followUser] = useFollowUserMutation()
 
-  const followButton = useMemo(() => {
+  const followButton = useCallback((isFollowing: boolean, id: string, userId?: string) => {
     const onClick = isFollowing
         ? followCallback(unFollowUser, -1)
         : followCallback(followUser, 1)
     const text = isFollowing ? 'Отписаться' : 'Подписаться'
+    if (!userId) {
+      return (
+          <Link href="/accounts/login">
+            <a className="profile__edit">Войти в аккаунт</a>
+          </Link>
+      )
+    }
     return (
         <FollowButton
             text={ text }
             className={ 'profile__edit' }
-            onClick={ () => onClick(id) }/>
+            onClick={ () => onClick(id, userId) }/>
     )
-  }, [isFollowing, id])
+  }, [])
 
 
   const infoItems = useMemo<Array<ProfileItemsType>>(() => {
@@ -105,9 +115,17 @@ const Profile = () => {
           { (ref: ModalRefType) => {
             switch (currentModalName) {
               case'subscribers':
-                return (<SubscriptionModal id={ id } { ...ref }/>)
+                return (<SubscriptionModal
+                    id={ id }
+                    userId={meId}
+                    FollowButton={ followButton }
+                    subscriber={ true } { ...ref }/>)
               case 'subscriptions':
-                return <SubscriptionModal id={ id } { ...ref }/>
+                return <SubscriptionModal
+                    id={ id }
+                    userId={meId}
+                    FollowButton={ followButton }
+                    subscriber={ false } { ...ref }/>
               default:
                 return null
             }
@@ -126,7 +144,7 @@ const Profile = () => {
             <ProfileItems
                 username={ username }
                 isCurrentUser={ isCurrentUser }
-                followButton={ followButton }
+                followButton={ followButton(isFollowing, id,meId) }
                 infoItems={ infoItems }
                 fullName={ fullName }/>
           </div>
