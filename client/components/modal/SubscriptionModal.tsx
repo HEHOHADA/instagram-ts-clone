@@ -20,7 +20,7 @@ export const SubscriptionModal: FC<ModalRefType & SubscriptionModalType> = ({clo
   return (
       <>
         <div className="modal-window__subscription__header">
-          <h1 className="modal-window__header__text">Подписчики</h1>
+          <h1 className="modal-window__header__text">{ subscriber ? 'Подписчики' : 'Подписки' }</h1>
           <CloseModalButton closeModal={ closeModal }/>
         </div>
 

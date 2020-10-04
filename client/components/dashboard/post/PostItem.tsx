@@ -16,7 +16,7 @@ type PropsType = {
 }
 
 
-export const PostItem: FC<PropsType> = React.memo(({photo, deletePhoto}) => {
+const PostItem: FC<PropsType> = React.memo(({photo, deletePhoto}) => {
 
   return (
       <div className="dashboard__content">
@@ -87,3 +87,5 @@ export const PostItem: FC<PropsType> = React.memo(({photo, deletePhoto}) => {
       </div>
   )
 })
+
+export default PostItem

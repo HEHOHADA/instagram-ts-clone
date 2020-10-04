@@ -1,14 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import MainLayout from '../../components/MainLayout'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useCallback, useMemo } from 'react'
 
+import withApollo from '../../lib/withApollo'
+import MainLayout from '../../components/MainLayout'
 import { declOfNum } from '../../utils/declOfNumb'
 import { PhotoItems } from '../../components/profile/PhotoItems'
 import { ModalRefType } from '../../hoc/ModalWindowContainer'
 import { SubscriptionModal } from '../../components/modal/SubscriptionModal'
 import { FollowButton } from '../../components/profile/FollowButton'
 import { ProfileItems } from '../../components/profile/ProfileItems'
-import { useRouter } from 'next/router'
-import withApollo from '../../lib/withApollo'
 import { followCallback } from '../../utils/followFunction'
 import {
   GetUserInfoQuery,
@@ -20,7 +21,6 @@ import {
   useViewUserPhotoQuery
 } from '../../geterated/apollo'
 import { useModal } from '../../hooks/useModal'
-import Link from 'next/link'
 
 
 export type ProfileItemsType = {
@@ -34,7 +34,6 @@ type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
 
 const Profile = () => {
   const {openModal, ModalWindow} = useModal()
-  const [currentModalName, serCurrentModalName] = useState<ModalUserPageType>(() => null)
   const router = useRouter()
   const {username: queryUserName} = router.query
   const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
@@ -51,7 +50,7 @@ const Profile = () => {
     </MainLayout>
   }
 
-  const meId =meData?.me?.id
+  const meId = meData?.me?.id
   const {
     photoCount, followerCount,
     isCurrentUser, id,
@@ -61,7 +60,7 @@ const Profile = () => {
 
   const [unFollowUser] = useUnFollowUserMutation()
   const [followUser] = useFollowUserMutation()
-
+  let subs: ModalUserPageType = null
   const followButton = useCallback((isFollowing: boolean, id: string, userId?: string) => {
     const onClick = isFollowing
         ? followCallback(unFollowUser, -1)
@@ -92,7 +91,7 @@ const Profile = () => {
       {
         count: (followerCount as number),
         onClick: () => {
-          serCurrentModalName('subscribers')
+          subs = 'subscribers'
           openModal()
         },
         text: declOfNum((followerCount as number), ['Подписка', 'Подписок', 'Подписки'])
@@ -100,7 +99,7 @@ const Profile = () => {
       {
         count: (followingCount as number),
         onClick: () => {
-          serCurrentModalName('subscriptions')
+          subs = 'subscriptions'
           openModal()
         },
         text: declOfNum((followingCount as number), ['Подписчик', 'Подписчиков', 'Подписчика'])
@@ -113,17 +112,17 @@ const Profile = () => {
       <MainLayout title={ fullName }>
         <ModalWindow>
           { (ref: ModalRefType) => {
-            switch (currentModalName) {
+            switch (subs) {
               case'subscribers':
                 return (<SubscriptionModal
                     id={ id }
-                    userId={meId}
+                    userId={ meId }
                     FollowButton={ followButton }
                     subscriber={ true } { ...ref }/>)
               case 'subscriptions':
                 return <SubscriptionModal
                     id={ id }
-                    userId={meId}
+                    userId={ meId }
                     FollowButton={ followButton }
                     subscriber={ false } { ...ref }/>
               default:
@@ -144,7 +143,7 @@ const Profile = () => {
             <ProfileItems
                 username={ username }
                 isCurrentUser={ isCurrentUser }
-                followButton={ followButton(isFollowing, id,meId) }
+                followButton={ followButton(isFollowing, id, meId) }
                 infoItems={ infoItems }
                 fullName={ fullName }/>
           </div>
