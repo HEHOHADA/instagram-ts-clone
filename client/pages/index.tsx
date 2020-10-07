@@ -18,7 +18,7 @@ const IndexPage = () => {
     notifyOnNetworkStatusChange: true
   })
 
-  if (!data || !dataFeed) {
+  if (!data) {
     return null
   }
   const {me} = data

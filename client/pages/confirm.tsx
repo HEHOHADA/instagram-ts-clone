@@ -4,6 +4,7 @@ import { MyContext } from '../interfaces/MyContext'
 import { ConfirmUserMutation, ConfirmUserMutationVariables } from '../geterated/apollo'
 import { confirmUserMutation } from '../graphql/user/mutation/confirmUser'
 import Redirect from '../lib/redirect'
+import withApollo from '../lib/withApollo'
 
 const Confirm = () => {
   return (
@@ -29,4 +30,4 @@ Confirm.getInitialProps = async ({query: {token}, apolloClient, ...ctx}: MyConte
 }
 
 
-export default Confirm
+export default withApollo()(Confirm)
