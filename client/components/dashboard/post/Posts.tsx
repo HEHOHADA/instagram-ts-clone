@@ -1,6 +1,8 @@
+import dynamic from 'next/dynamic'
 import React, { FC, useCallback } from 'react'
-import { PostItem } from './PostItem'
-import { PhotoItemFragment, useDeletePhotoMutation } from '../../../geterated/apollo'
+import { PhotoItemFragment, useDeletePhotoMutation } from '@/geterated/apollo'
+
+const PostItem = dynamic(() => import('./PostItem'))
 
 export type PhotoFeedType = PhotoItemFragment &
     { isAuthor: boolean, isLiked: boolean, postText: string }
@@ -15,7 +17,7 @@ export const Posts: FC<PropsType> = ({feed, ...props}) => {
     await deletePhotoMutation({
       variables: {id},
       update: (cache) => {
-        cache.evict({ id: cache.identify({__ref: `Photo:${ id }`})})
+        cache.evict({id: cache.identify({__ref: `Photo:${ id }`})})
       }
     })
   }, [deletePhotoMutation])

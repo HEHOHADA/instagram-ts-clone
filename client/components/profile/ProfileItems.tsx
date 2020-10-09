@@ -1,19 +1,22 @@
 import React, { FC } from 'react'
 import Link from 'next/link'
 import ProfileInfoItems from './ProfileInfoItems'
-import { ProfileItemsType } from '../../pages/[username]'
+import { ProfileItemsType } from '@/pages/[username]'
 
 
 type PropsType = {
   username: string
   isCurrentUser: boolean
-  followButton: any
+  followButton: Element | JSX.Element
   infoItems: Array<ProfileItemsType>
   fullName: string
 }
 
 export const ProfileItems: FC<PropsType> =
-    ({username, infoItems, fullName, followButton, isCurrentUser}) => {
+    ({
+       username, infoItems
+       , fullName, followButton, isCurrentUser
+     }) => {
       return (
           <div className="profile__items">
             <div className="profile__item__header">

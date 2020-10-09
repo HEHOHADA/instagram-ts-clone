@@ -5,6 +5,7 @@ import { Field, Form, Formik, FormikHelpers } from 'formik'
 export type FormType<T> = {
   submitHandler: (values: T, formikHelpers: FormikHelpers<T>) => void | Promise<any>
   initialValues: T
+  loading:boolean
   buttonText: string
   OrOptionsComponent?: JSX.Element | any | null
   RedirectComponent?: JSX.Element | any | null,

@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
 import Link from 'next/link'
+import React, { FC } from 'react'
 
 
 type PropsType = {
@@ -12,7 +12,9 @@ type PropsType = {
 export const PostHeader: FC<PropsType> = React.memo(({username, onOpenModal, pictureUrl}) => {
   return (
       <header className="dashboard__content__header">
-        <Link href={ `/${ username }` } >
+        <Link href={'/[username]'}
+              as={ `/${ username }` }
+              passHref >
           <a className="content__header_img">
             { pictureUrl && <img
                 alt="Нет фото"
@@ -21,7 +23,9 @@ export const PostHeader: FC<PropsType> = React.memo(({username, onOpenModal, pic
             /> }
           </a>
         </Link>
-        <Link href={ `/${ username }` }>
+        <Link  href={'/[username]'}
+               as={ `/${ username }` }
+               passHref>
           <a className="content__header__name">{ username }</a>
         </Link>
         <div onClick={ onOpenModal }

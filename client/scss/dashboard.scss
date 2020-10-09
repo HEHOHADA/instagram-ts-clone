@@ -31,7 +31,7 @@
 .dashboard__history__container {
   height: 84px;
   outline: 0;
-  margin-left: 20px;
+  padding: 0 20px;
   position: relative;
   width: 100%;
 }
@@ -43,13 +43,12 @@
 }
 
 .dashboard__item {
-  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .history__image {
   @include image__item(54px)
 }
-
 
 .history__username {
   display: block;
@@ -222,6 +221,7 @@
 .comment__btn {
   @include button(14px);
   margin-left: 4.5px;
+
   &:disabled {
     opacity: .3;
   }
@@ -309,7 +309,7 @@
 }
 
 .recommend__img {
-  @include image__item(32px);
+  @include image__item(40px);
   margin-right: 6px;
 }
 

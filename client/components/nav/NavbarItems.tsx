@@ -18,7 +18,7 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
     return [
       {link: '/', text: 'home'},
       {link: '/explore/', text: 'compass_calibration'},
-      {link: '/direct/inbox', text: 'comment'},
+      {as: '/direct/inbox', link: '/direct/[...slug]', text: 'comment'},
     ].map((n) => (
         <NavItem key={ n.text } { ...n } />
     ))

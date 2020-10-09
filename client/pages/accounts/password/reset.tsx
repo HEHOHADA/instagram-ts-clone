@@ -1,15 +1,16 @@
-import React, { useCallback, useMemo } from 'react'
-import MainLayout from '../../../components/MainLayout'
-import { ForgotPasswordType, useForgotPasswordMutation } from '../../../geterated/apollo'
-import { InstagramAuthForm } from '../../../components/form/InstagramAuthForm'
-import { InputAuthField } from '../../../components/utils/InputAuthField'
-import { useRouter } from 'next/router'
-import RedirectComponent from '../../../components/auth/RedirectComponent'
-import OrComponentWithRedirect from '../../../components/auth/OrComponentWithRedirect'
 import { NextPageContext } from 'next'
+import { useRouter } from 'next/router'
+import React, { useCallback, useMemo } from 'react'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
-import Redirect from '../../../lib/redirect'
-import withApollo from '../../../lib/withApollo'
+
+import Redirect from '@/lib/redirect'
+import withApollo from '@/lib/withApollo'
+import MainLayout from '@/components/MainLayout'
+import { InputAuthField } from '@/components/utils/InputAuthField'
+import RedirectComponent from '@/components/auth/RedirectComponent'
+import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
+import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
+import { ForgotPasswordType, useForgotPasswordMutation } from '@/geterated/apollo'
 
 const ForgotPassword = () => {
 
@@ -25,7 +26,7 @@ const ForgotPassword = () => {
     }]
   }, [])
 
-  const [forgotPassword] = useForgotPasswordMutation()
+  const [forgotPassword,{loading}] = useForgotPasswordMutation()
 
   const forgotPasswordHandler = useCallback(async (data, {setErrors}) => {
 
@@ -49,6 +50,7 @@ const ForgotPassword = () => {
       <MainLayout title="Forgot password">
         <div className="change-password__container container">
           <InstagramAuthForm<ForgotPasswordType>
+              loading={loading}
               OrOptionsComponent={ <OrComponentWithRedirect
                   link={ '/accounts/register' }
                   text={ 'Create account' }/> }

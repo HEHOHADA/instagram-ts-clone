@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
-import { splitArray } from '../../utils/splitArray'
 import { PhotoItem } from './PhotoItem'
-import { PhotoItemFragment } from '../../geterated/apollo'
+import { splitArray } from '@/utils/splitArray'
+import { PhotoItemFragment } from '@/geterated/apollo'
 
 type PropsType = {
   photoItems: PhotoItemFragment[]

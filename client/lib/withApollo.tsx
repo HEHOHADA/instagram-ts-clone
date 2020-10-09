@@ -3,8 +3,8 @@ import Head from 'next/head'
 import cookie from 'cookie'
 import { NextPageContext } from 'next'
 import App, { AppContext } from 'next/app'
-import { ApolloProvider } from '@apollo/react-hooks'
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, NormalizedCacheObject, ApolloProvider } from '@apollo/client'
+
 import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
 

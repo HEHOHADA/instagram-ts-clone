@@ -1,19 +1,19 @@
+import { useHistory } from 'react-router'
 import React, { FC, useEffect, useRef } from 'react'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+
 import { InfoMark } from '../utils/svg/InfoMark'
-import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '../../geterated/apollo'
 import { Smile } from '../utils/svg/Smile'
 import { Picture } from '../utils/svg/Picture'
 import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
-import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { TextArea } from '../utils/TextArea'
+import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '@/geterated/apollo'
 
-type PropsType = {
-  id: string
-}
 
-export const ConversationItem: FC<PropsType> = ({id}) => {
-
+const ConversationItem: FC = () => {
+  const router = useHistory()
+  const id = router.location.pathname.split('/')[3]
   const {data} = useChatQuery({
     variables: {id}
   })
@@ -29,7 +29,7 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
     }
   }
 
-  useEffect(scrollToBottom, [data?.chat.messages])
+  useEffect(scrollToBottom, [data?.chat.messages.length])
 
   const createMessageHandler = async (data: CreateMessageMutationVariables,
                                       {resetForm}: FormikHelpers<CreateMessageMutationVariables>) => {
@@ -108,3 +108,5 @@ export const ConversationItem: FC<PropsType> = ({id}) => {
       </div>
   )
 }
+
+export default ConversationItem

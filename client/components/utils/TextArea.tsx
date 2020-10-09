@@ -1,10 +1,10 @@
-import React, { DetailedHTMLProps, FC, TextareaHTMLAttributes } from 'react'
 import { FieldProps } from 'formik'
+import React, { DetailedHTMLProps, FC, TextareaHTMLAttributes } from 'react'
 
 
-type InputProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>
+type TextAreaProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>
 
-export const TextArea: FC<FieldProps & InputProps> = ({field, ...props}) => {
+export const TextArea: FC<FieldProps & TextAreaProps> = ({field,form:_, ...props}) => {
   return (
       <textarea
           { ...field }

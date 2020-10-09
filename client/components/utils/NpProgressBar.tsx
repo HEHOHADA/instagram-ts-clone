@@ -1,5 +1,5 @@
 import React from 'react'
-import NextNProgress from '../../lib/ProgressBar'
+import NextNProgress from '@/lib/ProgressBar'
 
 export const NpTopProgressBar = React.memo(() => {
   return (

@@ -1,54 +1,19 @@
-import React, { useCallback, useMemo } from 'react'
-import AuthLayout from '../../components/AuthLayout'
-import { LoginInput, MeDocument, MeQuery, useLoginMutation } from '../../geterated/apollo'
-import { setAccessToken } from '../../lib/token'
-import { useRouter } from 'next/router'
-import { InstagramAuthForm } from '../../components/form/InstagramAuthForm'
-import { InputAuthField } from '../../components/utils/InputAuthField'
-import OrComponentWithRedirect from '../../components/auth/OrComponentWithRedirect'
-import RedirectComponent from '../../components/auth/RedirectComponent'
-import { formatValidationErrors } from '../../utils/formatValidationErrors'
-import withApollo from '../../lib/withApollo'
+import React, { useMemo } from 'react'
 import { NextPageContext } from 'next'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
-import Redirect from '../../lib/redirect'
+
+import Redirect from '@/lib/redirect'
+import useLogin from '@/hooks/useLogin'
+import withApollo from '@/lib/withApollo'
+import { LoginInput } from '@/geterated/apollo'
+import AuthLayout from '@/components/AuthLayout'
+import { InputAuthField } from '@/components/utils/InputAuthField'
+import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
+import RedirectComponent from '@/components/auth/RedirectComponent'
+import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 
 const Login = () => {
-  const [login] = useLoginMutation()
-  const router = useRouter()
-  if (router.isFallback) {
-    router.push('/')
-  }
-  const submitLoginHandler = useCallback(async (data, {setErrors}) => {
-    try {
-      const response = await login({
-        variables: {
-          data
-        }, update: (cache, {data}) => {
-          if (!data || !data.login) {
-            return
-          }
-
-          cache.writeQuery<MeQuery>({
-            query: MeDocument,
-            data: {
-              me: data.login.user
-            }
-          })
-        }
-
-      })
-      if (response && response.data) {
-        setAccessToken(response.data.login.accessToken)
-      }
-
-      await router.push('/')
-
-    } catch (e) {
-      setErrors(formatValidationErrors(e.graphQLErrors[0], 'email'))
-    }
-  }, [])
-
+  const {loading, submitLoginHandler} = useLogin()
 
   const fieldsItems = useMemo(() => {
     return [{
@@ -71,6 +36,7 @@ const Login = () => {
   return (
       <AuthLayout>
         <InstagramAuthForm<LoginInput>
+            loading={ loading }
             OrOptionsComponent={ <OrComponentWithRedirect
                 link={ '/accounts/password/reset' }
                 text={ 'Забыли пароль' }/> }

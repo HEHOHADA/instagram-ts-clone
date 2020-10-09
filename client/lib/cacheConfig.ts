@@ -1,5 +1,4 @@
-import { PaginatedPhotos } from '../geterated/apollo'
-
+import { PaginatedPhotos, PaginatedUsersSearch } from '@/geterated/apollo'
 export const cacheConfig = {
   typePolicies: {
     Query: {
@@ -12,7 +11,19 @@ export const cacheConfig = {
           ): PaginatedPhotos {
             return {
               ...incoming,
-              photos: [...(existing?.photos || []), ...incoming.photos],
+              items: [...(existing?.items || []), ...incoming.items],
+            }
+          }
+        },
+        search:{
+          keyArgs: ['subString'],
+          merge(
+              existing: PaginatedUsersSearch | undefined,
+              incoming: PaginatedUsersSearch
+          ): PaginatedUsersSearch {
+            return {
+              ...incoming,
+              items: [...(existing?.items || []), ...incoming.items],
             }
           }
         }

@@ -53,12 +53,12 @@ export class FeedResolver {
     //   limit $2
     //   `, replacements)
 
-    const photos = photosPlusOne.slice(0, realLimit)
-    const endCursor = photos[photos.length - 1].date
+    const items = photosPlusOne.slice(0, realLimit)
+    const endCursor = items[items.length - 1].date
 
     return {
-      photos,
-      feedInfo: {
+      items,
+      paginationInfo: {
         hasMore: photosPlusOne.length === realLimitPlusOne,
         endCursor
       }
