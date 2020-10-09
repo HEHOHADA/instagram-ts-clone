@@ -1,8 +1,9 @@
 import 'dotenv/config'
-import { Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
-import { User } from '../../entity/User'
-import { MyContext } from '../../types/MyContext'
 import { verify } from 'jsonwebtoken'
+import { Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { MyContext } from '@/types/MyContext'
 
 @Resolver(() => User)
 export class MeResolver {

@@ -1,10 +1,11 @@
-import { Ctx, Query, Resolver } from 'type-graphql'
-import { MyContext } from '../../../types/MyContext'
 import { verify } from 'jsonwebtoken'
-import { User } from '../../../entity/User'
+import { Ctx, Query, Resolver } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { MyContext } from '@/types/MyContext'
 import { sendRefreshToken } from './sendRefreshToken'
-import { createAccessToken, createRefreshToken } from './createTokens'
 import { RefreshResponseType } from './RefreshResponseType'
+import { createAccessToken, createRefreshToken } from './createTokens'
 
 @Resolver()
 export class RefreshTokenResolver {

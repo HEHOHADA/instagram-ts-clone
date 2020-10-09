@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader'
-import { Likes } from '../entity/Likes'
+import { Likes } from '@/entity/Likes'
 
 
 export const createLikeLoader = () => new DataLoader<{ photoId: string, userId: string }, Likes | null>(async (keys) => {

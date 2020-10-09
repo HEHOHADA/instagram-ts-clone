@@ -1,8 +1,9 @@
-import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
-import { Photo } from '../../entity/Photo'
 import { getConnection } from 'typeorm'
-import { User } from '../../entity/User'
-import { MyContext } from '../../types/MyContext'
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { Photo } from '@/entity/Photo'
+import { MyContext } from '@/types/MyContext'
 
 @Resolver(() => Photo)
 export class ViewPhotoResolver {

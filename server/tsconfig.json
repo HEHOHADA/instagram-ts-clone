@@ -8,6 +8,10 @@
       "es2017",
       "esnext.asynciterable"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
@@ -27,7 +31,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "rootDir": "src"
   },
   "exclude": [

@@ -1,10 +1,11 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { MyContext } from '../../types/MyContext'
-import { Photo } from '../../entity/Photo'
-import { User } from '../../entity/User'
-import { Likes } from '../../entity/Likes'
 import { ApolloError } from 'apollo-server-express'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { Photo } from '@/entity/Photo'
+import { Likes } from '@/entity/Likes'
+import { MyContext } from '@/types/MyContext'
+import { isAuth } from '@/middleware/isAuthMiddleware'
 
 @Resolver()
 export class LikeResolver {

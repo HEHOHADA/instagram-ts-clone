@@ -1,10 +1,12 @@
 import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { MyContext } from '../../types/MyContext'
-import { Comment } from '../../entity/Comment'
+
+import { User } from '@/entity/User'
+import { Comment } from '@/entity/Comment'
+import { MyContext } from '@/types/MyContext'
+import { isAuth } from '@/middleware/isAuthMiddleware'
 import { CreateCommentType } from './types/CreateCommentType'
-import { User } from '../../entity/User'
-import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
+import { isUserAuthOrUndefined } from '@/middleware/isAuthenticatedMiddleware'
+
 
 @Resolver(() => Comment)
 export class CreateCommentResolver {

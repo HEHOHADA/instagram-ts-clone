@@ -1,7 +1,7 @@
 import { Arg, Ctx, Mutation, Resolver, UnauthorizedError, UseMiddleware } from 'type-graphql'
-import { MyContext } from '../../types/MyContext'
-import { Photo } from '../../entity/Photo'
-import { isAuth } from '../../middleware/isAuthMiddleware'
+import { Photo } from '@/entity/Photo'
+import { MyContext } from '@/types/MyContext'
+import { isAuth } from '@/middleware/isAuthMiddleware'
 
 @Resolver()
 export class CreatePhotoResolver {

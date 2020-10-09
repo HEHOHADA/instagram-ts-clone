@@ -1,5 +1,6 @@
 import { Ctx, Mutation, Resolver } from 'type-graphql'
-import { MyContext } from '../../types/MyContext'
+
+import { MyContext } from '@/types/MyContext'
 import { sendRefreshToken } from './auth/sendRefreshToken'
 
 @Resolver()

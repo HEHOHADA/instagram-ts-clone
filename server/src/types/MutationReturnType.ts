@@ -1,6 +1,7 @@
-import { ErrorMessageType } from './ErrorMessageType'
-import { User } from '../entity/User'
 import { createUnionType, Field, ObjectType } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { ErrorMessageType } from './ErrorMessageType'
 
 export type MutationReturnType = User | ErrorMessageType
 

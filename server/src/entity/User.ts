@@ -9,11 +9,12 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm'
 import { Ctx, Field, ID, ObjectType, Root, UseMiddleware } from 'type-graphql'
+
+import { Chat } from './Chat'
 import { Photo } from './Photo'
 import { Comment } from './Comment'
-import { Chat } from './Chat'
-import { isUserAuthOrUndefined } from '../middleware/isAuthenticatedMiddleware'
-import { MyContext } from '../types/MyContext'
+import { MyContext } from '@/types/MyContext'
+import { isUserAuthOrUndefined } from '@/middleware/isAuthenticatedMiddleware'
 
 @Entity()
 @ObjectType({isAbstract: true})

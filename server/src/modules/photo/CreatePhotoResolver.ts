@@ -1,16 +1,17 @@
-import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
-import { MyContext } from '../../types/MyContext'
-import { FileUpload, GraphQLUpload } from 'graphql-upload'
-import { processUpload } from '../shared/processUpload'
-import { ApolloError } from 'apollo-server-express'
-import { somethingWentWrong } from '../user/utils/errorMessages'
-import { Photo } from '../../entity/Photo'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { User } from '../../entity/User'
 import { getConnection } from 'typeorm'
-import { Likes } from '../../entity/Likes'
-import { Comment } from '../../entity/Comment'
-import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
+import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { Likes } from '@/entity/Likes'
+import { Photo } from '@/entity/Photo'
+import { MyContext } from '@/types/MyContext'
+import { ApolloError } from 'apollo-server-express'
+import { isAuth } from '@/middleware/isAuthMiddleware'
+import { processUpload } from '../shared/processUpload'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
+import { somethingWentWrong } from '../user/utils/errorMessages'
+import { isUserAuthOrUndefined } from '@/middleware/isAuthenticatedMiddleware'
+
 
 @Resolver(() => Photo)
 export class CreatePhotoResolver {

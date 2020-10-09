@@ -1,10 +1,12 @@
-import { Arg, Ctx, Int, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { getConnection } from 'typeorm'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { MyContext } from '../../types/MyContext'
-import { User } from '../../entity/User'
-import { PaginatedPhotos } from './types/PaginatedPhotos'
-import { Photo } from '../../entity/Photo'
+import { Arg, Ctx, Int, Query, Resolver, UseMiddleware } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { Photo } from '@/entity/Photo'
+import { MyContext } from '@/types/MyContext'
+import { isAuth } from '@/middleware/isAuthMiddleware'
+import { PaginatedPhotos } from '@/modules/photo/types/PaginatedPhotos'
+
 
 @Resolver()
 export class FeedResolver {

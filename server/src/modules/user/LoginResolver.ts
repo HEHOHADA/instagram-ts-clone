@@ -1,13 +1,14 @@
 import bcrypt from 'bcryptjs'
-import { AuthenticationError, ValidationError } from 'apollo-server-express'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
-import { User } from '../../entity/User'
+import { AuthenticationError, ValidationError } from 'apollo-server-express'
+
+import { User } from '@/entity/User'
+import { MyContext } from '@/types/MyContext'
 import { LoginInput } from './login/LoginInput'
-import { MyContext } from '../../types/MyContext'
-import { confirmEmailError, forgotPasswordLockedError, invalidLogin } from './utils/errorMessages'
 import { sendRefreshToken } from './auth/sendRefreshToken'
-import { createAccessToken, createRefreshToken } from './auth/createTokens'
 import { LoginResponseType } from './login/LoginResponseType'
+import { createAccessToken, createRefreshToken } from './auth/createTokens'
+import { confirmEmailError, forgotPasswordLockedError, invalidLogin } from './utils/errorMessages'
 
 @Resolver()
 export class LoginResolver {

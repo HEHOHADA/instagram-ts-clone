@@ -1,9 +1,11 @@
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Ctx, Field, ID, ObjectType, Root, UseMiddleware } from 'type-graphql'
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+
 import { User } from './User'
 import { Message } from './Message'
-import { MyContext } from '../types/MyContext'
-import { isAuth } from '../middleware/isAuthMiddleware'
+import { isAuth } from '@/middleware/isAuthMiddleware'
+import { MyContext } from '@/types/MyContext'
+
 
 
 @Entity()

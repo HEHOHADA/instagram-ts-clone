@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader'
-import { Photo } from '../entity/Photo'
+import { Photo } from '@/entity/Photo'
 
 export const createPhotoLoader = () => new DataLoader<string, Photo>(async photoIds => {
   const photos = await Photo.findByIds(photoIds as string[])

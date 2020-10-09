@@ -1,12 +1,14 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { GraphQLUpload } from 'graphql-upload'
-import { UploadType } from './types/UploadType'
-import { processUpload } from '../shared/processUpload'
 import { ApolloError } from 'apollo-server-express'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { MyContext } from '@/types/MyContext'
+import { UploadType } from './types/UploadType'
+import { isAuth } from '@/middleware/isAuthMiddleware'
+import { processUpload } from '../shared/processUpload'
 import { somethingWentWrong } from './utils/errorMessages'
-import { MyContext } from '../../types/MyContext'
-import { User } from '../../entity/User'
-import { isAuth } from '../../middleware/isAuthMiddleware'
+
 
 
 @Resolver()

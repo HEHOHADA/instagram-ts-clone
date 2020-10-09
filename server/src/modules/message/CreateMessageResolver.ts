@@ -1,9 +1,11 @@
 import { Context } from 'vm'
 import { Arg, Ctx, FieldResolver, Mutation, PubSub, PubSubEngine, Resolver, Root, UseMiddleware } from 'type-graphql'
-import { Message } from '../../entity/Message'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { MyContext } from '../../types/MyContext'
-import { User } from '../../entity/User'
+
+import { User } from '@/entity/User'
+import { Message } from '@/entity/Message'
+import { MyContext } from '@/types/MyContext'
+import { isAuth } from '@/middleware/isAuthMiddleware'
+
 
 @Resolver(() => Message)
 export class CreateMessageResolver {

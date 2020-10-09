@@ -1,9 +1,10 @@
-import { Arg, Ctx, FieldResolver, Query, Resolver, Root, UseMiddleware } from 'type-graphql'
-import { User } from '../../entity/User'
-import { ApolloError } from 'apollo-server-express'
 import { getConnection } from 'typeorm'
-import { MyContext } from '../../types/MyContext'
-import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
+import { ApolloError } from 'apollo-server-express'
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root, UseMiddleware } from 'type-graphql'
+
+import { User } from '@/entity/User'
+import { MyContext } from '@/types/MyContext'
+import { isUserAuthOrUndefined } from '@/middleware/isAuthenticatedMiddleware'
 
 @Resolver(() => User)
 export class GetUserInfoResolver {
