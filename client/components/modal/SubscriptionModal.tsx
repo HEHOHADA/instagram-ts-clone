@@ -2,11 +2,12 @@ import React, { FC } from 'react'
 import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { useGetFollowersQuery, useGetFollowingsQuery } from '@/geterated/apollo'
+import Link from 'next/link'
 
 type SubscriptionModalType = {
   FollowButton: (isFollowing: boolean, id: string, userId?: string) => JSX.Element
   id: string
-  subscriber: boolean,
+  subscriber: boolean
   userId?: string
 }
 
@@ -36,7 +37,13 @@ export const SubscriptionModal: FC<ModalRefType & SubscriptionModalType> = ({clo
                             alt="Фото"/> }
                       </div>
                       <div className="subscription__username__container">
-                        <a className="subscription__username">{ f.username }</a>
+                        <Link
+                            href={'/[username]'}
+                            as={ `/${ f.username  }` }
+                            passHref
+                        >
+                          <a className="subscription__username">{ f.username }</a>
+                        </Link>
                         <div className="subscription__full__name">{ f.fullName }</div>
                       </div>
                     </div>

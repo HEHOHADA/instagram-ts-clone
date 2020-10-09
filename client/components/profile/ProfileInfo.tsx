@@ -28,7 +28,7 @@ export const ProfileInfo = ({
           changeSubs('subscribers')
           openModal()
         },
-        text: declOfNum((followerCount as number), ['Подписка', 'Подписок', 'Подписки'])
+        text: declOfNum((followerCount as number), ['Подписчик', 'Подписчиков', 'Подписчика'])
       },
       {
         count: (followingCount as number),
@@ -36,7 +36,7 @@ export const ProfileInfo = ({
           changeSubs('subscriptions')
           openModal()
         },
-        text: declOfNum((followingCount as number), ['Подписчик', 'Подписчиков', 'Подписчика'])
+        text: declOfNum((followingCount as number), ['Подписка', 'Подписок', 'Подписки'])
       },
     ]
   }, [photoCount, followerCount, followingCount])
