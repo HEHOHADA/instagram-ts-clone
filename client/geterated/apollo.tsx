@@ -25,6 +25,7 @@ export type Query = {
   feed: PaginatedPhotos;
   viewUserPhoto: Array<Photo>;
   viewPhotoById: Photo;
+  search: PaginatedUsersSearch;
   getUserInfo: User;
   me?: Maybe<User>;
   refreshToken: RefreshResponseType;
@@ -59,6 +60,13 @@ export type QueryViewUserPhotoArgs = {
 
 export type QueryViewPhotoByIdArgs = {
   id: Scalars['String'];
+};
+
+
+export type QuerySearchArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  subString: Scalars['String'];
 };
 
 
@@ -107,8 +115,8 @@ export type User = {
 
 export type PaginatedPhotos = {
   __typename?: 'PaginatedPhotos';
-  photos: Array<Photo>;
-  feedInfo: FeedInfo;
+  items: Array<Photo>;
+  paginationInfo: PaginatedPhotoResponse;
 };
 
 export type Photo = {
@@ -138,10 +146,22 @@ export type Comment = {
   photo: Photo;
 };
 
-export type FeedInfo = {
-  __typename?: 'FeedInfo';
+export type PaginatedPhotoResponse = {
+  __typename?: 'PaginatedPhotoResponse';
   hasMore: Scalars['Boolean'];
   endCursor: Scalars['DateTime'];
+};
+
+export type PaginatedUsersSearch = {
+  __typename?: 'PaginatedUsersSearch';
+  items: Array<User>;
+  paginationInfo: PaginatedUserResponse;
+};
+
+export type PaginatedUserResponse = {
+  __typename?: 'PaginatedUserResponse';
+  hasMore: Scalars['Boolean'];
+  endCursor: Scalars['String'];
 };
 
 export type RefreshResponseType = {
@@ -543,13 +563,13 @@ export type FeedQuery = (
   { __typename?: 'Query' }
   & { feed: (
     { __typename?: 'PaginatedPhotos' }
-    & { photos: Array<(
+    & { items: Array<(
       { __typename?: 'Photo' }
       & Pick<Photo, 'isLiked' | 'isAuthor' | 'postText'>
       & PhotoItemFragment
-    )>, feedInfo: (
-      { __typename?: 'FeedInfo' }
-      & Pick<FeedInfo, 'hasMore' | 'endCursor'>
+    )>, paginationInfo: (
+      { __typename?: 'PaginatedPhotoResponse' }
+      & Pick<PaginatedPhotoResponse, 'hasMore' | 'endCursor'>
     ) }
   ) }
 );
@@ -701,6 +721,27 @@ export type MeQuery = (
     { __typename?: 'User' }
     & UserMeFragment
   )> }
+);
+
+export type SearchQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+  subString: Scalars['String'];
+}>;
+
+
+export type SearchQuery = (
+  { __typename?: 'Query' }
+  & { search: (
+    { __typename?: 'PaginatedUsersSearch' }
+    & { items: Array<(
+      { __typename?: 'User' }
+      & UserMeFragment
+    )>, paginationInfo: (
+      { __typename?: 'PaginatedUserResponse' }
+      & Pick<PaginatedUserResponse, 'hasMore' | 'endCursor'>
+    ) }
+  ) }
 );
 
 export const UserMeFragmentDoc = gql`
@@ -1269,13 +1310,13 @@ export type DeletePhotoMutationOptions = ApolloReactCommon.BaseMutationOptions<D
 export const FeedDocument = gql`
     query Feed($limit: Int!, $cursor: String) {
   feed(limit: $limit, cursor: $cursor) {
-    photos {
+    items {
       isLiked
       isAuthor
       postText
       ...photoItem
     }
-    feedInfo {
+    paginationInfo {
       hasMore
       endCursor
     }
@@ -1703,3 +1744,44 @@ export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptio
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
+export const SearchDocument = gql`
+    query Search($limit: Int!, $cursor: String, $subString: String!) {
+  search(limit: $limit, cursor: $cursor, subString: $subString) {
+    items {
+      ...userMe
+    }
+    paginationInfo {
+      hasMore
+      endCursor
+    }
+  }
+}
+    ${UserMeFragmentDoc}`;
+
+/**
+ * __useSearchQuery__
+ *
+ * To run a query within a React component, call `useSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
+ *      subString: // value for 'subString'
+ *   },
+ * });
+ */
+export function useSearchQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchQuery, SearchQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, baseOptions);
+      }
+export function useSearchLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchQuery, SearchQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, baseOptions);
+        }
+export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>;
+export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>;
+export type SearchQueryResult = ApolloReactCommon.QueryResult<SearchQuery, SearchQueryVariables>;

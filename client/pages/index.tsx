@@ -26,7 +26,7 @@ const IndexPage = () => {
     await fetchMore({
       variables: {
         limit: variables!.limit,
-        cursor: dataFeed?.feed.photos[dataFeed?.feed.photos.length - 1].date
+        cursor: dataFeed?.feed.items[dataFeed?.feed.items.length - 1].date
       }
     })
   }
@@ -37,9 +37,9 @@ const IndexPage = () => {
             <History/>
             <div className="dashboard__container_el">
               { dataFeed?.feed && <Posts
-                  feed={ dataFeed.feed.photos as PhotoFeedType[] }/> }
+                  feed={ dataFeed.feed.items as PhotoFeedType[] }/> }
             </div>
-            { dataFeed?.feed.feedInfo.hasMore ? (
+            { dataFeed?.feed.paginationInfo.hasMore ? (
                 <button
                     disabled={ loading }
                     onClick={ onFetchMore }

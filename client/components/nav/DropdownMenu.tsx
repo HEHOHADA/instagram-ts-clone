@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useRouter } from 'next/router'
+import React, { useMemo } from 'react'
 import { DropdownItem } from './DropdownItem'
 import { useLogoutMutation } from '../../geterated/apollo'
-import { useRouter } from 'next/router'
 import { setAccessToken } from '../../lib/token'
-import Link from 'next/link'
+import useDropdown from '../../hooks/useDropdown'
 
 type PropsType = {
   username: string
@@ -11,28 +11,13 @@ type PropsType = {
 }
 
 export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
-
+  const {dropDownRef} = useDropdown(closeDropDown)
   const [logout] = useLogoutMutation()
-  const dropDownRef = useRef(null)
   const router = useRouter()
-
-  const closeOutside = useCallback((e: MouseEvent) => {
-    if (dropDownRef?.current && !((dropDownRef.current! as HTMLDivElement).contains(e.target as HTMLDivElement))) {
-      closeDropDown()
-    }
-  }, [closeDropDown, dropDownRef])
-
-  useEffect(() => {
-    document.addEventListener('click', closeOutside)
-    return () => {
-      closeDropDown()
-      document.removeEventListener('click', closeOutside)
-    }
-  }, [closeDropDown])
 
   const dropDownMenu = useMemo(() => {
     return [
-      {link: `/${ username }` ,passHref:true,iconName: 'home', text: 'Профиль'},
+      {as: `/${ username }`, link: '/[username]', passHref: true, iconName: 'home', text: 'Профиль'},
       {link: '/accounts/settings', iconName: 'settings', text: 'Настройки'},
       {link: '/p/create', iconName: 'create', text: 'Создать пост'}
     ].map((n) => (
@@ -52,7 +37,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
               }
               await cache.reset()
               setAccessToken('')
-           router.push('/accounts/login')
+              router.push('/accounts/login')
             }
           }) } className="btn__logout">Выйти
           </button>

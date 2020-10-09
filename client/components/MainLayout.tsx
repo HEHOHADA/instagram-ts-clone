@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useMeQuery } from '../geterated/apollo'
 import NavbarItems from './nav/NavbarItems'
+import { SearchComponent } from './search/SearchComponent'
 
 type Props = {
   children?: ReactNode
@@ -24,14 +25,7 @@ const MainLayout = ({children, title = 'Main'}: Props) => {
               <Link href="/">
                 <a className="header__logo">&nbsp;</a>
               </Link>
-              <div className="header__search">
-                <input type="text" placeholder="Search" className="header__searchInput"/>
-                <button className="header__searchButton">
-                  <i className="material-icons">
-                    search
-                  </i>
-                </button>
-              </div>
+              <SearchComponent/>
               <div className="header__nav-items">
                 { !data || loading || !data.me ?
                     <div className="nav__container">

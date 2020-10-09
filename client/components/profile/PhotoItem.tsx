@@ -9,7 +9,7 @@ type PropsType = {
 export const PhotoItem = React.memo(({pictureUrl, id}: PropsType) => {
   return (
       <div className="profile__photo__container">
-        <Link passHref href={ `/p/${ id }` }>
+        <Link passHref as={ `/p/${ id }` } href={'/p/[id]'}>
           <a>
             <img
                 src={ pictureUrl }
