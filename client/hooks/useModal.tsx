@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useRef } from 'react'
-import { ModalRefType, ModalWindowContainer } from '../hoc/ModalWindowContainer'
+import { ModalRefType, ModalWindowContainer } from '@/hoc/ModalWindowContainer'
 
 export const useModal = () => {
   const modalRef = useRef<ModalRefType>(null)

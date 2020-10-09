@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
-import { followCallback } from '../utils/followFunction'
 import Link from 'next/link'
-import { FollowButton } from '../components/profile/FollowButton'
-import { useFollowUserMutation, useUnFollowUserMutation } from '../geterated/apollo'
+import React, { useCallback } from 'react'
+
+import { followCallback } from '@/utils/followFunction'
+import { FollowButton } from '@/components/profile/FollowButton'
+import { useFollowUserMutation, useUnFollowUserMutation } from '@/geterated/apollo'
 
 export default function useFollowButton() {
   const [unFollowUser] = useUnFollowUserMutation()

@@ -43,13 +43,12 @@
 }
 
 .dashboard__item {
-  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .history__image {
   @include image__item(54px)
 }
-
 
 .history__username {
   display: block;
@@ -310,7 +309,7 @@
 }
 
 .recommend__img {
-  @include image__item(32px);
+  @include image__item(40px);
   margin-right: 6px;
 }
 

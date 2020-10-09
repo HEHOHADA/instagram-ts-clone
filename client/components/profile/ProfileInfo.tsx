@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { ProfileItems } from './ProfileItems'
-import { declOfNum } from '../../utils/declOfNumb'
-import { ProfileItemsType } from '../../pages/[username]'
+import { ProfileItemsType } from '@/pages/[username]'
+import { declOfNum } from '@/utils/declOfNumb'
 
 
 export const ProfileInfo = ({

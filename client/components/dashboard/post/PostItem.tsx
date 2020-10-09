@@ -1,13 +1,12 @@
 import React, { FC } from 'react'
-import { Comments } from './comment/Comments'
-import { CreateCommentType } from '../../../geterated/apollo'
-import { Field, Form, Formik } from 'formik'
-import { TextArea } from '../../utils/TextArea'
-import { dateOptions } from '../../../utils/config'
+
 import { PhotoFeedType } from './Posts'
 import { PostHeader } from './PostHeader'
-import { PhotoItemContainer, PhotoItemType } from '../../../hoc/PhotoItemContainer'
+import { dateOptions } from '@/utils/config'
+import { Comments } from './comment/Comments'
 import { CommentTools } from './comment/CommentTools'
+import { PhotoItemContainer, PhotoItemType } from '@/hoc/PhotoItemContainer'
+import { CreateCommentForm } from '@/components/photo/CreateCommentForm'
 
 
 type PropsType = {
@@ -60,26 +59,10 @@ const PostItem: FC<PropsType> = React.memo(({photo, deletePhoto}) => {
                       comments={ photo.comments }/> }
                   <div
                       className="content__created">{ new Date(parseInt(photo.date)).toLocaleString('ru', dateOptions) }</div>
-                  <Formik<CreateCommentType>
-                      onSubmit={ createCommentHandler }
-                      initialValues={ {commentText: '', photoId: photo.id} }
-                  >
-                    { () => (
-                        <Form className="comment__create">
-                          <Field
-                              required
-                              placeholder="Введите комментарий"
-                              className="comment__add"
-                              name="commentText"
-                              component={ TextArea }
-                          />
-                          <button
-                              type="submit"
-                              className="comment__btn">Отправить
-                          </button>
-                        </Form>
-                    ) }
-                  </Formik>
+                  <CreateCommentForm
+                      createCommentHandler={createCommentHandler}
+                      photoId={ photo.id }
+                  />
                 </div>
               </>
           ) }

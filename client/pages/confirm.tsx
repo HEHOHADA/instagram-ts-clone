@@ -1,10 +1,11 @@
 import React from 'react'
-import MainLayout from '../components/MainLayout'
-import { MyContext } from '../interfaces/MyContext'
-import { ConfirmUserMutation, ConfirmUserMutationVariables } from '../geterated/apollo'
-import { confirmUserMutation } from '../graphql/user/mutation/confirmUser'
-import Redirect from '../lib/redirect'
-import withApollo from '../lib/withApollo'
+
+import Redirect from '@/lib/redirect'
+import withApollo from '@/lib/withApollo'
+import MainLayout from '@/components/MainLayout'
+import { MyContext } from '@/interfaces/MyContext'
+import { confirmUserMutation } from '@/graphql/user/mutation/confirmUser'
+import { ConfirmUserMutation, ConfirmUserMutationVariables } from '@/geterated/apollo'
 
 const Confirm = () => {
   return (

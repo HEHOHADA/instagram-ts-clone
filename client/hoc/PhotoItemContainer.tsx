@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
-import { ModalRefType } from './ModalWindowContainer'
-import { PhotoSettingsModal } from '../components/modal/PhotoSettingsModal'
-import { PhotoFeedType } from '../components/dashboard/post/Posts'
-import { useModal } from '../hooks/useModal'
-import { useCommentCreateHandler } from '../hooks/useCommentCreateHandler'
-import { useCommentDeleteHandler } from '../hooks/useCommentDeleteHandler'
-import { useLikeHandler } from '../hooks/useLikeHandler'
 import { FormikHelpers } from 'formik'
-import { CreateCommentType } from '../geterated/apollo'
+import { useModal } from '@/hooks/useModal'
+import { CreateCommentType } from '@/geterated/apollo'
+import { ModalRefType } from './ModalWindowContainer'
+import { useLikeHandler } from '@/hooks/useLikeHandler'
+import { PhotoFeedType } from '@/components/dashboard/post/Posts'
+import { useCommentDeleteHandler } from '@/hooks/useCommentDeleteHandler'
+import { useCommentCreateHandler } from '@/hooks/useCommentCreateHandler'
+import { PhotoSettingsModal } from '@/components/modal/PhotoSettingsModal'
+
 
 
 type PropsType = {
@@ -47,9 +48,7 @@ export const PhotoItemContainer = React.memo(({photo, deletePhoto, children}: Pr
                   { ...ref }/>)
           }
         </ModalWindow>
-        {
-          children && children(childrenProps)
-        }
+        { children(childrenProps) }
       </>
   )
 })

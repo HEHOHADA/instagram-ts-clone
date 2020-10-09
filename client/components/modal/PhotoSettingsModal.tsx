@@ -1,5 +1,5 @@
 import React from 'react'
-import { ModalRefType } from '../../hoc/ModalWindowContainer'
+import { ModalRefType } from '@/hoc/ModalWindowContainer'
 
 type PropsType = {
   deletePhoto: () => void
@@ -13,10 +13,6 @@ export const PhotoSettingsModal = ({closeModal, isAuthor, deletePhoto}: ModalRef
         { isAuthor && <button onClick={ deletePhoto }
                               className="photo__settings__modal">Удалить
         </button> }
-        <button className="photo__settings__modal">Удалить</button>
-        <button className="photo__settings__modal">Удалить</button>
-        <button className="photo__settings__modal">Удалить</button>
-        <button className="photo__settings__modal">Удалить</button>
         <button onClick={ closeModal } className="photo__settings__modal">Отменить</button>
       </>
   )

@@ -1,6 +1,6 @@
 import React from 'react'
-import OrComponent from './OrComponent'
 import Link from 'next/link'
+import OrComponent from './OrComponent'
 import { RedirectComponentType } from './RedirectComponent'
 
 const OrComponentWithRedirect = ({link, text}: RedirectComponentType) => {

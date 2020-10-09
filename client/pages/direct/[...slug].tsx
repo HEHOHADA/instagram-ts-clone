@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic'
 import { GetStaticPropsContext } from 'next'
 import { Route, Switch } from 'react-router'
 
-import withApollo from '../../lib/withApollo'
-import MainLayout from '../../components/MainLayout'
-import { ConversationNew } from '../../components/direct/ConversationNew'
-import { ConversationList } from '../../components/direct/ConversationList'
-import { useChatsQuery } from '../../geterated/apollo'
-import { useMessageReceive } from '../../hooks/useMessageReceive'
+import withApollo from '@/lib/withApollo'
+import MainLayout from '@/components/MainLayout'
+import { ConversationNew } from '@/components/direct/ConversationNew'
+import { ConversationList } from '@/components/direct/ConversationList'
+import { useChatsQuery } from '@/geterated/apollo'
+import { useMessageReceive } from '@/hooks/useMessageReceive'
 
-const ConversationItem = dynamic(() => import('../../components/direct/ConversationItem'))
+const ConversationItem = dynamic(() => import('@/components/direct/ConversationItem'))
 
 const DirectPages = ({slug}: any) => {
 

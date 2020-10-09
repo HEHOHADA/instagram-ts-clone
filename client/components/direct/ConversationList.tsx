@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
-import { CreateDialog } from '../utils/svg/CreateDialog'
-import { ChatsQuery, useMeQuery } from '../../geterated/apollo'
+
+import { useModal } from '@/hooks/useModal'
 import { DialogItem } from './chat/DialogItem'
-import { ModalRefType } from '../../hoc/ModalWindowContainer'
-import { useModal } from '../../hooks/useModal'
+import { CreateDialog } from '../utils/svg/CreateDialog'
+import { ModalRefType } from '@/hoc/ModalWindowContainer'
+import { ChatsQuery, useMeQuery } from '@/geterated/apollo'
 import { CreateMessageModal } from '../modal/CreateMessageModal'
 
 type ChatsType = ChatsQuery['chats']

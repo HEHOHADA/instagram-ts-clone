@@ -1,13 +1,14 @@
 import { useHistory } from 'react-router'
 import React, { FC, useEffect, useRef } from 'react'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
+
 import { InfoMark } from '../utils/svg/InfoMark'
-import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '../../geterated/apollo'
 import { Smile } from '../utils/svg/Smile'
 import { Picture } from '../utils/svg/Picture'
 import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { TextArea } from '../utils/TextArea'
+import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '@/geterated/apollo'
 
 
 const ConversationItem: FC = () => {

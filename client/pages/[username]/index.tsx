@@ -1,21 +1,22 @@
-import { useRouter } from 'next/router'
 import React from 'react'
+import { useRouter } from 'next/router'
 
-import withApollo from '../../lib/withApollo'
-import MainLayout from '../../components/MainLayout'
-import { PhotoItems } from '../../components/profile/PhotoItems'
-import { ModalRefType } from '../../hoc/ModalWindowContainer'
-import { SubscriptionModal } from '../../components/modal/SubscriptionModal'
+import withApollo from '@/lib/withApollo'
+import { useModal } from '@/hooks/useModal'
+import MainLayout from '@/components/MainLayout'
+import useFollowButton from '@/hooks/useFollowButton'
+import { ModalRefType } from '@/hoc/ModalWindowContainer'
+import { PhotoItems } from '@/components/profile/PhotoItems'
+import { ProfileInfo } from '@/components/profile/ProfileInfo'
+import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
 import {
   GetUserInfoQuery,
   PhotoItemFragment,
   useGetUserInfoQuery,
   useMeQuery,
   useViewUserPhotoQuery
-} from '../../geterated/apollo'
-import { useModal } from '../../hooks/useModal'
-import useFollowButton from '../../hooks/useFollowButton'
-import { ProfileInfo } from '../../components/profile/ProfileInfo'
+} from '@/geterated/apollo'
+
 
 export type ProfileItemsType = {
   onClick?: () => void | null | undefined
@@ -33,7 +34,6 @@ const Profile = () => {
   const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
   const {data: dataPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
   const {data: meData} = useMeQuery()
-  const meId = meData?.me?.id
   const {followButton} = useFollowButton()
   let subs: ModalUserPageType = null
   const changeSubs = (subName: ModalUserPageType) => {
@@ -55,13 +55,13 @@ const Profile = () => {
               case'subscribers':
                 return (<SubscriptionModal
                     id={ data!.getUserInfo.id }
-                    userId={ meId }
+                    userId={ meData?.me?.id }
                     FollowButton={ followButton }
                     subscriber={ true } { ...ref }/>)
               case 'subscriptions':
                 return <SubscriptionModal
                     id={ data!.getUserInfo.id }
-                    userId={ meId }
+                    userId={ meData?.me?.id }
                     FollowButton={ followButton }
                     subscriber={ false } { ...ref }/>
               default:
@@ -72,7 +72,7 @@ const Profile = () => {
         <div className="profile container">
 
           { data?.getUserInfo && <ProfileInfo
-              meId={ meId }
+              meId={ meData?.me?.id }
               followButton={ followButton }
               openModal={ openModal }
               changeSubs={ changeSubs }

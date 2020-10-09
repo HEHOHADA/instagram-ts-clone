@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ProfileInfoItem } from './ProfileInfoItem'
-import { ProfileItemsType } from '../../pages/[username]'
+import { ProfileItemsType } from '@/pages/[username]'
 
 type PropsType = {
   navItems: Array<ProfileItemsType>

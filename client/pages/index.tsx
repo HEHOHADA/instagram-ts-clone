@@ -1,11 +1,12 @@
 import React from 'react'
-import MainLayout from '../components/MainLayout'
-import { History } from '../components/dashboard/History'
-import { useFeedQuery, useMeQuery } from '../geterated/apollo'
-import { PhotoFeedType, Posts } from '../components/dashboard/post/Posts'
-import { UserProfileRecommendation } from '../components/dashboard/UserProfileRecommendation'
-import withApollo from '../lib/withApollo'
-import { RecommendationItems } from '../components/recommendation/RecommendationItems'
+
+import withApollo from '@/lib/withApollo'
+import MainLayout from '@/components/MainLayout'
+import { History } from '@/components/dashboard/History'
+import { useFeedQuery, useMeQuery } from '@/geterated/apollo'
+import { PhotoFeedType, Posts } from '@/components/dashboard/post/Posts'
+import { UserProfileRecommendation } from '@/components/dashboard/UserProfileRecommendation'
+import { RecommendationItems } from '@/components/recommendation/RecommendationItems'
 
 
 const IndexPage = () => {

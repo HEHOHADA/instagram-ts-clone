@@ -1,10 +1,10 @@
 import React from 'react'
-import MainLayout from '../../components/MainLayout'
-import { useBlockRoute } from '../../utils/useBlockRoute'
 import { NextPageContext } from 'next'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
-import Redirect from '../../lib/redirect'
-import withApollo from '../../lib/withApollo'
+
+import Redirect from '@/lib/redirect'
+import withApollo from '@/lib/withApollo'
+import MainLayout from '@/components/MainLayout'
 
 const CheckEmail = () => {
   return (

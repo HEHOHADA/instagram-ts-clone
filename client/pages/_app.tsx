@@ -1,8 +1,10 @@
 import React from 'react'
 import App from 'next/app'
-import '../scss/index.scss'
-import { NpTopProgressBar } from '../components/utils/NpProgressBar'
-import withReactRouter from '../lib/withReactRouter'
+
+import 'scss/index.scss'
+
+import withReactRouter from 'lib/withReactRouter'
+import { NpTopProgressBar } from 'components/utils/NpProgressBar'
 
 
 class MyApp extends App{

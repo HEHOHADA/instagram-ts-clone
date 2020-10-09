@@ -1,8 +1,9 @@
 import React from 'react'
-import { CloseModalButton } from './CloseModalButton'
-import { ModalRefType } from '../../hoc/ModalWindowContainer'
-import { ChatDocument, useFindOrCreateChatMutation, useGetFollowersQuery } from '../../geterated/apollo'
 import { useRouter } from 'next/router'
+
+import { CloseModalButton } from './CloseModalButton'
+import { ModalRefType } from '@/hoc/ModalWindowContainer'
+import { ChatDocument, useFindOrCreateChatMutation, useGetFollowersQuery } from '@/geterated/apollo'
 
 export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string }) => {
   const {data} = useGetFollowersQuery({variables: {userId: id}})

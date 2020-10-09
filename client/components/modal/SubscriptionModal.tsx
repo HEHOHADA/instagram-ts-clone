@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { ModalRefType } from '../../hoc/ModalWindowContainer'
 import { CloseModalButton } from './CloseModalButton'
-import { useGetFollowersQuery, useGetFollowingsQuery } from '../../geterated/apollo'
+import { ModalRefType } from '@/hoc/ModalWindowContainer'
+import { useGetFollowersQuery, useGetFollowingsQuery } from '@/geterated/apollo'
 
 type SubscriptionModalType = {
   FollowButton: (isFollowing: boolean, id: string, userId?: string) => JSX.Element

@@ -1,5 +1,5 @@
-import { useDeleteCommentMutation } from '../geterated/apollo'
 import { useCallback } from 'react'
+import { useDeleteCommentMutation } from '@/geterated/apollo'
 
 export const useCommentDeleteHandler = ({photoId}: any) => {
   const [deleteCommentMutation] = useDeleteCommentMutation()

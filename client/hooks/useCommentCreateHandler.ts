@@ -1,6 +1,6 @@
-import { CreateCommentType, useCreateCommentMutation } from '../geterated/apollo'
 import { useCallback } from 'react'
 import { FormikHelpers } from 'formik'
+import { CreateCommentType, useCreateCommentMutation } from '@/geterated/apollo'
 
 export const useCommentCreateHandler = () => {
   const [createCommentMutation] = useCreateCommentMutation()
@@ -12,7 +12,7 @@ export const useCommentCreateHandler = () => {
         },
         update: (cache, {data}) => {
           cache.modify({
-            id: `Photo:${ photo.id }`,
+            id: `Photo:${  data?.createComment.photoId }`,
             fields: {
               commentCount(cachedValue) {
                 return cachedValue + 1

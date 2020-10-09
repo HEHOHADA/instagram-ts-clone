@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import React, { FC, useCallback } from 'react'
-import { PhotoItemFragment, useDeletePhotoMutation } from '../../../geterated/apollo'
+import { PhotoItemFragment, useDeletePhotoMutation } from '@/geterated/apollo'
 
 const PostItem = dynamic(() => import('./PostItem'))
 

@@ -1,5 +1,4 @@
-import { PaginatedPhotos, PaginatedUsersSearch } from '../geterated/apollo'
-
+import { PaginatedPhotos, PaginatedUsersSearch } from '@/geterated/apollo'
 export const cacheConfig = {
   typePolicies: {
     Query: {

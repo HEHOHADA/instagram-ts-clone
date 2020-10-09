@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { useSearchLazyQuery } from '../../geterated/apollo'
-import useDebounce from '../../hooks/useDebounce'
-import useDropdown from '../../hooks/useDropdown'
 import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+
+import useDropdown from '@/hooks/useDropdown'
+import useDebounce from '@/hooks/useDebounce'
+import { useSearchLazyQuery } from '@/geterated/apollo'
 
 export const SearchComponent = () => {
   const {dropDownRef, isOpen, open} = useDropdown()

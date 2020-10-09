@@ -1,19 +1,18 @@
 import React, { useCallback } from 'react'
-import MainLayout from '../../components/MainLayout'
-import { useMeQuery, useSetPictureProfileMutation } from '../../geterated/apollo'
-import { DropzonePictureProfile } from '../../components/utils/DropzoneField'
-import withApollo from '../../lib/withApollo'
 import { NextPageContext } from 'next'
+
+import Redirect from '@/lib/redirect'
+import withApollo from '@/lib/withApollo'
+import MainLayout from '@/components/MainLayout'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
-import Redirect from '../../lib/redirect'
+import { DropzonePictureProfile } from '@/components/utils/DropzoneField'
+import { useMeQuery, useSetPictureProfileMutation } from '@/geterated/apollo'
+import Loading from '@/components/utils/Loading'
 
 const Settings = () => {
 
   const [setPicture] = useSetPictureProfileMutation()
   const {data} = useMeQuery()
-  if (!data) {
-    return null
-  }
 
   const changePictureHandler = useCallback(async ([picture]) => {
     await setPicture({
@@ -21,7 +20,7 @@ const Settings = () => {
         picture
       },
       update: (cache) => {
-        cache.evict({id: `User:${ data.me?.id }`})
+        cache.evict({id: `User:${ data?.me?.id }`})
       }
     })
 
@@ -46,17 +45,22 @@ const Settings = () => {
           </ul>
           <article className="settings__main">
             <div className="user__picture__container">
-              <div className="user__url">
-                { data.me?.pictureUrl && <img
-                    src={ data.me.pictureUrl } alt=""/> }
-              </div>
-              <div className="user__change-picture">
-                <div className="username">{ data.me?.username }</div>
-                <DropzonePictureProfile
-                    text={ 'Сменить фото' }
-                    onDrop={ changePictureHandler }
-                    className="change-picture"/>
-              </div>
+              { data ?
+                  <>
+                    <div className="user__url">
+                      { data.me?.pictureUrl && <img
+                          src={ data.me.pictureUrl } alt=""/> }
+                    </div>
+                    <div className="user__change-picture">
+                      <div className="username">{ data.me?.username }</div>
+                      <DropzonePictureProfile
+                          text={ 'Сменить фото' }
+                          onDrop={ changePictureHandler }
+                          className="change-picture"/>
+                    </div>
+                  </>
+                  : <Loading/>
+              }
             </div>
             <form className="settings__change-info">
               <div className="change__item__container">

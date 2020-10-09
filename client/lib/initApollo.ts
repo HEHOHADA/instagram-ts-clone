@@ -6,6 +6,7 @@ import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from '@apollo/client/link/context'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { TokenRefreshLink } from 'apollo-link-token-refresh'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 import {
   ApolloClient,
   ApolloLink,
@@ -14,12 +15,11 @@ import {
   OperationVariables,
   split,
 } from '@apollo/client'
+import Redirect from './redirect'
 import { isBrowser } from './isBrowser'
-import { getAccessToken, setAccessToken } from './token'
 import { isServer } from './withApollo'
 import { cacheConfig } from './cacheConfig'
-import Redirect from './redirect'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { getAccessToken, setAccessToken } from './token'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
@@ -93,7 +93,6 @@ function create(
         console.log(
             `[GraphQL error]: Message: ${ message }, Location: ${ locations }, Path: ${ path }`)
         if (isBrowser && (message.includes('AuthenticationError') || message.includes('Access denied!'))) {
-          // Router.replace('/accounts/login')
           Redirect(ctx, '/accounts/login')
         }
       })

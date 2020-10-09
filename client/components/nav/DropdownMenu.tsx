@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
 import React, { useMemo } from 'react'
+import { setAccessToken } from '@/lib/token'
 import { DropdownItem } from './DropdownItem'
-import { useLogoutMutation } from '../../geterated/apollo'
-import { setAccessToken } from '../../lib/token'
-import useDropdown from '../../hooks/useDropdown'
+import useDropdown from '@/hooks/useDropdown'
+import { useLogoutMutation } from '@/geterated/apollo'
 
 type PropsType = {
   username: string

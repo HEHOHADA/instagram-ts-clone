@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react'
-import Head from 'next/head'
 import Link from 'next/link'
-import { useMeQuery } from '../geterated/apollo'
+import Head from 'next/head'
+import React, { ReactNode } from 'react'
+
+import { useMeQuery } from '@/geterated/apollo'
 import NavbarItems from './nav/NavbarItems'
 import { SearchComponent } from './search/SearchComponent'
 
