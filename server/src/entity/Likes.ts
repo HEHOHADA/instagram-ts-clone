@@ -1,6 +1,5 @@
-import { Field, ID, ObjectType } from 'type-graphql'
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-
+import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Photo } from './Photo'
 

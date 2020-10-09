@@ -1,7 +1,7 @@
 import { verify } from 'jsonwebtoken'
-import { User } from '@/entity/User'
-import { sendRefreshToken } from '@/modules/user/auth/sendRefreshToken'
-import { createAccessToken, createRefreshToken } from '@/modules/user/auth/createTokens'
+import { User } from '../entity/User'
+import { sendRefreshToken } from '../modules/user/auth/sendRefreshToken'
+import { createAccessToken, createRefreshToken } from '../modules/user/auth/createTokens'
 
 export const refreshToken = async (req: any, res: any) => {
   const token = req.cookies.jid

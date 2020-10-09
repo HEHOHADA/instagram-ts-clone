@@ -1,5 +1,5 @@
 import { v4 } from 'uuid'
-import { redis } from '@/redis'
+import { redis } from '../../../redis'
 import { confirmUserPrefix } from '../../constants/redisPrefix'
 
 export const createConfirmEmail = async (userId: string) => {

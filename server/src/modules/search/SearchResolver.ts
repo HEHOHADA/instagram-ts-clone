@@ -1,7 +1,6 @@
-import { getConnection } from 'typeorm'
 import { Arg, Int, Query, Resolver } from 'type-graphql'
-
-import { User } from '@/entity/User'
+import { getConnection } from 'typeorm'
+import { User } from '../../entity/User'
 import { PaginatedUsersSearch } from './PaginatedUsers'
 
 @Resolver()

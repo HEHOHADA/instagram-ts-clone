@@ -1,8 +1,8 @@
-import { getRepository } from 'typeorm'
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
-import { User } from '@/entity/User'
-import { MyContext } from '@/types/MyContext'
-import { isAuth } from '@/middleware/isAuthMiddleware'
+import { MyContext } from '../../types/MyContext'
+import { isAuth } from '../../middleware/isAuthMiddleware'
+import { getRepository } from 'typeorm'
+import { User } from '../../entity/User'
 
 @Resolver()
 export class FollowResolver {

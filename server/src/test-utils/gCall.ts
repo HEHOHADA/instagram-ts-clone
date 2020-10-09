@@ -1,6 +1,6 @@
 import { graphql, GraphQLSchema } from 'graphql'
 import { Maybe } from 'type-graphql'
-import { createSchema } from '@/utils/createSchema'
+import { createSchema } from '../utils/createSchema'
 
 
 interface Options {

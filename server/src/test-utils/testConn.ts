@@ -1,4 +1,4 @@
-import { createConnection } from 'typeorm'
+import { createConnection } from 'typeorm/index'
 
 export const testConn = (drop: boolean = false) => {
   return createConnection({

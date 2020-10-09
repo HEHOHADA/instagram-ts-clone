@@ -1,10 +1,9 @@
-import { getConnection } from 'typeorm'
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
-
-import { User } from '@/entity/User'
-import { MyContext } from '@/types/MyContext'
-import { isAuth } from '@/middleware/isAuthMiddleware'
-import { isUserAuthOrUndefined } from '@/middleware/isAuthenticatedMiddleware'
+import { MyContext } from '../../types/MyContext'
+import { isAuth } from '../../middleware/isAuthMiddleware'
+import { User } from '../../entity/User'
+import { getConnection } from 'typeorm'
+import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
 
 @Resolver()
 export class FollowResolver {

@@ -1,8 +1,7 @@
 import { Arg, Mutation, Resolver, UseMiddleware } from 'type-graphql'
-
-import { Comment } from '@/entity/Comment'
-import { isAuth } from '@/middleware/isAuthMiddleware'
+import { isAuth } from '../../middleware/isAuthMiddleware'
 import { DeleteCommentType } from './types/DeleteCommentType'
+import { Comment } from '../../entity/Comment'
 
 ///Todo
 @Resolver()

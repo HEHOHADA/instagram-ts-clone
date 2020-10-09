@@ -1,9 +1,8 @@
+import { Connection } from 'typeorm/index'
+import { testConn } from '../../test-utils/testConn'
+import { gCall } from '../../test-utils/gCall'
 import * as faker from 'faker'
-import { Connection } from 'typeorm'
-
-import { User } from '@/entity/User'
-import { gCall } from '@/test-utils/gCall'
-import { testConn } from '@/test-utils/testConn'
+import { User } from '../../entity/User'
 import { RegisterInput } from '../user/register/RegisterInput'
 
 

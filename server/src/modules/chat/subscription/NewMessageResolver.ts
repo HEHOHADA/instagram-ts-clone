@@ -1,9 +1,7 @@
+import { Message } from '../../../entity/Message'
 import { Ctx, ForbiddenError, Resolver, Root, Subscription } from 'type-graphql'
-
-import { Chat } from '@/entity/Chat'
-import { Message } from '@/entity/Message'
-import { MyContext } from '@/types/MyContext'
-
+import { Chat } from '../../../entity/Chat'
+import { MyContext } from '../../../types/MyContext'
 
 interface Payload {
   messageReceived: Message
