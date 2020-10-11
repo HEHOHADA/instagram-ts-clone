@@ -8,11 +8,12 @@ import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import { DropzonePictureProfile } from '@/components/utils/DropzoneField'
 import { useMeQuery, useSetPictureProfileMutation } from '@/geterated/apollo'
 import Loading from '@/components/utils/Loading'
+import { useIsAuth } from '@/utils/useIsAuth'
 
 const Settings = () => {
-
-  const [setPicture] = useSetPictureProfileMutation()
+  useIsAuth()
   const {data} = useMeQuery()
+  const [setPicture] = useSetPictureProfileMutation()
 
   const changePictureHandler = useCallback(async ([picture]) => {
     await setPicture({
@@ -52,7 +53,7 @@ const Settings = () => {
                           src={ data.me.pictureUrl } alt=""/> }
                     </div>
                     <div className="user__change-picture">
-                      <div className="username">{ data.me?.username }</div>
+                      <div className="username">{ data.me!.username }</div>
                       <DropzonePictureProfile
                           text={ 'Сменить фото' }
                           onDrop={ changePictureHandler }
@@ -88,8 +89,8 @@ const Settings = () => {
 export const getServerSideProps = async (ctx: NextPageContext) => {
   if (ctx.req) {
     const jid = getCookieParser(ctx.req)
-    if (jid()['jid']) {
-      Redirect(ctx, '/')
+    if (!jid()['jid']) {
+      Redirect(ctx, '/accounts/login')
     }
   }
   return {

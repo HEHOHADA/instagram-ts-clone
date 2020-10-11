@@ -9,12 +9,8 @@ import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { PhotoItems } from '@/components/profile/PhotoItems'
 import { ProfileInfo } from '@/components/profile/ProfileInfo'
 import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
-import {
-  PhotoItemFragment,
-  useGetUserInfoQuery,
-  useMeQuery,
-  useViewUserPhotoQuery
-} from '@/geterated/apollo'
+import { PhotoItemFragment, useGetUserInfoQuery, useMeQuery, useViewUserPhotoQuery } from '@/geterated/apollo'
+import Loading from '@/components/utils/Loading'
 
 
 export type ProfileItemsType = {
@@ -31,7 +27,7 @@ const Profile = () => {
   const {openModal, ModalWindow} = useModal()
   const router = useRouter()
   const {username: queryUserName} = router.query
-  const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
+  const {data, loading} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
   const {data: dataPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
   const {data: meData} = useMeQuery()
   const {followButton} = useFollowButton()
@@ -41,13 +37,13 @@ const Profile = () => {
   }
   return (
       <MainLayout title={ data?.getUserInfo.fullName || 'Профиль' }>
-        { !data &&
-        <h1 style={ {
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center',
-          fontSize: '40px'
-        } }>Такого пользователя нет</h1>
+        { !data && !loading ?
+            <h1 style={ {
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+              fontSize: '40px'
+            } }>Такого пользователя нет</h1> : loading ? <Loading/> : null
         }
         <ModalWindow>
           { (ref: ModalRefType) => {

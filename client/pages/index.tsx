@@ -48,11 +48,11 @@ const IndexPage = () => {
             ) : null }
           </div>
           <div className="dashboard__recommendation">
-            <UserProfileRecommendation
-                username={ me!.username }
-                pictureUrl={ me!.pictureUrl }
-                fullName={ me!.fullName }
-            />
+            { me && <UserProfileRecommendation
+                username={ me.username }
+                pictureUrl={ me.pictureUrl }
+                fullName={ me.fullName }
+            /> }
             <RecommendationItems/>
           </div>
         </div>

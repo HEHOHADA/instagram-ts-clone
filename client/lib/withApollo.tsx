@@ -3,7 +3,7 @@ import Head from 'next/head'
 import cookie from 'cookie'
 import { NextPageContext } from 'next'
 import App, { AppContext } from 'next/app'
-import { ApolloClient, NormalizedCacheObject, ApolloProvider } from '@apollo/client'
+import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client'
 
 import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
@@ -25,7 +25,7 @@ export type WithApolloType = {
   serverAccessToken: string
 }
 
-export const initOnContext = (ctx: NextPageContextApp, serverAccessToken: string): NextPageContextApp => {
+export const initOnContext = (ctx: NextPageContextApp, serverAccessToken: string | null): NextPageContextApp => {
   const inAppContext = Boolean(ctx.ctx)
   if (process.env.NODE_ENV === 'development') {
     if (inAppContext) {
@@ -52,6 +52,7 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
 
   const WithApollo = ({apolloClient, apolloState, serverAccessToken, ...pageProps}: WithApolloType) => {
     if (!isServer() && !getAccessToken()) {
+    if (!getAccessToken() && serverAccessToken) {
       setAccessToken(serverAccessToken)
     }
     const client = apolloClient || initApollo(apolloState, undefined, serverAccessToken)
@@ -80,9 +81,9 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
   if (ssr || PageComponent.getInitialProps) {
     WithApollo.getInitialProps = async (ctx: NextPageContextApp) => {
       const {AppTree} = ctx
-      let serverAccessToken = ''
+      let serverAccessToken: string | null = ''
 
-      if (isServer() && ctx.req?.headers.cookie) {
+      if (isServer() && ctx.req?.headers.cookie && !getAccessToken()) {
         const cookies = cookie.parse(ctx.req.headers.cookie)
 
         if (cookies.jid) {
@@ -95,11 +96,12 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
             }
           })
           const data = await response.json()
+          setAccessToken(data.accessToken)
           serverAccessToken = data.accessToken
         }
+      } else {
+        serverAccessToken = getAccessToken()
       }
-
-
       const inAppContext = Boolean(ctx.ctx)
       const {apolloClient} = initOnContext(ctx, serverAccessToken)
 
