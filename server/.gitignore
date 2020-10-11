@@ -5,5 +5,5 @@ build/
 tmp/
 temp/
 yarn-error.log
-images
+images/
 /.env
