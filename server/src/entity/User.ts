@@ -36,7 +36,10 @@ export class User extends BaseEntity {
   username: string
 
   @Field({nullable: true})
-  @Column('varchar', {nullable: true, default: null})
+  @Column('varchar', {
+    nullable: true,
+    default: 'https://images.pexels.com/photos/235985/pexels-photo-235985.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'
+  })
   pictureUrl: string
 
   @Column()
@@ -85,12 +88,12 @@ export class User extends BaseEntity {
       (chat) => chat.users)
   chats: Chat[]
 
-  @Field(()=>Boolean)
+  @Field(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
   async isFollowed(@Root() parent: User, @Ctx() {payload: {userId}}: MyContext) {
     if (!userId) return false
 
-   const user = await getConnection()
+    const user = await getConnection()
         .getRepository(User)
         .createQueryBuilder('user')
         .where('user.id = :userId', {userId: parent.id})
@@ -109,7 +112,7 @@ export class User extends BaseEntity {
     return Boolean((user.following).length)
   }
 
-  @Field(()=>Boolean)
+  @Field(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
   async isFollowing(@Root() parent: User, @Ctx() {payload: {userId}}: MyContext) {
     if (!userId) return false
@@ -133,7 +136,7 @@ export class User extends BaseEntity {
     return Boolean((user.following).length)
   }
 
-  @Field(()=>Boolean)
+  @Field(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
   isCurrentUser(@Root() user: User, @Ctx() {payload: {userId}}: MyContext) {
     return user.id === userId

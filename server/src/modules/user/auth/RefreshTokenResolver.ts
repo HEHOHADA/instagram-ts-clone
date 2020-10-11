@@ -11,15 +11,14 @@ export class RefreshTokenResolver {
   @Query(() => RefreshResponseType)
   async refreshToken(
       @Ctx(){req, res}: MyContext
-  ): Promise<{ accessToken: string, ok: boolean }> {
+  ): Promise<RefreshResponseType> {
     const token = req.cookies.jid
-    console.log(token)
     if (!token) {
       // res.send({ok: false, accessToken: ''})
       return {
         accessToken: '',
         ok: false
-      } as RefreshResponseType
+      }
     }
 
     let payload: any = null
@@ -31,7 +30,7 @@ export class RefreshTokenResolver {
       return {
         accessToken: '',
         ok: false
-      } as RefreshResponseType
+      }
     }
 
     const user = await User.findOne({id: payload.userId})
@@ -41,7 +40,7 @@ export class RefreshTokenResolver {
       return {
         accessToken: '',
         ok: false
-      } as RefreshResponseType
+      }
     }
 
     sendRefreshToken(res, createRefreshToken(user))
@@ -50,6 +49,6 @@ export class RefreshTokenResolver {
     return {
       accessToken: createAccessToken(user),
       ok: true
-    } as RefreshResponseType
+    }
   }
 }

@@ -9,12 +9,12 @@ import { ConversationNew } from '@/components/direct/ConversationNew'
 import { ConversationList } from '@/components/direct/ConversationList'
 import { useChatsQuery } from '@/geterated/apollo'
 import { useMessageReceive } from '@/hooks/useMessageReceive'
+import Loading from '@/components/utils/Loading'
 
 const ConversationItem = dynamic(() => import('@/components/direct/ConversationItem'))
 
 const DirectPages = ({slug}: any) => {
-
-  const {data} = useChatsQuery({
+  const {data, loading} = useChatsQuery({
     skip: !slug?.length
   })
   useMessageReceive()
@@ -24,8 +24,8 @@ const DirectPages = ({slug}: any) => {
         <div className="direct">
           <div className="direct__container">
             <div className="direct__items__container">
-              { !data ?
-                  <h1>Somethimng went Wrong</h1> :
+              { !data && loading ?
+                  <Loading/> :
                   <ConversationList chats={ data?.chats }/>
               }
               <Switch>

@@ -1,20 +1,28 @@
-import React, { useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
+
 import { ProfileItems } from './ProfileItems'
-import { ProfileItemsType } from '@/pages/[username]'
 import { declOfNum } from '@/utils/declOfNumb'
+import { GetUserInfoQuery } from '@/geterated/apollo'
+import { ModalUserPageType, ProfileItemsType } from '@/pages/[username]'
 
+type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
 
-export const ProfileInfo = ({
-                              username, pictureUrl,
-                              openModal,
-                              followButton,
-                              changeSubs,
-                              isFollowing,
-                              id, meId,
-                              fullName,
-                              isCurrentUser, photoCount,
-                              followerCount, followingCount
-                            }: any) => {
+type PropsType = GetUserInfoQueryType & {
+  followButton: (isFollowing: boolean, id: string, userId?: (string | undefined)) => JSX.Element
+  changeSubs: (subs: ModalUserPageType) => void
+  meId?: string
+}
+
+export const ProfileInfo: FC<PropsType> = ({
+                                             username, pictureUrl,
+                                             followButton,
+                                             changeSubs,
+                                             isFollowing,
+                                             id, meId,
+                                             fullName,
+                                             isCurrentUser, photoCount,
+                                             followerCount, followingCount
+                                           }) => {
 
   const infoItems = useMemo<Array<ProfileItemsType>>(() => {
     return [
@@ -26,7 +34,6 @@ export const ProfileInfo = ({
         count: (followerCount as number),
         onClick: () => {
           changeSubs('subscribers')
-          openModal()
         },
         text: declOfNum((followerCount as number), ['Подписчик', 'Подписчиков', 'Подписчика'])
       },
@@ -34,7 +41,6 @@ export const ProfileInfo = ({
         count: (followingCount as number),
         onClick: () => {
           changeSubs('subscriptions')
-          openModal()
         },
         text: declOfNum((followingCount as number), ['Подписка', 'Подписок', 'Подписки'])
       },

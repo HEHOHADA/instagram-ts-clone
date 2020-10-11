@@ -1,16 +1,16 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 
 import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
-import { ChatDocument, useFindOrCreateChatMutation, useGetFollowersQuery } from '@/geterated/apollo'
+import { ChatDocument, useFindOrCreateChatMutation, useGetFollowingsQuery } from '@/geterated/apollo'
+import Loading from '@/components/utils/Loading'
+import { useHistory } from 'react-router'
 
 export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string }) => {
-  const {data} = useGetFollowersQuery({variables: {userId: id}})
+  const {data} = useGetFollowingsQuery({variables: {userId: id}})
   const [findOrCreateMutation] = useFindOrCreateChatMutation()
-  const router = useRouter()
+  const router = useHistory()
   const findOrCreateChat = async (userId: string) => {
-
     const response = await findOrCreateMutation({
       variables: {userId},
       update: (cache, {data}) => {
@@ -24,7 +24,6 @@ export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string
         }
       }
     })
-
     if (response.data) {
       closeModal()
       router.replace(`/direct/t/${ response.data.findOrCreateChat.id }`)
@@ -44,7 +43,7 @@ export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string
         </div>
         <div className="modal-window__subscription__container">
           <ul className="subscription__items">
-            { data?.getFollowers.map(item => (
+            { data ? data.getFollowings.map(item => (
                     <li className="subscription__item" key={ item.id }>
                       <div className="subscription__item__container" onClick={ () => findOrCreateChat(item.id) }>
                         <div className="subscription__user__info">
@@ -63,7 +62,7 @@ export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string
                       </div>
                     </li>
                 )
-            ) }
+            ) : <Loading/> }
           </ul>
         </div>
       </>

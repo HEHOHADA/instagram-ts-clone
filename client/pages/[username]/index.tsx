@@ -10,7 +10,6 @@ import { PhotoItems } from '@/components/profile/PhotoItems'
 import { ProfileInfo } from '@/components/profile/ProfileInfo'
 import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
 import {
-  GetUserInfoQuery,
   PhotoItemFragment,
   useGetUserInfoQuery,
   useMeQuery,
@@ -24,8 +23,9 @@ export type ProfileItemsType = {
   text: string
 }
 
-type ModalUserPageType = 'subscribers' | 'subscriptions' | null
-type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
+export type ModalUserPageType = 'subscribers' | 'subscriptions' | null
+
+let subs: ModalUserPageType = null
 
 const Profile = () => {
   const {openModal, ModalWindow} = useModal()
@@ -35,9 +35,9 @@ const Profile = () => {
   const {data: dataPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
   const {data: meData} = useMeQuery()
   const {followButton} = useFollowButton()
-  let subs: ModalUserPageType = null
   const changeSubs = (subName: ModalUserPageType) => {
     subs = subName
+    openModal()
   }
   return (
       <MainLayout title={ data?.getUserInfo.fullName || 'Профиль' }>
@@ -51,19 +51,22 @@ const Profile = () => {
         }
         <ModalWindow>
           { (ref: ModalRefType) => {
+            const modalProps = {
+              id: data!.getUserInfo.id,
+              userId: meData?.me?.id,
+              isCurrent: data!.getUserInfo.isCurrentUser,
+              FollowButton: followButton,
+              ...ref
+            }
             switch (subs) {
               case'subscribers':
                 return (<SubscriptionModal
-                    id={ data!.getUserInfo.id }
-                    userId={ meData?.me?.id }
-                    FollowButton={ followButton }
-                    subscriber={ true } { ...ref }/>)
+                    { ...modalProps }
+                    subscriber={ true }/>)
               case 'subscriptions':
                 return <SubscriptionModal
-                    id={ data!.getUserInfo.id }
-                    userId={ meData?.me?.id }
-                    FollowButton={ followButton }
-                    subscriber={ false } { ...ref }/>
+                    { ...modalProps }
+                    subscriber={ false }/>
               default:
                 return null
             }
@@ -74,7 +77,6 @@ const Profile = () => {
           { data?.getUserInfo && <ProfileInfo
               meId={ meData?.me?.id }
               followButton={ followButton }
-              openModal={ openModal }
               changeSubs={ changeSubs }
               { ...data.getUserInfo } /> }
           <hr/>

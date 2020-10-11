@@ -3,7 +3,6 @@ import { FollowUserMutationFn, UnFollowUserMutationFn } from '@/geterated/apollo
 
 type FollowCallbackType = UnFollowUserMutationFn | FollowUserMutationFn
 
-
 export function followCallback(followCallback: FollowCallbackType, count: number): (userId: string, id?: string) => Promise<void> {
   return async (userId: string, id?: string) => {
     await followCallback({
@@ -35,6 +34,8 @@ export function followCallback(followCallback: FollowCallbackType, count: number
             data: {followerCount: data.followerCount + count, isFollowing: !data.isFollowing}
           })
         }
+        cache.evict({fieldName:'getFollowers'})
+        cache.evict({fieldName:'getFollowings'})
         cache.modify({
           id: `User:${ id }`,
           fields: {
