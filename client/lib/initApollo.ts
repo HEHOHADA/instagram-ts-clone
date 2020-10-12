@@ -77,7 +77,7 @@ function create(
   }) as any
 
   const authLink = setContext((_req, {headers}) => {
-    const token = isServer() ? serverAccessToken : getAccessToken()
+    const token = getAccessToken()
     return {
       headers: {
         ...headers,
@@ -101,7 +101,7 @@ function create(
   })
 
   const ssrMode = Boolean(ctx)
-  const linkHttp = ApolloLink.from([refreshLink, httpLink as any])
+  const linkHttp = ApolloLink.from([httpLink as any])
   const link = ssrMode
       ? linkHttp
       : isBrowser
@@ -118,7 +118,7 @@ function create(
     connectToDevTools: isBrowser,
     ssrMode, // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link: ApolloLink.from([errorLink, authLink, link]),
+    link: ApolloLink.from([refreshLink, errorLink, authLink, link]),
     cache: new InMemoryCache(cacheConfig)
         .restore(initialState || {})
   })

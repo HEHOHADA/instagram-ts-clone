@@ -7,6 +7,7 @@ import { useFeedQuery, useMeQuery } from '@/geterated/apollo'
 import { PhotoFeedType, Posts } from '@/components/dashboard/post/Posts'
 import { UserProfileRecommendation } from '@/components/dashboard/UserProfileRecommendation'
 import { RecommendationItems } from '@/components/recommendation/RecommendationItems'
+import Loading from '@/components/utils/Loading'
 
 
 const IndexPage = () => {
@@ -19,10 +20,7 @@ const IndexPage = () => {
     notifyOnNetworkStatusChange: true
   })
 
-  if (!data) {
-    return null
-  }
-  const {me} = data
+
   const onFetchMore = async () => {
     await fetchMore({
       variables: {
@@ -37,8 +35,8 @@ const IndexPage = () => {
           <div className="dashboard__main">
             <History/>
             <div className="dashboard__container_el">
-              { dataFeed?.feed && <Posts
-                  feed={ dataFeed.feed.items as PhotoFeedType[] }/> }
+              { dataFeed?.feed ? <Posts
+                  feed={ dataFeed.feed.items as PhotoFeedType[] }/> : <Loading/> }
             </div>
             { dataFeed?.feed.paginationInfo.hasMore ? (
                 <button
@@ -48,11 +46,7 @@ const IndexPage = () => {
             ) : null }
           </div>
           <div className="dashboard__recommendation">
-            { me && <UserProfileRecommendation
-                username={ me.username }
-                pictureUrl={ me.pictureUrl }
-                fullName={ me.fullName }
-            /> }
+            { data?.me ? <UserProfileRecommendation { ...data.me }/> : <Loading/> }
             <RecommendationItems/>
           </div>
         </div>

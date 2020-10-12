@@ -34,14 +34,14 @@ const PhotoViewPost = () => {
 
   let body: JSX.Element | null = null
 
-  if (!data) {
+  if (!data && !loading) {
     body = <h1 style={ {
       alignItems: 'center',
       display: 'flex',
       justifyContent: 'center',
       fontSize: '40px'
     } }>Такого поста нет</h1>
-  } else if (loading) {
+  } else if (!data && loading) {
     body = <Loading/>
   } else {
     const {
@@ -54,7 +54,7 @@ const PhotoViewPost = () => {
 
     body = <div className="photo__container">
       <PhotoItemContainer
-          photo={ data.viewPhotoById }
+          photo={ data!.viewPhotoById }
           deletePhoto={ deletePhoto }>
         { ({
              openModal, onLikeHandler,
