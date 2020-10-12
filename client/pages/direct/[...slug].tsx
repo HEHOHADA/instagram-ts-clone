@@ -1,7 +1,7 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 import { GetStaticPropsContext } from 'next'
-import { Route, Switch } from 'react-router'
+import { Route, Switch, useHistory } from 'react-router'
 
 import withApollo from '@/lib/withApollo'
 import MainLayout from '@/components/MainLayout'
@@ -18,7 +18,6 @@ const DirectPages = ({slug}: any) => {
     skip: !slug?.length
   })
   useMessageReceive()
-
   return (
       <MainLayout title="Direct">
         <div className="direct">
@@ -29,8 +28,8 @@ const DirectPages = ({slug}: any) => {
                   <ConversationList chats={ data?.chats }/>
               }
               <Switch>
-                <Route exact path={ `/direct/t/:id` } component={ ConversationItem }/>
                 <Route exact path={ `/direct/inbox` } component={ ConversationNew }/>
+                <Route exact path={ `/direct/t/:id` } component={ ConversationItem }/>
               </Switch>
             </div>
           </div>
