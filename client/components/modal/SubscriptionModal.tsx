@@ -1,12 +1,15 @@
 import React, { FC } from 'react'
+import Link from 'next/link'
+
+import Loading from '@/components/utils/Loading'
 import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { useGetFollowersQuery, useGetFollowingsQuery } from '@/geterated/apollo'
-import Link from 'next/link'
 
 type SubscriptionModalType = {
   FollowButton: (isFollowing: boolean, id: string, userId?: string) => JSX.Element
   id: string
+  isCurrent:boolean
   subscriber: boolean
   userId?: string
 }
@@ -27,7 +30,7 @@ export const SubscriptionModal: FC<ModalRefType & SubscriptionModalType> = ({clo
 
         <div className="modal-window__subscription__container">
           <ul className="subscription__items">
-            { data && data.map(f => (
+            { data ? data.map(f => (
                 <li className="subscription__item" key={ f.id }>
                   <div className="subscription__item__container">
                     <div className="subscription__user__info">
@@ -38,8 +41,8 @@ export const SubscriptionModal: FC<ModalRefType & SubscriptionModalType> = ({clo
                       </div>
                       <div className="subscription__username__container">
                         <Link
-                            href={'/[username]'}
-                            as={ `/${ f.username  }` }
+                            href={ '/[username]' }
+                            as={ `/${ f.username }` }
                             passHref
                         >
                           <a className="subscription__username">{ f.username }</a>
@@ -52,7 +55,7 @@ export const SubscriptionModal: FC<ModalRefType & SubscriptionModalType> = ({clo
                     </div>
                   </div>
                 </li>
-            )) }
+            )) : <Loading/> }
           </ul>
         </div>
 

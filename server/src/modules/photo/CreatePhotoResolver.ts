@@ -41,7 +41,7 @@ export class CreatePhotoResolver {
 
   @FieldResolver(() => [Comment])
   async comments(@Root()photo: Photo) {
-    return await getConnection()
+    return getConnection()
         .getRepository(Comment)
         .createQueryBuilder('comment')
         .where('comment.photoId= :id', {id: photo.id})
@@ -50,7 +50,7 @@ export class CreatePhotoResolver {
 
   @FieldResolver(() => Number, {defaultValue: 0})
   async commentCount(@Root()photo: Photo) {
-    return await getConnection()
+    return getConnection()
         .getRepository(Comment)
         .createQueryBuilder('comment')
         .where('comment.photoId= :id', {id: photo.id})
@@ -78,15 +78,11 @@ export class CreatePhotoResolver {
       throw new ApolloError(somethingWentWrong)
     }
     const user = await User.findOne(payload.userId!)
-    const photo = await Photo.create({
+    return await Photo.create({
       user,
       date: new Date(),
       pictureUrl: id,
       postText: title
-    })
-
-    await photo.save()
-
-    return photo
+    }).save()
   }
 }

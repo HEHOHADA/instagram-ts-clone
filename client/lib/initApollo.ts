@@ -26,7 +26,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 function create(
     initialState: NormalizedCacheObject,
     ctx?: any,
-    serverAccessToken?: string): ApolloClient<NormalizedCacheObject> {
+    serverAccessToken?: string | null): ApolloClient<NormalizedCacheObject> {
 
   const httpLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
@@ -126,7 +126,7 @@ function create(
 
 export default function initApollo(initialState: NormalizedCacheObject,
                                    ctx?: NextPageContext,
-                                   serverAccessToken?: string): ApolloClient<NormalizedCacheObject> {
+                                   serverAccessToken?: string | null): ApolloClient<NormalizedCacheObject> {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (isServer()) {

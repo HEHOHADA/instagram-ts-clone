@@ -8,6 +8,9 @@ import { DropzoneField } from '@/components/utils/DropzoneField'
 import { InputAuthField } from '@/components/utils/InputAuthField'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'
 import { CreatePhotoMutationVariables, useCreatePhotoMutation } from '@/geterated/apollo'
+import { NextPageContext } from 'next'
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import Redirect from '@/lib/redirect'
 
 const Create = () => {
   const [createPhoto, {loading}] = useCreatePhotoMutation()
@@ -70,6 +73,18 @@ const Create = () => {
         </div>
       </MainLayout>
   )
+}
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  if (ctx.req) {
+    const jid = getCookieParser(ctx.req)
+    if (!jid()['jid']) {
+      Redirect(ctx, '/accounts/login')
+    }
+  }
+  return {
+    props: {}
+  }
 }
 
 export default withApollo({ssr: false})(Create)

@@ -4,5 +4,4 @@ import PaginatedResponse from '../shared/PaginatedResponse'
 
 @ObjectType()
 export class PaginatedUsersSearch extends PaginatedResponse<User, String>(User, String) {
-
 }

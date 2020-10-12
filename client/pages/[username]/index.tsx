@@ -9,13 +9,8 @@ import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { PhotoItems } from '@/components/profile/PhotoItems'
 import { ProfileInfo } from '@/components/profile/ProfileInfo'
 import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
-import {
-  GetUserInfoQuery,
-  PhotoItemFragment,
-  useGetUserInfoQuery,
-  useMeQuery,
-  useViewUserPhotoQuery
-} from '@/geterated/apollo'
+import { PhotoItemFragment, useGetUserInfoQuery, useMeQuery, useViewUserPhotoQuery } from '@/geterated/apollo'
+import Loading from '@/components/utils/Loading'
 
 
 export type ProfileItemsType = {
@@ -24,46 +19,50 @@ export type ProfileItemsType = {
   text: string
 }
 
-type ModalUserPageType = 'subscribers' | 'subscriptions' | null
-type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
+export type ModalUserPageType = 'subscribers' | 'subscriptions' | null
+
+let subs: ModalUserPageType = null
 
 const Profile = () => {
   const {openModal, ModalWindow} = useModal()
   const router = useRouter()
   const {username: queryUserName} = router.query
-  const {data} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
+  const {data, loading} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
   const {data: dataPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
   const {data: meData} = useMeQuery()
   const {followButton} = useFollowButton()
-  let subs: ModalUserPageType = null
   const changeSubs = (subName: ModalUserPageType) => {
     subs = subName
+    openModal()
   }
   return (
       <MainLayout title={ data?.getUserInfo.fullName || 'Профиль' }>
-        { !data &&
-        <h1 style={ {
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center',
-          fontSize: '40px'
-        } }>Такого пользователя нет</h1>
+        { !data && !loading ?
+            <h1 style={ {
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+              fontSize: '40px'
+            } }>Такого пользователя нет</h1> : loading ? <Loading/> : null
         }
         <ModalWindow>
           { (ref: ModalRefType) => {
+            const modalProps = {
+              id: data!.getUserInfo.id,
+              userId: meData?.me?.id,
+              isCurrent: data!.getUserInfo.isCurrentUser,
+              FollowButton: followButton,
+              ...ref
+            }
             switch (subs) {
               case'subscribers':
                 return (<SubscriptionModal
-                    id={ data!.getUserInfo.id }
-                    userId={ meData?.me?.id }
-                    FollowButton={ followButton }
-                    subscriber={ true } { ...ref }/>)
+                    { ...modalProps }
+                    subscriber={ true }/>)
               case 'subscriptions':
                 return <SubscriptionModal
-                    id={ data!.getUserInfo.id }
-                    userId={ meData?.me?.id }
-                    FollowButton={ followButton }
-                    subscriber={ false } { ...ref }/>
+                    { ...modalProps }
+                    subscriber={ false }/>
               default:
                 return null
             }
@@ -74,7 +73,6 @@ const Profile = () => {
           { data?.getUserInfo && <ProfileInfo
               meId={ meData?.me?.id }
               followButton={ followButton }
-              openModal={ openModal }
               changeSubs={ changeSubs }
               { ...data.getUserInfo } /> }
           <hr/>
