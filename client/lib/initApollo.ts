@@ -25,21 +25,20 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
 function create(
     initialState: NormalizedCacheObject,
-    ctx?: any,
-    serverAccessToken?: string | null): ApolloClient<NormalizedCacheObject> {
+    ctx?: any): ApolloClient<NormalizedCacheObject> {
 
   const httpLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include'
   })
-  const wsClient = () => new SubscriptionClient(`ws://localhost:4000/subscription`, {
+
+  const wsLink = () => new WebSocketLink(new SubscriptionClient(`ws://localhost:4000/subscription`, {
     reconnect: true,
     lazy: true,
     connectionParams: () => ({
       authorization: `Bearer ${ getAccessToken() }`
     })
-  })
-  const wsLink = () => new WebSocketLink(wsClient())
+  }))
 
   const refreshLink = new TokenRefreshLink({
     isTokenValidOrUndefined: () => {
@@ -125,12 +124,11 @@ function create(
 }
 
 export default function initApollo(initialState: NormalizedCacheObject,
-                                   ctx?: NextPageContext,
-                                   serverAccessToken?: string | null): ApolloClient<NormalizedCacheObject> {
+                                   ctx?: NextPageContext): ApolloClient<NormalizedCacheObject> {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (isServer()) {
-    return create(initialState, ctx, serverAccessToken)
+    return create(initialState, ctx)
   }
 
   // Reuse client on the client-side

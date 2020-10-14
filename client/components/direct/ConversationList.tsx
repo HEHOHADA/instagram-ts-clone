@@ -6,14 +6,16 @@ import { CreateDialog } from '../utils/svg/CreateDialog'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { ChatsQuery, useMeQuery } from '@/geterated/apollo'
 import { CreateMessageModal } from '../modal/CreateMessageModal'
+import Loading from '@/components/utils/Loading'
 
 type ChatsType = ChatsQuery['chats']
 
 type PropsType = {
-  chats: ChatsType | undefined
+  loading: boolean
+  chats: ChatsType | null| undefined
 }
 
-export const ConversationList: FC<PropsType> = ({chats}) => {
+export const ConversationList: FC<PropsType> = ({chats,loading}) => {
   const {ModalWindow, openModal} = useModal()
   const {data} = useMeQuery()
   return (
@@ -31,7 +33,7 @@ export const ConversationList: FC<PropsType> = ({chats}) => {
             </div>
           </div>
           <div className="direct__conversation__overflow">
-            { chats && <ul className="direct__conversations">
+            { loading?<Loading/> : chats?.length ? <ul className="direct__conversations">
               { chats.map((c) => (
                   <DialogItem
                       id={ c.id }
@@ -40,7 +42,12 @@ export const ConversationList: FC<PropsType> = ({chats}) => {
                       pictureUrl={ c.users[0].pictureUrl }
                       key={ c.id }/>
               )) }
-            </ul>
+            </ul>: <h1 style={ {
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+              fontSize: '32px'
+            } }>Нет чатов</h1>
             }
           </div>
         </div>

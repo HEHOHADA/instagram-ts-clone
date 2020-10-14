@@ -36,7 +36,7 @@ const IndexPage = () => {
             <History/>
             <div className="dashboard__container_el">
               { dataFeed?.feed ? <Posts
-                  feed={ dataFeed.feed.items as PhotoFeedType[] }/> : <Loading/> }
+                  feed={ dataFeed.feed.items as PhotoFeedType[] }/> :loading? <Loading/> :<h1>Что-то не так</h1>}
             </div>
             { dataFeed?.feed.paginationInfo.hasMore ? (
                 <button
