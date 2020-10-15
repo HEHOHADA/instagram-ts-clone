@@ -15,26 +15,26 @@ import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 
 
 const Register = () => {
-  const [register,{loading}] = useRegisterMutation()
+  const [register, {loading}] = useRegisterMutation()
   const router = useRouter()
   const fieldsItems = useMemo(() => {
     return [{
-      name: 'email',
+      name: 'email' as const,
       placeholder: 'Email',
       type: 'text',
       component: InputAuthField
     }, {
-      name: 'username',
+      name: 'username' as const,
       placeholder: 'Username',
       type: 'text',
       component: InputAuthField
     }, {
-      name: 'fullName',
+      name: 'fullName' as const,
       placeholder: 'FullName',
       type: 'text',
       component: InputAuthField
     }, {
-      name: 'password',
+      name: 'password' as const,
       placeholder: 'Password',
       type: 'password',
       component: InputAuthField
@@ -61,7 +61,7 @@ const Register = () => {
   return (
       <AuthLayout>
         <InstagramAuthForm<RegisterInput>
-            loading={loading}
+            loading={ loading }
             OrOptionsComponent={ <OrComponentWithRedirect
                 link={ '/accounts/password/reset' }
                 text={ 'Забыли пароль' }/> }

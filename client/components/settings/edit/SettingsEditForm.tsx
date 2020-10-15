@@ -1,16 +1,40 @@
-import React from 'react'
-import { Form, Formik } from 'formik'
+import React, { useCallback } from 'react'
+import { Form, Formik, FormikHelpers } from 'formik'
+import { FieldItemsType } from '@/components/form/InstagramAuthForm'
+
+type SettingEditFormType = {
+  validation?: any
+  fieldName: keyof SettingsFormValue
+  possibleInfo?: JSX.Element
+  fieldItem: FieldItemsType<SettingsFormValue>
+}
+
+type SettingsFormValue = {
+  fullName: string
+  username: string
+  email: string
+}
 
 export const SettingsEditForm = () => {
+
+  const submitForm = useCallback((values: SettingsFormValue, formikHelpers: FormikHelpers<SettingsFormValue>) => {
+    console.log(values)
+    console.log(formikHelpers)
+  }, [])
+
   return (
-      <Formik
+      <Formik<SettingsFormValue>
           validateOnBlur={ false }
           validateOnChange={ false }
-          initialValues={ {} }
-          onSubmit={ () => {
+          initialValues={ {
+            fullName: '',
+            username: '',
+            email: ''
           } }
+          onSubmit={ submitForm }
       >{ () => (
           <Form className="settings__change-info">
+
             <div className="change__item__container">
               <div className="change__name">Имя</div>
               <div className="change__input__container">

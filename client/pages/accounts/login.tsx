@@ -8,7 +8,7 @@ import withApollo from '@/lib/withApollo'
 import { LoginInput } from '@/geterated/apollo'
 import AuthLayout from '@/components/AuthLayout'
 import { InputAuthField } from '@/components/utils/InputAuthField'
-import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
+import { FieldItemsType, InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 
@@ -17,13 +17,13 @@ const Login = () => {
 
   const fieldsItems = useMemo(() => {
     return [{
-      name: 'email',
+      name: 'email' as const,
       id: 'email',
       placeholder: 'Email',
       type: 'text',
       component: InputAuthField
     }, {
-      name: 'password',
+      name: 'password' as const,
       id: 'password',
       placeholder: 'Password',
       type: 'password',
