@@ -25,24 +25,17 @@ export class CreateChatResolver {
   ) {
     const {payload: {userId: meId}} = ctx
     const chat = await getConnection()
-        //       .query(`
-        // select * from chat c
-        //        inner join "userChat" as cu on cu."chatId" = c.id
-        //        inner join "user" u on u.id = cu."userId" and u.id = ($1)  and u.id=($2)
-        //        left join "message" m on c.id = m."chatId"
-        //   `, [userId, meId])
-        // console.log('chat',chat)
         .getRepository(Chat)
         .createQueryBuilder('c')
         .innerJoinAndSelect('c.users', 'users')
-        .where('users.id =:id', {id: userId})
-        .innerJoin(async (qb)=>{
-          return qb
-              .subQuery()
-              .innerJoin('c2.users', 'users')
-              .where('users.id = :id',{id:meId})
-              .getSql()
-        },'c2','c2.id=c.id')
+        .where('users.id = :id', {id: userId})
+        .innerJoin(query => {
+              return query
+                  .select('c2')
+                  .from(Chat,'c2')
+                  .innerJoinAndSelect('c2.users','users')
+                  .where('users.id = :id',{id:meId})
+            }, 'c2','"c2"."c2_id" = c.id')
         .leftJoinAndSelect('c.messages', 'messages')
         .cache(true)
         .getOne()
