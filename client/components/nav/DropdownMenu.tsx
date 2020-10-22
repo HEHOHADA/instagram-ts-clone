@@ -35,7 +35,7 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
               if (!data) {
                 return
               }
-              await cache.reset()
+              cache.reset()
               setAccessToken('')
               router.push('/accounts/login')
             }

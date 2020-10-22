@@ -30,7 +30,7 @@
 }
 
 .header__search {
-  position: absolute;
+  position: relative;
   background: #2f3640;
   height: 30px;
   border-radius: 40px;
@@ -81,6 +81,17 @@
 .nav__container {
   @extend %direc-row;
   align-items: center;
+  //@include media((
+  //  visibility: (lg:hidden),
+  //  background-color:(md:black, lg:white))
+  //)
+}
+
+
+@media only screen and (max-width: 768px) {
+  .header__nav-items {
+    visibility: hidden;
+  }
 }
 
 .nav__register {
@@ -108,7 +119,7 @@
   }
 }
 
-.dropdown.search__dropdown{
+.dropdown.search__dropdown {
   right: 0;
   top: 35px;
   width: 270px;
