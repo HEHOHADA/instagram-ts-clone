@@ -114,10 +114,10 @@
 
 
 .conversation__item {
-  height: 100%;
-  border-right: $border;
+  justify-content: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex: 1 1 auto;
 }
 

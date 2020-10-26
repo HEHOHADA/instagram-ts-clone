@@ -18,7 +18,7 @@ const ForgotPassword = () => {
 
   const fieldsItems = useMemo(() => {
     return [{
-      name: 'email',
+      name: 'email' as const,
       id: 'email',
       placeholder: 'Email',
       type: 'text',

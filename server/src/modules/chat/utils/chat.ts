@@ -14,5 +14,7 @@ export async function createChatFn(meId: string, userId: string) {
     user.save()
   })
 
+  chat.users = users
+
   return chat
 }

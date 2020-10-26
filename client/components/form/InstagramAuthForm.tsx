@@ -9,12 +9,12 @@ export type FormType<T> = {
   buttonText: string
   OrOptionsComponent?: JSX.Element | any | null
   RedirectComponent?: JSX.Element | any | null,
-  fields: Array<FieldItemsType>
+  fields: Array<FieldItemsType<keyof T>>
 }
 
-export type FieldItemsType = {
+export type FieldItemsType<K> = {
   type?: string
-  name: string
+  name: K
   placeholder: string
   component: React.ComponentType<any>
 }

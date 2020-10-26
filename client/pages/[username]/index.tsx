@@ -79,9 +79,9 @@ const Profile = () => {
           <div className="profile__objects">
             <div className="profile__objects__lin">
               <div className="object__item active">Публикация</div>
-              <div className="object__item">Публикация</div>
-              <div className="object__item">Публикация</div>
-              <div className="object__item">Публикация</div>
+              <div className="object__item">Сохраненное</div>
+              <div className="object__item">Отметки</div>
+              <div className="object__item">IGTV</div>
             </div>
           </div>
           { dataPhoto?.viewUserPhoto &&

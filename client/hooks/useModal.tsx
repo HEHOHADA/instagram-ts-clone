@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useRef } from 'react'
-import { ModalRefType, ModalWindowContainer } from '@/hoc/ModalWindowContainer'
+import ModalWindowContainer, { ModalRefType} from '@/hoc/ModalWindowContainer'
+
 
 export const useModal = () => {
   const modalRef = useRef<ModalRefType>(null)
@@ -9,7 +10,7 @@ export const useModal = () => {
   }, [modalRef])
 
   const closeModal = useCallback(() => {
-    modalRef.current?.closeModal
+    modalRef.current?.closeModal()
   }, [modalRef])
 
   const ModalWindow: FC<{ children: FC<ModalRefType> }> = ({children}) => {

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { FC, ForwardRefRenderFunction, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 
 export type ModalRefType = {
@@ -8,8 +8,8 @@ export type ModalRefType = {
 
 type PropsWithChildrenModalType = { children: FC<ModalRefType> }
 
-export const ModalWindowContainer = React.forwardRef<ModalRefType,
-    PropsWithChildrenModalType>((props, ref) => {
+const ModalWindowContainer: ForwardRefRenderFunction<ModalRefType,
+    PropsWithChildrenModalType> = (props, ref) => {
   const [showSubsModal, setShowSubsModal] = useState(false)
 
   const modalRef = useRef<HTMLDivElement>(null)
@@ -28,13 +28,9 @@ export const ModalWindowContainer = React.forwardRef<ModalRefType,
       document.getElementById('modal-window-container')?.removeEventListener('click', closeOutside)
     }
   }, [showSubsModal])
-  const open = () => {
-    setShowSubsModal(true)
-  }
+  const open = () => setShowSubsModal(true)
 
-  const close = () => {
-    setShowSubsModal(false)
-  }
+  const close = () => setShowSubsModal(false)
 
   useImperativeHandle(ref, () => ({
     openModal: open,
@@ -59,4 +55,7 @@ export const ModalWindowContainer = React.forwardRef<ModalRefType,
         </div>)
   }
   return null
-})
+}
+
+
+export default React.forwardRef(ModalWindowContainer)

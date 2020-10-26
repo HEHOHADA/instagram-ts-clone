@@ -25,21 +25,20 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
 function create(
     initialState: NormalizedCacheObject,
-    ctx?: any,
-    serverAccessToken?: string | null): ApolloClient<NormalizedCacheObject> {
+    ctx?: any): ApolloClient<NormalizedCacheObject> {
 
   const httpLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include'
   })
-  const wsClient = () => new SubscriptionClient(`ws://localhost:4000/subscription`, {
+
+  const wsLink = () => new WebSocketLink(new SubscriptionClient(`ws://localhost:4000/subscription`, {
     reconnect: true,
     lazy: true,
     connectionParams: () => ({
       authorization: `Bearer ${ getAccessToken() }`
     })
-  })
-  const wsLink = () => new WebSocketLink(wsClient())
+  }))
 
   const refreshLink = new TokenRefreshLink({
     isTokenValidOrUndefined: () => {
@@ -77,7 +76,7 @@ function create(
   }) as any
 
   const authLink = setContext((_req, {headers}) => {
-    const token = isServer() ? serverAccessToken : getAccessToken()
+    const token = getAccessToken()
     return {
       headers: {
         ...headers,
@@ -101,7 +100,7 @@ function create(
   })
 
   const ssrMode = Boolean(ctx)
-  const linkHttp = ApolloLink.from([refreshLink, httpLink as any])
+  const linkHttp = ApolloLink.from([httpLink as any])
   const link = ssrMode
       ? linkHttp
       : isBrowser
@@ -118,19 +117,18 @@ function create(
     connectToDevTools: isBrowser,
     ssrMode, // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link: ApolloLink.from([errorLink, authLink, link]),
+    link: ApolloLink.from([refreshLink, errorLink, authLink, link]),
     cache: new InMemoryCache(cacheConfig)
         .restore(initialState || {})
   })
 }
 
 export default function initApollo(initialState: NormalizedCacheObject,
-                                   ctx?: NextPageContext,
-                                   serverAccessToken?: string | null): ApolloClient<NormalizedCacheObject> {
+                                   ctx?: NextPageContext): ApolloClient<NormalizedCacheObject> {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (isServer()) {
-    return create(initialState, ctx, serverAccessToken)
+    return create(initialState, ctx)
   }
 
   // Reuse client on the client-side

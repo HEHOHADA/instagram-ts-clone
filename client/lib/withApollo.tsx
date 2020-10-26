@@ -7,6 +7,7 @@ import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/cli
 
 import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
+import dynamic from 'next/dynamic'
 
 export interface NextPageContextWithApollo extends NextPageContext {
   apolloClient: ApolloClient<NormalizedCacheObject> | null
@@ -25,7 +26,7 @@ export type WithApolloType = {
   serverAccessToken: string
 }
 
-export const initOnContext = (ctx: NextPageContextApp, serverAccessToken: string | null): NextPageContextApp => {
+export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
   const inAppContext = Boolean(ctx.ctx)
   if (process.env.NODE_ENV === 'development') {
     if (inAppContext) {
@@ -37,7 +38,7 @@ export const initOnContext = (ctx: NextPageContextApp, serverAccessToken: string
 
   const apolloClient = ctx.apolloClient ||
       initApollo(ctx.apolloState || {}, inAppContext
-          ? ctx.ctx : ctx, serverAccessToken)
+          ? ctx.ctx : ctx)
   // @ts-ignore
   apolloClient.toJSON = () => null
   ctx.apolloClient = apolloClient
@@ -54,7 +55,7 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
     if (!getAccessToken() && serverAccessToken) {
       setAccessToken(serverAccessToken)
     }
-    const client = apolloClient || initApollo(apolloState, undefined, serverAccessToken)
+    const client = apolloClient || initApollo(apolloState)
     return (
         <ApolloProvider client={ client }>
           <PageComponent apolloClient={ client } { ...pageProps } />
@@ -102,7 +103,7 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
         serverAccessToken = getAccessToken()
       }
       const inAppContext = Boolean(ctx.ctx)
-      const {apolloClient} = initOnContext(ctx, serverAccessToken)
+      const {apolloClient} = initOnContext(ctx)
 
       // Run all GraphQL queries in the component tree
       // and extract the resulting data

@@ -9,6 +9,8 @@ import { DropzonePictureProfile } from '@/components/utils/DropzoneField'
 import { useMeQuery, useSetPictureProfileMutation } from '@/geterated/apollo'
 import Loading from '@/components/utils/Loading'
 import { useIsAuth } from '@/utils/useIsAuth'
+import { SettingsSidebar } from '@/components/settings/SettingsSidebar'
+import { SettingsEditForm } from '@/components/settings/edit/SettingsEditForm'
 
 const Settings = () => {
   useIsAuth()
@@ -30,20 +32,7 @@ const Settings = () => {
   return (
       <MainLayout title="Settings">
         <div className="settings__container">
-          <ul className="settings__side-bar">
-            <li>
-              <a className="side-bar__item">dasdas</a>
-            </li>
-            <li>
-              <a className="side-bar__item">dasdas</a>
-            </li>
-            <li>
-              <a className="side-bar__item">dasdas</a>
-            </li>
-            <li>
-              <a className="side-bar__item">dasdas</a>
-            </li>
-          </ul>
+          <SettingsSidebar/>
           <article className="settings__main">
             <div className="user__picture__container">
               { data ?
@@ -63,23 +52,7 @@ const Settings = () => {
                   : <Loading/>
               }
             </div>
-            <form className="settings__change-info">
-              <div className="change__item__container">
-                <div className="change__name">Имя</div>
-                <div className="change__input__container">
-                  <input placeholder="Введите иия" type="text" className="input__field"/>
-                  <div className="change__input__info">
-                    Чтобы людям было проще находить ваш аккаунт, используйте имя, под которым вас знают: ваше имя и
-                    фамилию, никнейм или название компании.
-                    Изменить имя можно не более двух раз в течение 14 дней.
-                  </div>
-                </div>
-              </div>
-              <div className="form__settings__submit">
-                <button type='submit' className="send__form">Отправить</button>
-                <button className="block__account">Заблокировать аккаунт</button>
-              </div>
-            </form>
+           <SettingsEditForm />
           </article>
         </div>
       </MainLayout>

@@ -37,7 +37,7 @@ const ChangePassword = () => {
 
   const fieldsItems = useMemo(() => {
     return [{
-      name: 'password',
+      name: 'password' as const,
       placeholder: 'Password',
       type: 'password',
       component: InputAuthField
