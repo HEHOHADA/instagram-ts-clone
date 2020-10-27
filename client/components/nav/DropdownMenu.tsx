@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { setAccessToken } from '@/lib/token'
 import { DropdownItem } from './DropdownItem'
 import useDropdown from '@/hooks/useDropdown'
@@ -10,7 +10,7 @@ type PropsType = {
   closeDropDown: () => void
 }
 
-export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
+export const DropdownMenu: FC<PropsType> = ({username, closeDropDown}) => {
   const {dropDownRef} = useDropdown(closeDropDown)
   const [logout] = useLogoutMutation()
   const router = useRouter()
@@ -21,27 +21,27 @@ export const DropdownMenu = ({username, closeDropDown}: PropsType) => {
       {link: '/accounts/settings', iconName: 'settings', text: 'Настройки'},
       {link: '/p/create', iconName: 'create', text: 'Создать пост'}
     ].map((n) => (
-        <DropdownItem key={ n.text } { ...n } />
+      <DropdownItem key={ n.text } { ...n } />
     ))
   }, [])
 
   return (
-      <div className="dropdown" ref={ dropDownRef }>
-        <div className="menu">
-          { dropDownMenu }
-          <hr/>
-          <button onClick={ () => logout({
-            update: async (cache, {data}) => {
-              if (!data) {
-                return
-              }
-              cache.reset()
-              setAccessToken('')
-              router.push('/accounts/login')
+    <div className="dropdown" ref={ dropDownRef }>
+      <div className="menu">
+        { dropDownMenu }
+        <hr/>
+        <button onClick={ () => logout({
+          update: async (cache, {data}) => {
+            if (!data) {
+              return
             }
-          }) } className="btn__logout">Выйти
-          </button>
-        </div>
+            cache.reset()
+            setAccessToken('')
+            router.push('/accounts/login')
+          }
+        }) } className="btn__logout">Выйти
+        </button>
       </div>
+    </div>
   )
 }

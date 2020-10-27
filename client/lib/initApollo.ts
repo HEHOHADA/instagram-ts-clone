@@ -25,7 +25,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
 function create(
     initialState: NormalizedCacheObject,
-    ctx?: any): ApolloClient<NormalizedCacheObject> {
+    ctx?: NextPageContext): ApolloClient<NormalizedCacheObject> {
 
   const httpLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
@@ -61,7 +61,7 @@ function create(
         credentials: 'include'
       })
     },
-    handleResponse: (_, accessTokenField) => async (response: any) => {
+    handleResponse: (_, accessTokenField) => async (response: Response) => {
       const result = await response.json()
       return {
         [accessTokenField]: result[accessTokenField]

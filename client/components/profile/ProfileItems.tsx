@@ -14,8 +14,8 @@ type PropsType = {
 
 export const ProfileItems: FC<PropsType> =
     ({
-       username, infoItems
-       , fullName, followButton, isCurrentUser
+       username, infoItems,
+       fullName, followButton, isCurrentUser
      }) => {
       return (
           <div className="profile__items">
