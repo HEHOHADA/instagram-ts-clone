@@ -1,19 +1,23 @@
-import { Connection } from 'typeorm/index'
-import { testConn } from '../../test-utils/testConn'
-import { gCall } from '../../test-utils/gCall'
-import * as faker from 'faker'
+import { Connection } from 'typeorm'
 import { User } from '../../entity/User'
-import { RegisterInput } from '../user/register/RegisterInput'
+import { testConn } from '../../test-utils/testConn'
+import { TestClient } from '../../test-utils/TestClient'
 
 
 let conn: Connection
+let client: TestClient
 
-beforeAll(async () => {
+beforeAll(async (done) => {
   conn = await testConn()
+  console.log('conn form register',conn)
+  client = new TestClient()
+  done()
 })
 
-afterAll(async () => {
-  await conn.close()
+afterAll(async (done) => {
+  console.log('conn after delete form register',conn)
+  conn.close()
+  done()
 })
 
 export const registerTestMutation = `
@@ -29,34 +33,24 @@ mutation Register($data:RegisterInput!){
 
 describe('Register', () => {
   it('should create user', async () => {
-    const user: RegisterInput = {
-      fullName: `${ faker.name.firstName() } ${ faker.name.lastName() }`,
-      email: faker.internet.email(),
-      password: faker.internet.password(5),
-      username: faker.internet.userName()
-    }
 
-    const response = await gCall({
-      source: registerTestMutation,
-      variableValues: {
-        data: user
-      }
-    })
+    const rightUser = client.rightClientRegister
+    const response = await client.register()
     expect(response).toMatchObject({
       data: {
         register: {
-          fullName: user.fullName,
-          email: user.email,
-          username: user.username
+          fullName: rightUser.fullName,
+          email: rightUser.email,
+          username: rightUser.username
         }
       }
     })
 
-    const dbUser = await User.findOne({where: {email: user.email}})
+    const dbUser = await User.findOne({where: {email: rightUser.email}})
     expect(dbUser).toBeDefined()
     expect(dbUser?.confirmed).toBeFalsy()
-    expect(dbUser?.password).not.toBe(user.password)
-    expect(dbUser?.fullName).toBe(user.fullName)
+    expect(dbUser?.password).not.toBe(rightUser.password)
+    expect(dbUser?.fullName).toBe(rightUser.fullName)
   })
 
   it('should throw argument exeption', () => {
