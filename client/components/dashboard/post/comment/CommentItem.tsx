@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import React, { FC } from 'react'
+import { LinkItem } from '@/components/utils/LinkItem'
 
 type PropsType = {
   username: string
@@ -12,16 +12,18 @@ type PropsType = {
 
 export const CommentItem: FC<PropsType> = ({username, pictureUrl, commentText, onDelete, id, isAuthor}) => {
   return (
-      <li className="comment__item">
-        { pictureUrl && <div className="comment__img">
-          <img src={ pictureUrl } alt="picture"/>
-        </div> }
-        <Link href={ `/${ username }` }>
-          <a className="comment__username">{ username }:</a>
-        </Link>
-        <p className="comment__text">{ commentText }</p>
-        { isAuthor && onDelete &&
-        <span onClick={ () => onDelete(id) } className="material-icons delete__comment">delete</span> }
-      </li>
+    <li className="comment__item">
+      { pictureUrl && <div className="comment__img">
+        <img src={ pictureUrl } alt="picture"/>
+      </div> }
+      <LinkItem
+        href={ `/${ username }` }
+        linkClassName={ 'comment__username' }
+        LinkContent={ `${ username }:` }/>
+      <p className="comment__text">{ commentText }</p>
+      { isAuthor && onDelete &&
+      <span onClick={ () => onDelete(id) }
+            className="material-icons delete__comment">delete</span> }
+    </li>
   )
 }

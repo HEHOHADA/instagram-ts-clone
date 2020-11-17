@@ -32,14 +32,16 @@ export const ProfileInfo: FC<PropsType> = ({
       },
       {
         count: (followerCount as number),
-        onClick: () => {
+        onClick: (e) => {
+          e.stopPropagation()
           changeSubs('subscribers')
         },
         text: declOfNum((followerCount as number), ['Подписчик', 'Подписчиков', 'Подписчика'])
       },
       {
         count: (followingCount as number),
-        onClick: () => {
+        onClick: (e) => {
+          e.stopPropagation()
           changeSubs('subscriptions')
         },
         text: declOfNum((followingCount as number), ['Подписка', 'Подписок', 'Подписки'])

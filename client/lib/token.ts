@@ -14,8 +14,5 @@ export const setAccessToken = (s: string) => {
 }
 
 export const getAccessToken = () => {
-  if (!isServer()) {
-    return accessToken || localStorage.getItem(localStorageTokenName)
-  }
-  return accessToken
+  return !isServer() ? accessToken || localStorage.getItem(localStorageTokenName) : accessToken
 }

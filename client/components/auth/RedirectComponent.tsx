@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import { LinkItem } from '@/components/utils/LinkItem'
 
 export type RedirectComponentType = {
   link: string
@@ -8,15 +8,17 @@ export type RedirectComponentType = {
 
 const RedirectComponent = ({link, text}: RedirectComponentType) => {
   return (
-      <div className="auth__change__page">
-        <div className="change__page__container">
-          <p className="change__page__items">
-            <Link href={ link } as="/">
-              <a className="change__link">{ text }</a>
-            </Link>
-          </p>
-        </div>
+    <div className="auth__change__page">
+      <div className="change__page__container">
+        <p className="change__page__items">
+          <LinkItem
+            linkClassName="change__link"
+            href={ link }
+            as="/"
+            LinkContent={ text }/>
+        </p>
       </div>
+    </div>
   )
 }
 

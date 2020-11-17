@@ -1,28 +1,27 @@
 import React from 'react'
-import { StaticRouter } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
+import { isServer } from './withApollo'
 
-const isServer = typeof window === 'undefined'
 
-export default (App: any) => {
+export const withReactRouter = (App: any) => {
   return class AppWithReactRouter extends React.Component<any, any> {
     render() {
-      if (isServer) {
+      if (isServer()) {
         const {StaticRouter} = require('react-router')
         return (
-            <StaticRouter
-                location={ this.props.router.asPath }
-            >
-              <App { ...this.props } />
-            </StaticRouter>
+          <StaticRouter
+            location={ this.props.router.asPath }
+          >
+            <App { ...this.props } />
+          </StaticRouter>
         )
       } else {
         return (
-            <BrowserRouter>
-              <App { ...this.props } />
-            </BrowserRouter>
+          <BrowserRouter>
+            <App { ...this.props } />
+          </BrowserRouter>
         )
       }
     }
   }
-};
+}

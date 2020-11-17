@@ -19,10 +19,10 @@ export class CreatePhotoResolver {
   @FieldResolver(() => Number, {defaultValue: 0})
   async likeCount(@Root()photo: Photo) {
     return await getConnection()
-        .getRepository(Likes)
-        .createQueryBuilder('like')
-        .where('like.photoId= :id', {id: photo.id})
-        .getCount()
+      .getRepository(Likes)
+      .createQueryBuilder('like')
+      .where('like.photoId= :id', {id: photo.id})
+      .getCount()
   }
 
   @FieldResolver(() => Boolean)
@@ -57,10 +57,11 @@ export class CreatePhotoResolver {
         .getCount()
   }
 
+
   @FieldResolver(() => User)
   async user(
-      @Root()photo: Photo,
-      @Ctx(){userLoader}: MyContext
+    @Root()photo: Photo,
+    @Ctx(){userLoader}: MyContext
   ) {
     return userLoader.load(photo.userId)
   }
@@ -68,9 +69,9 @@ export class CreatePhotoResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Photo)
   async createPhoto(
-      @Ctx(){payload}: MyContext,
-      @Arg('title')title: string,
-      @Arg('picture', () => GraphQLUpload) picture: FileUpload
+    @Ctx(){payload}: MyContext,
+    @Arg('title')title: string,
+    @Arg('picture', () => GraphQLUpload) picture: FileUpload
   ) {
     const id = await processUpload(picture)
 

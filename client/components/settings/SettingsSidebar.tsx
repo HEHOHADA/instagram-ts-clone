@@ -9,8 +9,8 @@ export const SettingsSidebar = () => {
   ]
   return (
       <ul className="settings__side-bar">
-        { array.map((n, i) => (
-            <li key={ `sidebar_${ i }` }>
+        { array.map(n => (
+            <li key={ `sidebar_${ n }` }>
               <a className="side-bar__item">{ n.name }</a>
             </li>
         )) }

@@ -14,8 +14,7 @@ export const DialogItem: FC<PropsType> = ({pictureUrl, id, username, date}) => {
         <div className="conversation__img">
           { pictureUrl && <img
               src={ pictureUrl }
-              alt="Фото профиля yurfos" className="_6q-tv" data-testid="user-avatar"
-              draggable="false"/> }
+              alt="Фото профиля yurfos" /> }
         </div>
         <div className="conversation__user__dialog">
           <div className="user__name">{ username }</div>

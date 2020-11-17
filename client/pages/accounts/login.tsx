@@ -1,14 +1,10 @@
 import React, { useMemo } from 'react'
-import { NextPageContext } from 'next'
-import { getCookieParser } from 'next/dist/next-server/server/api-utils'
-
-import Redirect from '@/lib/redirect'
 import useLogin from '@/hooks/useLogin'
 import withApollo from '@/lib/withApollo'
 import { LoginInput } from '@/geterated/apollo'
 import AuthLayout from '@/components/AuthLayout'
 import { InputAuthField } from '@/components/utils/InputAuthField'
-import { FieldItemsType, InstagramAuthForm } from '@/components/form/InstagramAuthForm'
+import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 
@@ -52,16 +48,16 @@ const Login = () => {
   )
 }
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  if (ctx.req) {
-    const jid = getCookieParser(ctx.req)
-    if (jid()['jid']) {
-      Redirect(ctx, '/')
-    }
-  }
-  return {
-    props: {}
-  }
-}
+// export const getServerSideProps = async (ctx: NextPageContext) => {
+//   if (ctx.req) {
+//     const jid = getCookieParser(ctx.req)
+//     if (jid()['jid']) {
+//       Redirect(ctx, '/')
+//     }
+//   }
+//   return {
+//     props: {}
+//   }
+// }
 
 export default withApollo({ssr: false})(Login)

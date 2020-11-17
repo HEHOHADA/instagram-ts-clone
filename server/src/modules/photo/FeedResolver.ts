@@ -44,6 +44,7 @@ export class FeedResolver {
     const photosPlusOne = await queryBuilder
         .orderBy('p.date', 'DESC')
         .limit(realLimitPlusOne)
+        .cache(true)
         .getMany()
     // const photosPlusOne = await getConnection().query(`
     //   select p.* from photo p

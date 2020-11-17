@@ -30,35 +30,34 @@ export const SubscriptionModal: FC<ModalRefType & SubscriptionModalType> = ({clo
 
         <div className="modal-window__subscription__container">
           <ul className="subscription__items">
-            { data ? data.map(f => (
-                <li className="subscription__item" key={ f.id }>
+            { data ? data.map(user => (
+                <li className="subscription__item" key={ user.id }>
                   <div className="subscription__item__container">
                     <div className="subscription__user__info">
                       <div className="subscription__user__img">
-                        { f.pictureUrl && <img
-                            src={ f.pictureUrl }
+                        { user.pictureUrl && <img
+                            src={ user.pictureUrl }
                             alt="Фото"/> }
                       </div>
                       <div className="subscription__username__container">
                         <Link
                             href={ '/[username]' }
-                            as={ `/${ f.username }` }
+                            as={ `/${ user.username }` }
                             passHref
                         >
-                          <a className="subscription__username">{ f.username }</a>
+                          <a className="subscription__username">{ user.username }</a>
                         </Link>
-                        <div className="subscription__full__name">{ f.fullName }</div>
+                        <div className="subscription__full__name">{ user.fullName }</div>
                       </div>
                     </div>
                     <div className="subscription__info__btn__container">
-                      { FollowButton(f.isFollowing, f.id, userId) }
+                      { FollowButton(user.isFollowing, user.id, userId) }
                     </div>
                   </div>
                 </li>
             )) : <Loading/> }
           </ul>
         </div>
-
       </>
   )
 }

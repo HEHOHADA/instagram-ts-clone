@@ -4,6 +4,7 @@ import { setAccessToken } from '@/lib/token'
 import { DropdownItem } from './DropdownItem'
 import useDropdown from '@/hooks/useDropdown'
 import { useLogoutMutation } from '@/geterated/apollo'
+import { Button } from '@/components/utils/Button'
 
 type PropsType = {
   username: string
@@ -30,7 +31,7 @@ export const DropdownMenu: FC<PropsType> = ({username, closeDropDown}) => {
       <div className="menu">
         { dropDownMenu }
         <hr/>
-        <button onClick={ () => logout({
+        <Button onClick={ () => logout({
           update: async (cache, {data}) => {
             if (!data) {
               return
@@ -39,8 +40,7 @@ export const DropdownMenu: FC<PropsType> = ({username, closeDropDown}) => {
             setAccessToken('')
             router.push('/accounts/login')
           }
-        }) } className="btn__logout">Выйти
-        </button>
+        })} text={'Выйти'} className="btn__logout"/>
       </div>
     </div>
   )

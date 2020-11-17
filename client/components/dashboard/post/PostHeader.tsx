@@ -28,7 +28,10 @@ export const PostHeader: FC<PropsType> = React.memo(({username, onOpenModal, pic
                passHref>
           <a className="content__header__name">{ username }</a>
         </Link>
-        <div onClick={ onOpenModal }
+        <div onClick={(e)=>{
+          e.stopPropagation()
+          onOpenModal && onOpenModal()
+        } }
              className="content__header__options">
             <span className="material-icons">
                 more_horiz

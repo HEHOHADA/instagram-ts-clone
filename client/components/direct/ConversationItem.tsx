@@ -45,8 +45,7 @@ const ConversationItem: FC = () => {
             <div className="conversation__user__img">
               <img alt="Фото профиля tagir_sl"
                    src={ data?.chat.users[0].pictureUrl! }
-                   className="_6q-tv" data-testid="user-avatar"
-                   draggable="false"/>
+                   />
             </div>
             <div className="conversation__user__name">{ data?.chat.users[0].username }</div>
           </div>

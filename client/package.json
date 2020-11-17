@@ -32,6 +32,7 @@
     "ws": "^7.3.1"
   },
   "devDependencies": {
+    "@apollo/react-common": "^3.1.4",
     "@graphql-codegen/cli": "1.19.0",
     "@graphql-codegen/introspection": "1.18.0",
     "@graphql-codegen/typescript": "1.17.11",

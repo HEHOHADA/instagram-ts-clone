@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import NavItem from './NavItem'
 import { DropdownMenu } from './DropdownMenu'
-import { is } from '@babel/types'
 
 type PropsType = {
   imageUrl: string | null | undefined
