@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import React, { ReactNode } from 'react'
 
-type Props = {
+type PropsType = {
   children?: ReactNode
   title?: string
 }
 
-const AuthLayout = ({children, title = 'Instagram'}: Props) => (
+const AuthLayout = ({children, title = 'Instagram'}: PropsType) => (
     <div>
       <Head>
         <title>{ title } | Auth</title>

@@ -24,8 +24,8 @@ import { getAccessToken, setAccessToken } from './token'
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
 function create(
-    initialState: NormalizedCacheObject,
-    ctx?: any): ApolloClient<NormalizedCacheObject> {
+  initialState: NormalizedCacheObject,
+  ctx?: NextPageContext): ApolloClient<NormalizedCacheObject> {
 
   const httpLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
@@ -61,7 +61,7 @@ function create(
         credentials: 'include'
       })
     },
-    handleResponse: (_, accessTokenField) => async (response: any) => {
+    handleResponse: (_, accessTokenField) => async (response: Response) => {
       const result = await response.json()
       return {
         [accessTokenField]: result[accessTokenField]
@@ -90,7 +90,7 @@ function create(
     if (graphQLErrors)
       graphQLErrors.forEach(({message, locations, path}) => {
         console.log(
-            `[GraphQL error]: Message: ${ message }, Location: ${ locations }, Path: ${ path }`)
+          `[GraphQL error]: Message: ${ message }, Location: ${ locations || 'not found' }, Path: ${ path }`)
         if (isBrowser && (message.includes('AuthenticationError') || message.includes('Access denied!'))) {
           Redirect(ctx, '/accounts/login')
         }
@@ -102,24 +102,24 @@ function create(
   const ssrMode = Boolean(ctx)
   const linkHttp = ApolloLink.from([httpLink as any])
   const link = ssrMode
-      ? linkHttp
-      : isBrowser
-          ? split(
-              ({query}: any) => {
-                const {kind, operation}: OperationVariables = getMainDefinition(query)
-                return kind === 'OperationDefinition' && operation === 'subscription'
-              },
-              wsLink(),
-              linkHttp
-          )
-          : linkHttp
+    ? linkHttp
+    : isBrowser
+      ? split(
+        ({query}: any) => {
+          const {kind, operation}: OperationVariables = getMainDefinition(query)
+          return kind === 'OperationDefinition' && operation === 'subscription'
+        },
+        wsLink(),
+        linkHttp
+      )
+      : linkHttp
   return new ApolloClient({
     connectToDevTools: isBrowser,
     ssrMode, // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link: ApolloLink.from([refreshLink, errorLink, authLink, link]),
+    link: ApolloLink.from([refreshLink,authLink, errorLink,  link]),
     cache: new InMemoryCache(cacheConfig)
-        .restore(initialState || {})
+      .restore(initialState || {})
   })
 }
 

@@ -7,7 +7,6 @@ import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/cli
 
 import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
-import dynamic from 'next/dynamic'
 
 export interface NextPageContextWithApollo extends NextPageContext {
   apolloClient: ApolloClient<NormalizedCacheObject> | null
@@ -31,14 +30,14 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
   if (process.env.NODE_ENV === 'development') {
     if (inAppContext) {
       console.warn(
-          'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.Read more: https://err.sh/next.js/opt-out-auto-static-optimization',
+        'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.Read more: https://err.sh/next.js/opt-out-auto-static-optimization',
       )
     }
   }
 
   const apolloClient = ctx.apolloClient ||
-      initApollo(ctx.apolloState || {}, inAppContext
-          ? ctx.ctx : ctx)
+    initApollo(ctx.apolloState || {}, inAppContext
+      ? ctx.ctx : ctx)
   // @ts-ignore
   apolloClient.toJSON = () => null
   ctx.apolloClient = apolloClient
@@ -57,16 +56,16 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
     }
     const client = apolloClient || initApollo(apolloState)
     return (
-        <ApolloProvider client={ client }>
-          <PageComponent apolloClient={ client } { ...pageProps } />
-        </ApolloProvider>
+      <ApolloProvider client={ client }>
+        <PageComponent apolloClient={ client } { ...pageProps } />
+      </ApolloProvider>
     )
   }
 
   if (process.env.NODE_ENV !== 'production') {
     // Find correct display name
     const displayName =
-        PageComponent.displayName || PageComponent.name || 'Component'
+      PageComponent.displayName || PageComponent.name || 'Component'
 
     // Warn if old way of installing apollo is used
     if (displayName === 'App') {
@@ -136,9 +135,9 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
               props = {pageProps: {...pageProps, apolloClient}}
             }
             await getDataFromTree(
-                <AppTree
-                    { ...props }
-                />
+              <AppTree
+                { ...props }
+              />
             )
           } catch (error) {
             // Prevent Apollo Client GraphQL errors from crashing SSR.

@@ -1,6 +1,6 @@
 import Router from 'next/router'
 
-const Redirect = (context: any, target: string) => {
+const Redirect = (context: any, target: string): void => {
   if (context?.res) {
     // server
     // 303: "See other"

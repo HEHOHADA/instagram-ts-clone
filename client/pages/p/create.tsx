@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, Form, Formik } from 'formik'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { useRouter } from 'next/router'
 
 import withApollo from '@/lib/withApollo'
@@ -16,7 +16,7 @@ const Create = () => {
   const [createPhoto, {loading}] = useCreatePhotoMutation()
   const router = useRouter()
 
-  const createPhotoHandler = async (data: any, {setErrors}: any) => {
+  const createPhotoHandler = async (data: CreatePhotoMutationVariables, {setErrors}: FormikHelpers<CreatePhotoMutationVariables>) => {
     try {
       const response = await createPhoto({
         variables: {
@@ -34,44 +34,44 @@ const Create = () => {
   }
 
   return (
-      <MainLayout title={ 'Photo create' }>
-        <div className="photo__create__container">
-          <div className="photo__create__form__container">
-            <Formik<CreatePhotoMutationVariables>
-                validateOnBlur={ false }
-                validateOnChange={ false }
-                initialValues={ {title: '', picture: null} }
-                onSubmit={ createPhotoHandler }
-            >{ () => (
-                <Form className="photo__create__form">
-                  <Field
-                      type="text"
-                      name="title"
-                      placeholder="Title"
-                      className="photo__create__title"
-                      component={ InputAuthField }/>
-                  <div className="photo__create__image-upload">
-                    <Field
-                        text={ 'Добавить фото' }
-                        className="photo__create__image-upload__text"
-                        name="picture"
-                        type="file"
-                        component={ DropzoneField }/>
-                  </div>
-                  <div className="photo__create__btn__container">
-                    <button
-                        type="submit"
-                        disabled={ loading }
-                        className="photo__create__btn">
-                      Create Photo
-                    </button>
-                  </div>
-                </Form>
-            ) }
-            </Formik>
-          </div>
+    <MainLayout title={ 'Photo create' }>
+      <div className="photo__create__container">
+        <div className="photo__create__form__container">
+          <Formik<CreatePhotoMutationVariables>
+            validateOnBlur={ false }
+            validateOnChange={ false }
+            initialValues={ {title: '', picture: null} }
+            onSubmit={ createPhotoHandler }
+          >{ () => (
+            <Form className="photo__create__form">
+              <Field
+                type="text"
+                name="title"
+                placeholder="Title"
+                className="photo__create__title"
+                component={ InputAuthField }/>
+              <div className="photo__create__image-upload">
+                <Field
+                  text={ 'Добавить фото' }
+                  className="photo__create__image-upload__text"
+                  name="picture"
+                  type="file"
+                  component={ DropzoneField }/>
+              </div>
+              <div className="photo__create__btn__container">
+                <button
+                  type="submit"
+                  disabled={ loading }
+                  className="photo__create__btn">
+                  Create Photo
+                </button>
+              </div>
+            </Form>
+          ) }
+          </Formik>
         </div>
-      </MainLayout>
+      </div>
+    </MainLayout>
   )
 }
 

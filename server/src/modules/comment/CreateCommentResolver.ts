@@ -10,8 +10,8 @@ import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddlewar
 export class CreateCommentResolver {
   @FieldResolver(() => User)
   async user(
-      @Root()comment: Comment,
-      @Ctx(){userLoader}: MyContext
+    @Root()comment: Comment,
+    @Ctx(){userLoader}: MyContext
   ) {
     return userLoader.load(comment.userId)
   }
@@ -25,8 +25,8 @@ export class CreateCommentResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Comment)
   async createComment(
-      @Arg('data'){photoId, commentText}: CreateCommentType,
-      @Ctx(){payload: {userId}, userLoader}: MyContext
+    @Arg('data', () => CreateCommentType){photoId, commentText}: CreateCommentType,
+    @Ctx(){payload: {userId}, userLoader}: MyContext
   ) {
 
     const user = await userLoader.load(userId!)

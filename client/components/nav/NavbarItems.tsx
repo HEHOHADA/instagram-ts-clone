@@ -27,7 +27,10 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
   return (
       <div className="nav__container">
         { navItemArray }
-        <div className="nav__profile nav_item" onClick={ changeIsOpen }>
+        <div className="nav__profile nav_item" onClick={e=>{
+          e.stopPropagation()
+          changeIsOpen()
+        } }>
           { imageUrl ?
               <div className="image__item">
                 <img alt="Грузит" src={ imageUrl }/>

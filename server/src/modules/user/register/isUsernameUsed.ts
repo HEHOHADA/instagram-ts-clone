@@ -5,8 +5,9 @@ import { User } from '../../../entity/User'
 export class isUsernameUsed implements ValidatorConstraintInterface {
   validate(username: string): Promise<boolean> | boolean {
     return User.findOne({
+      // @ts-ignore
       where: `"username" ILIKE '${ username.replace(/_/g, '\\_') }'`
-    })
+    },{cache:true})
                .then(user => {
                  return !user
                })

@@ -1,16 +1,18 @@
 import React from 'react'
-import Link from 'next/link'
 import OrComponent from './OrComponent'
 import { RedirectComponentType } from './RedirectComponent'
+import { LinkItem } from '@/components/utils/LinkItem'
 
 const OrComponentWithRedirect = ({link, text}: RedirectComponentType) => {
   return (
-      <>
-        <OrComponent/>
-        <Link href={ link } as="/">
-          <a className="auth__forgot__password">{ text }</a>
-        </Link>
-      </>
+    <>
+      <OrComponent/>
+      <LinkItem
+        href={ link }
+        as="/"
+        linkClassName="auth__forgot__password"
+        LinkContent={ text }/>
+    </>
   )
 }
 

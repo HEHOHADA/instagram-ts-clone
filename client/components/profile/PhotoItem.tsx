@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import { LinkItem } from '@/components/utils/LinkItem'
 
 type PropsType = {
   pictureUrl: string
@@ -8,15 +8,15 @@ type PropsType = {
 
 export const PhotoItem = React.memo(({pictureUrl, id}: PropsType) => {
   return (
-      <div className="profile__photo__container">
-        <Link passHref as={ `/p/${ id }` } href={'/p/[photoId]'}>
-          <a>
-            <img
-                src={ pictureUrl }
-                className="profile__photo"
-            />
-          </a>
-        </Link>
-      </div>
+    <div className="profile__photo__container">
+      <LinkItem
+        passHref
+        as={ `/p/${ id }` }
+        href={ '/p/[photoId]' }
+        LinkContent={ <img
+          src={ pictureUrl }
+          className="profile__photo"
+          alt={ 'Профиль' }/> }/>
+    </div>
   )
 })

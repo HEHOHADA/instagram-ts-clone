@@ -16,7 +16,9 @@ export class MeResolver {
     try {
       const token = (auth as string).split(' ')[1]
       const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET as string)
-      return User.findOne(payload.userId)
+      return User.findOne({
+        id: payload.userId
+      }, {cache: true})
     } catch (e) {
       console.log(e)
       return undefined
@@ -26,7 +28,7 @@ export class MeResolver {
   @FieldResolver(() => String, {nullable: true})
   pictureUrl(@Root()user: User, @Ctx(){imageUrl}: MyContext) {
 
-    if(!user.pictureUrl){
+    if (!user.pictureUrl) {
       return null
     }
     if (user.pictureUrl.includes('http')) {

@@ -1,20 +1,31 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { RedirectComponentType } from '../auth/RedirectComponent'
-import Link from 'next/link'
+import { LinkItem } from '@/components/utils/LinkItem'
 
-export const DropdownItem = ({text, link,as, iconName,passHref}: RedirectComponentType & {
+
+export type LinkRedirectComponentType = {
   iconName: string,
-  as?:string,
+  as?: string,
   passHref?: boolean
-}) => {
+}
+
+type PropsType = LinkRedirectComponentType & RedirectComponentType
+
+export const DropdownItem: FC<PropsType> = ({text, link, as, iconName, passHref}) => {
+
+  const LinkContent = (
+    <>
+      <span className="material-icons">
+        { iconName }
+      </span>
+      { text }
+    </>
+  )
+
   return (
-      <Link passHref={passHref} as={as} href={ link }>
-        <a className="menu-item">
-            <span className="material-icons">
-              { iconName }
-            </span>
-          { text }
-        </a>
-      </Link>
+    <LinkItem
+      passHref={ passHref }
+      as={ as } href={ link } linkClassName={ 'menu-item' }
+      LinkContent={ LinkContent }/>
   )
 }

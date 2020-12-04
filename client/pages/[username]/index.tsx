@@ -14,7 +14,7 @@ import Loading from '@/components/utils/Loading'
 
 
 export type ProfileItemsType = {
-  onClick?: () => void | null | undefined
+  onClick?: (e?:any) => void | null | undefined
   count: number
   text: string
 }

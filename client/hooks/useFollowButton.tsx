@@ -2,15 +2,17 @@ import Link from 'next/link'
 import React, { useCallback } from 'react'
 
 import { followCallback } from '@/utils/followFunction'
-import { FollowButton } from '@/components/profile/FollowButton'
 import { useFollowUserMutation, useUnFollowUserMutation } from '@/geterated/apollo'
+import { Button } from '@/components/utils/Button'
 
 export default function useFollowButton() {
   const [unFollowUser] = useUnFollowUserMutation()
   const [followUser] = useFollowUserMutation()
   const followButton = useCallback((isFollowing: boolean, id: string, userId?: string) => {
     const onClick = isFollowing
-        ? followCallback(unFollowUser, -1)
+      // @ts-ignore
+      ? followCallback(unFollowUser, -1)
+      // @ts-ignore
         : followCallback(followUser, 1)
     const text = isFollowing ? 'Отписаться' : 'Подписаться'
     if (!userId) {
@@ -21,7 +23,7 @@ export default function useFollowButton() {
       )
     }
     return (
-        <FollowButton
+        <Button
             text={ text }
             className={ 'profile__edit' }
             onClick={ () => onClick(id, userId) }/>
