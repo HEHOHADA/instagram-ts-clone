@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ButtonHTMLAttributes } from 'react'
 
 type PropsType = {
   onClick?: () => void
@@ -6,9 +6,9 @@ type PropsType = {
   className: string
 }
 
-export const Button = React.memo(({onClick, text, className}: PropsType) => {
+export const Button = React.memo(({onClick, text, className,...props}: PropsType& ButtonHTMLAttributes<{}>) => {
   return (
     <button className={ className }
-            onClick={ onClick }>{ text }</button>
+            onClick={ onClick } {...props}>{ text }</button>
   )
 })

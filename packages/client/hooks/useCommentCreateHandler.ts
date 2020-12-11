@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { FormikHelpers } from 'formik'
-import { CreateCommentType, useCreateCommentMutation } from '@/geterated/apollo'
+import { CreateCommentType, useCreateCommentMutation } from '@instagram/common'
 
 export const useCommentCreateHandler = () => {
   const [createCommentMutation] = useCreateCommentMutation()

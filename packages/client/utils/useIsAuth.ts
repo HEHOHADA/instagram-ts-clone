@@ -1,6 +1,6 @@
+import { useMeQuery } from '@instagram/common'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { useMeQuery } from '@/geterated/apollo'
 
 export const useIsAuth = () => {
   const {data, loading} = useMeQuery()

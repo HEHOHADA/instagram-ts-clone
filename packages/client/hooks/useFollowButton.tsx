@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import React, { useCallback } from 'react'
 
+import { useFollowUserMutation, useUnFollowUserMutation } from '@instagram/common'
 import { followCallback } from '@/utils/followFunction'
-import { useFollowUserMutation, useUnFollowUserMutation } from '@/geterated/apollo'
 import { Button } from '@/components/utils/Button'
 
 export default function useFollowButton() {
@@ -10,9 +10,7 @@ export default function useFollowButton() {
   const [followUser] = useFollowUserMutation()
   const followButton = useCallback((isFollowing: boolean, id: string, userId?: string) => {
     const onClick = isFollowing
-      // @ts-ignore
       ? followCallback(unFollowUser, -1)
-      // @ts-ignore
         : followCallback(followUser, 1)
     const text = isFollowing ? 'Отписаться' : 'Подписаться'
     if (!userId) {

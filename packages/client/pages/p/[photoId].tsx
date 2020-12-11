@@ -1,6 +1,12 @@
 import React, { useCallback } from 'react'
 import { useRouter } from 'next/router'
 
+import {
+  useDeletePhotoMutation,
+  useViewPhotoByIdQuery,
+  ViewPhotoByIdQuery
+} from '@instagram/common'
+
 import withApollo from '@/lib/withApollo'
 import MainLayout from '@/components/MainLayout'
 import Loading from '@/components/utils/Loading'
@@ -9,7 +15,6 @@ import { CreateCommentForm } from '@/components/photo/CreateCommentForm'
 import { Comments } from '@/components/dashboard/post/comment/Comments'
 import { PhotoItemContainer, PhotoItemType } from '@/hoc/PhotoItemContainer'
 import { CommentTools } from '@/components/dashboard/post/comment/CommentTools'
-import { useDeletePhotoMutation, useViewPhotoByIdQuery, ViewPhotoByIdQuery } from '@/geterated/apollo'
 
 type ViewPhotoByIdType = ViewPhotoByIdQuery['viewPhotoById']
 

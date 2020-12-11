@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { FormikHelpers } from 'formik'
+import { CreateCommentType } from '@instagram/common'
 import { useModal } from '@/hooks/useModal'
-import { CreateCommentType } from '@/geterated/apollo'
 import { ModalRefType } from './ModalWindowContainer'
 import { useLikeHandler } from '@/hooks/useLikeHandler'
 import { PhotoFeedType } from '@/components/dashboard/post/Posts'

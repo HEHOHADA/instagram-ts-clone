@@ -1,23 +1,23 @@
 {
   "name": "instagram-ts-clone",
   "private": true,
+  "dependencies": {
+    "metro-config": "^0.56.0"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
     ],
     "nohoist": [
-      "**/rimraf",
+      "**/react-native",
+      "**/*react-native*",
+      "**/react-native/**",
+      "**/react-native*/**",
       "**/expo",
-      "**/expo/**",
-      "**/rimraf/**"
+      "**/expo*/**",
+      "**/*expo*",
+      "**/*react-navigation*",
+      "**/*react-navigation*/**"
     ]
-  },
-  "devDependencies": {
-    "lerna": "^3.22.1"
-  },
-  "scripts": {
-    "heroku-postbuild": "yarn run build:server",
-    "build:server": "lerna run build --scope={@airbnb/server}",
-    "build:web": "lerna run build --scope={@airbnb/common,@airbnb/web}"
   }
 }

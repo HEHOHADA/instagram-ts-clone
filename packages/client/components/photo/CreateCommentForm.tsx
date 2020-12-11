@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { CreateCommentType } from '@instagram/common'
 import { TextArea } from '../utils/TextArea'
-import { CreateCommentType } from '@/geterated/apollo'
 
 
 type PropsType = {

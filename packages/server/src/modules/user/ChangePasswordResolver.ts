@@ -13,7 +13,7 @@ import { MyContext } from '../../types/MyContext'
 export class ChangePasswordResolver {
   @Mutation(() => User)
   async changeForgotPassword(
-      @Arg('data'){token, password}: ChangeForgotPassword
+      @Arg('data',()=>ChangeForgotPassword){token, password}: ChangeForgotPassword
   ) {
 
     const userId = await redis.get(forgotPasswordPrefix + token)

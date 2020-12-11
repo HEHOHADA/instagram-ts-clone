@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { useMeQuery } from '@/geterated/apollo'
+import { useMeQuery } from '@instagram/common'
 
 export const useBlockRoute = () => {
   const {data, loading} = useMeQuery()

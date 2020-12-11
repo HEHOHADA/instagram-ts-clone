@@ -14,6 +14,7 @@ function load() {
 
   state = 'loading'
 
+  // @ts-ignore
   timer = setTimeout(function () {
     NProgress.start()
   }, delay) // only show progress bar if it takes longer than the delay

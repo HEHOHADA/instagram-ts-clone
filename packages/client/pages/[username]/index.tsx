@@ -9,8 +9,8 @@ import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { PhotoItems } from '@/components/profile/PhotoItems'
 import { ProfileInfo } from '@/components/profile/ProfileInfo'
 import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
-import { PhotoItemFragment, useGetUserInfoQuery, useMeQuery, useViewUserPhotoQuery } from '@/geterated/apollo'
 import Loading from '@/components/utils/Loading'
+import { PhotoItemFragment, useGetUserInfoQuery, useMeQuery, useViewUserPhotoQuery } from '@instagram/common'
 
 
 export type ProfileItemsType = {

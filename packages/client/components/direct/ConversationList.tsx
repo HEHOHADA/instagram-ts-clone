@@ -4,9 +4,9 @@ import { useModal } from '@/hooks/useModal'
 import { DialogItem } from './chat/DialogItem'
 import { CreateDialog } from '../utils/svg/CreateDialog'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
-import { ChatsQuery, useMeQuery } from '@/geterated/apollo'
 import { CreateMessageModal } from '../modal/CreateMessageModal'
 import Loading from '@/components/utils/Loading'
+import { ChatsQuery, useMeQuery } from '@instagram/common'
 
 type ChatsType = ChatsQuery['chats']
 

@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
+import { LoginInput } from '@instagram/common'
+
 import useLogin from '@/hooks/useLogin'
 import withApollo from '@/lib/withApollo'
-import { LoginInput } from '@/geterated/apollo'
 import AuthLayout from '@/components/AuthLayout'
 import { InputAuthField } from '@/components/utils/InputAuthField'
 import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'

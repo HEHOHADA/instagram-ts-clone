@@ -18,7 +18,8 @@ export function TabHomeNavigation() {
             headerTitle: 'Instagram', headerRight: () => (
               <HeaderButtons
                 HeaderButtonComponent={ AppHeaderIcon }>
-                <FontAwesome5 name="telegram-plane" size={30} color="black" onPress={()=>navigation.navigate('Auth',{screen:'TabLogin'})}/>
+                <FontAwesome5 name="telegram-plane" size={ 30 } color="black"
+                              onPress={ () => navigation.navigate('Auth', {screen: 'TabLogin'}) }/>
               </HeaderButtons>
             )
           }

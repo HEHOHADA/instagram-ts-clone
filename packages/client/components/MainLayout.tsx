@@ -2,7 +2,8 @@ import Link from 'next/link'
 import Head from 'next/head'
 import React, { ReactNode } from 'react'
 
-import { useMeQuery } from '@/geterated/apollo'
+import { useMeQuery } from '@instagram/common'
+
 import NavbarItems from './nav/NavbarItems'
 import { SearchComponent } from './search/SearchComponent'
 import { LinkItem } from '@/components/utils/LinkItem'

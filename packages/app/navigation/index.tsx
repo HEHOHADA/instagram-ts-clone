@@ -4,10 +4,10 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
 
 import { RootStackParamList } from '@type/navigation'
-import NotFoundScreen from '../screens/NotFoundScreen'
 import BottomTabNavigator from './BottomTabNavigator'
 import LinkingConfiguration from './LinkingConfiguration'
 import { AuthNavigation } from './Auth/AuthNavigation'
+import NotFoundScreen from '@screens/NotFoundScreen'
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started

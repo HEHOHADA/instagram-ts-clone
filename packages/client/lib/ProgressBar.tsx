@@ -19,6 +19,7 @@ const NextNProgress = (props: NextNProgressPropsTypes) => {
 
   const routeChangeEnd = useCallback(() => {
     timer && clearTimeout(timer)
+    // @ts-ignore
     timer = setTimeout(() => {
       NProgress.done(true)
     }, props.stopDelayMs)

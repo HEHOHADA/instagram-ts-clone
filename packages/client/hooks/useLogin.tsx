@@ -1,8 +1,9 @@
-import { MeDocument, MeQuery, useLoginMutation } from '@/geterated/apollo'
 import { useCallback } from 'react'
+import { useRouter } from 'next/router'
+import { MeDocument, MeQuery, useLoginMutation } from '@instagram/common'
+
 import { setAccessToken } from '@/lib/token'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'
-import { useRouter } from 'next/router'
 
 export default function useLogin() {
   const [login, {loading}] = useLoginMutation()

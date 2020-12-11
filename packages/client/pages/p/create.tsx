@@ -1,15 +1,16 @@
 import React from 'react'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
+
+import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import { CreatePhotoMutationVariables, useCreatePhotoMutation } from '@instagram/common'
 
 import withApollo from '@/lib/withApollo'
 import MainLayout from '@/components/MainLayout'
 import { DropzoneField } from '@/components/utils/DropzoneField'
 import { InputAuthField } from '@/components/utils/InputAuthField'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'
-import { CreatePhotoMutationVariables, useCreatePhotoMutation } from '@/geterated/apollo'
-import { NextPageContext } from 'next'
-import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import Redirect from '@/lib/redirect'
 
 const Create = () => {

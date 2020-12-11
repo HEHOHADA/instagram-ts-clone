@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { Image, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
-import { ICON_SIZE } from '@constants/icons'
+import { useNavigation } from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { Image, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 import { Text } from '@components/Themed'
+import { ICON_SIZE } from '@constants/icons'
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [hidePassword, setHidePassword] = useState(true)
+  const {navigate} = useNavigation()
   return (
     <SafeAreaView style={ styles.container }>
       <View style={ styles.centerContainer }>
@@ -62,8 +64,7 @@ export default function LoginScreen() {
         </View>
         <View style={ styles.otherOptionsWrapper }>
           <TouchableOpacity
-            onPress={ () => {
-            } }
+            onPress={ () => navigate('TabForgotPassword') }
             style={ styles.forgot }
             activeOpacity={ 1 }>
             <Text style={ {

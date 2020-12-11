@@ -8,7 +8,7 @@ import { Picture } from '../utils/svg/Picture'
 import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { TextArea } from '../utils/TextArea'
-import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '@/geterated/apollo'
+import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '@instagram/common'
 
 
 const ConversationItem: FC = () => {
@@ -60,7 +60,7 @@ const ConversationItem: FC = () => {
                     date={ m.date }
                     key={ m.id }
                     text={ m.text }
-                    pictureUrl={ m.user.pictureUrl }
+                    pictureUrl={ m.user.pictureUrl as string }
                     isAuthor={ m.isAuthor }/>
             )) }
           </div>

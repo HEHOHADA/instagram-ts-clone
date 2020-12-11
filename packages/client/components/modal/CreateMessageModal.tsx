@@ -2,15 +2,10 @@ import React from 'react'
 
 import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
-import {
-  ChatDocument,
-  useFindOrCreateChatMutation,
-  useGetFollowingsQuery
-} from '@/geterated/apollo'
 import Loading from '@/components/utils/Loading'
 import { useHistory } from 'react-router'
-import Link from 'next/link'
 import { LinkItem } from '@/components/utils/LinkItem'
+import { ChatDocument, useFindOrCreateChatMutation, useGetFollowingsQuery } from '@instagram/common'
 
 export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string }) => {
   const {data} = useGetFollowingsQuery({variables: {userId: id}})
@@ -63,7 +58,7 @@ export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string
                       <LinkItem
                         passHref
                         href={ `/${ user.username }` }
-                        LinkContent={user.username}
+                        LinkContent={ user.username }
                         linkClassName="subscription__username"
                       />
                     </div>

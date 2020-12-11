@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { gql } from '@apollo/client'
+import { useLikeMutation } from '@instagram/common'
 
-import { useLikeMutation } from '@/geterated/apollo'
 
 export const useLikeHandler = ({photoId, isLiked}: any) => {
   const [likeMutation] = useLikeMutation()

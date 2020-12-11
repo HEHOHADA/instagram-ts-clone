@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { AppImage } from '@ui/AppImage'
-import { MonoText } from '../StyledText'
+import { MonoText } from '@ui/StyledText'
 
 type PropsType = {
   uri: string

@@ -1,7 +1,9 @@
 import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo } from 'react'
+
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
+import { ForgotPasswordType, useForgotPasswordMutation } from '@instagram/common'
 
 import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
@@ -10,7 +12,6 @@ import { InputAuthField } from '@/components/utils/InputAuthField'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
-import { ForgotPasswordType, useForgotPasswordMutation } from '@/geterated/apollo'
 
 const ForgotPassword = () => {
 

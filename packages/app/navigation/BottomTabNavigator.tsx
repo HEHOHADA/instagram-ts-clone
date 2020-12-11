@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import Colors from '../constants/Colors'
-import useColorScheme from '../hooks/useColorScheme'
+import Colors from '@constants/Colors'
+import useColorScheme from '@hooks/useColorScheme'
 import { BottomTabParamList } from '@type/navigation'
 import { TabHomeNavigation } from './Root/TabHomeNavigation'
 import { TabSearchNavigation } from './Root/TabSearchNavigation'

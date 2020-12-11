@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 import useDropdown from '@/hooks/useDropdown'
 import useDebounce from '@/hooks/useDebounce'
-import { useSearchLazyQuery } from '@/geterated/apollo'
 import { Button } from '@/components/utils/Button'
 import { LinkItem } from '@/components/utils/LinkItem'
+import { useSearchLazyQuery } from '@instagram/common'
 
 export const SearchComponent = () => {
   const {dropDownRef, isOpen, open} = useDropdown()
