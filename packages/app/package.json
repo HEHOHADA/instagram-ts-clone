@@ -15,8 +15,9 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@instagram/common": "1.0.0",
+    "@apollo/client": "^3.3.6",
     "@expo/vector-icons": "^12.0.0",
+    "@instagram/common": "1.0.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.8.0",
     "@react-navigation/drawer": "^5.11.4",
@@ -27,17 +28,23 @@
     "expo-constants": "~9.3.3",
     "expo-font": "~8.4.0",
     "expo-linking": "~2.0.0",
+    "expo-secure-store": "~9.3.0",
     "expo-splash-screen": "~0.8.1",
     "expo-status-bar": "~1.0.3",
     "expo-web-browser": "~8.6.0",
+    "graphql-tag": "^2.11.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
     "react-native-web": "~0.13.12",
     "react-navigation-header-buttons": "^6.0.0"
+  },
+  "resolutions": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

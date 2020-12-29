@@ -10,12 +10,9 @@ export const refreshToken = async (req: Request, res: Response) => {
   if (!token) {
     return res.send({ok: false, accessToken: ''})
   }
-  console.log('here', req)
   let payload: TokenType | null = null
   try {
-    console.log(token)
     payload = verify(token, process.env.REFRESH_TOKEN_SECRET as string) as TokenType
-    console.log(payload)
   } catch (e) {
     console.log(e)
     sendRefreshToken(res, '')

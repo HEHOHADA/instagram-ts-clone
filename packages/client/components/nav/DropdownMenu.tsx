@@ -3,8 +3,8 @@ import React, { FC, useMemo } from 'react'
 import { setAccessToken } from '@/lib/token'
 import { DropdownItem } from './DropdownItem'
 import useDropdown from '@/hooks/useDropdown'
-import { useLogoutMutation } from '@/geterated/apollo'
 import { Button } from '@/components/utils/Button'
+import { useLogoutMutation } from '@instagram/common'
 
 type PropsType = {
   username: string

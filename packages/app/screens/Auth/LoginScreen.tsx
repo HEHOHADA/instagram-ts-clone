@@ -1,16 +1,47 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Image, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+
 import { Text } from '@components/Themed'
 import { ICON_SIZE } from '@constants/icons'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
+import { IMeQuery, MeDocument, useLoginMutation } from '@instagram/common'
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [hidePassword, setHidePassword] = useState(true)
+  const [login] = useLoginMutation()
+
   const {navigate} = useNavigation()
+  const submitLoginHandler = useCallback(async (data) => {
+    try {
+      console.log('it works')
+      const response = await login({
+        variables: {
+          data
+        }, update: (cache, {data}) => {
+          if (!data || !data.login) {
+            return
+          }
+
+          cache.writeQuery<IMeQuery>({
+            query: MeDocument,
+            data: {
+              me: data.login.user
+            }
+          })
+        }
+
+      })
+      if (response && response.data) {
+        console.log('response', response.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
   return (
     <SafeAreaView style={ styles.container }>
       <View style={ styles.centerContainer }>
@@ -50,8 +81,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            onPress={ () => {
-            } }
+            onPress={ () => submitLoginHandler({password, email: username}) }
             activeOpacity={ 0.6 } style={ {
             ...styles.btnLogin
           } }>

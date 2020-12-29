@@ -126,7 +126,7 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
         if (ssr && AppTree) {
           try {
             // Run all GraphQL queries
-            const {getDataFromTree} = await import('@apollo/react-ssr')
+            const {getDataFromTree} = await import('@apollo/client/react/ssr')
 
             let props: any
             if (inAppContext) {

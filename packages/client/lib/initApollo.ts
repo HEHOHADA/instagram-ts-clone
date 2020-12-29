@@ -1,12 +1,6 @@
-import jwtDecode from 'jwt-decode'
 import { NextPageContext } from 'next'
 import { onError } from '@apollo/client/link/error'
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { createUploadLink } from 'apollo-upload-client'
-import { setContext } from '@apollo/client/link/context'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { TokenRefreshLink } from 'apollo-link-token-refresh'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import {
   ApolloClient,
   ApolloLink,
@@ -18,74 +12,14 @@ import {
 import Redirect from './redirect'
 import { isBrowser } from './isBrowser'
 import { isServer } from './withApollo'
-import { cacheConfig } from './cacheConfig'
 import { getAccessToken, setAccessToken } from './token'
+import { authContextLink, cacheConfig, httpLinkWithUpload, refreshLink, wsLink } from '@instagram/common'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
 function create(
   initialState: NormalizedCacheObject,
   ctx?: NextPageContext): ApolloClient<NormalizedCacheObject> {
-
-  const httpLink = createUploadLink({
-    uri: 'http://localhost:4000/graphql',
-    credentials: 'include'
-  })
-
-  const wsLink = () => new WebSocketLink(new SubscriptionClient(`ws://localhost:4000/subscription`, {
-    reconnect: true,
-    lazy: true,
-    connectionParams: () => ({
-      authorization: `Bearer ${ getAccessToken() }`
-    })
-  }))
-
-  const refreshLink = new TokenRefreshLink({
-    isTokenValidOrUndefined: () => {
-      const token = getAccessToken()
-      if (!token) {
-        return true
-      }
-
-      try {
-        const {exp} = jwtDecode(token)
-        return Date.now() < exp * 1000
-      } catch {
-        return false
-      }
-    },
-    accessTokenField: 'accessToken',
-    fetchAccessToken: () => {
-      return fetch('http://localhost:4000/refresh_token', {
-        method: 'POST',
-        credentials: 'include'
-      })
-    },
-    handleResponse: (_, accessTokenField) => async (response: Response) => {
-      const result = await response.json()
-      return {
-        [accessTokenField]: result[accessTokenField]
-      }
-    },
-    handleFetch: accessTokenPayload => {
-      setAccessToken(accessTokenPayload)
-    },
-    handleError: err => {
-      console.error(err)
-    }
-  }) as any
-
-  const authLink = setContext((_req, {headers}) => {
-    const token = getAccessToken()
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${ token }` : ''
-      }
-    }
-  })
-
-
   const errorLink = onError(({graphQLErrors, networkError}) => {
     if (graphQLErrors)
       graphQLErrors.forEach(({message, locations, path}) => {
@@ -100,7 +34,7 @@ function create(
   })
 
   const ssrMode = Boolean(ctx)
-  const linkHttp = ApolloLink.from([httpLink as any])
+  const linkHttp = ApolloLink.from([httpLinkWithUpload as any])
   const link = ssrMode
     ? linkHttp
     : isBrowser
@@ -109,7 +43,7 @@ function create(
           const {kind, operation}: OperationVariables = getMainDefinition(query)
           return kind === 'OperationDefinition' && operation === 'subscription'
         },
-        wsLink(),
+        wsLink(`Bearer ${ getAccessToken() }`) as any,
         linkHttp
       )
       : linkHttp
@@ -117,7 +51,7 @@ function create(
     connectToDevTools: isBrowser,
     ssrMode, // Disables forceFetch on the server (so queries are only run once)
     // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
-    link: ApolloLink.from([refreshLink,authLink, errorLink,  link]),
+    link: ApolloLink.from([refreshLink(getAccessToken, setAccessToken), authContextLink(getAccessToken), errorLink, link]),
     cache: new InMemoryCache(cacheConfig)
       .restore(initialState || {})
   })

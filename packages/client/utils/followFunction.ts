@@ -1,5 +1,5 @@
 import { ApolloCache, gql } from '@apollo/client'
-import { FollowUserMutationFn, UnFollowUserMutationFn } from '@/geterated/apollo'
+import { FollowUserMutationFn, UnFollowUserMutationFn } from '@instagram/common'
 
 type FollowCallbackType = UnFollowUserMutationFn | FollowUserMutationFn
 

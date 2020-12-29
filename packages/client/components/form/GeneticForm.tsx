@@ -55,7 +55,6 @@ const GenericForm: <TVariables, TData>(
   const handleSubmit = async (_: any, formikHelpers: FormikHelpers<any>) => {
     const {validateForm} = formikHelpers
     validateForm((values: any) => {
-      console.log(values)
       const finalVars = transformValues ? transformValues(values) : values
       if (apollo.mutate) {
         try {

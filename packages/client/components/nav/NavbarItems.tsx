@@ -11,7 +11,6 @@ type PropsType = {
 const NavbarItems = ({imageUrl, username}: PropsType) => {
   const [isOpen, setIsOpen] = useState(() => false)
 
-
   const changeIsOpen = () => setIsOpen(!isOpen)
 
   const navItemArray = useMemo(() => {

@@ -24,6 +24,7 @@ const server = async () => {
   // const RedisStore = connectRedis(session)
   const app = Express()
   app.use(cookieParser())
+  // @ts-ignore
   app.use(cors({
     credentials: true,
     origin: 'http://localhost:3000'
@@ -56,7 +57,7 @@ const server = async () => {
     uploads: false,
     tracing: true,
     subscriptions: {
-      path:'/subscription',
+      path: '/subscription',
       onConnect: async (_connectionParams: any) => {
         const token = (_connectionParams as any).authorization.split(' ')[1]
         // const {cookie} = ws.upgradeReq.headers
@@ -74,7 +75,7 @@ const server = async () => {
       userLoader: createUserLoader(),
       commentLoader: createCommentLoader(),
       photoLoader: createPhotoLoader(),
-      imageUrl:'http://localhost:4000',
+      imageUrl: 'http://localhost:4000',
       url: req ? (req.protocol + '://' + req.get('host')) : ''
     }),
     formatError: (error: GraphQLError) => {
@@ -91,8 +92,8 @@ const server = async () => {
   const httpServer = http.createServer(app)
   apolloServer.installSubscriptionHandlers(httpServer)
   httpServer.listen(4000, () => {
-    console.log(`🚀 Server ready at http://localhost:${4000}${apolloServer.graphqlPath}`)
-    console.log(`🚀 Subscriptions ready at ws://localhost:${4000}${apolloServer.subscriptionsPath}`)
+    console.log(`🚀 Server ready at http://localhost:${ 4000 }${ apolloServer.graphqlPath }`)
+    console.log(`🚀 Subscriptions ready at ws://localhost:${ 4000 }${ apolloServer.subscriptionsPath }`)
   })
 }
 
