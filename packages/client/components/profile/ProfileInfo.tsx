@@ -3,9 +3,9 @@ import React, { FC, useMemo } from 'react'
 import { ProfileItems } from './ProfileItems'
 import { declOfNum } from '@/utils/declOfNumb'
 import { ModalUserPageType, ProfileItemsType } from '@/pages/[username]'
-import { GetUserInfoQuery } from '@instagram/common'
+import { IGetUserInfoQuery } from '@instagram/common'
 
-type GetUserInfoQueryType = GetUserInfoQuery['getUserInfo']
+type GetUserInfoQueryType = IGetUserInfoQuery['getUserInfo']
 
 type PropsType = GetUserInfoQueryType & {
   followButton: (isFollowing: boolean, id: string, userId?: (string | undefined)) => JSX.Element

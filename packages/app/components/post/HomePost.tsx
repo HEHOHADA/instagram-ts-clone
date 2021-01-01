@@ -1,28 +1,36 @@
 import React, { FC } from 'react'
-import { Image, ImageBackground, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { AppImage } from '@ui/AppImage'
 import { Text } from '@components/Themed'
 import { AppHeaderIcon } from '@ui/AppHeaderIcon'
 import { HeaderButtons } from 'react-navigation-header-buttons'
-import { FontAwesome5, Ionicons } from '@expo/vector-icons'
+import { FontAwesome5 } from '@expo/vector-icons'
 import { SCREEN_WIDTH } from '@constants/demens'
 import { TabBarIcon } from '@components/ui/AppIcon'
 import { ICON_SIZE, ICONS } from '@constants/icons'
+import { IFeedQuery } from '@instagram/common'
+import { useNavigation } from '@react-navigation/native'
 
-type PropsType = {
-  posts: Array<any>
-}
+type PropsType = IFeedQuery['feed']['items'][0]
 
-export const HomePost: FC<PropsType> = ({posts}) => {
-  const {owner, ...post} = posts[0]
+export const HomePost: FC<PropsType> = ({
+                                          user,
+                                          commentCount,
+                                          postText,
+                                          isLiked,
+                                          likeCount,
+                                          pictureUrl
+                                        }) => {
+
+  const {navigate} = useNavigation()
   return (
     <View style={ styles.wrapper }>
       <View style={ styles.header }>
         <View style={ styles.user }>
-          <AppImage uri={ owner.uri }/>
+          <AppImage uri={ user.pictureUrl as string }/>
           <View style={ styles.info }>
-            <Text style={ {fontWeight: 'bold', fontSize: 16} }>{ owner.ownerName }</Text>
-            <Text>{ owner.place }</Text>
+            <Text style={ {fontWeight: 'bold', fontSize: 16} }>{ user.username }</Text>
+            <Text>{ user.fullName }</Text>
           </View>
         </View>
         <View>
@@ -37,10 +45,10 @@ export const HomePost: FC<PropsType> = ({posts}) => {
         <View>
           <Image
             style={ {
-              width: post.uri.width < post.uri.height ? post.uri.width * SCREEN_WIDTH / post.uri.height : SCREEN_WIDTH,
-              height: post.uri.width > post.uri.height ? post.uri.height * SCREEN_WIDTH / post.uri.width : SCREEN_WIDTH
+              width: SCREEN_WIDTH,
+              height: SCREEN_WIDTH
             } }
-            source={ {uri: post.uri} }
+            source={ {uri: pictureUrl} }
           />
         </View>
       </View>
@@ -51,34 +59,33 @@ export const HomePost: FC<PropsType> = ({posts}) => {
               onPress={ () => {
               } }
             >
-              <TabBarIcon name={ ICONS.like } color={ 'black' }/>
+              <TabBarIcon name={ ICONS.like } color={ isLiked ? 'red' : 'black' }/>
             </TouchableOpacity>
             <TouchableOpacity onPress={ () => {
             } }>
               <FontAwesome5 name={ ICONS.comment } size={ ICON_SIZE.big } color="black"/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={ () => {
-            } }>
+            <TouchableOpacity onPress={ () => navigate('TabDirect', {screen: 'TabDirectScreen'}) }>
               <FontAwesome5 name={ ICONS.direct } size={ ICON_SIZE.big } color="black"/>
             </TouchableOpacity>
           </View>
         </View>
-        { post.likeCount  && <Text style={ {
+        { likeCount && <Text style={ {
           fontWeight: 'bold',
           marginVertical: 5,
-        } }>{ post.likeCount >= 1000 ?
-          (Math.round(post.likeCount / 1000) + 'k')
-          : post.likeCount } { post.likeCount < 2 ? 'like' : 'likes' }</Text> }
-        { post.comments.length > 0 &&
+        } }>{ likeCount >= 1000 ?
+          (Math.round(likeCount / 1000) + 'k')
+          : likeCount } { likeCount < 2 ? 'like' : 'likes' }</Text> }
+        { commentCount && commentCount > 0 &&
         <>
           <View>
             <Text style={ {
               fontWeight: '600',
               marginVertical: 5,
-            } }>dsadsa <Text style={ {
-              fontWeight: '400'
-            } }>dasdas
-            </Text>dsadas</Text>
+            } }>{ user.username } <Text style={ {
+              fontWeight: '600'
+            } }>
+            </Text>{ postText }</Text>
           </View>
           <TouchableOpacity
             onPress={ () => {
@@ -87,7 +94,7 @@ export const HomePost: FC<PropsType> = ({posts}) => {
             <Text style={ {
               color: '#666',
             } }>
-              View all 8321 comments
+              View all { commentCount } comments
             </Text>
           </TouchableOpacity>
         </>
@@ -100,45 +107,14 @@ export const HomePost: FC<PropsType> = ({posts}) => {
           activeOpacity={ 1 }
           style={ styles.commentInputWrapper }>
           <View style={ {flexDirection: 'row', alignItems: 'center'} }>
-            <Image source={ {uri: post.uri} }
+            <Image source={ {uri: user.pictureUrl as string} }
                    style={ styles.commentAvatar }/>
             <Text style={ {
               color: '#666',
               marginHorizontal: 10
             } }>Add a comment...</Text>
           </View>
-          <View style={ styles.commentIconsWrapper }>
-            <TouchableOpacity onPress={ () => {
-
-            } }>
-              <Text style={ {
-                fontSize: 10
-              } }>❤</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={ () => {
-
-            } }>
-              <Text style={ {
-                fontSize: 10
-              } }>🙌</Text>
-            </TouchableOpacity>
-
-          </View>
         </TouchableOpacity>
-        <View style={ {
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginVertical: 5
-        } }>
-          <Text style={ {
-            fontSize: 12,
-            color: '#666'
-          } }>dasdsa</Text>
-          <Text style={ {
-            fontSize: 12,
-            color: '#666'
-          } }> • </Text>
-        </View>
       </View>
     </View>
   )

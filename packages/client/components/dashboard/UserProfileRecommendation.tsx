@@ -14,7 +14,7 @@ export const UserProfileRecommendation: FC<ProsType> = React.memo(({pictureUrl, 
         passHref
         linkClassName="user__img"
         href={ `/${ username }` }
-        LinkContent={ <img alt="Фото профиля bulat.khai"
+        LinkContent={ <img alt={ `Фото профиля ${username}` }
                            src={ pictureUrl as string | undefined }/> }/>
       <div className="user__info">
         <LinkItem

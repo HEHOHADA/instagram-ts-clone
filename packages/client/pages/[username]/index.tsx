@@ -1,6 +1,13 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 
+import {
+  IPhotoItemFragment,
+  useGetUserInfoQuery,
+  useMeQuery,
+  useViewUserPhotoQuery
+} from '@instagram/common'
+
 import withApollo from '@/lib/withApollo'
 import { useModal } from '@/hooks/useModal'
 import MainLayout from '@/components/MainLayout'
@@ -10,11 +17,9 @@ import { PhotoItems } from '@/components/profile/PhotoItems'
 import { ProfileInfo } from '@/components/profile/ProfileInfo'
 import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
 import Loading from '@/components/utils/Loading'
-import { PhotoItemFragment, useGetUserInfoQuery, useMeQuery, useViewUserPhotoQuery } from '@instagram/common'
-
 
 export type ProfileItemsType = {
-  onClick?: (e?:any) => void | null | undefined
+  onClick?: (e?: any) => void | null | undefined
   count: number
   text: string
 }
@@ -85,7 +90,7 @@ const Profile = () => {
             </div>
           </div>
           { dataPhoto?.viewUserPhoto &&
-          <PhotoItems photoItems={ dataPhoto.viewUserPhoto as PhotoItemFragment[] }/> }
+          <PhotoItems photoItems={ dataPhoto.viewUserPhoto as IPhotoItemFragment[] }/> }
         </div>
       </MainLayout>
   )

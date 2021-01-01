@@ -4,7 +4,7 @@ import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
-import { CreatePhotoMutationVariables, useCreatePhotoMutation } from '@instagram/common'
+import { ICreatePhotoMutationVariables, useCreatePhotoMutation } from '@instagram/common'
 
 import withApollo from '@/lib/withApollo'
 import MainLayout from '@/components/MainLayout'
@@ -17,7 +17,7 @@ const Create = () => {
   const [createPhoto, {loading}] = useCreatePhotoMutation()
   const router = useRouter()
 
-  const createPhotoHandler = async (data: CreatePhotoMutationVariables, {setErrors}: FormikHelpers<CreatePhotoMutationVariables>) => {
+  const createPhotoHandler = async (data: ICreatePhotoMutationVariables, {setErrors}: FormikHelpers<ICreatePhotoMutationVariables>) => {
     try {
       const response = await createPhoto({
         variables: {
@@ -38,7 +38,7 @@ const Create = () => {
     <MainLayout title={ 'Photo create' }>
       <div className="photo__create__container">
         <div className="photo__create__form__container">
-          <Formik<CreatePhotoMutationVariables>
+          <Formik<ICreatePhotoMutationVariables>
             validateOnBlur={ false }
             validateOnChange={ false }
             initialValues={ {title: '', picture: null} }

@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native'
 import { View, Text } from '@components/Themed'
 
 
-export default function DirectScreen() {
+export default function PostScreen() {
   return (
     <View style={ styles.container }>
-      <Text style={ styles.title }>Direct</Text>
+      <Text style={ styles.title }>PostScreen page</Text>
     </View>
   )
 }
@@ -20,5 +20,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
   },
 })

@@ -2,7 +2,7 @@ import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo } from 'react'
 
-import { RegisterInput, useRegisterMutation } from '@instagram/common'
+import { IRegisterInput, useRegisterMutation } from '@instagram/common'
 
 import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
@@ -61,7 +61,7 @@ const Register = () => {
 
   return (
       <AuthLayout>
-        <InstagramAuthForm<RegisterInput>
+        <InstagramAuthForm<IRegisterInput>
             loading={ loading }
             OrOptionsComponent={ <OrComponentWithRedirect
                 link={ '/accounts/password/reset' }

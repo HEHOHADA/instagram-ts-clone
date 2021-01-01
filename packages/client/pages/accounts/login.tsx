@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { LoginInput } from '@instagram/common'
+import { ILoginInput } from '@instagram/common'
 
 import useLogin from '@/hooks/useLogin'
 import withApollo from '@/lib/withApollo'
@@ -11,7 +11,6 @@ import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 
 const Login = () => {
   const {loading, submitLoginHandler} = useLogin()
-
   const fieldsItems = useMemo(() => {
     return [{
       name: 'email' as const,
@@ -31,21 +30,20 @@ const Login = () => {
 
 
   return (
-      <AuthLayout>
-        <InstagramAuthForm<LoginInput>
-            loading={ loading }
-            OrOptionsComponent={ <OrComponentWithRedirect
-                link={ '/accounts/password/reset' }
-                text={ 'Забыли пароль' }/> }
-            RedirectComponent={ <RedirectComponent
-                text={ 'Регистрация' }
-                link={ '/accounts/register' }/> }
-
-            buttonText={ 'Login' }
-            fields={ fieldsItems }
-            initialValues={ {password: '', email: ''} }
-            submitHandler={ submitLoginHandler }/>
-      </AuthLayout>
+    <AuthLayout>
+      <InstagramAuthForm<ILoginInput>
+        loading={ loading }
+        OrOptionsComponent={ <OrComponentWithRedirect
+          link={ '/accounts/password/reset' }
+          text={ 'Забыли пароль' }/> }
+        RedirectComponent={ <RedirectComponent
+          text={ 'Регистрация' }
+          link={ '/accounts/register' }/> }
+        buttonText={ 'Login' }
+        fields={ fieldsItems }
+        initialValues={ {password: '', email: ''} }
+        submitHandler={ submitLoginHandler }/>
+    </AuthLayout>
   )
 }
 

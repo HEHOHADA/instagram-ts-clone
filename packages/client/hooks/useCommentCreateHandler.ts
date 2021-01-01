@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { FormikHelpers } from 'formik'
-import { CreateCommentType, useCreateCommentMutation } from '@instagram/common'
+import { ICreateCommentType, useCreateCommentMutation } from '@instagram/common'
 
 export const useCommentCreateHandler = () => {
   const [createCommentMutation] = useCreateCommentMutation()
-  const createCommentHandler = useCallback(async (data: CreateCommentType, {resetForm}: FormikHelpers<any>) => {
+  const createCommentHandler = useCallback(async (data: ICreateCommentType, {resetForm}: FormikHelpers<any>) => {
     try {
       const response = await createCommentMutation({
         variables: {

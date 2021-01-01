@@ -32,7 +32,7 @@
     "expo-splash-screen": "~0.8.1",
     "expo-status-bar": "~1.0.3",
     "expo-web-browser": "~8.6.0",
-    "graphql-tag": "^2.11.0",
+    "graphql": "^15.4.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
@@ -54,6 +54,19 @@
     "expo-yarn-workspaces": "^1.2.1",
     "jest-expo": "^40.0.0",
     "typescript": "~4.0.0"
+  },
+  "workspaces": {
+    "nohoist": [
+      "**/react-native",
+      "**/*react-native*",
+      "**/react-native/**",
+      "**/react-native*/**",
+      "**/expo",
+      "**/expo*/**",
+      "**/*expo*",
+      "**/*react-navigation*",
+      "**/*react-navigation*/**"
+    ]
   },
   "private": true
 }

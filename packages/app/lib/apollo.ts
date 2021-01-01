@@ -1,7 +1,8 @@
 import { onError } from '@apollo/client/link/error'
 import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client'
-import { authContextLink, cacheConfig, httpLinkWithUpload, refreshLink } from '@instagram/common'
 import { getToken, setToken } from './token'
+import { Platform } from 'react-native'
+import { authContextLink, cacheConfig, httpLinkWithUpload, refreshLink } from '@instagram/common'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (graphQLErrors)
@@ -13,10 +14,13 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
   if (networkError) console.log(`[Network error]: ${ JSON.stringify(networkError) }`)
 })
 
+const host =
+  Platform.OS === 'ios' ? 'http://localhost:4000/graphql' : 'http://192.168.1.145:4000/graphql'
+const httpLink = httpLinkWithUpload(host)
+
 export default new ApolloClient({
   link: ApolloLink.from([refreshLink(getToken,
     setToken), authContextLink(getToken),
-    errorLink, httpLinkWithUpload]),
-
+    errorLink,httpLink]),
   cache: new InMemoryCache(cacheConfig)
 })

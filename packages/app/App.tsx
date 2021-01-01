@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client/react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import client from './lib/apollo'
 import Navigation from './navigation'
@@ -14,12 +14,12 @@ export default function App() {
     return null
   } else {
     return (
-      <ApolloProvider client={ client }>
-        <SafeAreaProvider>
+      <SafeAreaProvider>
+        <ApolloProvider client={ client }>
           <Navigation colorScheme={ colorScheme }/>
           <StatusBar/>
-        </SafeAreaProvider>
-      </ApolloProvider>
+        </ApolloProvider>
+      </SafeAreaProvider>
     )
   }
 }

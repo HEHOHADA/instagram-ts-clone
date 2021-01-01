@@ -1,17 +1,17 @@
 import React, { FC } from 'react'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { CreateCommentType } from '@instagram/common'
+import { ICreateCommentType } from '@instagram/common'
 import { TextArea } from '../utils/TextArea'
 
 
 type PropsType = {
   photoId: string,
-  createCommentHandler: (data: CreateCommentType, {resetForm}: FormikHelpers<CreateCommentType>) => Promise<void>
+  createCommentHandler: (data: ICreateCommentType, {resetForm}: FormikHelpers<ICreateCommentType>) => Promise<void>
 }
 
 export const CreateCommentForm: FC<PropsType> = ({photoId, createCommentHandler}) => {
   return (
-    <Formik<CreateCommentType>
+    <Formik<ICreateCommentType>
       onSubmit={ createCommentHandler }
       initialValues={ {commentText: '', photoId: photoId} }
     >

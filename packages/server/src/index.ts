@@ -24,7 +24,6 @@ const server = async () => {
   // const RedisStore = connectRedis(session)
   const app = Express()
   app.use(cookieParser())
-  // @ts-ignore
   app.use(cors({
     credentials: true,
     origin: 'http://localhost:3000'

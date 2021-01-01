@@ -7,6 +7,7 @@ import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/cli
 
 import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
+import { API_CONSTANTS } from '@instagram/common'
 
 export interface NextPageContextWithApollo extends NextPageContext {
   apolloClient: ApolloClient<NormalizedCacheObject> | null
@@ -38,8 +39,6 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
   const apolloClient = ctx.apolloClient ||
     initApollo(ctx.apolloState || {}, inAppContext
       ? ctx.ctx : ctx)
-  // @ts-ignore
-  apolloClient.toJSON = () => null
   ctx.apolloClient = apolloClient
   if (inAppContext) {
     ctx.ctx.apolloClient = apolloClient
@@ -50,7 +49,12 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
 
 const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any) => {
 
-  const WithApollo = ({apolloClient, apolloState, serverAccessToken, ...pageProps}: WithApolloType) => {
+  const WithApollo = ({
+                        apolloClient,
+                        apolloState,
+                        serverAccessToken,
+                        ...pageProps
+                      }: WithApolloType) => {
     if (!getAccessToken() && serverAccessToken) {
       setAccessToken(serverAccessToken)
     }
@@ -86,8 +90,7 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
         const cookies = cookie.parse(ctx.req.headers.cookie)
 
         if (cookies.jid) {
-
-          const response = await fetch('http://localhost:4000/refresh_token', {
+          const response = await fetch(API_CONSTANTS.refresh, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -127,7 +130,6 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
           try {
             // Run all GraphQL queries
             const {getDataFromTree} = await import('@apollo/client/react/ssr')
-
             let props: any
             if (inAppContext) {
               props = {...pageProps, apolloClient}

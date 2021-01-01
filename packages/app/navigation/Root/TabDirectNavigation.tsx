@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { TabDirectParamList } from '@types/navigation'
-import ProfileScreen from '../../screens/Profile/ProfileScreen'
+import { TabDirectParamList } from '@type/navigation'
+import DirectScreen from '@screens/Direct/DirectScreen'
 
 const TabDirectStack = createStackNavigator<TabDirectParamList>()
 
@@ -10,7 +10,7 @@ export function TabDirectNavigation() {
     <TabDirectStack.Navigator>
       <TabDirectStack.Screen
         name="TabDirectScreen"
-        component={ ProfileScreen }
+        component={ DirectScreen }
         options={ {headerTitle: 'Твой профиль'} }
       />
     </TabDirectStack.Navigator>

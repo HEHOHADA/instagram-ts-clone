@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useMemo } from 'react'
 
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
-import { ForgotPasswordType, useForgotPasswordMutation } from '@instagram/common'
+import { IForgotPasswordType, useForgotPasswordMutation } from '@instagram/common'
 
 import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
@@ -50,7 +50,7 @@ const ForgotPassword = () => {
   return (
       <MainLayout title="Forgot password">
         <div className="change-password__container container">
-          <InstagramAuthForm<ForgotPasswordType>
+          <InstagramAuthForm<IForgotPasswordType>
               loading={loading}
               OrOptionsComponent={ <OrComponentWithRedirect
                   link={ '/accounts/register' }

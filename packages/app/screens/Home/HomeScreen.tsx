@@ -1,10 +1,11 @@
-import * as React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import React from 'react'
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
 import { NAVIGATION_BAR_PADDING_V } from '@constants/demens'
 import { HistoryItems } from '@components/history/HistoryItems'
-import { View } from '@components/Themed'
-import { HomePost } from '@components/post/HomePost'
 
+import { useQuery } from '@apollo/client'
+import { HomePosts } from '@components/post/HomePosts'
+import { FeedDocument } from '@instagram/common'
 
 const data = [
   {
@@ -14,29 +15,36 @@ const data = [
   },
 ]
 
-const posts = [
-  {
-    uri: 'https://scontent-frx5-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/127635564_660216101326400_5131144735374551526_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&_nc_cat=1&_nc_ohc=rEx7XJV8WYUAX_HxLvG&tp=1&oh=315dfdcb6da8da7d3286bf054941bbe4&oe=5FF869DB',
-    likeCount: 5,
-    comments: [
-      {comment: 'hello', owner: 'me'}
-    ],
-    owner: {
-      uri: 'https://scontent-frx5-1.cdninstagram.com/v/t51.2885-19/s150x150/106558826_282409769486623_7544924254557319006_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&_nc_ohc=NLFtu8HPoHkAX917glb&tp=1&oh=b6a31acfadc341c3377e2df012588a00&oe=5FF67A22',
-      ownerName: 'dsadsa',
-      place: 'moskow',
-    },
-    id: '1'
-  },
-]
+
 export default function HomeScreen() {
+  const {data: dataFeed, loading, fetchMore, variables} = useQuery(FeedDocument, {
+    variables: {
+      limit: 2,
+      cursor: null as null | string
+    },
+    notifyOnNetworkStatusChange: true
+  })
+
+
+  const onFetchMore = async () => {
+    await fetchMore({
+      variables: {
+        limit: variables!.limit,
+        cursor: dataFeed?.feed.items[dataFeed?.feed.items.length - 1].date
+      }
+    })
+  }
+
   return (
-    <View style={ styles.container }>
-      <ScrollView>
+    <ScrollView>
+      <SafeAreaView style={ styles.container }>
         <HistoryItems data={ data }/>
-        <HomePost posts={ posts }/>
-      </ScrollView>
-    </View>
+        { dataFeed && !loading &&
+        <HomePosts
+          onFetchMore={ dataFeed.feed.paginationInfo.hasMore ? onFetchMore : undefined }
+          posts={ dataFeed.feed }/> }
+      </SafeAreaView>
+    </ScrollView>
   )
 }
 
@@ -44,6 +52,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: NAVIGATION_BAR_PADDING_V,
+    color: 'white'
   },
   title: {
     fontSize: 20,

@@ -25,7 +25,7 @@ function create(
       graphQLErrors.forEach(({message, locations, path}) => {
         console.log(
           `[GraphQL error]: Message: ${ message }, Location: ${ locations || 'not found' }, Path: ${ path }`)
-        if (isBrowser && (message.includes('AuthenticationError') || message.includes('Access denied!'))) {
+        if ((message.includes('AuthenticationError') || message.includes('Access denied!'))) {
           Redirect(ctx, '/accounts/login')
         }
       })
@@ -34,7 +34,8 @@ function create(
   })
 
   const ssrMode = Boolean(ctx)
-  const linkHttp = ApolloLink.from([httpLinkWithUpload as any])
+  debugger
+  const linkHttp = ApolloLink.from([httpLinkWithUpload()])
   const link = ssrMode
     ? linkHttp
     : isBrowser

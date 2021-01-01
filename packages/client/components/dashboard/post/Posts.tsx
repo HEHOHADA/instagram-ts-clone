@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic'
 import React, { FC, useCallback } from 'react'
-import { PhotoItemFragment, useDeletePhotoMutation } from '@instagram/common'
+import { IPhotoItemFragment, useDeletePhotoMutation } from '@instagram/common'
 
 const PostItem = dynamic(() => import('./PostItem'))
 
-export type PhotoFeedType = PhotoItemFragment &
+export type PhotoFeedType = IPhotoItemFragment &
     { isAuthor: boolean, isLiked: boolean, postText: string }
 
 type PropsType = {

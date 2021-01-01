@@ -25,7 +25,7 @@ export type TabAddParamList = {
 }
 
 export type TabProfileParamList = {
-  TabProfileScreen: undefined
+  TabProfileScreen: { queryUserName: string }
 }
 
 export type TabNewsParamList = {

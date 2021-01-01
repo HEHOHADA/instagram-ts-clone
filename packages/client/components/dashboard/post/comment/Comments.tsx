@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { CommentItem } from './CommentItem'
-import { CommentItemFragment, UserMeFragment } from '@instagram/common'
+import { ICommentItemFragment, IUserMeFragment } from '@instagram/common'
 
-export type CommentWithUserType = CommentItemFragment & { user: UserMeFragment }
+export type CommentWithUserType = ICommentItemFragment & { user: IUserMeFragment }
 
 type ProsType = {
   comments: CommentWithUserType[],

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import {
   useDeletePhotoMutation,
   useViewPhotoByIdQuery,
-  ViewPhotoByIdQuery
+  IViewPhotoByIdQuery
 } from '@instagram/common'
 
 import withApollo from '@/lib/withApollo'
@@ -16,7 +16,7 @@ import { Comments } from '@/components/dashboard/post/comment/Comments'
 import { PhotoItemContainer, PhotoItemType } from '@/hoc/PhotoItemContainer'
 import { CommentTools } from '@/components/dashboard/post/comment/CommentTools'
 
-type ViewPhotoByIdType = ViewPhotoByIdQuery['viewPhotoById']
+type ViewPhotoByIdType = IViewPhotoByIdQuery['viewPhotoById']
 
 const PhotoViewPost = () => {
   const router = useRouter()

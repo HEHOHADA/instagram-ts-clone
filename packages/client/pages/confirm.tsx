@@ -5,10 +5,10 @@ import withApollo from '@/lib/withApollo'
 import MainLayout from '@/components/MainLayout'
 import { MyContext } from '@/interfaces/MyContext'
 import {
-  confirmUserMutation,
-  ConfirmUserMutation,
-  ConfirmUserMutationVariables
+  IConfirmUserMutation,
+  IConfirmUserMutationVariables
 } from '@instagram/common'
+import { confirmUserMutation } from '@instagram/common/dist/graphql/mutation'
 
 const Confirm = () => {
   return (
@@ -22,8 +22,8 @@ Confirm.getInitialProps = async ({query: {token}, apolloClient, ...ctx}: MyConte
   if (!token) {
     return {}
   }
-  await apolloClient.mutate<ConfirmUserMutation,
-    ConfirmUserMutationVariables>({
+  await apolloClient.mutate<IConfirmUserMutation,
+    IConfirmUserMutationVariables>({
     mutation: confirmUserMutation,
     variables: {
       token: token as string

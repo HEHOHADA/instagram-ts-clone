@@ -3,21 +3,28 @@ import { useNavigation } from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Image, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
 
+import {
+  ILoginMutation,
+  ILoginMutationVariables,
+  IMeQuery,
+  LoginDocument,
+  MeDocument
+} from '@instagram/common'
+
 import { Text } from '@components/Themed'
 import { ICON_SIZE } from '@constants/icons'
+import { useMutation } from '@apollo/client'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
-import { IMeQuery, MeDocument, useLoginMutation } from '@instagram/common'
+import { setToken } from '../../lib/token'
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [hidePassword, setHidePassword] = useState(true)
-  const [login] = useLoginMutation()
-
+  const [login] = useMutation<ILoginMutation, ILoginMutationVariables>(LoginDocument)
   const {navigate} = useNavigation()
   const submitLoginHandler = useCallback(async (data) => {
     try {
-      console.log('it works')
       const response = await login({
         variables: {
           data
@@ -25,7 +32,6 @@ export default function LoginScreen() {
           if (!data || !data.login) {
             return
           }
-
           cache.writeQuery<IMeQuery>({
             query: MeDocument,
             data: {
@@ -36,7 +42,8 @@ export default function LoginScreen() {
 
       })
       if (response && response.data) {
-        console.log('response', response.data)
+        setToken(response.data.login.accessToken)
+        navigate('Root', {screen: 'TabHomeScreen'})
       }
     } catch (e) {
       console.log(e)

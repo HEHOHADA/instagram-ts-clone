@@ -9,7 +9,6 @@ export class MeResolver {
   @Query(() => User, {nullable: true})
   async me(@Ctx() ctx: MyContext) {
     const auth = ctx.req.headers.authorization
-
     if (!auth) {
       return undefined
     }

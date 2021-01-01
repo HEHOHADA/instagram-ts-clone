@@ -8,7 +8,7 @@ import { Picture } from '../utils/svg/Picture'
 import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { TextArea } from '../utils/TextArea'
-import { CreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '@instagram/common'
+import { ICreateMessageMutationVariables, useChatQuery, useCreateMessageMutation } from '@instagram/common'
 
 
 const ConversationItem: FC = () => {
@@ -31,8 +31,8 @@ const ConversationItem: FC = () => {
 
   useEffect(scrollToBottom, [data?.chat.messages.length])
 
-  const createMessageHandler = async (data: CreateMessageMutationVariables,
-                                      {resetForm}: FormikHelpers<CreateMessageMutationVariables>) => {
+  const createMessageHandler = async (data: ICreateMessageMutationVariables,
+                                      {resetForm}: FormikHelpers<ICreateMessageMutationVariables>) => {
     const response = await createMessage({variables: {...data}})
     if (response && response.data) {
       resetForm()
@@ -66,7 +66,7 @@ const ConversationItem: FC = () => {
           </div>
         </div>
         <div className="conversation__form__container">
-          <Formik<CreateMessageMutationVariables>
+          <Formik<ICreateMessageMutationVariables>
               onSubmit={ createMessageHandler }
               initialValues={ {text: '', chatId: id} }
           >

@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import { HistoryPhoto } from './HistoryPhoto'
 import Colors from '@constants/Colors'
 import { PADDING_H } from '@constants/demens'
+import { VirtualizedView } from '@components/VirtualizeView'
 
 type PropsType = {
   data: Array<any>
@@ -10,17 +11,19 @@ type PropsType = {
 
 export const HistoryItems: FC<PropsType> = ({data}) => {
   return (
-    <View style={ styles.historyWrapper }>
-      <FlatList
-        horizontal
-        keyExtractor={ post => post.id?.toString() || '' }
-        data={ data }
-        renderItem={ ({item}) => {
-          return (
-            <HistoryPhoto { ...item }/>
-          )
-        } }/>
-    </View>
+    <VirtualizedView>
+      <View style={ styles.historyWrapper }>
+        <FlatList
+          horizontal
+          keyExtractor={ post => post.id?.toString() || '' }
+          data={ data }
+          renderItem={ ({item}) => {
+            return (
+              <HistoryPhoto { ...item }/>
+            )
+          } }/>
+      </View>
+    </VirtualizedView>
   )
 }
 

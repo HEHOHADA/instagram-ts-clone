@@ -1,7 +1,7 @@
 import { ApolloCache, gql } from '@apollo/client'
-import { FollowUserMutationFn, UnFollowUserMutationFn } from '@instagram/common'
+import { IFollowUserMutationFn, IUnFollowUserMutationFn } from '@instagram/common'
 
-type FollowCallbackType = UnFollowUserMutationFn | FollowUserMutationFn
+type FollowCallbackType = IUnFollowUserMutationFn | IFollowUserMutationFn
 
 export function followCallback(followCallback: FollowCallbackType, count: number): (userId: string, id?: string) => Promise<void> {
   return async (userId: string, id?: string) => {

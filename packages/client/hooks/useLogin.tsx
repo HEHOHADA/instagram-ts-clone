@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useRouter } from 'next/router'
-import { MeDocument, MeQuery, useLoginMutation } from '@instagram/common'
+import { MeDocument, IMeQuery, useLoginMutation } from '@instagram/common'
 
 import { setAccessToken } from '@/lib/token'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'
@@ -10,6 +10,7 @@ export default function useLogin() {
   const router = useRouter()
   const submitLoginHandler = useCallback(async (data, {setErrors}) => {
     try {
+      debugger
       const response = await login({
         variables: {
           data
@@ -18,7 +19,7 @@ export default function useLogin() {
             return
           }
 
-          cache.writeQuery<MeQuery>({
+          cache.writeQuery<IMeQuery>({
             query: MeDocument,
             data: {
               me: data.login.user
@@ -36,7 +37,7 @@ export default function useLogin() {
     } catch (e) {
       setErrors(formatValidationErrors(e.graphQLErrors[0], 'email'))
     }
-  }, [])
+  }, [router, login])
 
   return {
     loading, submitLoginHandler

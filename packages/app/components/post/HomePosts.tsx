@@ -1,14 +1,27 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { FC } from 'react'
+import { FlatList, StyleSheet, View } from 'react-native'
+import { IFeedQuery } from '@instagram/common'
+import { HomePost } from '@components/post/HomePost'
+import { VirtualizedView } from '@components/VirtualizeView'
 
-export const HomePosts = () => {
+type PropsType = {
+  posts: IFeedQuery['feed']
+  onFetchMore: (() => Promise<void>) | undefined
+}
+export const HomePosts: FC<PropsType> = ({posts, onFetchMore}) => {
   return (
-    <View>
-      
-    </View>
+    <VirtualizedView>
+      <FlatList
+        onScrollAnimationEnd={ onFetchMore }
+        keyExtractor={ item => item.id?.toString() || '' }
+        data={ posts.items }
+        renderItem={ ({item}) => {
+          return (
+            <HomePost { ...item }/>
+          )
+        } }/>
+    </VirtualizedView>
   )
 }
 
-const styles = StyleSheet.create({
-  
-})
+const styles = StyleSheet.create({})
