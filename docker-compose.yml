@@ -2,8 +2,6 @@ version: "3"
 services:
   graphql:
     build: ./server
-    networks:
-      - postgres
     depends_on:
       - postgres
       - redis
@@ -12,6 +10,19 @@ services:
     ports:
       - "4000:4000"
       - "4001:40001"
+    networks:
+      - deploy
+      environment:
+        - DB_USER=postgres
+        - DB_DATABASE=instagram-ts-gql
+        - DB_PASS=bulat551
+        - DB_HOST=postgres
+        - REDIS_PORT=6379
+        - FRONTEND_HOST=http://localhost:3000
+        - SEND_GRID_API_KEY=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
+        - SESSION_SECRET=1nst@gram_cl0ne
+        - ACCESS_TOKEN_SECRET=accestokensecret
+        - REFRESH_TOKEN_SECRET=refreshtokensecret
   #    container_name: graphql
   #      build: ./server
   #      restart: unless-stopped
@@ -37,36 +48,33 @@ services:
 
   postgres:
     image: postgres:latest
+    container_name: postgres
     ports:
       - "5432:5432"
     volumes:
       - pgvol:/var/lib/postgresql/data
-    networks:
-      - postgres
     environment:
       POSTGRES_PASSWORD: bulat551
+      POSTGRES_USER: postgres
+      POSTGRES_DB: instagram-gql-ts
 
   redis:
-#    image: "redis:alpine"
-#    image: redis:latest
-#    command: [ "redis-server", "--appendonly", "yes" ]
-#    hostname: redis
-#    networks:
-#      - redis-net
-#    volumes:
-#      - redis-data:/data
     image: redis:latest
     container_name: redis
-    restart: unless-stopped
+    command: redis-server
     ports:
       - "6379:6379"
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PORT=6379
+    networks:
+      - deploy
+    volumes:
+      - ./redis-data:/var/lib/redis
+
 volumes:
-  pgvol:
-#  redis-data:
+  postgres-data:
+  redis-data:
 
 networks:
-#  redis-net:
-  postgres:
+  deploy:
     driver: bridge
