@@ -34,7 +34,6 @@ function create(
   })
 
   const ssrMode = Boolean(ctx)
-  debugger
   const linkHttp = ApolloLink.from([httpLinkWithUpload()])
   const link = ssrMode
     ? linkHttp

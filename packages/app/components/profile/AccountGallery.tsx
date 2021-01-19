@@ -4,18 +4,20 @@ import { StyleSheet, View } from 'react-native'
 import { GalleryImage } from './GalleryImage'
 import { IPhoto } from '@instagram/common'
 import { useNavigation } from '@react-navigation/native'
+import { useNavigate } from '@hooks/useNavigate'
 
-
-export const AccountGallery: FC<{ photos: Array<IPhoto> }> = ({photos}) => {
-  const {navigate} = useNavigation()
-  const navigationHandler = (id: string) => {
-  }
+type PropsType = {
+  photos: Array<IPhoto>
+}
+export const AccountGallery: FC<PropsType> = ({photos}) => {
+  const {navigateToPostId} = useNavigate()
   return (
     <View style={ styles.container }>
       { photos && photos.map(photo => (
         <GalleryImage
           id={ photo.id }
-          navigate={ navigationHandler }
+          key={ photo.id }
+          navigate={ navigateToPostId }
           uri={ photo.pictureUrl }/>
       )) }
     </View>

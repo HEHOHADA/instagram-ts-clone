@@ -11,12 +11,13 @@
 
 .dashboard__main {
   flex-direction: column;
-  max-width: 620px;
   width: 100%;
-  margin-right: 30px;
   float: left;
   display: flex;
-
+  @include media((
+    margin-right:(xs:0, md:'30px'),
+    max-width:(xs:'none', md:'620px')
+  ));
 }
 
 .dashboard__history {
@@ -233,6 +234,10 @@
   max-width: 293px;
   height: 100vh;
   right: 300px;
+
+  @include media((
+    display: (xs:none, md: block)
+  ))
 }
 
 .user__profile {

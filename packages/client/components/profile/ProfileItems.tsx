@@ -20,18 +20,20 @@ export const ProfileItems: FC<PropsType> =
     return (
       <div className="profile__items">
         <div className="profile__item__header">
-          <h2 className="profile__name">{ username }</h2>
+          <div className="profile__item-header__container">
+            <h2 className="profile__name">{ username }</h2>
+            <a className="profile__settings">
+                  <span className="material-icons">
+                      settings
+                  </span>
+            </a>
+          </div>
           { isCurrentUser ?
             <LinkItem
               linkClassName={ 'profile__edit' } href="/accounts/settings"
               LinkContent={ 'Редиактировать пользователя' }/>
             : followButton
           }
-          <a className="profile__settings">
-                  <span className="material-icons">
-                      settings
-                  </span>
-          </a>
         </div>
         <ProfileInfoItems navItems={ infoItems }/>
         <div className="profile__item__name">{ fullName }</div>

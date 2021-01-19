@@ -1,14 +1,18 @@
 import React, { FC } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { IFeedQuery } from '@instagram/common'
-import { HomePost } from '@components/post/HomePost'
+import { PostItem } from '@components/post/PostItem'
 import { VirtualizedView } from '@components/VirtualizeView'
+import { useNavigation } from '@react-navigation/native'
+import { useNavigate } from '@hooks/useNavigate'
 
 type PropsType = {
   posts: IFeedQuery['feed']
   onFetchMore: (() => Promise<void>) | undefined
 }
 export const HomePosts: FC<PropsType> = ({posts, onFetchMore}) => {
+  const {navigateToPostId, navigateToProfile} = useNavigate()
+
   return (
     <VirtualizedView>
       <FlatList
@@ -17,7 +21,10 @@ export const HomePosts: FC<PropsType> = ({posts, onFetchMore}) => {
         data={ posts.items }
         renderItem={ ({item}) => {
           return (
-            <HomePost { ...item }/>
+            <PostItem
+              onNavigateProfile={navigateToProfile}
+              onNavigatePost={ navigateToPostId }
+                      { ...item }/>
           )
         } }/>
     </VirtualizedView>

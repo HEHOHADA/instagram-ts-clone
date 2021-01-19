@@ -28,13 +28,20 @@
       border-left-color: #dbdbdb;
     }
   }
+
+  @include media((
+    display:(xs:none, md:block)
+  ))
 }
 
 
 .settings__main {
-  @extend %direc-column;
   flex: 1 1 400px;
   min-width: 50px;
+
+  @include media((
+    margin:(xs: '0 auto', md:0)
+  ))
 }
 
 .user__picture__container {
@@ -42,6 +49,9 @@
   width: 100%;
   margin: 32px 0;
   align-items: center;
+  @include media((
+    justify-content:(xs: 'center', md:'initial')
+  ));
 
   .user__url {
     @include image__item(50px)
@@ -99,12 +109,18 @@
     padding-left: 32px;
     padding-right: 32px;
     text-align: right;
+    @include media((
+      flex:(xs:'none', md:' 0 0 194px')
+    ));
   }
 }
 
 .change__input__container {
   flex-basis: 390px;
-  padding-right: 60px;
+
+  @include media((
+    padding-right:(xs:'0', md:'3rem')
+  ));
 
   .input__field {
     border: $border;

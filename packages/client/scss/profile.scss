@@ -14,39 +14,59 @@
 
 .profile__image {
   flex-grow: 1;
-  margin-right: 40px;
+  margin-right: 2rem;
 
   .profile__image__center {
     @include image__item(150px);
+    @include media((
+      height:(xs:90px, md:150px),
+      width:(xs:90px, md:150px)
+    ));
     margin-left: auto;
     margin-right: auto;
   }
+
+  @include media((
+    margin: (xs: 0.5rem)
+  ))
 }
 
 .profile__items {
+  @extend %direc-column;
   flex-grow: 2;
+  justify-content: center;
 }
 
 .profile__item__header {
-  @extend %direc-row;
-  margin-bottom: 20px;
+  display: flex;
   align-items: center;
+
+  @include media((
+    flex-direction: (xs: column),
+    align-items:(xs: normal),
+    margin-bottom:(xs:0, md:'20px')
+  ))
 }
 
 .profile__name {
   font-size: 28px;
   line-height: 32px;
+  @include media((
+    margin-bottom:(xs: 0.5rem)
+  ))
 }
 
 .profile__edit {
   border: $border;
   padding: 5px 9px;
   text-align: center;
-  margin-left: 20px;
   background-color: transparent;
   color: $blackActive;
   font-size: 14px;
   border-radius: 4px;
+  @include media((
+    display:(xs:none, md:block),
+  ))
 }
 
 .profile__settings {
@@ -56,7 +76,13 @@
 
 .profile__item__info {
   margin-bottom: 20px;
-  display: flex;
+  @include media((
+    display: (xs: none, md:flex)
+  ))
+}
+
+.profile__item-header__container {
+  @extend %direc-row;
 }
 
 .profile__item {
@@ -100,13 +126,18 @@
 
 .profile__photos {
   @extend %direc-row;
-  flex: 1 1 150px;
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
 }
 
 .profile__photo__container {
   max-height: 290px;
-  margin: 10px;
-  width: 100%;
+  flex: 1 1 0;
+  width: calc(33% - 22px);
+  @include media((
+    margin-right:(sm:0, md:'1rem')
+  ))
 }
 
 .profile__photo {

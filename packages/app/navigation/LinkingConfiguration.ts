@@ -6,12 +6,16 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabHome: {
+          Home: {
             screens: {
-              TabHomeScreen: 'homeOne',
+              TabHome: 'homeOne',
+              TabSearch: 'homeOne',
+              TabAdd: 'homeOne',
+              TabNews: 'homeOne',
+              TabProfile: 'homeOne',
             },
           },
-          TabAdd: {
+          Direct: {
             screens: {
               TabAddScreen: 'addOne',
             },

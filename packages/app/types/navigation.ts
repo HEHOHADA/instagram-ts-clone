@@ -28,6 +28,10 @@ export type TabProfileParamList = {
   TabProfileScreen: { queryUserName: string }
 }
 
+export type TabPostParamList = {
+  TabPostScreen: { id: string }
+}
+
 export type TabNewsParamList = {
   TabNewsScreen: undefined
 }
@@ -49,4 +53,9 @@ export type AuthParamList = {
   TabRegister: undefined
   TabChangePassword: undefined
   TabForgotPassword: undefined
+}
+
+export type SharedTabParamList = {
+  PostScreen: { id: string }
+  ProfileScreen: { queryUserName: string }
 }

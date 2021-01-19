@@ -74,7 +74,6 @@ const Profile = () => {
           } }
         </ModalWindow>
         <div className="profile container">
-
           { data?.getUserInfo && <ProfileInfo
               meId={ meData?.me?.id }
               followButton={ followButton }

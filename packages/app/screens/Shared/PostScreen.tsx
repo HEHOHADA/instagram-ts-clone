@@ -1,21 +1,29 @@
 import * as React from 'react'
-import { StyleSheet } from 'react-native'
-import { View, Text } from '@components/Themed'
-
+import { SafeAreaView, StyleSheet } from 'react-native'
+import { Text, View } from '@components/Themed'
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { SharedTabParamList } from '@type/navigation'
+import { useQuery } from '@apollo/client'
+import { IViewPhotoByIdQuery, ViewPhotoByIdDocument } from '@instagram/common'
+import { SCREEN_HEIGHT } from '@constants/demens'
+import { PostItem } from '@components/post/PostItem'
 
 export default function PostScreen() {
+  const {params} = useRoute<RouteProp<SharedTabParamList, 'PostScreen'>>()
+  const {data} = useQuery<IViewPhotoByIdQuery>(ViewPhotoByIdDocument, {variables: {id: params.id}})
+  console.log(data)
   return (
-    <View style={ styles.container }>
-      <Text style={ styles.title }>PostScreen page</Text>
-    </View>
+    <SafeAreaView style={ styles.container }>
+      <PostItem  { ...(data?.viewPhotoById as any) || {} } />
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#f7f8fc',
+    width: '100%',
+    height: SCREEN_HEIGHT
   },
   title: {
     fontSize: 20,

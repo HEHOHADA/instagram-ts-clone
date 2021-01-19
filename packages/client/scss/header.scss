@@ -26,6 +26,7 @@
 
 .header__logo {
   flex: 1 1 0;
+  margin-left: 1rem;
   background: url("../public/static/img/735145cfe0a4.png") no-repeat;
 }
 
@@ -73,25 +74,18 @@
 }
 
 .header__nav-items {
-  @extend %direc-row;
-  flex: 1 0 0%;
+  flex-direction: row;
+  position: relative;
+  flex: 1 0 0;
   justify-content: flex-end;
+  @include media((
+    display: (xs: none, md: flex)
+  ))
 }
 
 .nav__container {
   @extend %direc-row;
   align-items: center;
-  //@include media((
-  //  visibility: (lg:hidden),
-  //  background-color:(md:black, lg:white))
-  //)
-}
-
-
-@media only screen and (max-width: 768px) {
-  .header__nav-items {
-    visibility: hidden;
-  }
 }
 
 .nav__register {

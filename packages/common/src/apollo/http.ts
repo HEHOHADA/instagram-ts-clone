@@ -8,6 +8,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { TokenType } from '../types'
 import { API_CONSTANTS } from '../config'
+import { getServerAccessToken, setServerAccessToken } from './util'
 
 export function httpLinkWithUpload(api = API_CONSTANTS.api): ApolloLink {
   return createUploadLink({
@@ -31,25 +32,25 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
   return new TokenRefreshLink({
     isTokenValidOrUndefined: () => {
       let possibleToken = getAccessToken()
-      let token
       if (typeof possibleToken === 'object') {
         (async () => {
           try {
-            token = await possibleToken
+            const token = await possibleToken
+            token && setServerAccessToken(token)
           } catch (err) {
             console.log(err)
           }
         })()
       } else {
-        token = possibleToken
+        setServerAccessToken(possibleToken)
       }
-
+      const token = getServerAccessToken()
       if (!token) {
         return true
       }
 
       try {
-        const {exp} = jwtDecode(token as any) as TokenType
+        const {exp} = jwtDecode(token) as TokenType
         return Date.now() < exp * 1000
       } catch {
         return false

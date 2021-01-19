@@ -20,10 +20,10 @@ import { ExtraInfo } from '@components/profile/ExtraInfo'
 export default function ProfileScreen() {
   const {params} = useRoute<RouteProp<TabProfileParamList, 'TabProfileScreen'>>()
   const {
-    data: userData,
-    loading
+    data: userData
   } = useQuery<IGetUserInfoQuery>(GetUserInfoDocument, {variables: {username: (params.queryUserName as string)}})
   const {data: dataPhoto} = useQuery<IViewUserPhotoQuery>(ViewUserPhotoDocument, {variables: {username: (params.queryUserName as string)}})
+
   return (
     <SafeAreaView style={ styles.container }>
       <TouchableOpacity

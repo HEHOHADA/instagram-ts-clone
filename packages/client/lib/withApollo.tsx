@@ -39,6 +39,8 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
   const apolloClient = ctx.apolloClient ||
     initApollo(ctx.apolloState || {}, inAppContext
       ? ctx.ctx : ctx)
+  // @ts-ignore Circular structure in "getInitialProps" result
+  apolloClient.toJSON = () => null
   ctx.apolloClient = apolloClient
   if (inAppContext) {
     ctx.ctx.apolloClient = apolloClient

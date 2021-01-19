@@ -8,31 +8,39 @@ import { FontAwesome5 } from '@expo/vector-icons'
 import { SCREEN_WIDTH } from '@constants/demens'
 import { TabBarIcon } from '@components/ui/AppIcon'
 import { ICON_SIZE, ICONS } from '@constants/icons'
-import { IFeedQuery } from '@instagram/common'
+import { IPhoto, IPhotoItemFragment } from '@instagram/common'
 import { useNavigation } from '@react-navigation/native'
+import { TapGestureHandler } from 'react-native-gesture-handler'
 
-type PropsType = IFeedQuery['feed']['items'][0]
+type PropsType = (Pick<IPhoto, 'isLiked' | 'isAuthor' | 'postText'> & IPhotoItemFragment) & {
+  onNavigatePost?: (id: string) => void
+  onNavigateProfile?: (id: string) => void
 
-export const HomePost: FC<PropsType> = ({
+}
+
+export const PostItem: FC<PropsType> = ({
                                           user,
                                           commentCount,
                                           postText,
                                           isLiked,
-                                          likeCount,
-                                          pictureUrl
+                                          likeCount, id,
+                                          pictureUrl,
+                                          onNavigatePost,
+                                          onNavigateProfile
                                         }) => {
 
   const {navigate} = useNavigation()
   return (
     <View style={ styles.wrapper }>
       <View style={ styles.header }>
-        <View style={ styles.user }>
-          <AppImage uri={ user.pictureUrl as string }/>
+        <TouchableOpacity style={ styles.user }
+                          onLongPress={ () => onNavigateProfile && onNavigateProfile(user.username) }>
+          { user?.pictureUrl && <AppImage uri={ user.pictureUrl as string }/> }
           <View style={ styles.info }>
             <Text style={ {fontWeight: 'bold', fontSize: 16} }>{ user.username }</Text>
             <Text>{ user.fullName }</Text>
           </View>
-        </View>
+        </TouchableOpacity>
         <View>
           <HeaderButtons
             HeaderButtonComponent={ AppHeaderIcon }>
@@ -41,17 +49,23 @@ export const HomePost: FC<PropsType> = ({
           </HeaderButtons>
         </View>
       </View>
-      <View style={ styles.container }>
-        <View>
-          <Image
-            style={ {
-              width: SCREEN_WIDTH,
-              height: SCREEN_WIDTH
-            } }
-            source={ {uri: pictureUrl} }
-          />
-        </View>
-      </View>
+      <TouchableOpacity
+        style={ styles.container }
+        activeOpacity={ 0.9 }
+        onLongPress={ () => onNavigatePost && onNavigatePost(id) }>
+        <TapGestureHandler
+          numberOfTaps={ 2 }>
+          <View>
+            <Image
+              style={ {
+                width: SCREEN_WIDTH,
+                height: SCREEN_WIDTH
+              } }
+              source={ {uri: pictureUrl} }
+            />
+          </View>
+        </TapGestureHandler>
+      </TouchableOpacity>
       <View style={ styles.reactionsWrapper }>
         <View style={ styles.reactions }>
           <View style={ styles.lReactions }>
@@ -65,7 +79,7 @@ export const HomePost: FC<PropsType> = ({
             } }>
               <FontAwesome5 name={ ICONS.comment } size={ ICON_SIZE.big } color="black"/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={ () => navigate('TabDirect', {screen: 'TabDirectScreen'}) }>
+            <TouchableOpacity onPress={ () => navigate('Direct', {screen: 'TabDirectScreen'}) }>
               <FontAwesome5 name={ ICONS.direct } size={ ICON_SIZE.big } color="black"/>
             </TouchableOpacity>
           </View>

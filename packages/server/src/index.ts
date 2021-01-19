@@ -74,7 +74,7 @@ const server = async () => {
       userLoader: createUserLoader(),
       commentLoader: createCommentLoader(),
       photoLoader: createPhotoLoader(),
-      imageUrl: 'http://localhost:4000',
+      imageUrl: 'http://192.168.1.145:4000',
       url: req ? (req.protocol + '://' + req.get('host')) : ''
     }),
     formatError: (error: GraphQLError) => {

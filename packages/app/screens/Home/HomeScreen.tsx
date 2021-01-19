@@ -21,10 +21,8 @@ export default function HomeScreen() {
     variables: {
       limit: 2,
       cursor: null as null | string
-    },
-    notifyOnNetworkStatusChange: true
+    }
   })
-
 
   const onFetchMore = async () => {
     await fetchMore({
@@ -34,7 +32,6 @@ export default function HomeScreen() {
       }
     })
   }
-
   return (
     <ScrollView>
       <SafeAreaView style={ styles.container }>
