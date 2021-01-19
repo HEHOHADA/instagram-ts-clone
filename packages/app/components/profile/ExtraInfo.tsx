@@ -6,6 +6,7 @@ type PropsType = {
   info: string | number | undefined | null
   textInfo: string
 }
+
 export const ExtraInfo: FC<PropsType> = ({info = 0, textInfo}) => {
   return (
     <TouchableOpacity style={ styles.wrapper }>

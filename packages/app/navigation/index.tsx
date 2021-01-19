@@ -29,7 +29,8 @@ export default function Navigation({colorScheme}: { colorScheme: ColorSchemeName
 const Stack = createStackNavigator<RootStackParamList>()
 
 function RootNavigator() {
-  const {data} = useQuery<IMeQuery>(MeDocument)
+  const {data,loading} = useQuery<IMeQuery>(MeDocument)
+  console.log(data,loading)
   return (
     <Stack.Navigator screenOptions={ {headerShown: false} }>
       { !data?.me ? <Stack.Screen name="Auth"

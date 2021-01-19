@@ -20,7 +20,7 @@ const httpLink = httpLinkWithUpload(host)
 
 export default new ApolloClient({
   link: ApolloLink.from([refreshLink(getToken,
-    setToken), authContextLink(getToken),
+    setToken, 'http://192.168.1.145:4000/refresh_token'), authContextLink(getToken),
     errorLink,httpLink]),
   cache: new InMemoryCache(cacheConfig)
 })

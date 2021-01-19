@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   },
   photoWrapper: {
     position: 'relative',
-    width: SCREEN_WIDTH / 3 - 10 / 3,
-    height: SCREEN_WIDTH / 3 - 10 / 3,
+    width: SCREEN_WIDTH / 3 - 5,
+    height: SCREEN_WIDTH / 3 - 5,
     marginBottom: 5,
   },
   photo: {

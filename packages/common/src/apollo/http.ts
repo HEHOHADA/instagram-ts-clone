@@ -1,14 +1,11 @@
-import jwtDecode from 'jwt-decode'
 import { ApolloLink } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from '@apollo/client/link/context'
 import { TokenRefreshLink } from 'apollo-link-token-refresh'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-
-import { TokenType } from '../types'
 import { API_CONSTANTS } from '../config'
-import { getServerAccessToken, setServerAccessToken } from './util'
+import { checkToken } from './util'
 
 export function httpLinkWithUpload(api = API_CONSTANTS.api): ApolloLink {
   return createUploadLink({
@@ -30,30 +27,12 @@ export function wsLink(token: string, api = API_CONSTANTS.ws): ApolloLink {
 
 export function refreshLink(getAccessToken: () => Promise<string | null> | string | null, setAccessToken: (token: string) => Promise<void> | void, api = API_CONSTANTS.refresh): ApolloLink {
   return new TokenRefreshLink({
-    isTokenValidOrUndefined: () => {
+    isTokenValidOrUndefined:async () => {
       let possibleToken = getAccessToken()
       if (typeof possibleToken === 'object') {
-        (async () => {
-          try {
-            const token = await possibleToken
-            token && setServerAccessToken(token)
-          } catch (err) {
-            console.log(err)
-          }
-        })()
+        return checkToken(await possibleToken)
       } else {
-        setServerAccessToken(possibleToken)
-      }
-      const token = getServerAccessToken()
-      if (!token) {
-        return true
-      }
-
-      try {
-        const {exp} = jwtDecode(token) as TokenType
-        return Date.now() < exp * 1000
-      } catch {
-        return false
+        return checkToken(possibleToken)
       }
     },
     accessTokenField: 'accessToken',
@@ -65,6 +44,7 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
     },
     handleResponse: (_, accessTokenField) => async (response: Response) => {
       const result = await response.json()
+      console.log('fetch', result)
       return {
         [accessTokenField]: result[accessTokenField]
       }
@@ -75,7 +55,7 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
     handleError: err => {
       console.error(err)
     }
-  }) as any
+  }) as ApolloLink
 }
 
 

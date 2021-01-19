@@ -15,7 +15,6 @@ import { TapGestureHandler } from 'react-native-gesture-handler'
 type PropsType = (Pick<IPhoto, 'isLiked' | 'isAuthor' | 'postText'> & IPhotoItemFragment) & {
   onNavigatePost?: (id: string) => void
   onNavigateProfile?: (id: string) => void
-
 }
 
 export const PostItem: FC<PropsType> = ({
@@ -28,7 +27,6 @@ export const PostItem: FC<PropsType> = ({
                                           onNavigatePost,
                                           onNavigateProfile
                                         }) => {
-
   const {navigate} = useNavigation()
   return (
     <View style={ styles.wrapper }>
@@ -84,34 +82,34 @@ export const PostItem: FC<PropsType> = ({
             </TouchableOpacity>
           </View>
         </View>
-        { likeCount && <Text style={ {
+        { likeCount ? <Text style={ {
           fontWeight: 'bold',
           marginVertical: 5,
         } }>{ likeCount >= 1000 ?
           (Math.round(likeCount / 1000) + 'k')
-          : likeCount } { likeCount < 2 ? 'like' : 'likes' }</Text> }
-        { commentCount && commentCount > 0 &&
-        <>
-          <View>
-            <Text style={ {
-              fontWeight: '600',
-              marginVertical: 5,
-            } }>{ user.username } <Text style={ {
-              fontWeight: '600'
-            } }>
-            </Text>{ postText }</Text>
-          </View>
-          <TouchableOpacity
-            onPress={ () => {
-            } }
-            style={ styles.btnViewCmt }>
-            <Text style={ {
-              color: '#666',
-            } }>
-              View all { commentCount } comments
-            </Text>
-          </TouchableOpacity>
-        </>
+          : likeCount } { likeCount < 2 ? 'like' : 'likes' }</Text> : null }
+        { commentCount && commentCount > 0 ?
+          <>
+            <View>
+              <Text style={ {
+                fontWeight: '600',
+                marginVertical: 5,
+              } }>{ user.username } <Text style={ {
+                fontWeight: '600'
+              } }>
+              </Text>{ postText }</Text>
+            </View>
+            <TouchableOpacity
+              onPress={ () => {
+              } }
+              style={ styles.btnViewCmt }>
+              <Text style={ {
+                color: '#666',
+              } }>
+                View all { commentCount } comments
+              </Text>
+            </TouchableOpacity>
+          </> : null
         }
 
         <TouchableOpacity

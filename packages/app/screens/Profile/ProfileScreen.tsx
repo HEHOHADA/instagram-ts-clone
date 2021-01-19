@@ -23,7 +23,6 @@ export default function ProfileScreen() {
     data: userData
   } = useQuery<IGetUserInfoQuery>(GetUserInfoDocument, {variables: {username: (params.queryUserName as string)}})
   const {data: dataPhoto} = useQuery<IViewUserPhotoQuery>(ViewUserPhotoDocument, {variables: {username: (params.queryUserName as string)}})
-
   return (
     <SafeAreaView style={ styles.container }>
       <TouchableOpacity
