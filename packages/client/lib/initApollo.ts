@@ -43,7 +43,7 @@ function create(
           const {kind, operation}: OperationVariables = getMainDefinition(query)
           return kind === 'OperationDefinition' && operation === 'subscription'
         },
-        wsLink(`Bearer ${ getAccessToken() }`) as any,
+        wsLink(getAccessToken),
         linkHttp
       )
       : linkHttp

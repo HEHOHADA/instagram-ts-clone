@@ -1,7 +1,6 @@
 import React from 'react'
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native'
+import { SafeAreaView, StyleSheet } from 'react-native'
 import { NAVIGATION_BAR_PADDING_V } from '@constants/demens'
-import { HistoryItems } from '@components/history/HistoryItems'
 
 import { useQuery } from '@apollo/client'
 import { HomePosts } from '@components/post/HomePosts'
@@ -16,12 +15,13 @@ export default function HomeScreen() {
   })
 
   const onFetchMore = async () => {
-    await refetch({
+     refetch({
         limit: variables!.limit,
         cursor: dataFeed?.feed.items[dataFeed?.feed.items.length - 1].date
       }
     )
   }
+
   return (
     <SafeAreaView style={ styles.container }>
       { dataFeed && !loading &&

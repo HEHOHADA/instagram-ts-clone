@@ -1,24 +1,83 @@
-import * as React from 'react'
-import { StyleSheet } from 'react-native'
-import { View, Text } from '@components/Themed'
+import React, { useState } from 'react'
+import { FlatList, SafeAreaView, StyleSheet, TextInput } from 'react-native'
+import { NAVIGATION_BAR_PADDING_V, SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
+import { View } from '@components/Themed'
+import { TabBarIcon } from '@ui/AppIcon'
+import { ChatItem } from '@components/direct/ChatItem'
+import { useQuery } from '@apollo/client'
+import { ChatsDocument, IChatsQuery } from '@instagram/common'
+import { useNavigate } from '@hooks/useNavigate'
 
 
 export default function DirectScreen() {
+  const [search, setSearch] = useState('')
+  const {data} = useQuery<IChatsQuery>(ChatsDocument)
+  const {navigateToChat} = useNavigate()
   return (
-    <View style={ styles.container }>
-      <Text style={ styles.title }>Direct</Text>
-    </View>
+    <SafeAreaView style={ styles.container }>
+      <View style={ styles.inputWrapper }>
+        <View style={ styles.inputContainer }>
+          <TabBarIcon style={ styles.searchIcon } size={ 20 } color={ 'black' } name={ 'search' }/>
+          <TextInput
+            value={ search } onChangeText={ setSearch }
+            placeholder={ 'Поиск' }
+            autoCorrect={ false }
+            style={ styles.input }/>
+        </View>
+      </View>
+
+      <View style={ styles.chat }>
+        <FlatList keyExtractor={ post => post.id?.toString() || '' }
+                  data={ data?.chats }
+                  renderItem={ ({item}) => {
+                    return (
+                      <ChatItem
+                        goToChat={navigateToChat}
+                        { ...item }/>
+                    )
+                  } }/>
+      </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: NAVIGATION_BAR_PADDING_V,
+    color: 'white',
+    backgroundColor: '#fff',
+    height: SCREEN_HEIGHT,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  inputWrapper: {
+    padding: 5,
+    width: SCREEN_WIDTH * 0.9,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#dedede',
+    marginTop: 10,
+    marginBottom: 20,
+    marginLeft: 20,
+  },
+  inputContainer: {
+    height: 40,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    backgroundColor: '#fff',
+  },
+  searchIcon: {
+    padding: 10
+  },
+  input: {
+    width: SCREEN_WIDTH * 0.7,
+    height: '100%',
+    paddingHorizontal: 15
+  },
+  chat: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    paddingHorizontal: 10
   },
 })

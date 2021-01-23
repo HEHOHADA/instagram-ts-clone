@@ -15,6 +15,7 @@ export const HistoryItems: FC<PropsType> = ({data}) => {
       <View style={ styles.historyWrapper }>
         <FlatList
           horizontal
+          showsVerticalScrollIndicator={false}
           keyExtractor={ post => post.id?.toString() || '' }
           data={ data }
           renderItem={ ({item}) => {

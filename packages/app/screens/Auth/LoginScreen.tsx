@@ -39,10 +39,9 @@ export default function LoginScreen() {
             }
           })
         }
-
       })
       if (response && response.data) {
-        setToken(response.data.login.accessToken)
+        await setToken(response.data.login.accessToken)
         navigate('Root', {screen: 'TabHomeScreen'})
       }
     } catch (e) {

@@ -46,6 +46,7 @@ export type TabTwoParamList = {
 
 export type TabDirectParamList = {
   TabDirectScreen: undefined
+  TabChatScreen: { id: string, url: string, name: string, message?: string }
 }
 
 export type AuthParamList = {

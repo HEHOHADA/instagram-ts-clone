@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native'
 import { Text, View } from '@components/Themed'
 import { AppImage } from '@ui/AppImage'
 import { TabBarIcon } from '@ui/AppIcon'
@@ -20,9 +26,9 @@ import { ExtraInfo } from '@components/profile/ExtraInfo'
 export default function ProfileScreen() {
   const {params} = useRoute<RouteProp<TabProfileParamList, 'TabProfileScreen'>>()
   const {
-    data: userData
+    data: userData,loading
   } = useQuery<IGetUserInfoQuery>(GetUserInfoDocument, {variables: {username: (params.queryUserName as string)}})
-  const {data: dataPhoto} = useQuery<IViewUserPhotoQuery>(ViewUserPhotoDocument, {variables: {username: (params.queryUserName as string)}})
+  const {data: dataPhoto,loading:photoLoading} = useQuery<IViewUserPhotoQuery>(ViewUserPhotoDocument, {variables: {username: (params.queryUserName as string)}})
   return (
     <SafeAreaView style={ styles.container }>
       <TouchableOpacity
@@ -30,18 +36,20 @@ export default function ProfileScreen() {
         onPress={ () => {
         } }>
         <View>
-          <View style={ styles.infoWrapper }>
-            <TouchableOpacity style={ styles.avatarWrapper }>
-              <AppImage uri={ userData?.getUserInfo.pictureUrl as string }
-                        style={ styles.mainAvatar }
-              />
-            </TouchableOpacity>
-            <View style={ styles.extraInfoWrapper }>
-              <ExtraInfo info={ userData?.getUserInfo.photoCount } textInfo={ 'Posts' }/>
-              <ExtraInfo info={ userData?.getUserInfo.followerCount } textInfo={ 'Followers' }/>
-              <ExtraInfo info={ userData?.getUserInfo.followingCount } textInfo={ 'Following' }/>
+          { loading ? <ActivityIndicator/> :
+            <View style={ styles.infoWrapper }>
+              <TouchableOpacity style={ styles.avatarWrapper }>
+                <AppImage uri={ userData?.getUserInfo.pictureUrl as string }
+                          style={ styles.mainAvatar }
+                />
+              </TouchableOpacity>
+              <View style={ styles.extraInfoWrapper }>
+                <ExtraInfo info={ userData?.getUserInfo.photoCount } textInfo={ 'Posts' }/>
+                <ExtraInfo info={ userData?.getUserInfo.followerCount } textInfo={ 'Followers' }/>
+                <ExtraInfo info={ userData?.getUserInfo.followingCount } textInfo={ 'Following' }/>
+              </View>
             </View>
-          </View>
+          }
           <View style={ styles.bioWrapper }>
             <Text style={ {
               fontWeight: '500',
@@ -75,25 +83,27 @@ export default function ProfileScreen() {
               <TabBarIcon name="tooltip-image-outline" size={ 24 } color="#333"/>
             </TouchableOpacity>
           </View>
-          <ScrollView
-            onScrollEndDrag={ () => {
-            } }
-            bounces={ false }
-            horizontal
-            showsHorizontalScrollIndicator={ false }
-          >
-            <TouchableOpacity
-              style={ {
-                marginTop: 5,
-                flexDirection: 'row'
+          { photoLoading ? <ActivityIndicator/> :
+            <ScrollView
+              onScrollEndDrag={ () => {
               } }
-              activeOpacity={ 1 }
+              bounces={ false }
+              horizontal
+              showsHorizontalScrollIndicator={ false }
             >
-              <AccountGallery
-                photos={ dataPhoto?.viewUserPhoto as [] }
-              />
-            </TouchableOpacity>
-          </ScrollView>
+              <TouchableOpacity
+                style={ {
+                  marginTop: 5,
+                  flexDirection: 'row'
+                } }
+                activeOpacity={ 1 }
+              >
+                <AccountGallery
+                  photos={ dataPhoto?.viewUserPhoto as [] }
+                />
+              </TouchableOpacity>
+            </ScrollView>
+          }
         </View>
       </TouchableOpacity>
     </SafeAreaView>

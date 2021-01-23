@@ -11,8 +11,13 @@ export function useNavigate() {
     navigate('Shared', {screen: 'ProfileScreen', params: {queryUserName}})
   }
 
+  const navigateToChat = (id: string, name: string, message: string, url: string) => {
+    navigate('Direct', {screen: 'TabChatScreen', params: {id, name, message, url}})
+  }
+
   return {
     navigateToPostId,
-    navigateToProfile
+    navigateToProfile,
+    navigateToChat
   }
 }

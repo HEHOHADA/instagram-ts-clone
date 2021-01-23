@@ -15,12 +15,15 @@ import { TapGestureHandler } from 'react-native-gesture-handler'
 type PropsType = (Pick<IPhoto, 'isLiked' | 'isAuthor' | 'postText'> & IPhotoItemFragment) & {
   onNavigatePost?: (id: string) => void
   onNavigateProfile?: (id: string) => void
+  onLike: (photoId: string, isLiked: boolean) => void
+
 }
 
 export const PostItem: FC<PropsType> = ({
                                           user,
                                           commentCount,
                                           postText,
+                                          onLike,
                                           isLiked,
                                           likeCount, id,
                                           pictureUrl,
@@ -68,8 +71,7 @@ export const PostItem: FC<PropsType> = ({
         <View style={ styles.reactions }>
           <View style={ styles.lReactions }>
             <TouchableOpacity
-              onPress={ () => {
-              } }
+              onPress={ () => onLike(id, isLiked) }
             >
               <TabBarIcon name={ ICONS.like } color={ isLiked ? 'red' : 'black' }/>
             </TouchableOpacity>

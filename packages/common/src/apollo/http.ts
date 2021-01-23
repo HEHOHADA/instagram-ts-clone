@@ -15,19 +15,22 @@ export function httpLinkWithUpload(api = API_CONSTANTS.api): ApolloLink {
 }
 
 
-export function wsLink(token: string, api = API_CONSTANTS.ws): ApolloLink {
+export function wsLink(getAccessToken: () => Promise<string | null> | string | null, api = API_CONSTANTS.ws): ApolloLink {
   return new WebSocketLink(new SubscriptionClient(api, {
     reconnect: true,
     lazy: true,
-    connectionParams: () => ({
-      authorization: token
-    })
+    connectionParams: async () => {
+      const token = await getAccessToken()
+      return {
+        authorization: token ? `Bearer ${ token }` : ''
+      }
+    }
   }))
 }
 
 export function refreshLink(getAccessToken: () => Promise<string | null> | string | null, setAccessToken: (token: string) => Promise<void> | void, api = API_CONSTANTS.refresh): ApolloLink {
   return new TokenRefreshLink({
-    isTokenValidOrUndefined:async () => {
+    isTokenValidOrUndefined: async () => {
       let possibleToken = getAccessToken()
       if (typeof possibleToken === 'object') {
         return checkToken(await possibleToken)
@@ -44,7 +47,6 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
     },
     handleResponse: (_, accessTokenField) => async (response: Response) => {
       const result = await response.json()
-      console.log('fetch', result)
       return {
         [accessTokenField]: result[accessTokenField]
       }
@@ -62,6 +64,7 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
 export function authContextLink(getAccessToken: () => Promise<string | null> | string | null): ApolloLink {
   return setContext(async (_req, {headers}) => {
     const token = await getAccessToken()
+    console.log('token', token)
     return {
       headers: {
         ...headers,
