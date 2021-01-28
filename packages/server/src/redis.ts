@@ -1,5 +1,13 @@
-import Redis from 'ioredis'
+import Redis, { RedisOptions } from 'ioredis'
 
-const redisPort = process.env.REDIS_PORT
+const host = process.env.REDIS_HOST
 
-export const redis = new Redis(redisPort)
+const options: RedisOptions = {
+  host, port: 6379
+}
+
+const redis = new Redis(options)
+
+export {
+  redis
+}

@@ -1,6 +1,6 @@
 FROM node
 
-WORKDIR /abb
+WORKDIR /instagram
 
 COPY ./package.json .
 COPY ./packages/server/package.json ./packages/server/
@@ -13,7 +13,7 @@ COPY ./packages/server/dist ./packages/server/dist
 COPY ./packages/common/dist ./packages/common/dist
 COPY ./packages/server/.env.prod ./packages/server/.env
 COPY ./packages/server/.env.example ./packages/server/
-COPY ./ormconfig.json .
+COPY ./ormconfig.js .
 
 WORKDIR ./packages/server
 

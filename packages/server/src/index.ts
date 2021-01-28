@@ -8,7 +8,7 @@ import { GraphQLError } from 'graphql'
 import cookieParser from 'cookie-parser'
 import { createConnection } from 'typeorm'
 import { graphqlUploadExpress } from 'graphql-upload'
-import { ApolloServer, PubSub } from 'apollo-server-express'
+import { ApolloServer, ApolloServerExpressConfig, PubSub } from 'apollo-server-express'
 import { redis } from './redis'
 import { createSchema } from './utils/createSchema'
 import { refreshToken } from './utils/refreshToken'
@@ -20,7 +20,25 @@ import { createPhotoLoader } from './utils/createPhotoLoader'
 // typeorm.useContainer(Container)
 
 const server = async () => {
-  await createConnection()
+
+  let retries = 10
+  while (retries) {
+    try {
+      await createConnection()
+      // await conn.runMigrations()
+      break
+    } catch (err) {
+      console.log(err)
+      retries -= 1
+      console.log(`${ retries } retries remaining...`)
+      // wait 5 seconds before retrying connection to
+      // postgres
+      await new Promise(res => {
+        console.log(`test env var `)
+        setTimeout(res, 5000)
+      })
+    }
+  }
   // const RedisStore = connectRedis(session)
   const app = Express()
   app.use(cookieParser())
@@ -85,7 +103,8 @@ const server = async () => {
         return {message, path}
       }
     }
-  })
+  } as ApolloServerExpressConfig)
+
 
   apolloServer.applyMiddleware({app, cors: false})
   const httpServer = http.createServer(app)
