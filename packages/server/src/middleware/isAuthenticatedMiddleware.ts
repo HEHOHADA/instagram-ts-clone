@@ -2,8 +2,7 @@ import { verify } from 'jsonwebtoken'
 import { MiddlewareFn } from 'type-graphql'
 import { MyContext } from '../types/MyContext'
 
-export const isUserAuthOrUndefined: MiddlewareFn<MyContext> = async ({context}, next) => {
-
+export const isUserAuthOrUndefined: MiddlewareFn<MyContext> = async ({ context }, next) => {
   if (context.connection?.context.userId) {
     context.payload = context.connection.context
     return next()

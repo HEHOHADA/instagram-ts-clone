@@ -17,11 +17,11 @@ type SettingsFormValue = {
   email: string
 }
 const PossibleInfo = (
-    <div className="change__input__info">
-      Чтобы людям было проще находить ваш аккаунт, используйте имя, под которым вас знают: ваше имя и
-      фамилию, никнейм или название компании.
-      Изменить имя можно не более двух раз в течение 14 дней.
-    </div>
+  <div className='change__input__info'>
+    Чтобы людям было проще находить ваш аккаунт, используйте имя, под которым вас знают: ваше имя и
+    фамилию, никнейм или название компании.
+    Изменить имя можно не более двух раз в течение 14 дней.
+  </div>
 )
 export const SettingsEditForm = () => {
 
@@ -60,41 +60,41 @@ export const SettingsEditForm = () => {
           component: InputField
         } as any,
         possibleInfo: PossibleInfo
-      },
+      }
     ]
   }, [])
   return (
-      <Formik<SettingsFormValue>
-          validateOnBlur={ false }
-          validateOnChange={ false }
-          initialValues={ {
-            fullName: '',
-            username: '',
-            email: ''
-          } }
-          onSubmit={ submitForm }
-      >{ () => (
-          <Form className="settings__change-info">
-            { filedItems.map((item) => {
-              const {component, ...inputProps} = item.fieldItem
-              return (
-                  <SettingsEditItem
-                      key={ item.name }
-                      inputProps={ inputProps }
-                      InputComponent={ component }
-                      PossibleInfo={ item.possibleInfo }
-                      name={ item.name }/>
-              )
-            }) }
-            <div className="form__settings__submit">
-              <button
-                  type="submit"
-                  className="send__form">Отправить
-              </button>
-              <button className="block__account">Заблокировать аккаунт</button>
-            </div>
-          </Form>)
-      }
-      </Formik>
+    <Formik<SettingsFormValue>
+      validateOnBlur={ false }
+      validateOnChange={ false }
+      initialValues={ {
+        fullName: '',
+        username: '',
+        email: ''
+      } }
+      onSubmit={ submitForm }
+    >{ () => (
+      <Form className='settings__change-info'>
+        { filedItems.map((item) => {
+          const { component, ...inputProps } = item.fieldItem
+          return (
+            <SettingsEditItem
+              key={ item.name }
+              inputProps={ inputProps }
+              InputComponent={ component }
+              PossibleInfo={ item.possibleInfo }
+              name={ item.name } />
+          )
+        }) }
+        <div className='form__settings__submit'>
+          <button
+            type='submit'
+            className='send__form'>Отправить
+          </button>
+          <button className='block__account'>Заблокировать аккаунт</button>
+        </div>
+      </Form>)
+    }
+    </Formik>
   )
 }

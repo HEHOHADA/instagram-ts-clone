@@ -1,3 +1,5 @@
+import { SubscriptionType } from './subscription'
+
 export type RootStackParamList = {
   Root: undefined
   Auth: undefined
@@ -13,7 +15,7 @@ export type BottomTabParamList = {
   TabSearch: undefined
   TabAdd: undefined
   TabNews: undefined
-  TabProfile: undefined
+  TabProfile: { queryUserName: string }
 }
 
 export type TabSearchParamList = {
@@ -24,8 +26,10 @@ export type TabAddParamList = {
   TabAddScreen: undefined
 }
 
-export type TabProfileParamList = {
-  TabProfileScreen: { queryUserName: string }
+
+export type TabProfileParams = {
+  ProfileScreen: { queryUserName: string }
+  FollowScreen: { id: string, type: SubscriptionType }
 }
 
 export type TabPostParamList = {
@@ -58,5 +62,5 @@ export type AuthParamList = {
 
 export type SharedTabParamList = {
   PostScreen: { id: string }
-  ProfileScreen: { queryUserName: string }
+  Profile: { queryUserName: string }
 }

@@ -5,7 +5,6 @@ import DirectScreen from '@screens/Direct/DirectScreen'
 import { UserInfo } from '@components/direct/UserInfo'
 import ChatScreen from '@screens/Direct/ChatScreen'
 import { TouchableOpacity } from 'react-native'
-import { TabBarIcon } from '@ui/AppIcon'
 
 const TabDirectStack = createStackNavigator<TabDirectParamList>()
 

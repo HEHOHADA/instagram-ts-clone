@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { TabSearchParamList } from '@types/navigation'
-import SearchScreen from '../../screens/Search/SearchScreen'
+import { TabSearchParamList } from '@type/navigation'
+import SearchScreen from '@screens/Search/SearchScreen'
 
 const TabSearchStack = createStackNavigator<TabSearchParamList>()
 

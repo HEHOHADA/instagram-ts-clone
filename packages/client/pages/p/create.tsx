@@ -14,16 +14,16 @@ import { formatValidationErrors } from '@/utils/formatValidationErrors'
 import Redirect from '@/lib/redirect'
 
 const Create = () => {
-  const [createPhoto, {loading}] = useCreatePhotoMutation()
+  const [createPhoto, { loading }] = useCreatePhotoMutation()
   const router = useRouter()
 
-  const createPhotoHandler = async (data: ICreatePhotoMutationVariables, {setErrors}: FormikHelpers<ICreatePhotoMutationVariables>) => {
+  const createPhotoHandler = async (data: ICreatePhotoMutationVariables, { setErrors }: FormikHelpers<ICreatePhotoMutationVariables>) => {
     try {
       const response = await createPhoto({
         variables: {
           ...data
         }, update: (cache) => {
-          cache.evict({fieldName: 'feed:{}'})
+          cache.evict({ fieldName: 'feed:{}' })
         }
       })
       if (response) {
@@ -36,34 +36,34 @@ const Create = () => {
 
   return (
     <MainLayout title={ 'Photo create' }>
-      <div className="photo__create__container">
-        <div className="photo__create__form__container">
+      <div className='photo__create__container'>
+        <div className='photo__create__form__container'>
           <Formik<ICreatePhotoMutationVariables>
             validateOnBlur={ false }
             validateOnChange={ false }
-            initialValues={ {title: '', picture: null} }
+            initialValues={ { title: '', picture: null } }
             onSubmit={ createPhotoHandler }
           >{ () => (
-            <Form className="photo__create__form">
+            <Form className='photo__create__form'>
               <Field
-                type="text"
-                name="title"
-                placeholder="Title"
-                className="photo__create__title"
-                component={ InputAuthField }/>
-              <div className="photo__create__image-upload">
+                type='text'
+                name='title'
+                placeholder='Title'
+                className='photo__create__title'
+                component={ InputAuthField } />
+              <div className='photo__create__image-upload'>
                 <Field
                   text={ 'Добавить фото' }
-                  className="photo__create__image-upload__text"
-                  name="picture"
-                  type="file"
-                  component={ DropzoneField }/>
+                  className='photo__create__image-upload__text'
+                  name='picture'
+                  type='file'
+                  component={ DropzoneField } />
               </div>
-              <div className="photo__create__btn__container">
+              <div className='photo__create__btn__container'>
                 <button
-                  type="submit"
+                  type='submit'
                   disabled={ loading }
-                  className="photo__create__btn">
+                  className='photo__create__btn'>
                   Create Photo
                 </button>
               </div>
@@ -88,4 +88,4 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 }
 
-export default withApollo({ssr: false})(Create)
+export default withApollo({ ssr: false })(Create)

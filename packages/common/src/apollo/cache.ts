@@ -12,7 +12,7 @@ export const cacheConfig = {
           ): IPaginatedPhotos {
             return {
               ...incoming,
-              items: [...(existing?.items || []), ...incoming.items],
+              items: [...(existing?.items || []), ...incoming.items]
             }
           }
         },
@@ -24,12 +24,12 @@ export const cacheConfig = {
           ): IPaginatedUsersSearch {
             return {
               ...incoming,
-              items: [...(existing?.items || []), ...incoming.items],
+              items: [...(existing?.items || []), ...incoming.items]
             }
           }
         }
       }
-    },
+    }
     // Photo: {
     //   fields: {
     //     comments: {

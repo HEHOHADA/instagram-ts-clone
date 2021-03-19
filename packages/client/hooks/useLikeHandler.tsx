@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import { useLikeMutation } from '@instagram/common'
 
 
-export const useLikeHandler = ({photoId, isLiked}: any) => {
+export const useLikeHandler = ({ photoId, isLiked }: any) => {
   const [likeMutation] = useLikeMutation()
 
   const onLikeHandler = useCallback(async () => {
@@ -21,7 +21,7 @@ export const useLikeHandler = ({photoId, isLiked}: any) => {
                     likeCount
                     isLiked
                 }
-            `,
+            `
           })
 
           if (data) {
@@ -33,7 +33,7 @@ export const useLikeHandler = ({photoId, isLiked}: any) => {
                       isLiked
                   }
               `,
-              data: {likeCount: data.likeCount + counting, isLiked: !data.isLiked}
+              data: { likeCount: data.likeCount + counting, isLiked: !data.isLiked }
             })
           }
         }
@@ -43,7 +43,7 @@ export const useLikeHandler = ({photoId, isLiked}: any) => {
     }
   }, [isLiked, photoId])
 
-  return{
+  return {
     onLikeHandler
   }
 }

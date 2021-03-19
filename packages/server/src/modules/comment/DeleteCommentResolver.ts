@@ -3,15 +3,12 @@ import { isAuth } from '../../middleware/isAuthMiddleware'
 import { DeleteCommentType } from './types/DeleteCommentType'
 import { Comment } from '../../entity/Comment'
 
-///Todo
+/// Todo
 @Resolver()
 export class DeleteCommentResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
-  async deleteComment(
-      @Arg('data'){id}: DeleteCommentType,
-  ) {
-
+  async deleteComment(@Arg('data') { id }: DeleteCommentType) {
     await Comment.delete(id)
 
     return true

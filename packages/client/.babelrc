@@ -1,5 +1,15 @@
 {
   "presets": [
-    "next/babel"
-  ]
+    ["next/babel", {
+      "preset-env": {
+        // "debug": true, // to display @babel/preset-env logs
+        // looks like with implicit(default) targets here, @babel/preset-env uses
+        // browserslist entry in package.json to get actual targets
+        // https://github.com/zloirock/core-js#babelpreset-env
+        "useBuiltIns": "usage",
+        "corejs": "3.8" // check this more, was 3.3 previously
+      }
+    }]
+  ],
+  "plugins": [["styled-components", { "ssr": true }], "@babel/plugin-proposal-optional-chaining"]
 }

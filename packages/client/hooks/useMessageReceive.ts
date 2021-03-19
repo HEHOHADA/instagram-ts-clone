@@ -4,19 +4,19 @@ import { useMessageReceivedSubscription } from '@instagram/common'
 export const useMessageReceive = () => {
   const client = useApolloClient()
   useMessageReceivedSubscription({
-    onSubscriptionData: ({subscriptionData}) => {
+    onSubscriptionData: ({ subscriptionData }) => {
       const messageReceived = subscriptionData.data?.messageReceived
       if (messageReceived) {
         client.cache.modify({
-          id: `Chat:${ messageReceived.chatId }`,
+          id: `Chat:${messageReceived.chatId}`,
           fields: {
             messages(cachedValue) {
-              const messageRef = {'__ref': `Message:${ messageReceived.id }`}
+              const messageRef = { __ref: `Message:${messageReceived.id}` }
               return [...cachedValue, messageRef]
             },
             lastMessage() {
               return {
-                '__typename': 'Message',
+                __typename: 'Message',
                 date: messageReceived.date,
                 text: messageReceived.text
               }
@@ -27,6 +27,6 @@ export const useMessageReceive = () => {
           }
         })
       }
-    },
+    }
   })
 }

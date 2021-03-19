@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { TabBarIcon } from '@ui/AppIcon'
+import { AppIcon } from '@ui/AppIcon'
 import { IMessage, IUser } from '@instagram/common'
 import { UserInfo } from './UserInfo'
 
@@ -21,7 +21,7 @@ export const ChatItem: FC<PropsType> = ({users, id, goToChat, lastMessage}) => {
         username={ user.username } text={ lastMessage?.text }
         pictureUrl={ user.pictureUrl }/>
       <TouchableOpacity>
-        <TabBarIcon color={ 'black' } name={ 'camera-outline' }/>
+        <AppIcon color={ 'black' } name={ 'camera-outline' }/>
       </TouchableOpacity>
     </TouchableOpacity>
   )

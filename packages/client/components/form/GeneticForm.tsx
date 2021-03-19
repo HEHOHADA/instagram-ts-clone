@@ -30,9 +30,7 @@ export interface IGenericFormBaseProps<TVariables, TData> {
 }
 
 
-export interface IGenericFormProps<TVariables, TData>
-  extends IGenericFormBaseProps<TVariables, TData> {
-}
+export type IGenericFormProps<TVariables, TData> = IGenericFormBaseProps<TVariables, TData>
 
 
 const hasErrors = (fieldsError: { [x: string]: unknown }) => {

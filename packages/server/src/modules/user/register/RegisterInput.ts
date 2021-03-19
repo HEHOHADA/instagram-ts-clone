@@ -4,11 +4,11 @@ import UserType from '../types/UserType'
 import { IsUsernameUsed } from './isUsernameUsed'
 
 @InputType()
-export class RegisterInput extends PasswordMixin(UserType){
+export class RegisterInput extends PasswordMixin(UserType) {
   @Field()
   fullName: string
 
   @Field()
-  @IsUsernameUsed({message:'username already used'})
+  @IsUsernameUsed({ message: 'username already used' })
   username: string
 }

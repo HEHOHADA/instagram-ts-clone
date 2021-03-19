@@ -7,6 +7,8 @@ import { IViewPhotoByIdQuery, ViewPhotoByIdDocument } from '@instagram/common'
 import { SCREEN_HEIGHT } from '@constants/demens'
 import { PostItem } from '@components/post/PostItem'
 import { useLikeHandler } from '@hooks/useLike'
+import { AppLoader } from '@components/ui/AppLoader'
+import { useNavigate } from '@hooks/useNavigate'
 
 export default function PostScreen() {
   const {params} = useRoute<RouteProp<SharedTabParamList, 'PostScreen'>>()
@@ -14,11 +16,13 @@ export default function PostScreen() {
     data,
     loading
   } = useQuery<IViewPhotoByIdQuery>(ViewPhotoByIdDocument, {variables: {id: params.id}})
-  const {onLikeHandler} = useLikeHandler()
+  const {likeHandler} = useLikeHandler()
+  const {navigateToProfile} = useNavigate()
   return (
     <SafeAreaView style={ styles.container }>
-      { data?.viewPhotoById || loading ? <ActivityIndicator/> :
-        <PostItem onLike={ onLikeHandler } { ...(data?.viewPhotoById as any) || {} } /> }
+      { !data?.viewPhotoById || loading ? <AppLoader/> :
+        <PostItem onNavigateProfile={ navigateToProfile }
+                  onLike={ likeHandler } { ...(data?.viewPhotoById as any) || {} } /> }
     </SafeAreaView>
   )
 }

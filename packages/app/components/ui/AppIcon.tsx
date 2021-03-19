@@ -9,7 +9,7 @@ type PropsType = {
   style?: Object
 }
 
-export function TabBarIcon({style,...props}: PropsType) {
+export function AppIcon({style,...props}: PropsType) {
   // @ts-ignore
   return <Ionicons size={ ICON_SIZE.big } style={ {marginBottom: -3,...style} } { ...props } />
 }

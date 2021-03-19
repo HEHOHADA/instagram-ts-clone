@@ -1,10 +1,12 @@
 import { Redis } from 'ioredis'
-import { createUserLoader } from '../utils/createUserLoader'
-import { createLikeLoader } from '../utils/createLikeLoader'
-import { createCommentLoader } from '../utils/createCommentLoader'
-import { createPhotoLoader } from '../utils/createPhotoLoader'
 import { PubSub } from 'apollo-server-express'
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
+import {
+  createCommentLoader,
+  createUserLoader,
+  createPhotoLoader,
+  createLikeLoader
+} from '@utils/index'
 
 export interface MyContext extends ExpressContext {
   payload: { userId: string | null }
@@ -17,4 +19,3 @@ export interface MyContext extends ExpressContext {
   url: string
   imageUrl: string
 }
-

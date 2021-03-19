@@ -1,4 +1,4 @@
-export const loginTestMutation =`
+export const loginTestMutation = `
 mutation Login($data:LoginInput!){
   login(data:$data){
       user{
@@ -13,7 +13,5 @@ mutation Login($data:LoginInput!){
 }
 `
 describe('Registe2r', () => {
-  it('should create user', async () => {
-
-  })
+  it('should create user', async () => {})
 })

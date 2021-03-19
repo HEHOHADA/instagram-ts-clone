@@ -1,14 +1,7 @@
 import * as React from 'react'
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, View } from '@components/Themed'
-import { AppImage } from '@ui/AppImage'
-import { TabBarIcon } from '@ui/AppIcon'
+import { AppIcon } from '@ui/AppIcon'
 import { AccountGallery } from '@components/profile/AccountGallery'
 import { useQuery } from '@apollo/client'
 import {
@@ -18,17 +11,23 @@ import {
   ViewUserPhotoDocument
 } from '@instagram/common'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { TabProfileParamList } from '@type/navigation'
+import { TabProfileParams } from '@type/navigation'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
-import { ExtraInfo } from '@components/profile/ExtraInfo'
+import { AppLoader } from '@ui/AppLoader'
+import HeaderInfo from '@components/profile/HeaderInfo'
 
 
 export default function ProfileScreen() {
-  const {params} = useRoute<RouteProp<TabProfileParamList, 'TabProfileScreen'>>()
+  const {params} = useRoute<RouteProp<TabProfileParams, 'ProfileScreen'>>()
   const {
-    data: userData,loading
-  } = useQuery<IGetUserInfoQuery>(GetUserInfoDocument, {variables: {username: (params.queryUserName as string)}})
-  const {data: dataPhoto,loading:photoLoading} = useQuery<IViewUserPhotoQuery>(ViewUserPhotoDocument, {variables: {username: (params.queryUserName as string)}})
+    data: userData, loading
+  } = useQuery<IGetUserInfoQuery>(GetUserInfoDocument, {variables: {username: (params.queryUserName)}})
+
+  const {
+    data: dataPhoto,
+    loading: photoLoading
+  } = useQuery<IViewUserPhotoQuery>(ViewUserPhotoDocument, {variables: {username: (params.queryUserName)}})
+
   return (
     <SafeAreaView style={ styles.container }>
       <TouchableOpacity
@@ -36,19 +35,10 @@ export default function ProfileScreen() {
         onPress={ () => {
         } }>
         <View>
-          { loading ? <ActivityIndicator/> :
-            <View style={ styles.infoWrapper }>
-              <TouchableOpacity style={ styles.avatarWrapper }>
-                <AppImage uri={ userData?.getUserInfo.pictureUrl as string }
-                          style={ styles.mainAvatar }
-                />
-              </TouchableOpacity>
-              <View style={ styles.extraInfoWrapper }>
-                <ExtraInfo info={ userData?.getUserInfo.photoCount } textInfo={ 'Posts' }/>
-                <ExtraInfo info={ userData?.getUserInfo.followerCount } textInfo={ 'Followers' }/>
-                <ExtraInfo info={ userData?.getUserInfo.followingCount } textInfo={ 'Following' }/>
-              </View>
-            </View>
+          { loading ? <AppLoader/> :
+            <HeaderInfo
+              {...userData?.getUserInfo}
+              />
           }
           <View style={ styles.bioWrapper }>
             <Text style={ {
@@ -73,17 +63,17 @@ export default function ProfileScreen() {
               onPress={ () => {
               } }
               style={ styles.galleryTab }>
-              <TabBarIcon name="grid" size={ 24 } color="#333"/>
+              <AppIcon name="grid" size={ 24 } color="#333"/>
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={ 0.8 }
               onPress={ () => {
               } }
               style={ styles.galleryTab }>
-              <TabBarIcon name="tooltip-image-outline" size={ 24 } color="#333"/>
+              <AppIcon name="tooltip-image-outline" size={ 24 } color="#333"/>
             </TouchableOpacity>
           </View>
-          { photoLoading ? <ActivityIndicator/> :
+          { photoLoading ? <AppLoader/> :
             <ScrollView
               onScrollEndDrag={ () => {
               } }

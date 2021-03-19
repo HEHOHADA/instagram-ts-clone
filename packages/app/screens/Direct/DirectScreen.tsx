@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { FlatList, SafeAreaView, StyleSheet, TextInput } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet } from 'react-native'
 import { NAVIGATION_BAR_PADDING_V, SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
 import { View } from '@components/Themed'
-import { TabBarIcon } from '@ui/AppIcon'
 import { ChatItem } from '@components/direct/ChatItem'
 import { useQuery } from '@apollo/client'
 import { ChatsDocument, IChatsQuery } from '@instagram/common'
 import { useNavigate } from '@hooks/useNavigate'
+import { InputIcon } from '@components/shared/InputIcon'
 
 
 export default function DirectScreen() {
@@ -17,12 +17,10 @@ export default function DirectScreen() {
     <SafeAreaView style={ styles.container }>
       <View style={ styles.inputWrapper }>
         <View style={ styles.inputContainer }>
-          <TabBarIcon style={ styles.searchIcon } size={ 20 } color={ 'black' } name={ 'search' }/>
-          <TextInput
-            value={ search } onChangeText={ setSearch }
-            placeholder={ 'Поиск' }
-            autoCorrect={ false }
-            style={ styles.input }/>
+          <InputIcon
+            inputProps={ {style: styles.input} }
+            iconStyle={ styles.searchIcon } value={ search } iconName={ 'search' }
+            onChangeText={ setSearch }/>
         </View>
       </View>
 
@@ -32,7 +30,7 @@ export default function DirectScreen() {
                   renderItem={ ({item}) => {
                     return (
                       <ChatItem
-                        goToChat={navigateToChat}
+                        goToChat={ navigateToChat }
                         { ...item }/>
                     )
                   } }/>

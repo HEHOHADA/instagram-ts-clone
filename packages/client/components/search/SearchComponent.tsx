@@ -26,14 +26,16 @@ export const SearchComponent = () => {
       }
     })
   }
+
   useEffect(() => {
       if (debouncedSearchTerm) {
         loadSearch()
         !isOpen && open()
       }
     },
-    [debouncedSearchTerm]
+    [debouncedSearchTerm,isOpen,open,loadSearch]
   )
+
   return (
     <div className="header__search">
       <input

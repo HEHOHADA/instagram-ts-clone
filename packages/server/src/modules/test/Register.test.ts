@@ -1,10 +1,9 @@
 import { Connection } from 'typeorm/index'
+import * as faker from 'faker'
 import { testConn } from '../../test-utils/testConn'
 import { gCall } from '../../test-utils/gCall'
-import * as faker from 'faker'
 import { User } from '../../entity/User'
 import { RegisterInput } from '../user/register/RegisterInput'
-
 
 let conn: Connection
 
@@ -30,7 +29,7 @@ mutation Register($data:RegisterInput!){
 describe('Register', () => {
   it('should create user', async () => {
     const user: RegisterInput = {
-      fullName: `${ faker.name.firstName() } ${ faker.name.lastName() }`,
+      fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
       email: faker.internet.email(),
       password: faker.internet.password(5),
       username: faker.internet.userName()
@@ -52,14 +51,12 @@ describe('Register', () => {
       }
     })
 
-    const dbUser = await User.findOne({where: {email: user.email}})
+    const dbUser = await User.findOne({ where: { email: user.email } })
     expect(dbUser).toBeDefined()
     expect(dbUser?.confirmed).toBeFalsy()
     expect(dbUser?.password).not.toBe(user.password)
     expect(dbUser?.fullName).toBe(user.fullName)
   })
 
-  it('should throw argument exeption', () => {
-
-  })
+  it('should throw argument exeption', () => {})
 })

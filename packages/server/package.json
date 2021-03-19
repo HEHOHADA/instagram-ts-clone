@@ -47,21 +47,34 @@
     "@types/node": "^14.11.8",
     "@types/shortid": "^0.0.29",
     "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "eslint": "^7.22.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "faker": "^5.1.0",
+    "husky": "^5.1.3",
     "jest": "^26.5.2",
-    "module-alias": "^2.2.2",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
     "ts-jest": "^26.4.1",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.63",
-    "typescript": "^4.0.3"
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.0.3",
+    "typescript-transform-paths": "^2.2.3"
   },
   "scripts": {
-    "start": "ts-node-dev --respawn src/index.ts",
+    "start": "npx ts-node-dev --prefer-ts true -r tsconfig-paths/register --watch src --respawn  src/index.ts",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "build": "tsc",
     "migration:gen": "yarn typeorm migration:generate -n",
     "migration:run": "yarn typeorm migration:run",
     "db:setup": "ts-node ./src/test-utils/setup.ts",
-    "jest": "npm run db:setup && jest --watchAll"
+    "jest": "npm run db:setup && jest --watchAll",
+    "lint": "npx eslint --ext .ts \"src/**/*.ts\"",
+    "lint:fix": "npm run lint --fix",
+    "prettier": "prettier --config ./.prettierrc --write src/**/*.ts"
   }
 }

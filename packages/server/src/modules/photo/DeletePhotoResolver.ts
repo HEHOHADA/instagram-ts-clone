@@ -7,10 +7,7 @@ import { isAuth } from '../../middleware/isAuthMiddleware'
 export class CreatePhotoResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
-  async deletePhoto(
-      @Ctx(){payload}: MyContext,
-      @Arg('id') id: string) {
-
+  async deletePhoto(@Ctx() { payload }: MyContext, @Arg('id') id: string) {
     const photo = await Photo.findOne(id)
 
     if (!photo) {

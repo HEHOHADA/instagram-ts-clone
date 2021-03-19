@@ -7,13 +7,19 @@ type PropsType = {
   PossibleInfo?: JSX.Element
 
 }
-export const SettingsEditItem: FC<PropsType> = ({name, InputComponent, inputProps, PossibleInfo}) => {
+export const SettingsEditItem: FC<PropsType> = ({
+  name,
+  InputComponent,
+  inputProps,
+  PossibleInfo
+}) => {
   return (
-      <div className="change__item__container">
-        <div className="change__name">{ name }</div>
-        <div className="change__input__container">
-          <InputComponent className="input__field" { ...inputProps }/>
-          { PossibleInfo }
-        </div>
-      </div>)
+    <div className='change__item__container'>
+      <div className='change__name'>{ name }</div>
+      <div className='change__input__container'>
+        <InputComponent className='input__field' { ...inputProps } />
+        { PossibleInfo }
+      </div>
+    </div>
+  )
 }

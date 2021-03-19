@@ -6,7 +6,6 @@ export interface IUserMe {
   fullName: string
 }
 
-
 export interface IUserInfo extends IUserMe {
   followerCount: number
   followingCount: number

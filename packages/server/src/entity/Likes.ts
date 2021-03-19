@@ -6,7 +6,6 @@ import { Photo } from './Photo'
 @Entity()
 @ObjectType()
 export class Likes extends BaseEntity {
-
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -23,10 +22,9 @@ export class Likes extends BaseEntity {
   @Column()
   date: Date
 
-  @ManyToOne(() => Photo,
-      photo => photo.likes, {
-        onDelete: 'CASCADE',
-      })
+  @ManyToOne(() => Photo, (photo) => photo.likes, {
+    onDelete: 'CASCADE'
+  })
   photo: Photo
 
   @ManyToOne(() => User)

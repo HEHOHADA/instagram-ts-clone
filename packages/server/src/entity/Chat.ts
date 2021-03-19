@@ -1,15 +1,21 @@
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 import { Ctx, Field, ID, ObjectType, Root, UseMiddleware } from 'type-graphql'
 import { User } from './User'
 import { Message } from './Message'
-import { MyContext } from '../types/MyContext'
-import { isAuth } from '../middleware/isAuthMiddleware'
-
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
 
 @Entity()
 @ObjectType()
 export class Chat extends BaseEntity {
-
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -19,10 +25,10 @@ export class Chat extends BaseEntity {
   date: Date
 
   @Field(() => [Message])
-  @OneToMany(() => Message, message => message.chat)
+  @OneToMany(() => Message, (message) => message.chat)
   messages: Message[]
 
-  @Field(() => Message, {nullable: true})
+  @Field(() => Message, { nullable: true })
   lastMessage(@Root() parent: Chat): Message {
     const lastMessage = parent.messages[parent.messages.length - 1]
     return lastMessage ?? null
@@ -31,7 +37,9 @@ export class Chat extends BaseEntity {
   @Field(() => Boolean)
   @UseMiddleware(isAuth)
   unread(@Root() parent: Chat, @Ctx() ctx: MyContext): Boolean {
-    const {payload: {userId}} = ctx
+    const {
+      payload: { userId }
+    } = ctx
     const lastMessage = parent.messages[parent.messages.length - 1]
     const isUnread = !lastMessage.readTime
     const isSentByMe = userId === lastMessage.userId
@@ -40,17 +48,17 @@ export class Chat extends BaseEntity {
   }
 
   @Field(() => [User])
-  @ManyToMany(() => User, user => user.chats)
+  @ManyToMany(() => User, (user) => user.chats)
   @JoinTable({
     name: 'userChat',
     joinColumn: {
       name: 'chatId',
-      referencedColumnName: 'id',
+      referencedColumnName: 'id'
     },
     inverseJoinColumn: {
       name: 'userId',
-      referencedColumnName: 'id',
-    },
+      referencedColumnName: 'id'
+    }
   })
   users: User[]
 }

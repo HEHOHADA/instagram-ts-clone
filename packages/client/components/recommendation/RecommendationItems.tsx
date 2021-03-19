@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { FC } from 'react'
 
-export const RecommendationItems = () => {
+export const RecommendationItems:FC = () => {
   return (
       <div className="dashboard__recommendation__items">
         <div className="recommend__helper">

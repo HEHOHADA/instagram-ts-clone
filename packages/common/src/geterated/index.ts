@@ -106,9 +106,9 @@ export type IUser = {
   email: Scalars['String'];
   username: Scalars['String'];
   pictureUrl: Maybe<Scalars['String']>;
-  followerCount: Maybe<Scalars['Float']>;
-  followingCount: Maybe<Scalars['Float']>;
-  photoCount: Maybe<Scalars['Float']>;
+  followerCount:Scalars['Float'];
+  followingCount: Scalars['Float'];
+  photoCount: Scalars['Float'];
   chats: IChat;
   isFollowed: Scalars['Boolean'];
   isFollowing: Scalars['Boolean'];

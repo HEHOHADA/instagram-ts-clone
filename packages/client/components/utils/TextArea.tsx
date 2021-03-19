@@ -4,10 +4,10 @@ import React, { DetailedHTMLProps, FC, TextareaHTMLAttributes } from 'react'
 
 type TextAreaProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>
 
-export const TextArea: FC<FieldProps & TextAreaProps> = ({field,form:_, ...props}) => {
+export const TextArea: FC<FieldProps & TextAreaProps> = ({ field, form: _, ...props }) => {
   return (
-      <textarea
-          { ...field }
-          { ...props }/>
+    <textarea
+      { ...field }
+      { ...props } />
   )
 }

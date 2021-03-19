@@ -1,9 +1,11 @@
 import { ClassType, Field, ObjectType } from 'type-graphql'
 import { GraphQLScalarType } from 'graphql'
 
-export default function PaginatedResponse<TItem, TCursor>(TItemClass: ClassType<TItem>, ICursorItem: ClassType<TCursor> | GraphQLScalarType | String | Number | Boolean) {
-
-  @ObjectType(`Paginated${ TItemClass.name }Response`)
+export default function PaginatedResponse<TItem, TCursor>(
+  TItemClass: ClassType<TItem>,
+  ICursorItem: ClassType<TCursor> | GraphQLScalarType | String | Number | Boolean
+) {
+  @ObjectType(`Paginated${TItemClass.name}Response`)
   class PaginationInfo {
     @Field()
     hasMore: boolean
@@ -12,7 +14,7 @@ export default function PaginatedResponse<TItem, TCursor>(TItemClass: ClassType<
     endCursor: TCursor
   }
 
-  @ObjectType({isAbstract: true})
+  @ObjectType({ isAbstract: true })
   abstract class PaginatedResponseClass {
     @Field(() => [TItemClass])
     items: TItem[]

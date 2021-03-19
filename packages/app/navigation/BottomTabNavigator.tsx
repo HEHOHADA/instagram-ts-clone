@@ -8,9 +8,11 @@ import { TabHomeNavigation } from './Root/TabHomeNavigation'
 import { TabSearchNavigation } from './Root/TabSearchNavigation'
 import { TabAddNavigation } from './Root/TabAddNavigation'
 import { TabNewsNavigation } from './Root/TabNewsNavigation'
-import { TabProfileNavigation } from './Root/TabProfileNavigation'
-import { TabBarIcon } from '@components/ui/AppIcon'
+import { AppIcon } from '@components/ui/AppIcon'
 import { ICONS } from '@constants/icons'
+import { useQuery } from '@apollo/client'
+import { IMeQuery, MeDocument } from '@instagram/common'
+import ProfileNavigation from '@navigation/Profile'
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 type ColorType = {
@@ -18,7 +20,7 @@ type ColorType = {
 }
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme()
-
+  const {data} = useQuery<IMeQuery>(MeDocument)
   return (
     <BottomTab.Navigator
       initialRouteName="TabHome"
@@ -27,36 +29,37 @@ export default function BottomTabNavigator() {
         name="TabHome"
         component={ TabHomeNavigation }
         options={ {
-          tabBarIcon: ({color}: ColorType) => <TabBarIcon name={ ICONS.home } color={ color }/>,
+          tabBarIcon: ({color}: ColorType) => <AppIcon name={ ICONS.home } color={ color }/>,
         } }
       />
       <BottomTab.Screen
         name="TabSearch"
         component={ TabSearchNavigation }
         options={ {
-          tabBarIcon: ({color}: ColorType) => <TabBarIcon name={ ICONS.search } color={ color }/>,
+          tabBarIcon: ({color}: ColorType) => <AppIcon name={ ICONS.search } color={ color }/>,
         } }
       />
       <BottomTab.Screen
         name="TabAdd"
         component={ TabAddNavigation }
         options={ {
-          tabBarIcon: ({color}: ColorType) => <TabBarIcon name={ ICONS.plus } color={ color }/>,
+          tabBarIcon: ({color}: ColorType) => <AppIcon name={ ICONS.plus } color={ color }/>,
         } }
       />
       <BottomTab.Screen
         name="TabNews"
         component={ TabNewsNavigation }
         options={ {
-          tabBarIcon: ({color}: ColorType) => <TabBarIcon name={ ICONS.like } color={ color }/>,
+          tabBarIcon: ({color}: ColorType) => <AppIcon name={ ICONS.like } color={ color }/>,
         } }
       />
       <BottomTab.Screen
         name="TabProfile"
-        component={ TabProfileNavigation }
+        initialParams={ {queryUserName: data?.me?.username} }
+        component={ ProfileNavigation }
         options={ {
-          tabBarIcon: ({color}: ColorType) => <TabBarIcon name={ ICONS.person }
-                                                          color={ color }/>,
+          tabBarIcon: ({color}: ColorType) => <AppIcon name={ ICONS.person }
+                                                       color={ color }/>,
         } }
       />
     </BottomTab.Navigator>

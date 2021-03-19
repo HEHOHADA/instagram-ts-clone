@@ -32,11 +32,7 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
   return new TokenRefreshLink({
     isTokenValidOrUndefined: async () => {
       let possibleToken = getAccessToken()
-      if (typeof possibleToken === 'object') {
-        return checkToken(await possibleToken)
-      } else {
-        return checkToken(possibleToken)
-      }
+      return checkToken(typeof possibleToken === 'object' ? await possibleToken : possibleToken)
     },
     accessTokenField: 'accessToken',
     fetchAccessToken: () => {
@@ -47,6 +43,7 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
     },
     handleResponse: (_, accessTokenField) => async (response: Response) => {
       const result = await response.json()
+      console.log('result', result)
       return {
         [accessTokenField]: result[accessTokenField]
       }
@@ -64,7 +61,6 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
 export function authContextLink(getAccessToken: () => Promise<string | null> | string | null): ApolloLink {
   return setContext(async (_req, {headers}) => {
     const token = await getAccessToken()
-    console.log('token', token)
     return {
       headers: {
         ...headers,

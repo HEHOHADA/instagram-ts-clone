@@ -1,0 +1,48 @@
+{
+  "root": true,
+  "env": {
+    "es2020": true,
+    "node": true
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "prettier",
+    "import"
+  ],
+  "extends": [
+    "airbnb-typescript/base",
+    "prettier"
+  ],
+  "parserOptions": {
+    "project": [
+      "tsconfig.json",
+      "scripts/tsconfig.json"
+    ],
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "rules": {
+    "prettier/prettier": "warn",
+    "import/prefer-default-export": "off",
+    "no-plusplus": "off",
+    "no-console": "off",
+    "import/no-cycle": "off",
+    "class-methods-use-this": "off",
+    "semi": ["error", "never"],
+    "no-unused-vars": "off",
+    "quote-props": "off",
+    "max-classes-per-file": "off",
+    "func-names": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "max-len": [
+      "error",
+      {
+        "code": 100
+      }
+    ],
+    "semi-style": "off",
+    "no-param-reassign": "off",
+    "radix": "off"
+  }
+}

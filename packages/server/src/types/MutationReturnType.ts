@@ -1,6 +1,7 @@
-import { ErrorMessageType } from './ErrorMessageType'
-import { User } from '../entity/User'
 import { createUnionType, Field, ObjectType } from 'type-graphql'
+
+import { User } from '@entity/User'
+import { ErrorMessageType } from './ErrorMessageType'
 
 export type MutationReturnType = User | ErrorMessageType
 
@@ -13,10 +14,7 @@ class ErrorLoginType {
   message?: string
 }
 
-
 export const UserLoginMutationError = createUnionType({
   name: 'UserLoginError',
-  types: () => [User, ErrorLoginType] as const,
+  types: () => [User, ErrorLoginType] as const
 })
-
-

@@ -2,8 +2,7 @@ import { verify } from 'jsonwebtoken'
 import { MiddlewareFn, UnauthorizedError } from 'type-graphql'
 import { MyContext } from '../types/MyContext'
 
-export const isAuth: MiddlewareFn<MyContext> = async ({context}, next) => {
-
+export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   if (context.connection?.context.userId) {
     context.payload = context.connection.context
     return next()

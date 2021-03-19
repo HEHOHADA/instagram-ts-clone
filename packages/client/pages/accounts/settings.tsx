@@ -15,7 +15,7 @@ import { SettingsEditForm } from '@/components/settings/edit/SettingsEditForm'
 
 const Settings = () => {
   useIsAuth()
-  const {data} = useMeQuery()
+  const { data } = useMeQuery()
   const [setPicture] = useSetPictureProfileMutation()
 
   const changePictureHandler = useCallback(async ([picture]) => {
@@ -24,39 +24,39 @@ const Settings = () => {
         picture
       },
       update: (cache) => {
-        cache.evict({id: `User:${ data?.me?.id }`})
+        cache.evict({ id: `User:${ data?.me?.id }` })
       }
     })
 
-  }, [setPicture])
+  }, [setPicture, data?.me?.id])
 
   return (
-      <MainLayout title="Settings">
-        <div className="settings__container">
-          <SettingsSidebar/>
-          <article className="settings__main">
-            <div className="user__picture__container">
-              { data ?
-                  <>
-                    <div className="user__url">
-                      { data.me?.pictureUrl && <img
-                          src={ data.me.pictureUrl } alt=""/> }
-                    </div>
-                    <div className="user__change-picture">
-                      <div className="username">{ data.me!.username }</div>
-                      <DropzonePictureProfile
-                          text={ 'Сменить фото' }
-                          onDrop={ changePictureHandler }
-                          className="change-picture"/>
-                    </div>
-                  </>
-                  : <Loading/>
-              }
-            </div>
-           <SettingsEditForm />
-          </article>
-        </div>
-      </MainLayout>
+    <MainLayout title='Settings'>
+      <div className='settings__container'>
+        <SettingsSidebar />
+        <article className='settings__main'>
+          <div className='user__picture__container'>
+            { data ?
+              <>
+                <div className='user__url'>
+                  { data.me?.pictureUrl && <img
+                    src={ data.me.pictureUrl } alt='' /> }
+                </div>
+                <div className='user__change-picture'>
+                  <div className='username'>{ data.me!.username }</div>
+                  <DropzonePictureProfile
+                    text={ 'Сменить фото' }
+                    onDrop={ changePictureHandler }
+                    className='change-picture' />
+                </div>
+              </>
+              : <Loading />
+            }
+          </div>
+          <SettingsEditForm />
+        </article>
+      </div>
+    </MainLayout>
   )
 }
 
@@ -72,5 +72,5 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 }
 
-export default withApollo({ssr: false})(Settings)
+export default withApollo({ ssr: false })(Settings)
 

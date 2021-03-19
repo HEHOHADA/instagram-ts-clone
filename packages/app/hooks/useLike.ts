@@ -6,7 +6,7 @@ import { LikeDocument, useLikeMutation } from '@instagram/common'
 export const useLikeHandler = () => {
   const [likeMutation] = useMutation(LikeDocument)
 
-  const onLikeHandler = useCallback(async (photoId: string, isLiked: boolean) => {
+  const likeHandler = useCallback(async (photoId: string, isLiked: boolean) => {
     try {
       await likeMutation({
         variables: {
@@ -44,6 +44,6 @@ export const useLikeHandler = () => {
   }, [])
 
   return {
-    onLikeHandler
+     likeHandler
   }
 }

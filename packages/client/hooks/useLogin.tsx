@@ -6,15 +6,14 @@ import { setAccessToken } from '@/lib/token'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'
 
 export default function useLogin() {
-  const [login, {loading}] = useLoginMutation()
+  const [login, { loading }] = useLoginMutation()
   const router = useRouter()
-  const submitLoginHandler = useCallback(async (data, {setErrors}) => {
+  const submitLoginHandler = useCallback(async (data, { setErrors }) => {
     try {
-      debugger
       const response = await login({
         variables: {
           data
-        }, update: (cache, {data}) => {
+        }, update: (cache, { data }) => {
           if (!data || !data.login) {
             return
           }

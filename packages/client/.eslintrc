@@ -7,7 +7,7 @@
   },
   "extends": [
     "google",
-    "prettier/react",
+    "prettier",
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
@@ -24,19 +24,33 @@
     }
   },
   "rules": {
-    "semi": ["error", "never"],
+    "semi": [
+      "error",
+      "never"
+    ],
     "no-unused-vars": "off",
     "quote-props": "off",
     "max-len": [
       "error",
       {
-        "code": 100
+        "code": 100,
+        "tabWidth": 2
       }
     ],
-    "@typescript-eslint/no-use-before-define":"off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": "off",
     "arrow-parens": "off",
     "comma-dangle": "off",
     "linebreak-style": "off",
+    "new-cap": "off",
     "indent": "off",
     "require-jsdoc": "off",
     "semi-style": "off",

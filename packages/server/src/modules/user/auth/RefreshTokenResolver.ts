@@ -1,7 +1,8 @@
 import { Ctx, Query, Resolver } from 'type-graphql'
-import { MyContext } from '../../../types/MyContext'
 import { verify } from 'jsonwebtoken'
-import { User } from '../../../entity/User'
+
+import { MyContext } from '@type/MyContext'
+import { User } from '@entity/User'
 import { sendRefreshToken } from './sendRefreshToken'
 import { createAccessToken, createRefreshToken } from './createTokens'
 import { RefreshResponseType } from './RefreshResponseType'
@@ -9,9 +10,7 @@ import { RefreshResponseType } from './RefreshResponseType'
 @Resolver()
 export class RefreshTokenResolver {
   @Query(() => RefreshResponseType)
-  async refreshToken(
-      @Ctx(){req, res}: MyContext
-  ): Promise<RefreshResponseType> {
+  async refreshToken(@Ctx() { req, res }: MyContext): Promise<RefreshResponseType> {
     const token = req.cookies.jid
     if (!token) {
       // res.send({ok: false, accessToken: ''})
@@ -33,7 +32,7 @@ export class RefreshTokenResolver {
       }
     }
 
-    const user = await User.findOne({id: payload.userId})
+    const user = await User.findOne({ id: payload.userId })
 
     if (!user || user.tokenVersion !== payload.tokenVersion) {
       // res.send({ok: false, accessToken: ''})

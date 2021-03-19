@@ -6,7 +6,7 @@ import { AppHeaderIcon } from '@ui/AppHeaderIcon'
 import { HeaderButtons } from 'react-navigation-header-buttons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { SCREEN_WIDTH } from '@constants/demens'
-import { TabBarIcon } from '@components/ui/AppIcon'
+import { AppIcon } from '@components/ui/AppIcon'
 import { ICON_SIZE, ICONS } from '@constants/icons'
 import { IPhoto, IPhotoItemFragment } from '@instagram/common'
 import { useNavigation } from '@react-navigation/native'
@@ -73,7 +73,7 @@ export const PostItem: FC<PropsType> = ({
             <TouchableOpacity
               onPress={ () => onLike(id, isLiked) }
             >
-              <TabBarIcon name={ ICONS.like } color={ isLiked ? 'red' : 'black' }/>
+              <AppIcon name={ ICONS.like } color={ isLiked ? 'red' : 'black' }/>
             </TouchableOpacity>
             <TouchableOpacity onPress={ () => {
             } }>

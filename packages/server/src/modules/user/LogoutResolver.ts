@@ -4,11 +4,8 @@ import { sendRefreshToken } from './auth/sendRefreshToken'
 
 @Resolver()
 export class LogoutResolver {
-
   @Mutation(() => Boolean)
-  async logout(
-      @Ctx() ctx: MyContext
-  ) {
+  async logout(@Ctx() ctx: MyContext) {
     sendRefreshToken(ctx.res, '')
     return true
     // return new Promise((resolve, reject) => ctx.req.session!.destroy((e) => {

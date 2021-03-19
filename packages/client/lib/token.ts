@@ -1,18 +1,14 @@
-import { isServer } from './withApollo'
+import { readFromLocalStorage, saveToLocalStorage } from '@/lib/localStorage'
 
 let accessToken = ''
+
 const localStorageTokenName = 'token'
+
 export const setAccessToken = (s: string) => {
-  if (!isServer()) {
-    if (s) {
-      localStorage.setItem(localStorageTokenName, s)
-    } else {
-      localStorage.removeItem(localStorageTokenName)
-    }
-  }
+  saveToLocalStorage(localStorageTokenName, s)
   accessToken = s
 }
 
 export const getAccessToken = () => {
-  return !isServer() ? accessToken || localStorage.getItem(localStorageTokenName) : accessToken
+  return readFromLocalStorage(localStorageTokenName).value ?? accessToken
 }

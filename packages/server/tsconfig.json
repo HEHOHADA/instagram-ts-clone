@@ -10,6 +10,30 @@
     ],
     "sourceMap": true,
     "outDir": "./dist",
+    "paths": {
+      "@entity/*": [
+        "src/entity/*"
+      ],
+      "@modules/*": [
+        "src/modules/*"
+      ],
+      "@middleware/*": [
+        "src/middleware/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@type/*": [
+        "src/types/*"
+      ],
+      "@constants/*": ["src/modules/constants/*"]
+    },
+    "plugins": [
+      /* List of language service plugins to run inside the editor. */
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ],
     "moduleResolution": "node",
     "declaration": false,
     "composite": false,

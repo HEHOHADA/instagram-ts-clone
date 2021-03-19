@@ -49,7 +49,7 @@ type PropsType = {
 }
 export const HomePosts: FC<PropsType> = ({posts, onFetchMore}) => {
   const {navigateToPostId, navigateToProfile} = useNavigate()
-  const {onLikeHandler} = useLikeHandler()
+  const {likeHandler} = useLikeHandler()
   return (
     <VirtualizedView>
       <FlatList
@@ -61,7 +61,7 @@ export const HomePosts: FC<PropsType> = ({posts, onFetchMore}) => {
         renderItem={ ({item}) => {
           return (
             <PostItem
-              onLike={ onLikeHandler }
+              onLike={ likeHandler }
               onNavigateProfile={ navigateToProfile }
               onNavigatePost={ navigateToPostId }
               { ...item }/>
@@ -70,5 +70,3 @@ export const HomePosts: FC<PropsType> = ({posts, onFetchMore}) => {
     </VirtualizedView>
   )
 }
-
-const styles = StyleSheet.create({})

@@ -11,20 +11,22 @@ export class FeedResolver {
   @Query(() => PaginatedPhotos)
   @UseMiddleware(isAuth)
   async feed(
-      @Arg('limit', () => Int) limit: number,
-      @Arg('cursor', () => String, {nullable: true}) cursor: string | null,
-      @Ctx(){payload: {userId}}: MyContext
+    @Arg('limit', () => Int) limit: number,
+    @Arg('cursor', () => String, { nullable: true }) cursor: string | null,
+    @Ctx() { payload: { userId } }: MyContext
   ): Promise<PaginatedPhotos> {
     const realLimit = Math.min(50, limit)
 
     const realLimitPlusOne = realLimit + 1
 
-    const qbFollow = (await getConnection()
+    const qbFollow = (
+      await getConnection()
         .getRepository(User)
         .findOne(userId!, {
           relations: ['following'],
           cache: true
-        }))?.following.map(userItem => userItem.id)
+        })
+    )?.following.map((userItem) => userItem.id)
 
     // const replacements: any[] = [[...qbFollow!, userId].join(','), realLimitPlusOne]
     //
@@ -34,18 +36,18 @@ export class FeedResolver {
     // }
 
     const queryBuilder = getConnection()
-        .getRepository(Photo)
-        .createQueryBuilder('p')
-        .where('p.userId in (:...ids)', {ids: [...qbFollow!, userId]})
+      .getRepository(Photo)
+      .createQueryBuilder('p')
+      .where('p.userId in (:...ids)', { ids: [...qbFollow!, userId] })
 
     if (cursor) {
-      queryBuilder.andWhere('p.date < :date', {date: new Date(parseInt(cursor))})
+      queryBuilder.andWhere('p.date < :date', { date: new Date(parseInt(cursor)) })
     }
     const photosPlusOne = await queryBuilder
-        .orderBy('p.date', 'DESC')
-        .limit(realLimitPlusOne)
-        .cache(true)
-        .getMany()
+      .orderBy('p.date', 'DESC')
+      .limit(realLimitPlusOne)
+      .cache(true)
+      .getMany()
     // const photosPlusOne = await getConnection().query(`
     //   select p.* from photo p
     //   where p."userId" IN ($1)

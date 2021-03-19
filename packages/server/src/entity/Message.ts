@@ -3,11 +3,9 @@ import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Chat } from './Chat'
 
-
 @Entity()
 @ObjectType()
 export class Message extends BaseEntity {
-
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -26,8 +24,8 @@ export class Message extends BaseEntity {
   @Column()
   userId: string
 
-  @Field({nullable: true})
-  @Column('timestamp', {default: null})
+  @Field({ nullable: true })
+  @Column('timestamp', { default: null })
   readTime: Date
 
   @Field(() => String)
@@ -35,13 +33,11 @@ export class Message extends BaseEntity {
   date: Date
 
   @Field(() => Chat)
-  @ManyToOne(() => Chat,
-      chat => chat.messages)
+  @ManyToOne(() => Chat, (chat) => chat.messages)
   chat: Chat
 
   @Field(() => User)
-  @ManyToOne(() => User,
-      user => user)
+  @ManyToOne(() => User, (user) => user)
   @JoinColumn()
   user: User
 }

@@ -1,6 +1,6 @@
 import { Field, InputType } from 'type-graphql'
-import { PasswordMixin } from '../utils/PasswordMixin'
 import { MinLength } from 'class-validator'
+import { PasswordMixin } from '../utils/PasswordMixin'
 
 @InputType()
 export class ChangeForgotPassword extends PasswordMixin(class {}) {

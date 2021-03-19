@@ -1,30 +1,31 @@
 import { Arg, Ctx, Query, Resolver, UseMiddleware } from 'type-graphql'
-import { Chat } from '../../entity/Chat'
-import { MyContext } from '../../types/MyContext'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { User } from '../../entity/User'
 import { getConnection } from 'typeorm'
+import { Chat } from '@entity/Chat'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { User } from '@entity/User'
 
 @Resolver(() => Chat)
 export class ChatResolver {
-
   @Query(() => Chat)
   @UseMiddleware(isAuth)
   async chat(@Arg('id') id: string, @Ctx() ctx: MyContext) {
-    const {payload: {userId}} = ctx
+    const {
+      payload: { userId }
+    } = ctx
     // const chat = await Chat.findOneOrFail({
     //   where: {id},
     //   relations: ['users', 'messages'],
     //
     // })
     const chat = await getConnection()
-        .getRepository(Chat)
-        .createQueryBuilder('c')
-        .where('c.id = :id', {id})
-        .leftJoinAndSelect('c.users', 'users')
-        .leftJoinAndSelect('c.messages', 'messages')
-        .orderBy('messages.date', 'ASC')
-        .getOne()
+      .getRepository(Chat)
+      .createQueryBuilder('c')
+      .where('c.id = :id', { id })
+      .leftJoinAndSelect('c.users', 'users')
+      .leftJoinAndSelect('c.messages', 'messages')
+      .orderBy('messages.date', 'ASC')
+      .getOne()
     if (!chat) {
       throw new Error('Chat not found')
     }
@@ -51,9 +52,11 @@ export class ChatResolver {
   @Query(() => [Chat])
   @UseMiddleware(isAuth)
   async chats(@Ctx() ctx: MyContext) {
-    const {payload: {userId}} = ctx
-    const {chats} = await User.findOneOrFail({
-      where: {id: userId},
+    const {
+      payload: { userId }
+    } = ctx
+    const { chats } = await User.findOneOrFail({
+      where: { id: userId },
       relations: ['chats', 'chats.users', 'chats.messages']
     })
 
@@ -71,12 +74,10 @@ export class ChatResolver {
       const lastMessageOfChatB = chatB.messages[chatB.messages.length - 1]
 
       return (
-          // .getTime() because otherwise typescript throws an error (it would work in js without it)
-          lastMessageOfChatB.date.getTime() -
-          lastMessageOfChatA.date.getTime()
+        // .getTime() because otherwise typescript throws an error (it would work in js without it)
+        lastMessageOfChatB.date.getTime() - lastMessageOfChatA.date.getTime()
       )
     })
     return previewChats
   }
-
 }

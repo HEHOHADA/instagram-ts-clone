@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
-import { User } from '../../entity/User'
+import { User } from '@entity/User'
+import { MyContext } from '@type/MyContext'
 import { LoginInput } from './login/LoginInput'
-import { MyContext } from '../../types/MyContext'
 import { confirmEmailError, forgotPasswordLockedError, invalidLogin } from './utils/errorMessages'
 import { sendRefreshToken } from './auth/sendRefreshToken'
 import { createAccessToken, createRefreshToken } from './auth/createTokens'
@@ -11,14 +11,12 @@ import { LoginResponseType } from './login/LoginResponseType'
 
 @Resolver()
 export class LoginResolver {
-
   @Mutation(() => LoginResponseType)
   async login(
-      @Arg('data'){email, password}: LoginInput,
-      @Ctx() ctx: MyContext
+    @Arg('data') { email, password }: LoginInput,
+    @Ctx() ctx: MyContext
   ): Promise<LoginResponseType> {
-
-    const user = await User.findOne({where: {email}})
+    const user = await User.findOne({ where: { email } })
 
     if (!user) {
       throw new ValidationError(invalidLogin)

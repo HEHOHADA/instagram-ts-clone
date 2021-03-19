@@ -3,11 +3,9 @@ import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Photo } from './Photo'
 
-
 @Entity()
 @ObjectType()
 export class Comment extends BaseEntity {
-
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -32,14 +30,12 @@ export class Comment extends BaseEntity {
   date: Date
 
   @Field(() => User)
-  @ManyToOne(() => User,
-      user => user.photos)
+  @ManyToOne(() => User, (user) => user.photos)
   user: User
 
   @Field(() => Photo)
-  @ManyToOne(() => Photo,
-      photo => photo.comments, {
-        onDelete: 'CASCADE',
-      })
+  @ManyToOne(() => Photo, (photo) => photo.comments, {
+    onDelete: 'CASCADE'
+  })
   photo: Photo
 }

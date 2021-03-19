@@ -22,6 +22,7 @@ import { TabDirectParamList } from '@type/navigation'
 import { View } from '@components/Themed'
 import { MessageItem } from '@components/direct/MessageItem'
 import { ConversationInput } from '@components/direct/ConversationInput'
+import { AppLoader } from '@ui/AppLoader'
 
 
 export default function ChatScreen() {
@@ -38,7 +39,7 @@ export default function ChatScreen() {
         <KeyboardAvoidingView
           behavior={ Platform.OS === 'ios' ? 'padding' : 'height' }
           style={ styles.messagesContainer }>
-          { loading || !data?.chat.id ? <ActivityIndicator/> :
+          { loading || !data?.chat.id ? <AppLoader/> :
             <Animated.View style={ {
               ...styles.inboxContainer,
               height: '100%',

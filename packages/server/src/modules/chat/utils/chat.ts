@@ -1,11 +1,11 @@
-import { Chat } from '../../../entity/Chat'
-import { User } from '../../../entity/User'
+import { Chat } from '@entity/Chat'
+import { User } from '@entity/User'
 
 export async function createChatFn(meId: string, userId: string) {
-  const chat = await Chat.create({date: new Date()}).save()
+  const chat = await Chat.create({ date: new Date() }).save()
 
   const users = await User.find({
-    where: [{id: meId}, {id: userId}],
+    where: [{ id: meId }, { id: userId }],
     relations: ['chats']
   })
 

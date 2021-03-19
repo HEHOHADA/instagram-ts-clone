@@ -1,14 +1,20 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
 import { Comment } from './Comment'
 import { Likes } from './Likes'
 
-
 @Entity()
 @ObjectType()
 export class Photo extends BaseEntity {
-
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -22,7 +28,7 @@ export class Photo extends BaseEntity {
   pictureUrl: string
 
   @Field()
-  @Column('varchar', {nullable: true})
+  @Column('varchar', { nullable: true })
   postText: string
 
   @Field()
@@ -30,21 +36,19 @@ export class Photo extends BaseEntity {
   userId: string
 
   @Field(() => User)
-  @ManyToOne(() => User,
-      user => user.photos)
+  @ManyToOne(() => User, (user) => user.photos)
   @JoinColumn()
   user: User
 
-  @OneToMany(() => Likes,
-      like => like.photo, {
-        cascade: true
-      })
+  @OneToMany(() => Likes, (like) => like.photo, {
+    cascade: true
+  })
   likes: Likes[]
 
-  @Field({defaultValue: 0})
+  @Field({ defaultValue: 0 })
   likeCount: number
 
-  @Field({defaultValue: 0})
+  @Field({ defaultValue: 0 })
   commentCount: number
 
   @Field()
@@ -53,10 +57,9 @@ export class Photo extends BaseEntity {
   @Field()
   isAuthor: boolean
 
-  @Field(() => [Comment], {nullable: true})
-  @OneToMany(() => Comment,
-      comment => comment.photo, {
-        cascade: true
-      })
+  @Field(() => [Comment], { nullable: true })
+  @OneToMany(() => Comment, (comment) => comment.photo, {
+    cascade: true
+  })
   comments: Comment[]
 }

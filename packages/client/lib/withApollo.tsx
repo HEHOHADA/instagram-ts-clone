@@ -31,7 +31,9 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
   if (process.env.NODE_ENV === 'development') {
     if (inAppContext) {
       console.warn(
-        'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.Read more: https://err.sh/next.js/opt-out-auto-static-optimization',
+        'Warning: You have opted-out of Automatic Static Optimization due to' +
+        ' `withApollo` in `pages/_app`' +
+        '.Read more: https://err.sh/next.js/opt-out-auto-static-optimization'
       )
     }
   }
@@ -49,14 +51,14 @@ export const initOnContext = (ctx: NextPageContextApp): NextPageContextApp => {
 }
 
 
-const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any) => {
+const withApollo = ({ ssr = true }: { ssr?: boolean } = {}) => (PageComponent: any) => {
 
   const WithApollo = ({
-                        apolloClient,
-                        apolloState,
-                        serverAccessToken,
-                        ...pageProps
-                      }: WithApolloType) => {
+    apolloClient,
+    apolloState,
+    serverAccessToken,
+    ...pageProps
+  }: WithApolloType) => {
     if (!getAccessToken() && serverAccessToken) {
       setAccessToken(serverAccessToken)
     }
@@ -85,7 +87,7 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
 
   if (ssr || PageComponent.getInitialProps) {
     WithApollo.getInitialProps = async (ctx: NextPageContextApp) => {
-      const {AppTree} = ctx
+      const { AppTree } = ctx
       let serverAccessToken: string | null = ''
 
       if (isServer() && ctx.req?.headers.cookie && !getAccessToken()) {
@@ -107,7 +109,7 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
         serverAccessToken = getAccessToken()
       }
       const inAppContext = Boolean(ctx.ctx)
-      const {apolloClient} = initOnContext(ctx)
+      const { apolloClient } = initOnContext(ctx)
 
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
@@ -131,12 +133,12 @@ const withApollo = ({ssr = true}: { ssr?: boolean } = {}) => (PageComponent: any
         if (ssr && AppTree) {
           try {
             // Run all GraphQL queries
-            const {getDataFromTree} = await import('@apollo/client/react/ssr')
+            const { getDataFromTree } = await import('@apollo/client/react/ssr')
             let props: any
             if (inAppContext) {
-              props = {...pageProps, apolloClient}
+              props = { ...pageProps, apolloClient }
             } else {
-              props = {pageProps: {...pageProps, apolloClient}}
+              props = { pageProps: { ...pageProps, apolloClient } }
             }
             await getDataFromTree(
               <AppTree

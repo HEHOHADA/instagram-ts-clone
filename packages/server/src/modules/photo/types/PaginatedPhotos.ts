@@ -12,6 +12,4 @@ import { Photo } from '../../../entity/Photo'
 // }
 
 @ObjectType()
-export class PaginatedPhotos extends PaginatedResponse<Photo, Date>(Photo, Date) {
-
-}
+export class PaginatedPhotos extends PaginatedResponse<Photo, Date>(Photo, Date) {}

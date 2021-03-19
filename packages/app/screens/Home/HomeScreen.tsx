@@ -5,6 +5,7 @@ import { NAVIGATION_BAR_PADDING_V } from '@constants/demens'
 import { useQuery } from '@apollo/client'
 import { HomePosts } from '@components/post/HomePosts'
 import { FeedDocument } from '@instagram/common'
+import { AppLoader } from '@ui/AppLoader'
 
 export default function HomeScreen() {
   const {data: dataFeed, loading, refetch, variables} = useQuery(FeedDocument, {
@@ -15,7 +16,7 @@ export default function HomeScreen() {
   })
 
   const onFetchMore = async () => {
-     refetch({
+    refetch({
         limit: variables!.limit,
         cursor: dataFeed?.feed.items[dataFeed?.feed.items.length - 1].date
       }
@@ -24,10 +25,10 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={ styles.container }>
-      { dataFeed && !loading &&
-      <HomePosts
-        onFetchMore={ dataFeed.feed.paginationInfo.hasMore ? onFetchMore : undefined }
-        posts={ dataFeed.feed }/> }
+      { dataFeed && !loading ?
+        <HomePosts
+          onFetchMore={ dataFeed.feed.paginationInfo.hasMore ? onFetchMore : undefined }
+          posts={ dataFeed.feed }/> : <AppLoader/> }
     </SafeAreaView>
   )
 }

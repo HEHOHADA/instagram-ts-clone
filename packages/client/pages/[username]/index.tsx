@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useRouter } from 'next/router'
 
 import {
@@ -26,18 +26,18 @@ export type ProfileItemsType = {
 
 export type ModalUserPageType = 'subscribers' | 'subscriptions' | null
 
-let subs: ModalUserPageType = null
 
 const Profile = () => {
   const {openModal, ModalWindow} = useModal()
   const router = useRouter()
+  const subs = useRef<ModalUserPageType>(null)
   const {username: queryUserName} = router.query
   const {data, loading} = useGetUserInfoQuery({variables: {username: (queryUserName as string)}})
   const {data: dataPhoto} = useViewUserPhotoQuery({variables: {username: (queryUserName as string)}})
   const {data: meData} = useMeQuery()
   const {followButton} = useFollowButton()
   const changeSubs = (subName: ModalUserPageType) => {
-    subs = subName
+    subs.current = subName
     openModal()
   }
   return (
@@ -59,7 +59,7 @@ const Profile = () => {
               FollowButton: followButton,
               ...ref
             }
-            switch (subs) {
+            switch (subs.current) {
               case'subscribers':
                 return (<SubscriptionModal
                     { ...modalProps }

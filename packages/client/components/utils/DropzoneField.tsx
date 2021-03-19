@@ -15,12 +15,12 @@ export const DropzonePictureProfile: FC<PropsTypePicture> = ({onDrop, className,
     accept: 'image/jpeg, image/png'
   })
   const {
-    onKeyDown,
-    onKeyDownCapture,
-    onKeyPress,
-    onKeyPressCapture,
-    onKeyUp,
-    onKeyUpCapture,
+    _onKeyDown,
+    _onKeyDownCapture,
+    _onKeyPress,
+    _onKeyPressCapture,
+    _onKeyUp,
+    _onKeyUpCapture,
     ...props
   } = getRootProps()
   return (
