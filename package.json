@@ -1,0 +1,25 @@
+{
+  "name": "instagram-ts-clone",
+  "private": true,
+  "dependencies": {
+    "metro-config": "^0.56.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/react-native",
+      "**/*react-native*",
+      "**/react-native/**",
+      "**/react-native*/**",
+      "**/expo",
+      "**next**",
+      "**/expo*/**",
+      "@instagram/common",
+      "**/*expo*",
+      "**/*react-navigation*",
+      "**/*react-navigation*/**"
+    ]
+  }
+}

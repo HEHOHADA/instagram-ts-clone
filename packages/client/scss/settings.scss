@@ -1,0 +1,176 @@
+@import "mixins";
+@import "variables";
+@import "extented";
+
+.settings__container {
+  @extend %direc-row;
+  width: 100%;
+  margin: 30px auto 0;
+  max-width: $defaultContainer;
+  border-radius: 3px;
+  border: $border;
+}
+
+.settings__side-bar {
+  border-right: $border;
+  flex: 0 0 236px;
+
+  .side-bar__item {
+    color: $blackActive;
+    font-size: 16px;
+    display: block;
+    border-left: 2px solid transparent;
+    padding: 16px 16px 16px 30px;
+
+    &:hover {
+      transition: 0.1s;
+      background-color: #fafafa;
+      border-left-color: #dbdbdb;
+    }
+  }
+
+  @include media((
+    display:(xs:none, md:block)
+  ))
+}
+
+
+.settings__main {
+  flex: 1 1 400px;
+  min-width: 50px;
+
+  @include media((
+    margin:(xs: '0 auto', md:0)
+  ))
+}
+
+.user__picture__container {
+  @extend %direc-row;
+  width: 100%;
+  margin: 32px 0;
+  align-items: center;
+  @include media((
+    justify-content:(xs: 'center', md:'initial')
+  ));
+
+  .user__url {
+    @include image__item(50px)
+  }
+}
+
+
+.user__change-picture {
+  @extend %direc-column;
+  padding: 5px;
+
+  .username {
+    font-size: 20px;
+    line-height: 22px;
+    margin-bottom: 2px;
+    padding: 5px 5px 5px 0;
+  }
+
+  .change-picture {
+    color: $link;
+    border: 0;
+    background: none;
+    display: inline;
+    padding: 0;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+@media (min-width: 736px) {
+  .user__url {
+    margin: 2px 32px 0 124px;
+  }
+}
+
+
+.settings__change-info {
+  @extend %direc-column;
+  margin: 16px 0;
+}
+
+.change__item__container {
+  @extend %direc-row;
+  margin-bottom: 16px;
+  justify-content: flex-start;
+
+  .change__name {
+    flex: 0 0 194px;
+    color: $blackActive;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 18px;
+    margin-top: 6px;
+    padding-left: 32px;
+    padding-right: 32px;
+    text-align: right;
+    @include media((
+      flex:(xs:'none', md:' 0 0 194px')
+    ));
+  }
+}
+
+.change__input__container {
+  flex-basis: 390px;
+
+  @include media((
+    padding-right:(xs:'0', md:'3rem')
+  ));
+
+  .input__field {
+    border: $border;
+    color: $blackActive;
+    width: 100%;
+    height: 32px;
+    border-radius: 3px;
+    padding: 0 10px;
+
+    &:hover {
+      border: 1px solid black;
+      transition: color 0.5s ease-in;
+    }
+
+    &::placeholder {
+      color: #939999;
+    }
+  }
+
+  .change__input__info {
+    margin-top: 20px;
+    color: #bec9c9;
+  }
+}
+
+.form__settings__submit {
+  @extend %direc-row;
+  justify-content: flex-end;
+
+  .send__form {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 5px 9px;
+    background-color: $link;
+    color: $white;
+    margin-right: 20px;
+
+    &:disabled {
+      background-color: rgba(0, 149, 246, .3);
+      pointer-events: none;
+    }
+  }
+
+  .block__account {
+    font-weight: 600;
+    line-height: 28px;
+    color: $link;
+    border: 0;
+    background: none;
+    font-size: 14px;
+    margin: 0 15px;
+  }
+}
