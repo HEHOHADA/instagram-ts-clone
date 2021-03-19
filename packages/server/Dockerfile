@@ -10,13 +10,15 @@ COPY package.json ./
 COPY yarn.lock ./
 
 RUN yarn
-
+RUN npm install -g ts-node typescript ts-node-dev
 COPY . .
+COPY .env .
+COPY ormconfig.js .
+COPY init.sql /docker-entrypoint-initdb.d/
 
-RUN yarn build
 
-ENV NODE_ENV production
+ENV NODE_ENV development
 
 EXPOSE 4000
-CMD [ "node", "dist/index.js" ]
+CMD [ "ts-node", "src/index.ts" ]
 USER node

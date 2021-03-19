@@ -21,7 +21,25 @@ import { redis } from '@utils/redis'
 // typeorm.useContainer(Container)
 
 const server = async () => {
-  await createConnection()
+
+  let retries = 10
+  while (retries) {
+    try {
+      await createConnection()
+      // await conn.runMigrations()
+      break
+    } catch (err) {
+      console.log(err)
+      retries -= 1
+      console.log(`${ retries } retries remaining...`)
+      // wait 5 seconds before retrying connection to
+      // postgres
+      await new Promise(res => {
+        console.log(`test env var `)
+        setTimeout(res, 5000)
+      })
+    }
+  }
   // const RedisStore = connectRedis(session)
   const app = Express()
   app.use(cookieParser())
@@ -89,7 +107,7 @@ const server = async () => {
       }
       return { message, path }
     }
-  })
+  } as ApolloServerExpressConfig)
 
   apolloServer.applyMiddleware({ app, cors: false })
   const httpServer = http.createServer(app)

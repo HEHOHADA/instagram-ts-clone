@@ -65,6 +65,8 @@
       "**/react-native*/**",
       "**/expo",
       "**/expo*/**",
+      "@apollo",
+      "@instagram/common",
       "**/*expo*",
       "**/*react-navigation*",
       "**/*react-navigation*/**"

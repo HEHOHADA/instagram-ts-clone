@@ -22,7 +22,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
 })
 
 const host =
-  Platform.OS === 'ios' ? 'http://localhost:4000/graphql' : 'http://192.168.1.145:4000/graphql'
+  Platform.OS === 'ios' ? 'http://localhost:4000/graphql' : 'http://192.168.1.227:4000/graphql'
 const httpLink = httpLinkWithUpload(host)
 const link =
   split(
