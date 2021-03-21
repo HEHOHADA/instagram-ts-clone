@@ -1,17 +1,18 @@
-import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
-import { FileUpload, GraphQLUpload } from 'graphql-upload'
-import { ApolloError } from 'apollo-server-express'
 import { Repository } from 'typeorm'
-import { MyContext } from '@type/MyContext'
-import { processUpload } from '../shared/processUpload'
-import { somethingWentWrong } from '../../helpers/user/errorMessages'
-import { Photo } from '@entity/Photo'
-import { isAuth } from '@middleware/isAuthMiddleware'
+import { ApolloError } from 'apollo-server-express'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
+
 import { User } from '@entity/User'
+import { Photo } from '@entity/Photo'
 import { Likes } from '@entity/Likes'
 import { Comment } from '@entity/Comment'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { processUpload } from '@helpers/shared/processUpload'
+import { somethingWentWrong } from '@helpers/user/errorMessages'
 import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 
 @Resolver(() => Photo)
 export class CreatePhotoResolver {

@@ -1,20 +1,21 @@
 import bcrypt from 'bcryptjs'
-import { AuthenticationError, ValidationError } from 'apollo-server-express'
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
+import { AuthenticationError, ValidationError } from 'apollo-server-express'
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
 import { LoginInput } from '@type/user/login/LoginInput'
-import { confirmEmailError, forgotPasswordLockedError, invalidLogin } from '../../helpers/user/errorMessages'
-import { sendRefreshToken } from '../../helpers/user/auth/sendRefreshToken'
-import { createAccessToken, createRefreshToken } from '../../helpers/user/auth/createTokens'
+import { sendRefreshToken } from '@helpers/user/auth/sendRefreshToken'
 import { LoginResponseType } from '@type/user/login/LoginResponseType'
-import { InjectRepository } from 'typeorm-typedi-extensions'
-import { Repository } from 'typeorm'
+import { createAccessToken, createRefreshToken } from '@helpers/user/auth/createTokens'
+import { confirmEmailError, forgotPasswordLockedError, invalidLogin } from '@helpers/user/errorMessages'
 
 @Resolver()
 export class LoginResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {
   }
+
   @Mutation(() => LoginResponseType)
   async login(
     @Arg('data') { email, password }: LoginInput,

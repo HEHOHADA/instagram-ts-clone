@@ -8,6 +8,7 @@ import { InputAuthField } from '@/components/utils/InputAuthField'
 import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
+import { NextPageContext } from 'next'
 
 const Login = () => {
   const {loading, submitLoginHandler} = useLogin()
@@ -47,16 +48,10 @@ const Login = () => {
   )
 }
 
-// export const getServerSideProps = async (ctx: NextPageContext) => {
-//   if (ctx.req) {
-//     const jid = getCookieParser(ctx.req)
-//     if (jid()['jid']) {
-//       Redirect(ctx, '/')
-//     }
-//   }
-//   return {
-//     props: {}
-//   }
-// }
+export const getServerSideProps = async () => {
+  return {
+    props: {}
+  }
+}
 
 export default withApollo({ssr: false})(Login)

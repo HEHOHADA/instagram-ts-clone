@@ -16,7 +16,7 @@ import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 
 
 const Register = () => {
-  const [register, {loading}] = useRegisterMutation()
+  const [register, { loading }] = useRegisterMutation()
   const router = useRouter()
   const fieldsItems = useMemo(() => {
     return [{
@@ -43,7 +43,7 @@ const Register = () => {
     ]
   }, [])
 
-  const submitRegisterHandler = useCallback(async (data, {setErrors}) => {
+  const submitRegisterHandler = useCallback(async (data, { setErrors }) => {
     try {
       const response = await register({
         variables: {
@@ -60,32 +60,26 @@ const Register = () => {
   }, [])
 
   return (
-      <AuthLayout>
-        <InstagramAuthForm<IRegisterInput>
-            loading={ loading }
-            OrOptionsComponent={ <OrComponentWithRedirect
-                link={ '/accounts/password/reset' }
-                text={ 'Забыли пароль' }/> }
-            RedirectComponent={ <RedirectComponent
-                text={ 'Login' }
-                link={ '/accounts/login' }/> }
-            buttonText={ 'Register' }
-            fields={ fieldsItems }
-            initialValues={ {password: '', email: '', fullName: '', username: ''} }
-            submitHandler={ submitRegisterHandler }/>
-      </AuthLayout>
+    <AuthLayout>
+      <InstagramAuthForm<IRegisterInput>
+        loading={ loading }
+        OrOptionsComponent={ <OrComponentWithRedirect
+          link={ '/accounts/password/reset' }
+          text={ 'Забыли пароль' } /> }
+        RedirectComponent={ <RedirectComponent
+          text={ 'Login' }
+          link={ '/accounts/login' } /> }
+        buttonText={ 'Register' }
+        fields={ fieldsItems }
+        initialValues={ { password: '', email: '', fullName: '', username: '' } }
+        submitHandler={ submitRegisterHandler } />
+    </AuthLayout>
   )
 }
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  if (ctx.req) {
-    const jid = getCookieParser(ctx.req)
-    if (jid()['jid']) {
-      Redirect(ctx, '/')
-    }
-  }
+export const getServerSideProps = async () => {
   return {
     props: {}
   }
 }
-export default withApollo({ssr: false})(Register)
+export default withApollo({ ssr: false })(Register)

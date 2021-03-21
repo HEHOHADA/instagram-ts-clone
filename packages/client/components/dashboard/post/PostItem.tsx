@@ -14,7 +14,6 @@ type PropsType = {
   deletePhoto: (id: string) => Promise<void>
 }
 
-
 const PostItem: FC<PropsType> = React.memo(({photo, deletePhoto}) => {
 
   return (

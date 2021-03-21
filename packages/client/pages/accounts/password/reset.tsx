@@ -1,11 +1,6 @@
-import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo } from 'react'
-
-import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import { IForgotPasswordType, useForgotPasswordMutation } from '@instagram/common'
-
-import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
 import MainLayout from '@/components/MainLayout'
 import { InputAuthField } from '@/components/utils/InputAuthField'
@@ -67,13 +62,7 @@ const ForgotPassword = () => {
   )
 }
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  if (ctx.req) {
-    const jid = getCookieParser(ctx.req)
-    if (jid()['jid']) {
-      Redirect(ctx, '/')
-    }
-  }
+export const getServerSideProps = async () => {
   return {
     props: {}
   }

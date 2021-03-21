@@ -1,14 +1,15 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+import { Repository } from 'typeorm'
 import { GraphQLUpload } from 'graphql-upload'
 import { ApolloError } from 'apollo-server-express'
-import { MyContext } from '@type/MyContext'
-import { User } from '@entity/User'
-import { isAuth } from '@middleware/isAuthMiddleware'
-import { UploadType } from '@type/user/UploadType'
-import { processUpload } from '../shared/processUpload'
-import { somethingWentWrong } from '../../helpers/user/errorMessages'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import { Repository } from 'typeorm'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
+import { User } from '@entity/User'
+import { MyContext } from '@type/MyContext'
+import { UploadType } from '@type/user/UploadType'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { processUpload } from '@helpers/shared/processUpload'
+import { somethingWentWrong } from '@helpers/user/errorMessages'
 
 @Resolver()
 export class PictureProfileResolver {

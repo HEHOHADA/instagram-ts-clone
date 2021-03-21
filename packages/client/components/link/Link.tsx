@@ -1,4 +1,4 @@
-import { routes } from '@/utils/routes'
+import { routes } from '@/helpers/routing/routes'
 import NextLink, { LinkProps as NextLinkProps } from 'next/link'
 import React, { FC, PropsWithChildren, useMemo } from 'react'
 

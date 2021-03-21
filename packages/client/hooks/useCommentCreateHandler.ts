@@ -13,13 +13,13 @@ export const useCommentCreateHandler = () => {
           },
           update: (cache, { data }) => {
             cache.modify({
-              id: `Photo:${data?.createComment.photoId}`,
+              id: `Photo:${ data?.createComment.photoId }`,
               fields: {
                 commentCount(cachedValue) {
                   return cachedValue + 1
                 },
                 comments(cachedValue) {
-                  const commentRef = { __ref: `Comment:${data?.createComment?.id}` }
+                  const commentRef = { __ref: `Comment:${ data?.createComment?.id }` }
                   return [...cachedValue, commentRef]
                 }
               }

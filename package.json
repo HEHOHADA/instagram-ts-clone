@@ -2,6 +2,7 @@
   "name": "instagram-ts-clone",
   "private": true,
   "dependencies": {
+    "lerna": "^4.0.0",
     "metro-config": "^0.56.0"
   },
   "workspaces": {
@@ -16,7 +17,7 @@
       "**/expo",
       "**next**",
       "**/expo*/**",
-      "@instagram/common",
+      "**/instagram/common",
       "**/*expo*",
       "**/*react-navigation*",
       "**/*react-navigation*/**"

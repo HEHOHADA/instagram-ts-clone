@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Head from 'next/head'
 import React, { FC } from 'react'
 
-
 import NavbarItems from './nav/NavbarItems'
 import { SearchComponent } from './search/SearchComponent'
 import { LinkItem } from '@/components/utils/LinkItem'

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "license": "MIT",
-  "private": "true",
+  "private": true,
   "dependencies": {
     "@graphql-tools/load-files": "^6.2.4",
     "@graphql-tools/merge": "^6.2.4",
@@ -23,7 +23,7 @@
     "graphql-upload": "^11.0.0",
     "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.4.1",
+    "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "shortid": "^2.2.15",
     "type-graphql": "^1.0.0",

@@ -1,15 +1,16 @@
-import { AuthenticationError } from 'apollo-server-express'
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import bcrypt from 'bcryptjs'
-import { User } from '@entity/User'
-import { isAuth } from '@middleware/isAuthMiddleware'
-import { MyContext } from '@type/MyContext'
-import { redis } from '@utils/redis'
-import { forgotPasswordPrefix } from '../../helpers/constants/redisPrefix'
-import { ChangeForgotPassword, ChangePassword } from '@type/user/ChangePasswordInputType'
-import { expiredKeyError, invalidLogin } from '../../helpers/user/errorMessages'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Repository } from 'typeorm'
+import { AuthenticationError } from 'apollo-server-express'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
+import { redis } from '@utils/redis'
+import { User } from '@entity/User'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { forgotPasswordPrefix } from '@helpers/constants/redisPrefix'
+import { expiredKeyError, invalidLogin } from '@helpers/user/errorMessages'
+import { ChangeForgotPassword, ChangePassword } from '@type/user/ChangePasswordInputType'
 
 @Resolver()
 export class ChangePasswordResolver {
