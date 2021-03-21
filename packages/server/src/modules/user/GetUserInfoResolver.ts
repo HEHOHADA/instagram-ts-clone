@@ -1,12 +1,16 @@
 import { Arg, Ctx, FieldResolver, Query, Resolver, Root, UseMiddleware } from 'type-graphql'
 import { ApolloError } from 'apollo-server-express'
-import { getConnection } from 'typeorm'
-import { User } from '../../entity/User'
-import { MyContext } from '../../types/MyContext'
-import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
+import { Repository } from 'typeorm'
+import { User } from '@entity/User'
+import { MyContext } from '@type/MyContext'
+import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 
 @Resolver(() => User)
 export class GetUserInfoResolver {
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {
+  }
+
   @FieldResolver(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
   isCurrentUser(@Root() user: User, @Ctx() { payload: { userId } }: MyContext) {
@@ -15,8 +19,8 @@ export class GetUserInfoResolver {
 
   @Query(() => User)
   async getUserInfo(@Arg('username') username: string) {
-    const user = await getConnection()
-      .getRepository(User)
+    const user = this
+      .userRepository
       .createQueryBuilder('user')
       .select('user')
       .where('user.username ILIKE :username', {

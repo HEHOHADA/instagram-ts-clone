@@ -1,6 +1,6 @@
 import shortid from 'shortid'
 import { createWriteStream } from 'fs'
-import { UploadType } from '../user/types/UploadType'
+import { UploadType } from '@type/user/UploadType'
 
 const storeUpload = async (stream: any, mimetype: string): Promise<any> => {
   const extension = mimetype.split('/')[1]

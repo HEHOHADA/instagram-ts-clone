@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { IsEmail } from 'class-validator'
-import { IsEmailUsed } from '../register/isEmailUsed'
+import { IsEmailUsed } from '@helpers/user/auth/isEmailUsed'
 
 @ObjectType({ isAbstract: true })
 @InputType({ isAbstract: true })

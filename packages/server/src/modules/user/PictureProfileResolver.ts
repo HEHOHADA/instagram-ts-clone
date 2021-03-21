@@ -4,12 +4,17 @@ import { ApolloError } from 'apollo-server-express'
 import { MyContext } from '@type/MyContext'
 import { User } from '@entity/User'
 import { isAuth } from '@middleware/isAuthMiddleware'
-import { UploadType } from './types/UploadType'
+import { UploadType } from '@type/user/UploadType'
 import { processUpload } from '../shared/processUpload'
-import { somethingWentWrong } from './utils/errorMessages'
+import { somethingWentWrong } from '../../helpers/user/errorMessages'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Repository } from 'typeorm'
 
 @Resolver()
 export class PictureProfileResolver {
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {
+  }
+
   @UseMiddleware(isAuth)
   @Mutation(() => String)
   async setPictureProfile(
@@ -22,7 +27,7 @@ export class PictureProfileResolver {
       throw new ApolloError(somethingWentWrong)
     }
 
-    await User.update({ id: payload.userId! }, { pictureUrl: id })
+    await this.userRepository.update({ id: payload.userId! }, { pictureUrl: id })
 
     return id
   }

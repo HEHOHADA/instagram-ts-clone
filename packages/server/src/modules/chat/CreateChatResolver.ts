@@ -1,8 +1,8 @@
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { getConnection } from 'typeorm'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { Chat } from '../../entity/Chat'
-import { MyContext } from '../../types/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { Chat } from '@entity/Chat'
+import { MyContext } from '@type/MyContext'
 import { createChatFn } from './utils/chat'
 
 @Resolver()

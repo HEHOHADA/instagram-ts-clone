@@ -3,9 +3,9 @@ import { verify } from 'jsonwebtoken'
 
 import { MyContext } from '@type/MyContext'
 import { User } from '@entity/User'
-import { sendRefreshToken } from './sendRefreshToken'
-import { createAccessToken, createRefreshToken } from './createTokens'
-import { RefreshResponseType } from './RefreshResponseType'
+import { sendRefreshToken } from '@helpers/user/auth/sendRefreshToken'
+import { createAccessToken, createRefreshToken } from '@helpers/user/auth/createTokens'
+import { RefreshResponseType } from '@type/user'
 
 @Resolver()
 export class RefreshTokenResolver {

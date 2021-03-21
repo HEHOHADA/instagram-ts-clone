@@ -1,6 +1,6 @@
+import path from 'path'
 import { buildSchema } from 'type-graphql'
 import { loadFilesSync } from '@graphql-tools/load-files'
-import path from 'path'
 
 type ResolverObject = {
   [key: string]: Function

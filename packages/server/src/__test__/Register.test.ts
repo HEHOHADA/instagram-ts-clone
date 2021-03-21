@@ -1,9 +1,10 @@
-import { Connection } from 'typeorm/index'
+import { Connection } from 'typeorm'
 import * as faker from 'faker'
-import { testConn } from '../../test-utils/testConn'
-import { gCall } from '../../test-utils/gCall'
-import { User } from '../../entity/User'
-import { RegisterInput } from '../user/register/RegisterInput'
+
+import { RegisterInput } from '@type/user/register/RegisterInput'
+import { testConn } from '../test-utils/testConn'
+import { User } from '@entity/User'
+import { gCall } from '../test-utils/gCall'
 
 let conn: Connection
 

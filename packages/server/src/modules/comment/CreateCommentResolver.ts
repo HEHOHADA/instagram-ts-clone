@@ -1,13 +1,17 @@
 import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { MyContext } from '../../types/MyContext'
-import { Comment } from '../../entity/Comment'
-import { CreateCommentType } from './types/CreateCommentType'
-import { User } from '../../entity/User'
-import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
+import { User } from '@entity/User'
+import { Comment } from '@entity/Comment'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { CreateCommentType } from '@type/comment/CreateCommentType'
+import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Repository } from 'typeorm'
 
 @Resolver(() => Comment)
 export class CreateCommentResolver {
+  constructor(@InjectRepository(Comment) private readonly commentRepository: Repository<Comment>) {}
+
   @FieldResolver(() => User)
   async user(@Root() comment: Comment, @Ctx() { userLoader }: MyContext) {
     return userLoader.load(comment.userId)
@@ -27,11 +31,13 @@ export class CreateCommentResolver {
   ) {
     const user = await userLoader.load(userId!)
 
-    return await Comment.create({
-      commentText,
-      date: new Date(),
-      photoId,
-      user
-    }).save()
+    return await this.commentRepository
+      .create({
+        commentText,
+        date: new Date(),
+        photoId,
+        user
+      })
+      .save()
   }
 }

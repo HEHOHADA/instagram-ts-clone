@@ -1,6 +1,6 @@
 import { ObjectType } from 'type-graphql'
-import PaginatedResponse from '../../shared/PaginatedResponse'
-import { Photo } from '../../../entity/Photo'
+import PaginatedResponse from '@modules/shared/PaginatedResponse'
+import { Photo } from '@entity/Photo'
 
 //
 // @ObjectType({isAbstract: true})

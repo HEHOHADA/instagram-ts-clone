@@ -1,23 +1,30 @@
 import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { ApolloError } from 'apollo-server-express'
-import { getConnection } from 'typeorm'
-import { MyContext } from '../../types/MyContext'
+import { Repository } from 'typeorm'
+import { MyContext } from '@type/MyContext'
 import { processUpload } from '../shared/processUpload'
-import { somethingWentWrong } from '../user/utils/errorMessages'
-import { Photo } from '../../entity/Photo'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { User } from '../../entity/User'
-import { Likes } from '../../entity/Likes'
-import { Comment } from '../../entity/Comment'
-import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
+import { somethingWentWrong } from '../../helpers/user/errorMessages'
+import { Photo } from '@entity/Photo'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { User } from '@entity/User'
+import { Likes } from '@entity/Likes'
+import { Comment } from '@entity/Comment'
+import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 
 @Resolver(() => Photo)
 export class CreatePhotoResolver {
+  constructor(
+    @InjectRepository(Likes) private readonly likesRepository: Repository<Likes>,
+    @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Comment) private readonly commentRepository: Repository<Comment>,
+  ) {}
+
   @FieldResolver(() => Number, { defaultValue: 0 })
   async likeCount(@Root() photo: Photo) {
-    return await getConnection()
-      .getRepository(Likes)
+    return await this.likesRepository
       .createQueryBuilder('like')
       .where('like.photoId= :id', { id: photo.id })
       .getCount()
@@ -26,7 +33,7 @@ export class CreatePhotoResolver {
   @FieldResolver(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
   async isLiked(@Root() photo: Photo, @Ctx() { payload }: MyContext) {
-    const like = await Likes.findOne({ photoId: photo.id, userId: payload.userId! })
+    const like = await this.likesRepository.findOne({ photoId: photo.id, userId: payload.userId! })
     return Boolean(like)
   }
 
@@ -38,8 +45,7 @@ export class CreatePhotoResolver {
 
   @FieldResolver(() => [Comment])
   async comments(@Root() photo: Photo) {
-    return getConnection()
-      .getRepository(Comment)
+    return this.commentRepository
       .createQueryBuilder('comment')
       .where('comment.photoId= :id', { id: photo.id })
       .getMany()
@@ -47,8 +53,7 @@ export class CreatePhotoResolver {
 
   @FieldResolver(() => Number, { defaultValue: 0 })
   async commentCount(@Root() photo: Photo) {
-    return getConnection()
-      .getRepository(Comment)
+    return this.commentRepository
       .createQueryBuilder('comment')
       .where('comment.photoId= :id', { id: photo.id })
       .getCount()
@@ -71,12 +76,14 @@ export class CreatePhotoResolver {
     if (!id) {
       throw new ApolloError(somethingWentWrong)
     }
-    const user = await User.findOne(payload.userId!)
-    return await Photo.create({
-      user,
-      date: new Date(),
-      pictureUrl: id,
-      postText: title
-    }).save()
+    const user = await this.userRepository.findOne(payload.userId!)
+    return await this.photoRepository
+      .create({
+        user,
+        date: new Date(),
+        pictureUrl: id,
+        postText: title
+      })
+      .save()
   }
 }

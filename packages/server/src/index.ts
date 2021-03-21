@@ -2,26 +2,21 @@ import 'dotenv/config'
 import 'reflect-metadata'
 import cors from 'cors'
 import * as http from 'http'
+import * as TypeORM from 'typeorm'
+import { createConnection } from 'typeorm'
 import Express from 'express'
-import { verify } from 'jsonwebtoken'
 import { GraphQLError } from 'graphql'
 import cookieParser from 'cookie-parser'
-import { createConnection } from 'typeorm'
+import { Container } from 'typedi/Container'
 import { graphqlUploadExpress } from 'graphql-upload'
-import { ApolloServer, PubSub } from 'apollo-server-express'
-import {
-  createCommentLoader,
-  createSchema,
-  refreshToken,
-  createUserLoader,
-  createPhotoLoader
-} from '@utils/index'
-import { redis } from '@utils/redis'
+import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express'
+import { createSchema, refreshToken } from '@utils/index'
+import { createContext } from '@utils/createContext'
+import { onConnect } from '@utils/redis'
 
-// typeorm.useContainer(Container)
+TypeORM.useContainer(Container)
 
 const server = async () => {
-
   let retries = 10
   while (retries) {
     try {
@@ -31,10 +26,10 @@ const server = async () => {
     } catch (err) {
       console.log(err)
       retries -= 1
-      console.log(`${ retries } retries remaining...`)
+      console.log(`${retries} retries remaining...`)
       // wait 5 seconds before retrying connection to
       // postgres
-      await new Promise(res => {
+      await new Promise((res) => {
         console.log(`test env var `)
         setTimeout(res, 5000)
       })
@@ -51,7 +46,7 @@ const server = async () => {
   )
 
   app.post('/refresh_token', refreshToken)
-  app.use(graphqlUploadExpress({maxFileSize: 16 * 1024 * 1024, maxFiles: 10 }))
+  app.use(graphqlUploadExpress({ maxFileSize: 16 * 1024 * 1024, maxFiles: 10 }))
   app.use('/images', Express.static('images'))
 
   // app.use(
@@ -71,7 +66,6 @@ const server = async () => {
   //     }))
   const schema = await createSchema()
 
-  const pubsub = new PubSub()
   const apolloServer = new ApolloServer({
     schema,
     playground: process.env.NODE_ENV !== 'production',
@@ -79,27 +73,9 @@ const server = async () => {
     tracing: true,
     subscriptions: {
       path: '/subscription',
-      onConnect: async (_connectionParams: any) => {
-        const token = (_connectionParams as any).authorization.split(' ')[1]
-        // const {cookie} = ws.upgradeReq.headers
-        // const token = cookie.replace('token=Bearer%20', '')
-        const verifiedToken = verify(token, process.env.ACCESS_TOKEN_SECRET as string)
-        const { userId }: any = verifiedToken
-        return { userId }
-      }
+      onConnect: (connectionParams) => onConnect(connectionParams as { authorization: string })
     },
-    context: ({ req, res, connection }) => ({
-      redis,
-      pubsub,
-      connection,
-      req,
-      res,
-      userLoader: createUserLoader(),
-      commentLoader: createCommentLoader(),
-      photoLoader: createPhotoLoader(),
-      imageUrl: 'http://192.168.1.145:4000',
-      url: req ? `${req.protocol}://${req.get('host')}` : ''
-    }),
+    context: createContext,
     formatError: (error: GraphQLError) => {
       const { message, path, extensions } = error
       if (extensions?.exception?.validationErrors) {
