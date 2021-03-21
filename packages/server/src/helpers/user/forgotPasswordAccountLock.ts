@@ -1,6 +1,6 @@
 import { Redis } from 'ioredis'
 
-import { User } from '../../../entity/User'
+import { User } from '@entity/User'
 import { removeAllUsersSession } from './removeAllUsersSession'
 
 export const forgotPasswordAccountLock = async (userId: string, redis: Redis) => {

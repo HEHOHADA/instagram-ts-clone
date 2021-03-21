@@ -1,7 +1,7 @@
 import { Field, InputType } from 'type-graphql'
-import { PasswordMixin } from '../utils/PasswordMixin'
-import UserType from '../types/UserType'
-import { IsUsernameUsed } from './isUsernameUsed'
+import { PasswordMixin } from '@helpers/user/PasswordMixin'
+import UserType from '@type/user/UserType'
+import { IsUsernameUsed } from '@helpers/user/auth/isUsernameUsed'
 
 @InputType()
 export class RegisterInput extends PasswordMixin(UserType) {
