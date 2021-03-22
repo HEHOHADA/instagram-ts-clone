@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from '@/components/link/Link'
 import { Search } from '@/components/search/Search'
-import { LinkItem } from '@/components/utils/LinkItem'
 import { useMeQuery } from '@instagram/common'
 import { Logo } from '@/components/nav/Logo'
 import { BoxCenter } from '@/components/common/Containers'
 import { HeaderItems, NavContainer } from '@/components/nav/NavStyled'
 import NavbarItems from '@/components/nav/NavbarItems/NavbarItems'
+import { MainButton, SecondaryButton } from '@/components/common/buttons'
 
 export const Navbar = () => {
   const { data, loading } = useMeQuery()
@@ -25,16 +25,18 @@ export const Navbar = () => {
             <BoxCenter>
               <Link
                 to='login' as='/'>
-                <button className='nav__login'>
+                <MainButton size={ 'medium' }>
                   Войти
-                </button>
+                </MainButton>
               </Link>
-              <LinkItem
-                href='/accounts/register'
-                as='/'
-                linkClassName='nav__register'
-                LinkContent='Зарегистрироваться' />
-            </BoxCenter> : <NavbarItems
+              <Link
+                to='register' as='/'>
+                <SecondaryButton size='medium'>
+                  Зарегистрироваться
+                </SecondaryButton>
+              </Link>
+            </BoxCenter> :
+            <NavbarItems
               username={ data.me.username }
               imageUrl={ data.me.pictureUrl } /> }
         </BoxCenter>

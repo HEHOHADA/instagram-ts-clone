@@ -40,18 +40,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export const Button: FC<ButtonProps> = (props) => {
-  const defaultProps = {
-    size: 'medium',
-    width: 'auto',
-    color: 'primary',
-    textColor: 'white',
-    align: 'center',
-    mirroredIcon: false,
-    altColor: 'link',
-    outlined: false
-  }
-
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>()
 
   const {
     children,

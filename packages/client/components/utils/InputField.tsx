@@ -6,9 +6,9 @@ type InputProps = DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>,
 export const InputField = ({field, ...props}: FieldProps & InputProps) => {
 
   return (
-      <input
-          { ...field }{ ...props }
-          className="create__title"
-          required/>
+    <input
+      { ...field }{ ...props }
+      className="create__title"
+      required/>
   )
 }

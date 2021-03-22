@@ -40,13 +40,13 @@ const hasErrors = (fieldsError: { [x: string]: unknown }) => {
 const GenericForm: <TVariables, TData>(
   p: IGenericFormProps<TVariables, TData>
 ) => React.ReactElement<IGenericFormProps<TVariables, TData>> = ({
-                                                                   submitBtnLabel,
-                                                                   fields,
-                                                                   fieldOrder,
-                                                                   transformValues,
-                                                                   mutationSchema,
-                                                                   onSuccess
-                                                                 }) => {
+  submitBtnLabel,
+  fields,
+  fieldOrder,
+  transformValues,
+  mutationSchema,
+  onSuccess
+}) => {
 
   const apollo = useApolloClient()
 

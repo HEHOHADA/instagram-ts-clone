@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import NavItem from '@/components/nav/NavItem'
 import { DropdownMenu } from '@/components/nav/DropdownMenu'
+import { BoxCenter } from '@/components/common/Containers'
 
 type PropsType = {
   imageUrl: string | null | undefined
   username: string
 }
-
 
 const NavbarItems = ({imageUrl, username}: PropsType) => {
   const [isOpen, setIsOpen] = useState(() => false)
@@ -24,7 +24,7 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
   }, [])
 
   return (
-      <div className="nav__container">
+      <BoxCenter>
         { navItemArray }
         <div className="nav__profile nav_item" onClick={e=>{
           e.stopPropagation()
@@ -42,7 +42,7 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
               closeDropDown={ changeIsOpen }
               username={ username }/> }
         </div>
-      </div>
+      </BoxCenter>
   )
 }
 
