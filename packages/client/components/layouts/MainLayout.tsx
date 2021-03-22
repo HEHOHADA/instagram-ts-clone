@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import React, { FC } from 'react'
 import { Navbar } from '@/components/nav/Navbar'
+import { MainContainer } from './LayoutStyled'
 
 type Props = {
   title?: string
@@ -17,9 +18,9 @@ const MainLayout: FC<Props> = ({ children, title = 'Main' }) => {
       <header>
         <Navbar />
       </header>
-      <main className='main' role='main'>
+      <MainContainer role='main'>
         { children }
-      </main>
+      </MainContainer>
       <footer>
         <h2>ladsldasl</h2>
       </footer>
