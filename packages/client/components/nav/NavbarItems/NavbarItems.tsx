@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
-import NavItem from './NavItem'
-import { DropdownMenu } from './DropdownMenu'
+import NavItem from '@/components/nav/NavItem'
+import { DropdownMenu } from '@/components/nav/DropdownMenu'
 
 type PropsType = {
   imageUrl: string | null | undefined
@@ -38,7 +38,6 @@ const NavbarItems = ({imageUrl, username}: PropsType) => {
                 account_circle
               </a>
           }
-
           { isOpen && <DropdownMenu
               closeDropDown={ changeIsOpen }
               username={ username }/> }

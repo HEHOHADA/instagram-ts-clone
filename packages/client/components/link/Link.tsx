@@ -4,13 +4,13 @@ import React, { FC, PropsWithChildren, useMemo } from 'react'
 
 export interface LinkProps extends Omit<NextLinkProps, 'href'> {
   /** route name static routes */
-  to?: keyof typeof routes;
-  href?: NextLinkProps['href'];
-  children?: React.ReactChild | null | Record<string, any>;
-  onClick?: React.MouseEventHandler;
-  wrapper?: 'a' | React.FC;
-  hash?: string;
-  params?: { [key: string]: string };
+  to?: keyof typeof routes
+  href?: NextLinkProps['href']
+  children?: React.ReactChild | null | Record<string, any> | string
+  onClick?: React.MouseEventHandler
+  wrapper?: 'a' | React.FC
+  hash?: string
+  params?: { [key: string]: string }
 }
 
 const DefaultWrapper = 'a'

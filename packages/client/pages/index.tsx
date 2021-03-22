@@ -52,10 +52,10 @@ const IndexPage = () => {
               className='comment__btn' />
           ) : null }
         </div>
-        <div className='dashboard__recommendation'>
+        <aside className='dashboard__recommendation'>
           { data?.me ? <UserProfileRecommendation { ...data.me } /> : <Loading /> }
           <RecommendationItems />
-        </div>
+        </aside>
       </div>
     </MainLayout>
   )

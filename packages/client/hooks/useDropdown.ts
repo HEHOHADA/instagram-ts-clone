@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export default function useDropdown(toggleClick?: () => void) {
-  const dropDownRef = useRef(null)
+export default function useDropdown<T extends HTMLElement>(toggleClick?: () => void) {
+  const dropDownRef = useRef<T>(null)
   const [isOpen, setIsOpen] = useState<boolean>(() => false)
-  const open = () => setIsOpen(true)
-  const close = () => setIsOpen(false)
+  const open = useCallback(() => setIsOpen(true),[])
+  const close = useCallback(() => setIsOpen(false),[])
   const closeOutside = useCallback(
     (e: MouseEvent) => {
       if (
         dropDownRef?.current &&
-        !(dropDownRef.current! as HTMLDivElement).contains(e.target as HTMLDivElement)
+        !(dropDownRef.current! as HTMLElement).contains(e.target as HTMLDivElement)
       ) {
         toggleClick ? toggleClick() : close()
       }
