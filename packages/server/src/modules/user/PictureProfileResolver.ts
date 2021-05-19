@@ -5,16 +5,15 @@ import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 
 import { User } from '@entity/User'
+import { UploadType } from '@type/user'
 import { MyContext } from '@type/MyContext'
-import { UploadType } from '@type/user/UploadType'
+import { processUpload } from '@helpers/shared'
+import { somethingWentWrong } from '@helpers/user'
 import { isAuth } from '@middleware/isAuthMiddleware'
-import { processUpload } from '@helpers/shared/processUpload'
-import { somethingWentWrong } from '@helpers/user/errorMessages'
 
 @Resolver()
 export class PictureProfileResolver {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {
-  }
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
   @UseMiddleware(isAuth)
   @Mutation(() => String)

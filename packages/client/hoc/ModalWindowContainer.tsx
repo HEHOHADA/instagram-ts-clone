@@ -1,7 +1,6 @@
 import React, { FC, ForwardRefRenderFunction, MutableRefObject, useImperativeHandle } from 'react'
 import useDropdown from '@/hooks/useDropdown'
 
-
 export type ModalRefType = {
   openModal: () => void
   closeModal: () => void
@@ -16,7 +15,7 @@ const ModalWindowContainer: ForwardRefRenderFunction<ModalRefType,
   useImperativeHandle(ref, () => ({
     openModal: open,
     closeModal: close
-  }), [])
+  }), [close, open])
 
   if (isOpen && ref) {
     const children = props.children as FC<ModalRefType>
@@ -33,8 +32,8 @@ const ModalWindowContainer: ForwardRefRenderFunction<ModalRefType,
         </div>
       </div>)
   }
+
   return null
 }
-
 
 export default React.forwardRef(ModalWindowContainer)

@@ -8,14 +8,14 @@ import { redis } from '@utils/redis'
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
-import { forgotPasswordPrefix } from '@helpers/constants/redisPrefix'
-import { expiredKeyError, invalidLogin } from '@helpers/user/errorMessages'
-import { ChangeForgotPassword, ChangePassword } from '@type/user/ChangePasswordInputType'
+import { forgotPasswordPrefix } from '@helpers/constants'
+import { expiredKeyError, invalidLogin } from '@helpers/user'
+import { ChangeForgotPassword, ChangePassword } from '@type/user'
 
 @Resolver()
 export class ChangePasswordResolver {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {
-  }
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
   @Mutation(() => User)
   async changeForgotPassword(
     @Arg('data', () => ChangeForgotPassword) { token, password }: ChangeForgotPassword

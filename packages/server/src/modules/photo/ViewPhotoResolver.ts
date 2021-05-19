@@ -1,17 +1,17 @@
 import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+
 import { Photo } from '@entity/Photo'
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 
 @Resolver(() => Photo)
 export class ViewPhotoResolver {
   constructor(
     @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {
-  }
+    @InjectRepository(User) private readonly userRepository: Repository<User>
+  ) {}
 
   @FieldResolver(() => String, { nullable: true })
   pictureUrl(@Root() photo: Photo, @Ctx() ctx: MyContext) {

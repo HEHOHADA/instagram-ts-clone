@@ -1,17 +1,18 @@
 import { Repository } from 'typeorm'
-import { Arg, Ctx, Query, Resolver, UseMiddleware } from 'type-graphql'
 import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Ctx, Query, Resolver, UseMiddleware } from 'type-graphql'
+
+import { User } from '@entity/User'
 import { Chat } from '@entity/Chat'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
-import { User } from '@entity/User'
 
 @Resolver(() => Chat)
 export class ChatResolver {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Chat) private readonly chatRepository: Repository<Chat>,
-    ) {}
+    @InjectRepository(Chat) private readonly chatRepository: Repository<Chat>
+  ) {}
 
   @Query(() => Chat)
   @UseMiddleware(isAuth)

@@ -1,15 +1,14 @@
-import { Arg, Ctx, Mutation, Resolver, UnauthorizedError, UseMiddleware } from 'type-graphql'
-import { MyContext } from '@type/MyContext'
-import { Photo } from '@entity/Photo'
-import { isAuth } from '@middleware/isAuthMiddleware'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Ctx, Mutation, Resolver, UnauthorizedError, UseMiddleware } from 'type-graphql'
+
+import { Photo } from '@entity/Photo'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
 
 @Resolver()
 export class CreatePhotoResolver {
-  constructor(
-    @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,
-  ) {}
+  constructor(@InjectRepository(Photo) private readonly photoRepository: Repository<Photo>) {}
 
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)

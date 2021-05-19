@@ -1,15 +1,16 @@
 import 'dotenv/config'
-import { Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+import { Repository } from 'typeorm'
 import { verify } from 'jsonwebtoken'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
-import { InjectRepository } from 'typeorm-typedi-extensions'
-import { Repository } from 'typeorm'
 
 @Resolver(() => User)
 export class MeResolver {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {
-  }
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() ctx: MyContext) {
     const auth = ctx.req.headers.authorization
@@ -19,7 +20,7 @@ export class MeResolver {
     try {
       const token = (auth as string).split(' ')[1]
       const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET as string)
-      return this.userRepository.findOne(
+      return await this.userRepository.findOne(
         {
           id: payload.userId
         },

@@ -9,8 +9,8 @@ import {
 } from 'typeorm'
 import { Field, ID, ObjectType } from 'type-graphql'
 import { User } from './User'
-import { Comment } from './Comment'
 import { Likes } from './Likes'
+import { Comment } from './Comment'
 
 @Entity()
 @ObjectType()

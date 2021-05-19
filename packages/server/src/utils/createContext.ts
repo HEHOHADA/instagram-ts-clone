@@ -1,5 +1,4 @@
-import { PubSub } from 'apollo-server-express'
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
+import { ExpressContext, PubSub } from 'apollo-server-express'
 
 import { redis } from '@utils/redis'
 import { createUserLoader } from '@helpers/loader/createUserLoader'

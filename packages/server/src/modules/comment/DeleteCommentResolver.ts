@@ -1,9 +1,10 @@
 import { Repository } from 'typeorm'
-import { Arg, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
+import { Comment } from '@entity/Comment'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { DeleteCommentType } from '@type/comment/DeleteCommentType'
-import { Comment } from '@entity/Comment'
 
 /// Todo
 @Resolver()

@@ -20,12 +20,12 @@ export class CreatePhotoResolver {
     @InjectRepository(Likes) private readonly likesRepository: Repository<Likes>,
     @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Comment) private readonly commentRepository: Repository<Comment>,
+    @InjectRepository(Comment) private readonly commentRepository: Repository<Comment>
   ) {}
 
   @FieldResolver(() => Number, { defaultValue: 0 })
   async likeCount(@Root() photo: Photo) {
-    return await this.likesRepository
+    return this.likesRepository
       .createQueryBuilder('like')
       .where('like.photoId= :id', { id: photo.id })
       .getCount()

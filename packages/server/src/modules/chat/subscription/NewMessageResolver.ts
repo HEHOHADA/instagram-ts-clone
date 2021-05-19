@@ -1,8 +1,9 @@
 import { Repository } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Ctx, ForbiddenError, Resolver, Root, Subscription } from 'type-graphql'
-import { Message } from '@entity/Message'
+
 import { Chat } from '@entity/Chat'
+import { Message } from '@entity/Message'
 import { MyContext } from '@type/MyContext'
 
 interface Payload {

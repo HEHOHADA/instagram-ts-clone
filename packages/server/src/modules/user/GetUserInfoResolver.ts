@@ -1,15 +1,15 @@
-import { Arg, Ctx, FieldResolver, Query, Resolver, Root, UseMiddleware } from 'type-graphql'
-import { ApolloError } from 'apollo-server-express'
 import { Repository } from 'typeorm'
+import { ApolloError } from 'apollo-server-express'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Ctx, FieldResolver, Query, Resolver, Root, UseMiddleware } from 'type-graphql'
+
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
 import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
-import { InjectRepository } from 'typeorm-typedi-extensions'
 
 @Resolver(() => User)
 export class GetUserInfoResolver {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {
-  }
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
   @FieldResolver(() => Boolean)
   @UseMiddleware(isUserAuthOrUndefined)
@@ -19,8 +19,7 @@ export class GetUserInfoResolver {
 
   @Query(() => User)
   async getUserInfo(@Arg('username') username: string) {
-    const user = this
-      .userRepository
+    const user = this.userRepository
       .createQueryBuilder('user')
       .select('user')
       .where('user.username ILIKE :username', {
@@ -31,9 +30,11 @@ export class GetUserInfoResolver {
       .loadRelationCountAndMap('user.photoCount', 'user.photos')
       .cache(true)
       .getOne()
+
     if (!user) {
       throw new ApolloError('User not found')
     }
+
     return user
   }
 }

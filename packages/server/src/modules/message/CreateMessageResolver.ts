@@ -1,4 +1,6 @@
 import { Context } from 'vm'
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import {
   Arg,
   Ctx,
@@ -14,8 +16,6 @@ import { Message } from '@entity/Message'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { MyContext } from '@type/MyContext'
 import { User } from '@entity/User'
-import { InjectRepository } from 'typeorm-typedi-extensions'
-import { Repository } from 'typeorm'
 
 @Resolver(() => Message)
 export class CreateMessageResolver {

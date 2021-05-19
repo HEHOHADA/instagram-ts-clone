@@ -2,17 +2,18 @@ import 'dotenv/config'
 import 'reflect-metadata'
 import cors from 'cors'
 import * as http from 'http'
-import * as TypeORM from 'typeorm'
-import { createConnection } from 'typeorm'
 import Express from 'express'
+import * as TypeORM from 'typeorm'
+import { Container } from 'typedi'
 import { GraphQLError } from 'graphql'
 import cookieParser from 'cookie-parser'
-import { Container } from 'typedi/Container'
+import { createConnection } from 'typeorm'
+import { ApolloServer } from 'apollo-server-express'
 import { graphqlUploadExpress } from 'graphql-upload'
-import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express'
-import { createSchema, refreshToken } from '@utils/index'
-import { createContext } from '@utils/createContext'
+
 import { onConnect } from '@utils/redis'
+import { createContext } from '@utils/createContext'
+import { createSchema, refreshToken } from '@utils/index'
 
 TypeORM.useContainer(Container)
 
@@ -83,7 +84,7 @@ const server = async () => {
       }
       return { message, path }
     }
-  } as ApolloServerExpressConfig)
+  })
 
   apolloServer.applyMiddleware({ app, cors: false })
   const httpServer = http.createServer(app)

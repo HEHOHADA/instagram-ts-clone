@@ -1,16 +1,14 @@
 import { Repository } from 'typeorm'
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import { MyContext } from '@type/MyContext'
-import { isAuth } from '@middleware/isAuthMiddleware'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
 import { User } from '@entity/User'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { MyContext } from '@type/MyContext'
 
 @Resolver()
 export class FollowResolver {
-  constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>
-  ) {
-  }
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
@@ -20,10 +18,10 @@ export class FollowResolver {
     }
 
     await this.userRepository
-              .createQueryBuilder()
-              .relation(User, 'following')
-              .of(payload.userId)
-              .remove(userId)
+      .createQueryBuilder()
+      .relation(User, 'following')
+      .of(payload.userId)
+      .remove(userId)
 
     return true
   }

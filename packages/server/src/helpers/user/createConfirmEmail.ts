@@ -1,6 +1,6 @@
 import { v4 } from 'uuid'
 import { redis } from '@utils/redis'
-import { confirmUserPrefix } from '../constants/redisPrefix'
+import { confirmUserPrefix } from '@helpers/constants'
 
 export const createConfirmEmail = async (userId: string) => {
   const token = v4()

@@ -17,16 +17,17 @@ type PropsType = {
 
 export type PhotoItemType = {
   openModal: () => void
-  createCommentHandler: (data: ICreateCommentType, {resetForm}: FormikHelpers<any>) => Promise<void>
+  createCommentHandler: (data: ICreateCommentType, { resetForm }: FormikHelpers<never>)
+    => Promise<void>
   onDeleteComment: (id: string) => Promise<void>
   onLikeHandler: () => Promise<void>
 }
 
-export const PhotoItemContainer = React.memo(({photo, deletePhoto, children}: PropsType) => {
-  const {openModal, ModalWindow} = useModal()
-  const {createCommentHandler} = useCommentCreateHandler()
-  const {onDeleteComment} = useCommentDeleteHandler({photoId: photo.id})
-  const {onLikeHandler} = useLikeHandler({photoId: photo.id, isLiked: photo.isLiked})
+export const PhotoItemContainer = React.memo(({ photo, deletePhoto, children }: PropsType) => {
+  const { openModal, ModalWindow } = useModal()
+  const { createCommentHandler } = useCommentCreateHandler()
+  const { onDeleteComment } = useCommentDeleteHandler({ photoId: photo.id })
+  const { onLikeHandler } = useLikeHandler({ photoId: photo.id, isLiked: photo.isLiked })
 
   const childrenProps = {
     openModal,
@@ -36,16 +37,16 @@ export const PhotoItemContainer = React.memo(({photo, deletePhoto, children}: Pr
   }
 
   return (
-      <>
-        <ModalWindow>
-          { (ref: ModalRefType) => (
-              <PhotoSettingsModal
-                  isAuthor={ photo.isAuthor }
-                  deletePhoto={ () => deletePhoto(photo.id) }
-                  { ...ref }/>)
-          }
-        </ModalWindow>
-        { children(childrenProps) }
-      </>
+    <>
+      <ModalWindow>
+        { (ref: ModalRefType) => (
+          <PhotoSettingsModal
+            isAuthor={ photo.isAuthor }
+            deletePhoto={ () => deletePhoto(photo.id) }
+            { ...ref } />)
+        }
+      </ModalWindow>
+      { children(childrenProps) }
+    </>
   )
 })

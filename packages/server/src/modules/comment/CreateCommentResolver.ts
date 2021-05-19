@@ -1,12 +1,13 @@
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root, UseMiddleware } from 'type-graphql'
+
 import { User } from '@entity/User'
 import { Comment } from '@entity/Comment'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { CreateCommentType } from '@type/comment/CreateCommentType'
 import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
-import { InjectRepository } from 'typeorm-typedi-extensions'
-import { Repository } from 'typeorm'
 
 @Resolver(() => Comment)
 export class CreateCommentResolver {

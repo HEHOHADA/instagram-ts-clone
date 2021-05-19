@@ -1,6 +1,6 @@
 import { Ctx, Mutation, Resolver } from 'type-graphql'
 import { MyContext } from '@type/MyContext'
-import { sendRefreshToken } from '../../helpers/user/auth/sendRefreshToken'
+import { sendRefreshToken } from '@helpers/user'
 
 @Resolver()
 export class LogoutResolver {

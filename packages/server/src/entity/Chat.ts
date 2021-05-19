@@ -8,10 +8,11 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm'
 import { Ctx, Field, ID, ObjectType, Root, UseMiddleware } from 'type-graphql'
-import { User } from './User'
-import { Message } from './Message'
+
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
+import { User } from './User'
+import { Message } from './Message'
 
 @Entity()
 @ObjectType()
