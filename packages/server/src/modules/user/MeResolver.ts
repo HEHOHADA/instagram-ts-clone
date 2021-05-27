@@ -6,8 +6,10 @@ import { Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
 
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
+import { Service } from 'typedi'
 
 @Resolver(() => User)
+@Service()
 export class MeResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

@@ -13,8 +13,10 @@ import { isAuth } from '@middleware/isAuthMiddleware'
 import { processUpload } from '@helpers/shared/processUpload'
 import { somethingWentWrong } from '@helpers/user/errorMessages'
 import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+import { Service } from 'typedi'
 
 @Resolver(() => Photo)
+@Service()
 export class CreatePhotoResolver {
   constructor(
     @InjectRepository(Likes) private readonly likesRepository: Repository<Likes>,

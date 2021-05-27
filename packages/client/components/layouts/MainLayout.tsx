@@ -7,7 +7,7 @@ type Props = {
   title?: string
 }
 
-const MainLayout: FC<Props> = ({ children, title = 'Main' }) => {
+export const MainLayout: FC<Props> = ({ children, title = 'Main' }) => {
   return (
     <>
       <Head>
@@ -27,5 +27,3 @@ const MainLayout: FC<Props> = ({ children, title = 'Main' }) => {
     </>
   )
 }
-
-export default MainLayout

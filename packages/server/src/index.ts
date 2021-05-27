@@ -3,21 +3,16 @@ import 'reflect-metadata'
 import cors from 'cors'
 import * as http from 'http'
 import Express from 'express'
-import * as TypeORM from 'typeorm'
-import { Container } from 'typedi'
-import { GraphQLError } from 'graphql'
 import cookieParser from 'cookie-parser'
-import { createConnection } from 'typeorm'
-import { ApolloServer } from 'apollo-server-express'
+import { createConnection, useContainer } from 'typeorm'
+import { Container } from 'typeorm-typedi-extensions'
 import { graphqlUploadExpress } from 'graphql-upload'
 
-import { onConnect } from '@utils/redis'
-import { createContext } from '@utils/createContext'
-import { createSchema, refreshToken } from '@utils/index'
-
-TypeORM.useContainer(Container)
+import { refreshToken } from '@utils/index'
+import { createSchema, createServer } from '@helpers/apollo'
 
 const server = async () => {
+  useContainer(Container)
   let retries = 10
   while (retries) {
     try {
@@ -66,25 +61,7 @@ const server = async () => {
   //       saveUninitialized: true
   //     }))
   const schema = await createSchema()
-
-  const apolloServer = new ApolloServer({
-    schema,
-    playground: process.env.NODE_ENV !== 'production',
-    uploads: false,
-    tracing: true,
-    subscriptions: {
-      path: '/subscription',
-      onConnect: (connectionParams) => onConnect(connectionParams as { authorization: string })
-    },
-    context: createContext,
-    formatError: (error: GraphQLError) => {
-      const { message, path, extensions } = error
-      if (extensions?.exception?.validationErrors) {
-        return { message, path, extensions }
-      }
-      return { message, path }
-    }
-  })
+  const apolloServer = createServer(schema)
 
   apolloServer.applyMiddleware({ app, cors: false })
   const httpServer = http.createServer(app)

@@ -22,4 +22,4 @@ class MyApp extends App {
   }
 }
 
-export default withReactRouter(MyApp)
+export default MyApp

@@ -1,8 +1,10 @@
 import { Ctx, Mutation, Resolver } from 'type-graphql'
 import { MyContext } from '@type/MyContext'
 import { sendRefreshToken } from '@helpers/user'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class LogoutResolver {
   @Mutation(() => Boolean)
   async logout(@Ctx() ctx: MyContext) {

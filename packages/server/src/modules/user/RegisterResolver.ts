@@ -6,8 +6,10 @@ import { InjectRepository } from 'typeorm-typedi-extensions'
 import { User } from '@entity/User'
 import { RegisterInput } from '@type/user'
 import { createConfirmEmail, sendEmail } from '@helpers/user'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class RegisterResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

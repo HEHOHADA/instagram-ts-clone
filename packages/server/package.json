@@ -73,8 +73,8 @@
     ]
   },
   "scripts": {
-    "start": "npx ts-node-dev --prefer-ts true -r tsconfig-paths/register --watch src --respawn  src/index.ts",
-    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "start": "npx ts-node-dev --prefer-ts true -r tsconfig-paths/register --watch src --respawn src/index.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
     "build": "tsc",
     "migration:gen": "yarn typeorm migration:generate -n",
     "migration:run": "yarn typeorm migration:run",

@@ -5,8 +5,10 @@ import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
 import { Photo } from '@entity/Photo'
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
+import { Service } from 'typedi'
 
 @Resolver(() => Photo)
+@Service()
 export class ViewPhotoResolver {
   constructor(
     @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,

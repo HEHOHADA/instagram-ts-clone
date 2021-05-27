@@ -5,8 +5,10 @@ import { Arg, Ctx, Mutation, Resolver, UnauthorizedError, UseMiddleware } from '
 import { Photo } from '@entity/Photo'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class CreatePhotoResolver {
   constructor(@InjectRepository(Photo) private readonly photoRepository: Repository<Photo>) {}
 

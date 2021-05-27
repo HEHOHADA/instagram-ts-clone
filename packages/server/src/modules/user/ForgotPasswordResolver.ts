@@ -1,5 +1,6 @@
 import { v4 } from 'uuid'
 import { Repository } from 'typeorm'
+import { Service } from 'typedi'
 import { Arg, Mutation, Resolver } from 'type-graphql'
 import { InjectRepository } from 'typeorm-typedi-extensions'
 
@@ -11,6 +12,7 @@ import { forgotPasswordAccountLock } from '@helpers/user'
 import ForgotPasswordType from '@type/user/ForgotPasswordType'
 
 @Resolver()
+@Service()
 export class ForgotPasswordResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

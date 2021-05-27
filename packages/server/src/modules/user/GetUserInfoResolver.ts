@@ -1,3 +1,4 @@
+import { Service } from 'typedi'
 import { Repository } from 'typeorm'
 import { ApolloError } from 'apollo-server-express'
 import { InjectRepository } from 'typeorm-typedi-extensions'
@@ -8,6 +9,7 @@ import { MyContext } from '@type/MyContext'
 import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
 
 @Resolver(() => User)
+@Service()
 export class GetUserInfoResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

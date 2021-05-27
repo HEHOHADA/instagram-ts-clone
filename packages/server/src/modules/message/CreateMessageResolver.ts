@@ -16,8 +16,10 @@ import { Message } from '@entity/Message'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { MyContext } from '@type/MyContext'
 import { User } from '@entity/User'
+import { Service } from 'typedi'
 
 @Resolver(() => Message)
+@Service()
 export class CreateMessageResolver {
   constructor(@InjectRepository(Message) private readonly messageRepository: Repository<Message>) {}
 

@@ -3,8 +3,10 @@ import { Arg, Int, Query, Resolver } from 'type-graphql'
 
 import { User } from '@entity/User'
 import { PaginatedUsersSearch } from '@type/user'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class SearchResolver {
   @Query(() => PaginatedUsersSearch)
   async search(

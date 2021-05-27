@@ -29,7 +29,7 @@ export const useCommentDeleteHandler = ({ photoId }: any) => {
         console.log(e)
       }
     },
-    [photoId]
+    [deleteCommentMutation, photoId]
   )
 
   return {

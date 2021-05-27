@@ -101,7 +101,7 @@ const ConversationItem: FC = () => {
                 :
                 <Button
                   type='submit'
-                  className='comment__btn' text={ 'Отправить' } />
+                  className='comment__btn' text='Отправить' />
               }
             </Form>
           ) }

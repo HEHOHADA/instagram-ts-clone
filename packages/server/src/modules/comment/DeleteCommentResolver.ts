@@ -5,9 +5,11 @@ import { Arg, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { Comment } from '@entity/Comment'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { DeleteCommentType } from '@type/comment/DeleteCommentType'
+import { Service } from 'typedi'
 
 /// Todo
 @Resolver()
+@Service()
 export class DeleteCommentResolver {
   constructor(@InjectRepository(Comment) private readonly commentRepository: Repository<Comment>) {}
 

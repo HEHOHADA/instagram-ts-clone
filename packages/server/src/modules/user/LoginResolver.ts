@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs'
+import { Service } from 'typedi'
 import { Repository } from 'typeorm'
 import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
@@ -15,6 +16,7 @@ import {
 } from '@helpers/user/errorMessages'
 
 @Resolver()
+@Service()
 export class LoginResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

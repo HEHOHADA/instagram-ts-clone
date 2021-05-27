@@ -5,12 +5,14 @@ import { Ctx, ForbiddenError, Resolver, Root, Subscription } from 'type-graphql'
 import { Chat } from '@entity/Chat'
 import { Message } from '@entity/Message'
 import { MyContext } from '@type/MyContext'
+import { Service } from 'typedi'
 
 interface Payload {
   messageReceived: Message
 }
 
 @Resolver()
+@Service()
 export class MessageReceivedResolver {
   constructor(@InjectRepository(Chat) private readonly chatRepository: Repository<Chat>) {}
 

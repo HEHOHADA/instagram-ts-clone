@@ -1,13 +1,10 @@
 import React, { FC } from 'react'
 import { FormikHelpers } from 'formik'
 import { ICreateCommentType } from '@instagram/common'
-import { useModal } from '@/hooks/useModal'
 import { ModalRefType } from './ModalWindowContainer'
-import { useLikeHandler } from '@/hooks/useLikeHandler'
 import { PhotoFeedType } from '@/components/dashboard/post/Posts'
-import { useCommentDeleteHandler } from '@/hooks/useCommentDeleteHandler'
-import { useCommentCreateHandler } from '@/hooks/useCommentCreateHandler'
 import { PhotoSettingsModal } from '@/components/modal/PhotoSettingsModal'
+import { useCommentDeleteHandler, useCommentCreateHandler, useModal, useLikeHandler } from '@/hooks'
 
 type PropsType = {
   photo: PhotoFeedType
@@ -46,7 +43,9 @@ export const PhotoItemContainer = React.memo(({ photo, deletePhoto, children }: 
             { ...ref } />)
         }
       </ModalWindow>
-      { children(childrenProps) }
+      {
+        // @ts-ignore
+        children(childrenProps) }
     </>
   )
 })

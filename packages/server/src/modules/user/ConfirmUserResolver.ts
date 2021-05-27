@@ -1,3 +1,4 @@
+import { Service } from 'typedi'
 import { Repository } from 'typeorm'
 import { Arg, Mutation, Resolver } from 'type-graphql'
 import { InjectRepository } from 'typeorm-typedi-extensions'
@@ -7,6 +8,7 @@ import { redis } from '@utils/redis'
 import { confirmUserPrefix } from '@helpers/constants'
 
 @Resolver()
+@Service()
 export class ConfirmUserResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

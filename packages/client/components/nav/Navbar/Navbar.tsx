@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Link } from '@/components/link/Link'
 import { Search } from '@/components/search/Search'
 import { useMeQuery } from '@instagram/common'
@@ -8,7 +8,7 @@ import { HeaderItems, NavContainer } from '@/components/nav/NavStyled'
 import NavbarItems from '@/components/nav/NavbarItems/NavbarItems'
 import { MainButton, SecondaryButton } from '@/components/common/buttons'
 
-export const Navbar = () => {
+export const Navbar:FC = () => {
   const { data, loading } = useMeQuery()
 
   return (
@@ -25,7 +25,7 @@ export const Navbar = () => {
             <BoxCenter>
               <Link
                 to='login' as='/'>
-                <MainButton size={ 'medium' }>
+                <MainButton size='medium'>
                   Войти
                 </MainButton>
               </Link>

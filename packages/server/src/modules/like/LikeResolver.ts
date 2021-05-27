@@ -8,8 +8,10 @@ import { User } from '@entity/User'
 import { Photo } from '@entity/Photo'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class LikeResolver {
   constructor(
     @InjectRepository(Likes) private readonly likesRepository: Repository<Likes>,

@@ -50,6 +50,11 @@
   },
   "devDependencies": {
     "@babel/core": "~7.14.3",
+    "eslint": "^7.22.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "@types/react": "~17.0.6",
     "@types/react-native": "0.64.5",
     "babel-plugin-module-resolver": "^4.1.0",

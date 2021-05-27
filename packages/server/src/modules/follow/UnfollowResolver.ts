@@ -5,8 +5,10 @@ import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { User } from '@entity/User'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { MyContext } from '@type/MyContext'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class FollowResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

@@ -5,8 +5,10 @@ import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
 import { RefreshResponseType } from '@type/user'
 import { sendRefreshToken, createAccessToken, createRefreshToken } from '@helpers/user'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class RefreshTokenResolver {
   @Query(() => RefreshResponseType)
   async refreshToken(@Ctx() { req, res }: MyContext): Promise<RefreshResponseType> {

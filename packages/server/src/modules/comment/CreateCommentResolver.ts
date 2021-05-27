@@ -8,8 +8,10 @@ import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { CreateCommentType } from '@type/comment/CreateCommentType'
 import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+import { Service } from 'typedi'
 
 @Resolver(() => Comment)
+@Service()
 export class CreateCommentResolver {
   constructor(@InjectRepository(Comment) private readonly commentRepository: Repository<Comment>) {}
 

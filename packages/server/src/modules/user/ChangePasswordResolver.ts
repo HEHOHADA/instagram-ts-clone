@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { Repository } from 'typeorm'
+import { Service } from 'typedi'
 import { AuthenticationError } from 'apollo-server-express'
 import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
@@ -13,6 +14,7 @@ import { expiredKeyError, invalidLogin } from '@helpers/user'
 import { ChangeForgotPassword, ChangePassword } from '@type/user'
 
 @Resolver()
+@Service()
 export class ChangePasswordResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

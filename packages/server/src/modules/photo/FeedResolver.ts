@@ -7,8 +7,10 @@ import { Photo } from '@entity/Photo'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { PaginatedPhotos } from '@type/photo/PaginatedPhotos'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class FeedResolver {
   constructor(
     @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,

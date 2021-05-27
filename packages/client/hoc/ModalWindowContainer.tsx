@@ -1,5 +1,5 @@
 import React, { FC, ForwardRefRenderFunction, MutableRefObject, useImperativeHandle } from 'react'
-import useDropdown from '@/hooks/useDropdown'
+import { useDropdown } from '@/hooks'
 
 export type ModalRefType = {
   openModal: () => void
@@ -10,7 +10,7 @@ type PropsWithChildrenModalType = { children: FC<ModalRefType> }
 
 const ModalWindowContainer: ForwardRefRenderFunction<ModalRefType,
   PropsWithChildrenModalType> = (props, ref) => {
-  const { isOpen, close, open, dropDownRef: modalRef } = useDropdown()
+  const { isOpen, close, open, dropDownRef: modalRef } = useDropdown<HTMLDivElement>()
 
   useImperativeHandle(ref, () => ({
     openModal: open,

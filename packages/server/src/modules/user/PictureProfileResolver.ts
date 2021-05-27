@@ -10,8 +10,10 @@ import { MyContext } from '@type/MyContext'
 import { processUpload } from '@helpers/shared'
 import { somethingWentWrong } from '@helpers/user'
 import { isAuth } from '@middleware/isAuthMiddleware'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class PictureProfileResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

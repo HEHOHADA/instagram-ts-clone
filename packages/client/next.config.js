@@ -1,4 +1,5 @@
-const withTranspileModules = require('next-transpile-modules')
+/* eslint-disable */
+
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
@@ -6,8 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-module.exports = withBundleAnalyzer(
-  withTranspileModules({
+module.exports = withBundleAnalyzer({
     transpileModules: ['camelcase', 'dashify'],
     webpack: (config, options) => {
       const originalEntry = config.entry
@@ -25,5 +25,5 @@ module.exports = withBundleAnalyzer(
 
       return config
     }
-  })
+  }
 )

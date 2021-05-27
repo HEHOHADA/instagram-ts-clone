@@ -6,8 +6,10 @@ import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
 import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class FollowResolver {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 

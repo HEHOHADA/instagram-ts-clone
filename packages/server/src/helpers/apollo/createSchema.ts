@@ -8,7 +8,7 @@ type ResolverObject = {
 }
 
 export const createSchema = async () => {
-  const resolver = loadFilesSync(`${path.join(__dirname, '../modules')}/**/*Resolver.?s`)
+  const resolver = loadFilesSync(`${path.join(__dirname, '../../modules')}/**/*Resolver.?s`)
   const resolverItems: any = resolver.map((res: ResolverObject) => Object.values(res)[0])
 
   return await buildSchema({

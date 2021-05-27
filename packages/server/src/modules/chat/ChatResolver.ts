@@ -6,8 +6,10 @@ import { User } from '@entity/User'
 import { Chat } from '@entity/Chat'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
+import { Service } from 'typedi'
 
 @Resolver(() => Chat)
+@Service()
 export class ChatResolver {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
