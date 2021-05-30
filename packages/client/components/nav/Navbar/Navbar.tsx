@@ -8,7 +8,7 @@ import { HeaderItems, NavContainer } from '@/components/nav/NavStyled'
 import NavbarItems from '@/components/nav/NavbarItems/NavbarItems'
 import { MainButton, SecondaryButton } from '@/components/common/buttons'
 
-export const Navbar:FC = () => {
+export const Navbar: FC = () => {
   const { data, loading } = useMeQuery()
 
   return (
@@ -23,14 +23,12 @@ export const Navbar:FC = () => {
         <BoxCenter>
           { !data || loading || !data.me ?
             <BoxCenter>
-              <Link
-                to='login' as='/'>
+              <Link to='login' as='/'>
                 <MainButton size='medium'>
                   Войти
                 </MainButton>
               </Link>
-              <Link
-                to='register' as='/'>
+              <Link to='register' as='/'>
                 <SecondaryButton size='medium'>
                   Зарегистрироваться
                 </SecondaryButton>

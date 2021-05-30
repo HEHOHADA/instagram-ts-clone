@@ -7,7 +7,7 @@ import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import { ICreatePhotoMutationVariables, useCreatePhotoMutation } from '@instagram/common'
 
 import withApollo from '@/lib/withApollo'
-import MainLayout from '@/components/MainLayout'
+import {MainLayout }from '@/components/layouts/MainLayout'
 import { DropzoneField } from '@/components/utils/DropzoneField'
 import { InputAuthField } from '@/components/utils/InputAuthField'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'

@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 import { themeColor } from '@/themes'
 import { BoxCenter } from '@/components/common/Containers'
-import Image from 'next/image'
-import React from 'react'
 
 export const NavContainer = styled.nav`
   top: 0;

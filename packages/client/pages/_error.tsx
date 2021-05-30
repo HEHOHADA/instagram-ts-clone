@@ -1,6 +1,6 @@
 import React from 'react'
 
-import MainLayout from '@/components/MainLayout'
+import {MainLayout }from '@/components/layouts/MainLayout'
 import withApollo from '@/lib/withApollo'
 import Error from 'next/error'
 

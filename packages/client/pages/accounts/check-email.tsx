@@ -1,6 +1,6 @@
 import React from 'react'
 import withApollo from '@/lib/withApollo'
-import MainLayout from '@/components/MainLayout'
+import {MainLayout} from '@/components/layouts/MainLayout'
 
 const CheckEmail = () => {
   return (

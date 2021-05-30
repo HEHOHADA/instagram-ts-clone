@@ -3,13 +3,13 @@ import React from 'react'
 import { useFeedQuery, useMeQuery } from '@instagram/common'
 
 import withApollo from '@/lib/withApollo'
-import MainLayout from '@/components/MainLayout'
 import { History } from '@/components/dashboard/History'
 import { PhotoFeedType, Posts } from '@/components/dashboard/post/Posts'
 import { UserProfileRecommendation } from '@/components/dashboard/UserProfileRecommendation'
 import { RecommendationItems } from '@/components/recommendation/RecommendationItems'
 import Loading from '@/components/utils/Loading'
 import { Button } from '@/components/utils/Button'
+import { MainLayout } from '@/components/layouts'
 
 
 const IndexPage = () => {

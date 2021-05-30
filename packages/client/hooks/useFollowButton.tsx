@@ -11,20 +11,20 @@ export default function useFollowButton() {
   const followButton = useCallback((isFollowing: boolean, id: string, userId?: string) => {
     const onClick = isFollowing
       ? followCallback(unFollowUser, -1)
-        : followCallback(followUser, 1)
+      : followCallback(followUser, 1)
     const text = isFollowing ? 'Отписаться' : 'Подписаться'
     if (!userId) {
       return (
-          <Link href="/accounts/login">
-            <a className="profile__edit">Войти в аккаунт</a>
-          </Link>
+        <Link href='/accounts/login'>
+          <a className='profile__edit'>Войти в аккаунт</a>
+        </Link>
       )
     }
     return (
-        <Button
-            text={ text }
-            className={ 'profile__edit' }
-            onClick={ () => onClick(id, userId) }/>
+      <Button
+        text={ text }
+        className={ 'profile__edit' }
+        onClick={ () => onClick(id, userId) } />
     )
   }, [])
   return {

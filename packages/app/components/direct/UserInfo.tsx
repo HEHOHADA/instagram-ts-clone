@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { AppImage } from '@ui/AppImage'
 import { DEFAULT_IMAGE } from '@constants/default'
 import { Text } from '@components/Themed'

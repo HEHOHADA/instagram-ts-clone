@@ -14,14 +14,6 @@ module.exports = withBundleAnalyzer({
       config.entry = async () => {
         return await originalEntry()
       }
-      if(!isProduction) {
-        config.plugins.push(
-          new CircularDependencyPlugin({
-            exclude: /node_modules/,
-            failOnError: true
-          })
-        )
-      }
 
       return config
     }

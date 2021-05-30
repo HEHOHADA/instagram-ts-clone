@@ -3,24 +3,17 @@
   "private": true,
   "dependencies": {
     "lerna": "^4.0.0",
-    "metro-config": "^0.56.0"
+    "metro-config": "^0.56.0",
+    "expo-yarn-workspaces": "^1.5.1"
   },
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/common",
+      "packages/client",
+      "packages/app"
     ],
     "nohoist": [
-      "**/react-native",
-      "**/*react-native*",
-      "**/react-native/**",
-      "**/react-native*/**",
-      "**/expo",
-      "**next**",
-      "**/expo*/**",
-      "**/instagram/common",
-      "**/*expo*",
-      "**/*react-navigation*",
-      "**/*react-navigation*/**"
+      "**"
     ]
   }
 }

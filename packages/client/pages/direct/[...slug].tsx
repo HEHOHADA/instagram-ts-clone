@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router'
 import { useChatsQuery } from '@instagram/common'
 
 import withApollo from '@/lib/withApollo'
-import MainLayout from '@/components/MainLayout'
+import {MainLayout }from '@/components/layouts/MainLayout'
 import { ConversationNew } from '@/components/direct/ConversationNew'
 import { ConversationList } from '@/components/direct/ConversationList'
 import { useMessageReceive } from '@/hooks/useMessageReceive'

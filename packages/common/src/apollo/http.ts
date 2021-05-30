@@ -30,6 +30,7 @@ export function wsLink(getAccessToken: () => Promise<string | null> | string | n
 
 export function refreshLink(getAccessToken: () => Promise<string | null> | string | null, setAccessToken: (token: string) => Promise<void> | void, api = API_CONSTANTS.refresh): ApolloLink {
   return new TokenRefreshLink({
+    // @ts-ignore
     isTokenValidOrUndefined: async () => {
       let possibleToken = getAccessToken()
       return checkToken(typeof possibleToken === 'object' ? await possibleToken : possibleToken)
@@ -43,7 +44,6 @@ export function refreshLink(getAccessToken: () => Promise<string | null> | strin
     },
     handleResponse: (_, accessTokenField) => async (response: Response) => {
       const result = await response.json()
-      console.log('result', result)
       return {
         [accessTokenField]: result[accessTokenField]
       }

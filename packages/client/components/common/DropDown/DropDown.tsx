@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import { DropDownContainer, DropDownMenu } from './DropDownStyled'
 
-
 type PropsType = {
   children: ReactNode
 }

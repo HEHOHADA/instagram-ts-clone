@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import useDropdown from '@/hooks/useDropdown'
+import { useDropdown } from '@/hooks/useDropdown'
+
 import useDebounce from '@/hooks/useDebounce'
 import { Button } from '@/components/utils/Button'
 import { useSearchLazyQuery } from '@instagram/common'
@@ -48,7 +49,7 @@ export const Search = () => {
   return (
     <HeaderSearch>
       <SearchInput
-        value={searchString}
+        value={ searchString }
         onChange={ (e) => setSearchString(e.target.value) }
         type='text' placeholder='Search' />
       <SearchButton round onClick={ onFetchMore }>

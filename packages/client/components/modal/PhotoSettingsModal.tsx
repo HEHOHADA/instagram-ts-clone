@@ -15,8 +15,9 @@ export const PhotoSettingsModal = ({
   return (
     <>
       { isAuthor &&
-      <button onClick={ deletePhoto }
-              className='photo__settings__modal'>Удалить
+      <button
+        onClick={ deletePhoto }
+        className='photo__settings__modal'>Удалить
       </button> }
       <button onClick={ closeModal } className='photo__settings__modal'>Отменить</button>
     </>

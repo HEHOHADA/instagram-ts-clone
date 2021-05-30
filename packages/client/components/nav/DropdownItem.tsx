@@ -4,7 +4,6 @@ import { RedirectComponentType } from '../auth/RedirectComponent'
 import { Link } from '@/components/link/Link'
 import { Icon } from '@/components/common/icons/Icon'
 
-
 export type LinkRedirectComponentType = {
   iconName: string,
   as?: string,
@@ -23,11 +22,10 @@ const LinkIcon = styled(Link)`
 
   &:hover {
     background-color: #e2e3e6;
-
+  }
 `
 
 export const DropdownItem: FC<PropsType> = ({ text, link, as, iconName }) => {
-
   return (
     <LinkIcon
       as={ as } href={ link }>

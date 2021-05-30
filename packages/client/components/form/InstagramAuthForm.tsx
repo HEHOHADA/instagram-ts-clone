@@ -20,24 +20,24 @@ export type FieldItemsType<K> = {
 }
 
 export const InstagramAuthForm = <T extends {}>({
-                                                  submitHandler,
-                                                  initialValues,
-                                                  buttonText,
-                                                  OrOptionsComponent,
-                                                  RedirectComponent,
-                                                  fields
-                                                }: FormType<T>) => {
+  submitHandler,
+  initialValues,
+  buttonText,
+  OrOptionsComponent,
+  RedirectComponent,
+  fields
+}: FormType<T>) => {
 
   const fieldsItems = useMemo(() => {
     return fields.map((f: FieldItemsType<keyof T>) => (
-      <Field key={ `FieldItem_${ f.name }` } { ...f }/>
+      <Field key={ `FieldItem_${ f.name }` } { ...f } />
     ))
   }, [fields])
 
   return (
-    <div className="auth__content__container">
-      <div className="auth__form__container">
-        <div className="logo__item"/>
+    <div className='auth__content__container'>
+      <div className='auth__form__container'>
+        <div className='logo__item' />
         <Formik<T>
           validateOnBlur={ false }
           validateOnChange={ false }
@@ -45,13 +45,13 @@ export const InstagramAuthForm = <T extends {}>({
           onSubmit={ submitHandler }
         >{ () => (
           <Form
-            className="auth__form">
-            <div className="form__container">
-              <div className="form__inputs">
+            className='auth__form'>
+            <div className='form__container'>
+              <div className='form__inputs'>
                 { fieldsItems }
               </div>
-              <div className="form__submit__btn">
-                <button type="submit" className="submit__btn">
+              <div className='form__submit__btn'>
+                <button type='submit' className='submit__btn'>
                   { buttonText }
                 </button>
               </div>

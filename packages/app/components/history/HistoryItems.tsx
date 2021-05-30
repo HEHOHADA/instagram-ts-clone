@@ -9,20 +9,16 @@ type PropsType = {
   data: Array<any>
 }
 
-export const HistoryItems: FC<PropsType> = ({data}) => {
+export const HistoryItems: FC<PropsType> = ({ data }) => {
   return (
     <VirtualizedView>
       <View style={ styles.historyWrapper }>
         <FlatList
           horizontal
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={ false }
           keyExtractor={ post => post.id?.toString() || '' }
           data={ data }
-          renderItem={ ({item}) => {
-            return (
-              <HistoryPhoto { ...item }/>
-            )
-          } }/>
+          renderItem={ ({ item }) => (<HistoryPhoto { ...item } />) } />
       </View>
     </VirtualizedView>
   )

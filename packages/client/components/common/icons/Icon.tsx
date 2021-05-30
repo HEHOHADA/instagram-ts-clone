@@ -7,7 +7,7 @@ export type IconProps = {
 
 export const Icon: FC<IconProps> = ({ className, iconName }) => {
   return (
-    <i className={ `material-icons${ className??'' }` }>
+    <i className={ `material-icons${ className ?? '' }` }>
       { iconName }
     </i>
   )

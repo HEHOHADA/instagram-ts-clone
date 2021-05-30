@@ -8,7 +8,7 @@ import {
 } from '@instagram/common'
 
 import withApollo from '@/lib/withApollo'
-import MainLayout from '@/components/MainLayout'
+import {MainLayout }from '@/components/layouts/MainLayout'
 import Loading from '@/components/utils/Loading'
 import { PostHeader } from '@/components/dashboard/post/PostHeader'
 import { CreateCommentForm } from '@/components/photo/CreateCommentForm'

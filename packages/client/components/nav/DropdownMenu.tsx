@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import React, { FC, useMemo } from 'react'
+import React, { FC, RefObject, useMemo } from 'react'
 import { setAccessToken } from '@/lib/token'
 import { DropdownItem } from './DropdownItem'
-import useDropdown from '@/hooks/useDropdown'
+import { useDropdown } from '@/hooks/useDropdown'
 import { useLogoutMutation } from '@instagram/common'
 import { DropDown } from '@/components/common/DropDown/DropDown'
 import { MainButton } from '@/components/common/buttons'
@@ -34,7 +34,7 @@ export const DropdownMenu: FC<PropsType> = ({ username, closeDropDown }) => {
   }, [username])
 
   return (
-    <DropDown ref={ dropDownRef }>
+    <DropDown ref={ dropDownRef as RefObject<HTMLDivElement> }>
       { dropDownMenu }
       <hr />
       <MainButton
@@ -47,7 +47,7 @@ export const DropdownMenu: FC<PropsType> = ({ username, closeDropDown }) => {
             setAccessToken('')
             router.push('/accounts/login')
           }
-        }) }>Выйти</MainButton>
+        }) } size='medium'>Выйти</MainButton>
     </DropDown>
   )
 }
