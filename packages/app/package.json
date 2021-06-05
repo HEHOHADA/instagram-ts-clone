@@ -17,7 +17,6 @@
   "dependencies": {
     "@apollo/client": "^3.3.19",
     "@expo/vector-icons": "^12.0.5",
-    "@instagram/common": "*",
     "@react-native-community/masked-view": "0.1.11",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/drawer": "^5.12.5",

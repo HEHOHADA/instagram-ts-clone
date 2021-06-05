@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import React, { useCallback } from 'react'
 
-import { useFollowUserMutation, useUnFollowUserMutation } from '@instagram/common'
 import { followCallback } from '@/utils/followFunction'
 import { Button } from '@/components/utils/Button'
+import { useFollowUserMutation, useUnFollowUserMutation } from '@/geterated'
 
 export default function useFollowButton() {
   const [unFollowUser] = useUnFollowUserMutation()

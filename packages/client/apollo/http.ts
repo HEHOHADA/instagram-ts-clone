@@ -4,7 +4,7 @@ import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from '@apollo/client/link/context'
 import { TokenRefreshLink } from 'apollo-link-token-refresh'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { API_CONSTANTS } from '../config'
+import { API_CONSTANTS } from '@/config'
 import { checkToken } from './util'
 
 export function httpLinkWithUpload(api = API_CONSTANTS.api): ApolloLink {

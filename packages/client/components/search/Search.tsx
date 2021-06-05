@@ -4,8 +4,6 @@ import { useDropdown } from '@/hooks/useDropdown'
 
 import useDebounce from '@/hooks/useDebounce'
 import { Button } from '@/components/utils/Button'
-import { useSearchLazyQuery } from '@instagram/common'
-import { Icon } from '@/components/common/icons/Icon'
 import { UserLink } from '../link/UserLink'
 import {
   HeaderSearch,
@@ -14,6 +12,8 @@ import {
   SearchDropDownLink,
   SearchInput
 } from './SearchStyled'
+import { useSearchLazyQuery } from '@/geterated'
+import { Icon } from '../icons'
 
 export const Search = () => {
   const { dropDownRef, isOpen, open } = useDropdown<HTMLDivElement>()
@@ -53,7 +53,7 @@ export const Search = () => {
         onChange={ (e) => setSearchString(e.target.value) }
         type='text' placeholder='Search' />
       <SearchButton round onClick={ onFetchMore }>
-        <Icon iconName={ 'search' } />
+        <Icon iconName='search' />
       </SearchButton>
       { isOpen && called && data && !loading &&
       <SearchDropDown ref={ dropDownRef }>

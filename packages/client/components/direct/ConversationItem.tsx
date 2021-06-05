@@ -8,12 +8,12 @@ import { Picture } from '../utils/svg/Picture'
 import { Like } from '../utils/svg/Like'
 import { ChatMessage } from './chat/ChatMessage'
 import { TextArea } from '../utils/TextArea'
+import { Button } from '../utils/Button'
 import {
   ICreateMessageMutationVariables,
   useChatQuery,
   useCreateMessageMutation
-} from '@instagram/common'
-import { Button } from '../utils/Button'
+} from '@/geterated'
 
 
 const ConversationItem: FC = () => {

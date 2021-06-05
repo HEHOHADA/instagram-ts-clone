@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { useRouter } from 'next/router'
-import { MeDocument, IMeQuery, useLoginMutation } from '@instagram/common'
 
 import { setAccessToken } from '@/lib/token'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'
+import { IMeQuery, MeDocument, useLoginMutation } from '@/geterated'
 
 export default function useLogin() {
   const [login, { loading }] = useLoginMutation()

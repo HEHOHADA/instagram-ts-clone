@@ -7,7 +7,7 @@ import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/cli
 
 import initApollo from './initApollo'
 import { getAccessToken, setAccessToken } from './token'
-import { API_CONSTANTS } from '@instagram/common'
+import { API_CONSTANTS } from '@/config'
 
 export interface NextPageContextWithApollo extends NextPageContext {
   apolloClient: ApolloClient<NormalizedCacheObject> | null

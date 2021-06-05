@@ -13,13 +13,7 @@ import Redirect from './redirect'
 import { isBrowser } from './isBrowser'
 import { isServer } from './withApollo'
 import { getAccessToken, setAccessToken } from './token'
-import {
-  authContextLink,
-  cacheConfig,
-  httpLinkWithUpload,
-  refreshLink,
-  wsLink
-} from '@instagram/common'
+import { authContextLink, cacheConfig, httpLinkWithUpload, refreshLink, wsLink } from '@/apollo'
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null
 

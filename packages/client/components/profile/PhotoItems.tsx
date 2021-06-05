@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import { PhotoItem } from './PhotoItem'
 import { splitArray } from '@/utils/splitArray'
-import { IPhotoItemFragment } from '@instagram/common'
+import { IPhotoItemFragment } from '@/geterated'
 
 type PropsType = {
   photoItems: IPhotoItemFragment[]

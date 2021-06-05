@@ -6,7 +6,7 @@ import { CreateDialog } from '../utils/svg/CreateDialog'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { CreateMessageModal } from '../modal/CreateMessageModal'
 import Loading from '@/components/utils/Loading'
-import { IChatsQuery, useMeQuery } from '@instagram/common'
+import { IChatsQuery, useMeQuery } from '@/geterated'
 
 type ChatsType = IChatsQuery['chats']
 

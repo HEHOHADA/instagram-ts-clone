@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { CommentItem } from './CommentItem'
-import { ICommentItemFragment, IUserMeFragment } from '@instagram/common'
+import { ICommentItemFragment, IUserMeFragment } from '@/geterated'
 
 export type CommentWithUserType = ICommentItemFragment & { user: IUserMeFragment }
 

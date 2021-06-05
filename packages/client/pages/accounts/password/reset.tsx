@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo } from 'react'
-import { IForgotPasswordType, useForgotPasswordMutation } from '@instagram/common'
 import withApollo from '@/lib/withApollo'
 import {MainLayout }from '@/components/layouts/MainLayout'
 import { InputAuthField } from '@/components/utils/InputAuthField'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
+import { IForgotPasswordType, useForgotPasswordMutation } from '@/geterated'
 
 const ForgotPassword = () => {
 

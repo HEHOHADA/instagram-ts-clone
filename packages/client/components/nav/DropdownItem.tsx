@@ -2,17 +2,16 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { RedirectComponentType } from '../auth/RedirectComponent'
 import { Link } from '@/components/link/Link'
-import { Icon } from '@/components/common/icons/Icon'
+import { Icon } from '../icons'
 
 export type LinkRedirectComponentType = {
   iconName: string,
-  as?: string,
-  passHref?: boolean
+  as?: string
 }
 
 type PropsType = LinkRedirectComponentType & RedirectComponentType
 
-const LinkIcon = styled(Link)`
+const LinkIcon = styled.a`
   height: 50px;
   align-items: center;
   border-radius: 8px;
@@ -25,12 +24,13 @@ const LinkIcon = styled(Link)`
   }
 `
 
-export const DropdownItem: FC<PropsType> = ({ text, link, as, iconName }) => {
+export const DropdownItem: FC<PropsType> = ({ text, as, link, iconName }) => {
   return (
-    <LinkIcon
-      as={ as } href={ link }>
-      <Icon iconName={ iconName } />
-      { text }
-    </LinkIcon>
+    <Link passHref as={ as } href={ as ? link : undefined } to={ link }>
+      <LinkIcon>
+        <Icon iconName={ iconName } />
+        { text }
+      </LinkIcon>
+    </Link>
   )
 }

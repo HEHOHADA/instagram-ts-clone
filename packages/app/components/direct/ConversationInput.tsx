@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react'
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
-import { AppIcon } from '@ui/AppIcon'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SCREEN_WIDTH } from '@constants/demens'
 import { Text } from '@components/Themed'
 import { useMutation } from '@apollo/client'
-import { CreateMessageDocument, ICreateMessageMutationVariables } from '@instagram/common'
 import { InputIcon } from '@components/shared/InputIcon'
 
 export const ConversationInput: FC<{ id: string }> = ({id}) => {

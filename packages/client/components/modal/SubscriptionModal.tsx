@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Loading from '@/components/utils/Loading'
 import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
-import { useGetFollowersQuery, useGetFollowingsQuery } from '@instagram/common'
+import { useGetFollowersQuery, useGetFollowingsQuery } from '@/geterated'
 
 type SubscriptionModalType = {
   FollowButton: (isFollowing: boolean, id: string, userId?: string) => JSX.Element

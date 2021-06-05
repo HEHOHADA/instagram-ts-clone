@@ -3,9 +3,9 @@ import React, { FC, RefObject, useMemo } from 'react'
 import { setAccessToken } from '@/lib/token'
 import { DropdownItem } from './DropdownItem'
 import { useDropdown } from '@/hooks/useDropdown'
-import { useLogoutMutation } from '@instagram/common'
 import { DropDown } from '@/components/common/DropDown/DropDown'
 import { MainButton } from '@/components/common/buttons'
+import { useLogoutMutation } from '@/geterated'
 
 type PropsType = {
   username: string
@@ -22,12 +22,11 @@ export const DropdownMenu: FC<PropsType> = ({ username, closeDropDown }) => {
       {
         as: `/${ username }`,
         link: '/[username]',
-        passHref: true,
         iconName: 'home',
         text: 'Профиль'
       },
-      { link: '/accounts/settings', iconName: 'settings', text: 'Настройки' },
-      { link: '/p/create', iconName: 'create', text: 'Создать пост' }
+      { link: 'settings', iconName: 'settings', text: 'Настройки' },
+      { link: 'create', iconName: 'create', text: 'Создать пост' }
     ].map((n) => (
       <DropdownItem key={ n.text } { ...n } />
     ))

@@ -1,4 +1,4 @@
-import { useMeQuery } from '@instagram/common'
+import { useMeQuery } from '@/geterated'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 

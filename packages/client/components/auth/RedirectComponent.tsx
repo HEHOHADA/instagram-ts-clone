@@ -2,7 +2,7 @@ import React from 'react'
 import { LinkItem } from '@/components/utils/LinkItem'
 
 export type RedirectComponentType = {
-  link: string
+  link: any
   text: string
 }
 

@@ -2,17 +2,17 @@ import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo } from 'react'
 
-import { IRegisterInput, useRegisterMutation } from '@instagram/common'
 
 import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
-import AuthLayout from '@/components/AuthLayout'
+import AuthLayout from '@/components/layouts/AuthLayout'
 import { InputAuthField } from '@/components/utils/InputAuthField'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import { formatValidationErrors } from '@/utils/formatValidationErrors'
 import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
+import { IRegisterInput, useRegisterMutation } from '@/geterated'
 
 
 const Register = () => {

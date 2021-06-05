@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { useFeedQuery, useMeQuery } from '@instagram/common'
-
 import withApollo from '@/lib/withApollo'
 import { History } from '@/components/dashboard/History'
 import { PhotoFeedType, Posts } from '@/components/dashboard/post/Posts'
@@ -10,6 +8,7 @@ import { RecommendationItems } from '@/components/recommendation/RecommendationI
 import Loading from '@/components/utils/Loading'
 import { Button } from '@/components/utils/Button'
 import { MainLayout } from '@/components/layouts'
+import { useFeedQuery, useMeQuery } from '@/geterated'
 
 
 const IndexPage = () => {

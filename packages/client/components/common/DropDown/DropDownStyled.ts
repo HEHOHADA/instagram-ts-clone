@@ -8,7 +8,10 @@ export const DropDownContainer = styled.div`
   border: 1px solid ${ themeColor('dimGrey') };
   border-radius: 8px;
   overflow: hidden;
+  position: absolute;
+  left: 0;
 `
+
 export const DropDownMenu = styled.div`
   margin: 1px;
 `

@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { NextPageContext } from 'next'
 
-import { useMeQuery, useSetPictureProfileMutation } from '@instagram/common'
 
 import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
@@ -12,6 +11,7 @@ import { useIsAuth } from '@/utils/useIsAuth'
 import { SettingsSidebar } from '@/components/settings/SettingsSidebar'
 import { SettingsEditForm } from '@/components/settings/edit/SettingsEditForm'
 import { MainLayout } from '@/components/layouts'
+import { useMeQuery, useSetPictureProfileMutation } from '@/geterated'
 
 const Settings = () => {
   useIsAuth()

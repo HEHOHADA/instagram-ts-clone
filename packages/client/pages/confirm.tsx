@@ -4,11 +4,8 @@ import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
 import { MainLayout } from '@/components/layouts'
 import { MyContext } from '@/interfaces/MyContext'
-import {
-  IConfirmUserMutation,
-  IConfirmUserMutationVariables
-} from '@instagram/common'
-import { confirmUserMutation } from '@instagram/common/dist/graphql/mutation'
+import { confirmUserMutation } from '@/graphql/mutation'
+import { IConfirmUserMutation, IConfirmUserMutationVariables } from '@/geterated'
 
 const Confirm = () => {
   return (

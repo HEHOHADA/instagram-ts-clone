@@ -5,7 +5,7 @@ import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import Loading from '@/components/utils/Loading'
 import { useHistory } from 'react-router'
 import { LinkItem } from '@/components/utils/LinkItem'
-import { ChatDocument, useFindOrCreateChatMutation, useGetFollowingsQuery } from '@instagram/common'
+import { ChatDocument, useFindOrCreateChatMutation, useGetFollowingsQuery } from '@/geterated'
 
 export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string }) => {
   const {data} = useGetFollowingsQuery({variables: {userId: id}})

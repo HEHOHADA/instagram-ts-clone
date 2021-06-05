@@ -3,13 +3,12 @@ import dynamic from 'next/dynamic'
 import { GetServerSidePropsContext } from 'next'
 import { Route, Switch } from 'react-router'
 
-import { useChatsQuery } from '@instagram/common'
-
 import withApollo from '@/lib/withApollo'
 import {MainLayout }from '@/components/layouts/MainLayout'
 import { ConversationNew } from '@/components/direct/ConversationNew'
 import { ConversationList } from '@/components/direct/ConversationList'
 import { useMessageReceive } from '@/hooks/useMessageReceive'
+import { useChatsQuery } from '@/geterated'
 
 const ConversationItem = dynamic(() => import('@/components/direct/ConversationItem'))
 

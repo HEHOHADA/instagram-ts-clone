@@ -21,7 +21,7 @@ export function useDropdown<T extends HTMLElement>(toggleClick?: () => void) {
   useEffectOnce(() => {
     document.addEventListener('click', closeOutside)
     return () => {
-      toggleClick ? toggleClick() : close()
+      close()
       document.removeEventListener('click', closeOutside)
     }
   })

@@ -2,8 +2,8 @@ import React, { FC, useMemo } from 'react'
 
 import { ProfileItems } from './ProfileItems'
 import { ModalUserPageType, ProfileItemsType } from '@/pages/[username]'
-import { IGetUserInfoQuery } from '@instagram/common'
 import { declOfNum } from '@/helpers/strings/declOfNumb'
+import { IGetUserInfoQuery } from '@/geterated'
 
 type GetUserInfoQueryType = IGetUserInfoQuery['getUserInfo']
 

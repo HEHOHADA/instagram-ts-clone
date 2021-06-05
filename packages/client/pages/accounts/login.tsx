@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react'
-import { ILoginInput } from '@instagram/common'
 
 import useLogin from '@/hooks/useLogin'
 import withApollo from '@/lib/withApollo'
-import AuthLayout from '@/components/AuthLayout'
+import AuthLayout from '@/components/layouts/AuthLayout'
 import { InputAuthField } from '@/components/utils/InputAuthField'
 import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 import { NextPageContext } from 'next'
+import { ILoginInput } from '@/geterated'
 
 const Login = () => {
   const {loading, submitLoginHandler} = useLogin()

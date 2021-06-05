@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client'
-import { useMessageReceivedSubscription } from '@instagram/common'
+import { useMessageReceivedSubscription } from '@/geterated'
 
 export const useMessageReceive = () => {
   const client = useApolloClient()

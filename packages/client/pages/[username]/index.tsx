@@ -1,13 +1,6 @@
 import React, { useRef } from 'react'
 import { useRouter } from 'next/router'
 
-import {
-  IPhotoItemFragment,
-  useGetUserInfoQuery,
-  useMeQuery,
-  useViewUserPhotoQuery
-} from '@instagram/common'
-
 import withApollo from '@/lib/withApollo'
 import { useModal } from '@/hooks/useModal'
 import { MainLayout } from '@/components/layouts/MainLayout'
@@ -17,6 +10,12 @@ import { PhotoItems } from '@/components/profile/PhotoItems'
 import { ProfileInfo } from '@/components/profile/ProfileInfo'
 import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
 import Loading from '@/components/utils/Loading'
+import {
+  IPhotoItemFragment,
+  useGetUserInfoQuery,
+  useMeQuery,
+  useViewUserPhotoQuery
+} from '@/geterated'
 
 export type ProfileItemsType = {
   onClick?: (e?: any) => void | null | undefined

@@ -4,6 +4,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -17,62 +18,14 @@ export type Scalars = {
   Upload: any;
 };
 
-export type IQuery = {
-  __typename?: 'Query';
-  chat: IChat;
-  chats: Array<IChat>;
-  getFollowers: Array<IUser>;
-  getFollowings: Array<IUser>;
-  feed: IPaginatedPhotos;
-  viewUserPhoto: Array<IPhoto>;
-  viewPhotoById: IPhoto;
-  search: IPaginatedUsersSearch;
-  getUserInfo: IUser;
-  me: Maybe<IUser>;
-  refreshToken: IRefreshResponseType;
+export type IChangeForgotPassword = {
+  password: Scalars['String'];
+  token: Scalars['String'];
 };
 
-
-export type IQueryChatArgs = {
-  id: Scalars['String'];
-};
-
-
-export type IQueryGetFollowersArgs = {
-  userId: Scalars['String'];
-};
-
-
-export type IQueryGetFollowingsArgs = {
-  userId: Scalars['String'];
-};
-
-
-export type IQueryFeedArgs = {
-  cursor: Maybe<Scalars['String']>;
-  limit: Scalars['Int'];
-};
-
-
-export type IQueryViewUserPhotoArgs = {
-  username: Scalars['String'];
-};
-
-
-export type IQueryViewPhotoByIdArgs = {
-  id: Scalars['String'];
-};
-
-
-export type IQuerySearchArgs = {
-  cursor: Maybe<Scalars['String']>;
-  limit: Scalars['Int'];
-  subString: Scalars['String'];
-};
-
-
-export type IQueryGetUserInfoArgs = {
-  username: Scalars['String'];
+export type IChangePassword = {
+  password: Scalars['String'];
+  oldPassword: Scalars['String'];
 };
 
 export type IChat = {
@@ -83,56 +36,6 @@ export type IChat = {
   lastMessage: Maybe<IMessage>;
   unread: Scalars['Boolean'];
   users: Array<IUser>;
-};
-
-export type IMessage = {
-  __typename?: 'Message';
-  id: Scalars['ID'];
-  text: Scalars['String'];
-  isAuthor: Scalars['Boolean'];
-  chatId: Scalars['String'];
-  readTime: Maybe<Scalars['DateTime']>;
-  date: Scalars['String'];
-  chat: IChat;
-  user: IUser;
-};
-
-
-export type IUser = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  fullName: Scalars['String'];
-  email: Scalars['String'];
-  username: Scalars['String'];
-  pictureUrl: Maybe<Scalars['String']>;
-  followerCount: Maybe<Scalars['Float']>;
-  followingCount: Maybe<Scalars['Float']>;
-  photoCount: Maybe<Scalars['Float']>;
-  chats: IChat;
-  isFollowed: Scalars['Boolean'];
-  isFollowing: Scalars['Boolean'];
-  isCurrentUser: Scalars['Boolean'];
-};
-
-export type IPaginatedPhotos = {
-  __typename?: 'PaginatedPhotos';
-  items: Array<IPhoto>;
-  paginationInfo: IPaginatedPhotoResponse;
-};
-
-export type IPhoto = {
-  __typename?: 'Photo';
-  id: Scalars['ID'];
-  date: Scalars['String'];
-  pictureUrl: Scalars['String'];
-  postText: Scalars['String'];
-  userId: Scalars['String'];
-  user: IUser;
-  likeCount: Maybe<Scalars['Float']>;
-  commentCount: Maybe<Scalars['Float']>;
-  isLiked: Scalars['Boolean'];
-  isAuthor: Scalars['Boolean'];
-  comments: Maybe<Array<IComment>>;
 };
 
 export type IComment = {
@@ -147,28 +50,41 @@ export type IComment = {
   photo: IPhoto;
 };
 
-export type IPaginatedPhotoResponse = {
-  __typename?: 'PaginatedPhotoResponse';
-  hasMore: Scalars['Boolean'];
-  endCursor: Scalars['DateTime'];
+export type ICreateCommentType = {
+  photoId: Scalars['String'];
+  commentText: Scalars['String'];
 };
 
-export type IPaginatedUsersSearch = {
-  __typename?: 'PaginatedUsersSearch';
-  items: Array<IUser>;
-  paginationInfo: IPaginatedUserResponse;
+
+export type IDeleteCommentType = {
+  id: Scalars['String'];
 };
 
-export type IPaginatedUserResponse = {
-  __typename?: 'PaginatedUserResponse';
-  hasMore: Scalars['Boolean'];
-  endCursor: Scalars['String'];
+export type IForgotPasswordType = {
+  email: Scalars['String'];
 };
 
-export type IRefreshResponseType = {
-  __typename?: 'RefreshResponseType';
+export type ILoginInput = {
+  password: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type ILoginResponseType = {
+  __typename?: 'LoginResponseType';
   accessToken: Scalars['String'];
-  ok: Scalars['Boolean'];
+  user: IUser;
+};
+
+export type IMessage = {
+  __typename?: 'Message';
+  id: Scalars['ID'];
+  text: Scalars['String'];
+  isAuthor: Scalars['Boolean'];
+  chatId: Scalars['String'];
+  readTime: Maybe<Scalars['DateTime']>;
+  date: Scalars['String'];
+  chat: IChat;
+  user: IUser;
 };
 
 export type IMutation = {
@@ -280,39 +196,107 @@ export type IMutationRegisterArgs = {
   data: IRegisterInput;
 };
 
-export type ICreateCommentType = {
-  photoId: Scalars['String'];
-  commentText: Scalars['String'];
+export type IPaginatedPhotoResponse = {
+  __typename?: 'PaginatedPhotoResponse';
+  hasMore: Scalars['Boolean'];
+  endCursor: Scalars['DateTime'];
 };
 
-export type IDeleteCommentType = {
+export type IPaginatedPhotos = {
+  __typename?: 'PaginatedPhotos';
+  items: Array<IPhoto>;
+  paginationInfo: IPaginatedPhotoResponse;
+};
+
+export type IPaginatedUserResponse = {
+  __typename?: 'PaginatedUserResponse';
+  hasMore: Scalars['Boolean'];
+  endCursor: Scalars['String'];
+};
+
+export type IPaginatedUsersSearch = {
+  __typename?: 'PaginatedUsersSearch';
+  items: Array<IUser>;
+  paginationInfo: IPaginatedUserResponse;
+};
+
+export type IPhoto = {
+  __typename?: 'Photo';
+  id: Scalars['ID'];
+  date: Scalars['String'];
+  pictureUrl: Scalars['String'];
+  postText: Scalars['String'];
+  userId: Scalars['String'];
+  user: IUser;
+  likeCount: Maybe<Scalars['Float']>;
+  commentCount: Maybe<Scalars['Float']>;
+  isLiked: Scalars['Boolean'];
+  isAuthor: Scalars['Boolean'];
+  comments: Maybe<Array<IComment>>;
+};
+
+export type IQuery = {
+  __typename?: 'Query';
+  chat: IChat;
+  chats: Array<IChat>;
+  getFollowers: Array<IUser>;
+  getFollowings: Array<IUser>;
+  feed: IPaginatedPhotos;
+  viewUserPhoto: Array<IPhoto>;
+  viewPhotoById: IPhoto;
+  search: IPaginatedUsersSearch;
+  getUserInfo: IUser;
+  me: Maybe<IUser>;
+  refreshToken: IRefreshResponseType;
+};
+
+
+export type IQueryChatArgs = {
   id: Scalars['String'];
 };
 
 
-export type IChangeForgotPassword = {
-  password: Scalars['String'];
-  token: Scalars['String'];
+export type IQueryGetFollowersArgs = {
+  userId: Scalars['String'];
 };
 
-export type IChangePassword = {
-  password: Scalars['String'];
-  oldPassword: Scalars['String'];
+
+export type IQueryGetFollowingsArgs = {
+  userId: Scalars['String'];
 };
 
-export type IForgotPasswordType = {
-  email: Scalars['String'];
+
+export type IQueryFeedArgs = {
+  cursor: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
-export type ILoginResponseType = {
-  __typename?: 'LoginResponseType';
+
+export type IQueryViewUserPhotoArgs = {
+  username: Scalars['String'];
+};
+
+
+export type IQueryViewPhotoByIdArgs = {
+  id: Scalars['String'];
+};
+
+
+export type IQuerySearchArgs = {
+  cursor: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  subString: Scalars['String'];
+};
+
+
+export type IQueryGetUserInfoArgs = {
+  username: Scalars['String'];
+};
+
+export type IRefreshResponseType = {
+  __typename?: 'RefreshResponseType';
   accessToken: Scalars['String'];
-  user: IUser;
-};
-
-export type ILoginInput = {
-  password: Scalars['String'];
-  email: Scalars['String'];
+  ok: Scalars['Boolean'];
 };
 
 export type IRegisterInput = {
@@ -325,6 +309,23 @@ export type IRegisterInput = {
 export type ISubscription = {
   __typename?: 'Subscription';
   messageReceived: IMessage;
+};
+
+
+export type IUser = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  fullName: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
+  pictureUrl: Maybe<Scalars['String']>;
+  followerCount: Maybe<Scalars['Float']>;
+  followingCount: Maybe<Scalars['Float']>;
+  photoCount: Maybe<Scalars['Float']>;
+  chats: IChat;
+  isFollowed: Scalars['Boolean'];
+  isFollowing: Scalars['Boolean'];
+  isCurrentUser: Scalars['Boolean'];
 };
 
 export type ICommentItemFragment = (
@@ -812,7 +813,8 @@ export type IFindOrCreateChatMutationFn = Apollo.MutationFunction<IFindOrCreateC
  * });
  */
 export function useFindOrCreateChatMutation(baseOptions?: Apollo.MutationHookOptions<IFindOrCreateChatMutation, IFindOrCreateChatMutationVariables>) {
-        return Apollo.useMutation<IFindOrCreateChatMutation, IFindOrCreateChatMutationVariables>(FindOrCreateChatDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IFindOrCreateChatMutation, IFindOrCreateChatMutationVariables>(FindOrCreateChatDocument, options);
       }
 export type FindOrCreateChatMutationHookResult = ReturnType<typeof useFindOrCreateChatMutation>;
 export type FindOrCreateChatMutationResult = Apollo.MutationResult<IFindOrCreateChatMutation>;
@@ -848,7 +850,8 @@ export type ICreateCommentMutationFn = Apollo.MutationFunction<ICreateCommentMut
  * });
  */
 export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<ICreateCommentMutation, ICreateCommentMutationVariables>) {
-        return Apollo.useMutation<ICreateCommentMutation, ICreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ICreateCommentMutation, ICreateCommentMutationVariables>(CreateCommentDocument, options);
       }
 export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
 export type CreateCommentMutationResult = Apollo.MutationResult<ICreateCommentMutation>;
@@ -878,7 +881,8 @@ export type IDeleteCommentMutationFn = Apollo.MutationFunction<IDeleteCommentMut
  * });
  */
 export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<IDeleteCommentMutation, IDeleteCommentMutationVariables>) {
-        return Apollo.useMutation<IDeleteCommentMutation, IDeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IDeleteCommentMutation, IDeleteCommentMutationVariables>(DeleteCommentDocument, options);
       }
 export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
 export type DeleteCommentMutationResult = Apollo.MutationResult<IDeleteCommentMutation>;
@@ -908,7 +912,8 @@ export type IFollowUserMutationFn = Apollo.MutationFunction<IFollowUserMutation,
  * });
  */
 export function useFollowUserMutation(baseOptions?: Apollo.MutationHookOptions<IFollowUserMutation, IFollowUserMutationVariables>) {
-        return Apollo.useMutation<IFollowUserMutation, IFollowUserMutationVariables>(FollowUserDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IFollowUserMutation, IFollowUserMutationVariables>(FollowUserDocument, options);
       }
 export type FollowUserMutationHookResult = ReturnType<typeof useFollowUserMutation>;
 export type FollowUserMutationResult = Apollo.MutationResult<IFollowUserMutation>;
@@ -938,7 +943,8 @@ export type IUnFollowUserMutationFn = Apollo.MutationFunction<IUnFollowUserMutat
  * });
  */
 export function useUnFollowUserMutation(baseOptions?: Apollo.MutationHookOptions<IUnFollowUserMutation, IUnFollowUserMutationVariables>) {
-        return Apollo.useMutation<IUnFollowUserMutation, IUnFollowUserMutationVariables>(UnFollowUserDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IUnFollowUserMutation, IUnFollowUserMutationVariables>(UnFollowUserDocument, options);
       }
 export type UnFollowUserMutationHookResult = ReturnType<typeof useUnFollowUserMutation>;
 export type UnFollowUserMutationResult = Apollo.MutationResult<IUnFollowUserMutation>;
@@ -968,7 +974,8 @@ export type ILikeMutationFn = Apollo.MutationFunction<ILikeMutation, ILikeMutati
  * });
  */
 export function useLikeMutation(baseOptions?: Apollo.MutationHookOptions<ILikeMutation, ILikeMutationVariables>) {
-        return Apollo.useMutation<ILikeMutation, ILikeMutationVariables>(LikeDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ILikeMutation, ILikeMutationVariables>(LikeDocument, options);
       }
 export type LikeMutationHookResult = ReturnType<typeof useLikeMutation>;
 export type LikeMutationResult = Apollo.MutationResult<ILikeMutation>;
@@ -1009,7 +1016,8 @@ export type ICreateMessageMutationFn = Apollo.MutationFunction<ICreateMessageMut
  * });
  */
 export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<ICreateMessageMutation, ICreateMessageMutationVariables>) {
-        return Apollo.useMutation<ICreateMessageMutation, ICreateMessageMutationVariables>(CreateMessageDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ICreateMessageMutation, ICreateMessageMutationVariables>(CreateMessageDocument, options);
       }
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<ICreateMessageMutation>;
@@ -1055,7 +1063,8 @@ export type ICreatePhotoMutationFn = Apollo.MutationFunction<ICreatePhotoMutatio
  * });
  */
 export function useCreatePhotoMutation(baseOptions?: Apollo.MutationHookOptions<ICreatePhotoMutation, ICreatePhotoMutationVariables>) {
-        return Apollo.useMutation<ICreatePhotoMutation, ICreatePhotoMutationVariables>(CreatePhotoDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ICreatePhotoMutation, ICreatePhotoMutationVariables>(CreatePhotoDocument, options);
       }
 export type CreatePhotoMutationHookResult = ReturnType<typeof useCreatePhotoMutation>;
 export type CreatePhotoMutationResult = Apollo.MutationResult<ICreatePhotoMutation>;
@@ -1085,7 +1094,8 @@ export type IDeletePhotoMutationFn = Apollo.MutationFunction<IDeletePhotoMutatio
  * });
  */
 export function useDeletePhotoMutation(baseOptions?: Apollo.MutationHookOptions<IDeletePhotoMutation, IDeletePhotoMutationVariables>) {
-        return Apollo.useMutation<IDeletePhotoMutation, IDeletePhotoMutationVariables>(DeletePhotoDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IDeletePhotoMutation, IDeletePhotoMutationVariables>(DeletePhotoDocument, options);
       }
 export type DeletePhotoMutationHookResult = ReturnType<typeof useDeletePhotoMutation>;
 export type DeletePhotoMutationResult = Apollo.MutationResult<IDeletePhotoMutation>;
@@ -1118,7 +1128,8 @@ export type IChangeForgotPasswordMutationFn = Apollo.MutationFunction<IChangeFor
  * });
  */
 export function useChangeForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<IChangeForgotPasswordMutation, IChangeForgotPasswordMutationVariables>) {
-        return Apollo.useMutation<IChangeForgotPasswordMutation, IChangeForgotPasswordMutationVariables>(ChangeForgotPasswordDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IChangeForgotPasswordMutation, IChangeForgotPasswordMutationVariables>(ChangeForgotPasswordDocument, options);
       }
 export type ChangeForgotPasswordMutationHookResult = ReturnType<typeof useChangeForgotPasswordMutation>;
 export type ChangeForgotPasswordMutationResult = Apollo.MutationResult<IChangeForgotPasswordMutation>;
@@ -1148,7 +1159,8 @@ export type IConfirmUserMutationFn = Apollo.MutationFunction<IConfirmUserMutatio
  * });
  */
 export function useConfirmUserMutation(baseOptions?: Apollo.MutationHookOptions<IConfirmUserMutation, IConfirmUserMutationVariables>) {
-        return Apollo.useMutation<IConfirmUserMutation, IConfirmUserMutationVariables>(ConfirmUserDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IConfirmUserMutation, IConfirmUserMutationVariables>(ConfirmUserDocument, options);
       }
 export type ConfirmUserMutationHookResult = ReturnType<typeof useConfirmUserMutation>;
 export type ConfirmUserMutationResult = Apollo.MutationResult<IConfirmUserMutation>;
@@ -1178,7 +1190,8 @@ export type IForgotPasswordMutationFn = Apollo.MutationFunction<IForgotPasswordM
  * });
  */
 export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<IForgotPasswordMutation, IForgotPasswordMutationVariables>) {
-        return Apollo.useMutation<IForgotPasswordMutation, IForgotPasswordMutationVariables>(ForgotPasswordDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IForgotPasswordMutation, IForgotPasswordMutationVariables>(ForgotPasswordDocument, options);
       }
 export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
 export type ForgotPasswordMutationResult = Apollo.MutationResult<IForgotPasswordMutation>;
@@ -1213,7 +1226,8 @@ export type ILoginMutationFn = Apollo.MutationFunction<ILoginMutation, ILoginMut
  * });
  */
 export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<ILoginMutation, ILoginMutationVariables>) {
-        return Apollo.useMutation<ILoginMutation, ILoginMutationVariables>(LoginDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ILoginMutation, ILoginMutationVariables>(LoginDocument, options);
       }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<ILoginMutation>;
@@ -1242,7 +1256,8 @@ export type ILogoutMutationFn = Apollo.MutationFunction<ILogoutMutation, ILogout
  * });
  */
 export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<ILogoutMutation, ILogoutMutationVariables>) {
-        return Apollo.useMutation<ILogoutMutation, ILogoutMutationVariables>(LogoutDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ILogoutMutation, ILogoutMutationVariables>(LogoutDocument, options);
       }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<ILogoutMutation>;
@@ -1274,7 +1289,8 @@ export type IRegisterMutationFn = Apollo.MutationFunction<IRegisterMutation, IRe
  * });
  */
 export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<IRegisterMutation, IRegisterMutationVariables>) {
-        return Apollo.useMutation<IRegisterMutation, IRegisterMutationVariables>(RegisterDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IRegisterMutation, IRegisterMutationVariables>(RegisterDocument, options);
       }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<IRegisterMutation>;
@@ -1304,7 +1320,8 @@ export type ISetPictureProfileMutationFn = Apollo.MutationFunction<ISetPicturePr
  * });
  */
 export function useSetPictureProfileMutation(baseOptions?: Apollo.MutationHookOptions<ISetPictureProfileMutation, ISetPictureProfileMutationVariables>) {
-        return Apollo.useMutation<ISetPictureProfileMutation, ISetPictureProfileMutationVariables>(SetPictureProfileDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ISetPictureProfileMutation, ISetPictureProfileMutationVariables>(SetPictureProfileDocument, options);
       }
 export type SetPictureProfileMutationHookResult = ReturnType<typeof useSetPictureProfileMutation>;
 export type SetPictureProfileMutationResult = Apollo.MutationResult<ISetPictureProfileMutation>;
@@ -1351,10 +1368,12 @@ export const ChatDocument = gql`
  * });
  */
 export function useChatQuery(baseOptions: Apollo.QueryHookOptions<IChatQuery, IChatQueryVariables>) {
-        return Apollo.useQuery<IChatQuery, IChatQueryVariables>(ChatDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IChatQuery, IChatQueryVariables>(ChatDocument, options);
       }
 export function useChatLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IChatQuery, IChatQueryVariables>) {
-          return Apollo.useLazyQuery<IChatQuery, IChatQueryVariables>(ChatDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IChatQuery, IChatQueryVariables>(ChatDocument, options);
         }
 export type ChatQueryHookResult = ReturnType<typeof useChatQuery>;
 export type ChatLazyQueryHookResult = ReturnType<typeof useChatLazyQuery>;
@@ -1392,10 +1411,12 @@ export const ChatsDocument = gql`
  * });
  */
 export function useChatsQuery(baseOptions?: Apollo.QueryHookOptions<IChatsQuery, IChatsQueryVariables>) {
-        return Apollo.useQuery<IChatsQuery, IChatsQueryVariables>(ChatsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IChatsQuery, IChatsQueryVariables>(ChatsDocument, options);
       }
 export function useChatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IChatsQuery, IChatsQueryVariables>) {
-          return Apollo.useLazyQuery<IChatsQuery, IChatsQueryVariables>(ChatsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IChatsQuery, IChatsQueryVariables>(ChatsDocument, options);
         }
 export type ChatsQueryHookResult = ReturnType<typeof useChatsQuery>;
 export type ChatsLazyQueryHookResult = ReturnType<typeof useChatsLazyQuery>;
@@ -1431,10 +1452,12 @@ export const GetFollowersDocument = gql`
  * });
  */
 export function useGetFollowersQuery(baseOptions: Apollo.QueryHookOptions<IGetFollowersQuery, IGetFollowersQueryVariables>) {
-        return Apollo.useQuery<IGetFollowersQuery, IGetFollowersQueryVariables>(GetFollowersDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IGetFollowersQuery, IGetFollowersQueryVariables>(GetFollowersDocument, options);
       }
 export function useGetFollowersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetFollowersQuery, IGetFollowersQueryVariables>) {
-          return Apollo.useLazyQuery<IGetFollowersQuery, IGetFollowersQueryVariables>(GetFollowersDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IGetFollowersQuery, IGetFollowersQueryVariables>(GetFollowersDocument, options);
         }
 export type GetFollowersQueryHookResult = ReturnType<typeof useGetFollowersQuery>;
 export type GetFollowersLazyQueryHookResult = ReturnType<typeof useGetFollowersLazyQuery>;
@@ -1470,10 +1493,12 @@ export const GetFollowingsDocument = gql`
  * });
  */
 export function useGetFollowingsQuery(baseOptions: Apollo.QueryHookOptions<IGetFollowingsQuery, IGetFollowingsQueryVariables>) {
-        return Apollo.useQuery<IGetFollowingsQuery, IGetFollowingsQueryVariables>(GetFollowingsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IGetFollowingsQuery, IGetFollowingsQueryVariables>(GetFollowingsDocument, options);
       }
 export function useGetFollowingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetFollowingsQuery, IGetFollowingsQueryVariables>) {
-          return Apollo.useLazyQuery<IGetFollowingsQuery, IGetFollowingsQueryVariables>(GetFollowingsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IGetFollowingsQuery, IGetFollowingsQueryVariables>(GetFollowingsDocument, options);
         }
 export type GetFollowingsQueryHookResult = ReturnType<typeof useGetFollowingsQuery>;
 export type GetFollowingsLazyQueryHookResult = ReturnType<typeof useGetFollowingsLazyQuery>;
@@ -1513,10 +1538,12 @@ export const FeedDocument = gql`
  * });
  */
 export function useFeedQuery(baseOptions: Apollo.QueryHookOptions<IFeedQuery, IFeedQueryVariables>) {
-        return Apollo.useQuery<IFeedQuery, IFeedQueryVariables>(FeedDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IFeedQuery, IFeedQueryVariables>(FeedDocument, options);
       }
 export function useFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IFeedQuery, IFeedQueryVariables>) {
-          return Apollo.useLazyQuery<IFeedQuery, IFeedQueryVariables>(FeedDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IFeedQuery, IFeedQueryVariables>(FeedDocument, options);
         }
 export type FeedQueryHookResult = ReturnType<typeof useFeedQuery>;
 export type FeedLazyQueryHookResult = ReturnType<typeof useFeedLazyQuery>;
@@ -1549,10 +1576,12 @@ export const ViewUserPhotoDocument = gql`
  * });
  */
 export function useViewUserPhotoQuery(baseOptions: Apollo.QueryHookOptions<IViewUserPhotoQuery, IViewUserPhotoQueryVariables>) {
-        return Apollo.useQuery<IViewUserPhotoQuery, IViewUserPhotoQueryVariables>(ViewUserPhotoDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IViewUserPhotoQuery, IViewUserPhotoQueryVariables>(ViewUserPhotoDocument, options);
       }
 export function useViewUserPhotoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IViewUserPhotoQuery, IViewUserPhotoQueryVariables>) {
-          return Apollo.useLazyQuery<IViewUserPhotoQuery, IViewUserPhotoQueryVariables>(ViewUserPhotoDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IViewUserPhotoQuery, IViewUserPhotoQueryVariables>(ViewUserPhotoDocument, options);
         }
 export type ViewUserPhotoQueryHookResult = ReturnType<typeof useViewUserPhotoQuery>;
 export type ViewUserPhotoLazyQueryHookResult = ReturnType<typeof useViewUserPhotoLazyQuery>;
@@ -1585,10 +1614,12 @@ export const ViewPhotoByIdDocument = gql`
  * });
  */
 export function useViewPhotoByIdQuery(baseOptions: Apollo.QueryHookOptions<IViewPhotoByIdQuery, IViewPhotoByIdQueryVariables>) {
-        return Apollo.useQuery<IViewPhotoByIdQuery, IViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IViewPhotoByIdQuery, IViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, options);
       }
 export function useViewPhotoByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IViewPhotoByIdQuery, IViewPhotoByIdQueryVariables>) {
-          return Apollo.useLazyQuery<IViewPhotoByIdQuery, IViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IViewPhotoByIdQuery, IViewPhotoByIdQueryVariables>(ViewPhotoByIdDocument, options);
         }
 export type ViewPhotoByIdQueryHookResult = ReturnType<typeof useViewPhotoByIdQuery>;
 export type ViewPhotoByIdLazyQueryHookResult = ReturnType<typeof useViewPhotoByIdLazyQuery>;
@@ -1624,10 +1655,12 @@ export const GetUserInfoDocument = gql`
  * });
  */
 export function useGetUserInfoQuery(baseOptions: Apollo.QueryHookOptions<IGetUserInfoQuery, IGetUserInfoQueryVariables>) {
-        return Apollo.useQuery<IGetUserInfoQuery, IGetUserInfoQueryVariables>(GetUserInfoDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IGetUserInfoQuery, IGetUserInfoQueryVariables>(GetUserInfoDocument, options);
       }
 export function useGetUserInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetUserInfoQuery, IGetUserInfoQueryVariables>) {
-          return Apollo.useLazyQuery<IGetUserInfoQuery, IGetUserInfoQueryVariables>(GetUserInfoDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IGetUserInfoQuery, IGetUserInfoQueryVariables>(GetUserInfoDocument, options);
         }
 export type GetUserInfoQueryHookResult = ReturnType<typeof useGetUserInfoQuery>;
 export type GetUserInfoLazyQueryHookResult = ReturnType<typeof useGetUserInfoLazyQuery>;
@@ -1656,10 +1689,12 @@ export const MeDocument = gql`
  * });
  */
 export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<IMeQuery, IMeQueryVariables>) {
-        return Apollo.useQuery<IMeQuery, IMeQueryVariables>(MeDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IMeQuery, IMeQueryVariables>(MeDocument, options);
       }
 export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IMeQuery, IMeQueryVariables>) {
-          return Apollo.useLazyQuery<IMeQuery, IMeQueryVariables>(MeDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IMeQuery, IMeQueryVariables>(MeDocument, options);
         }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
@@ -1698,7 +1733,8 @@ export const MessageReceivedDocument = gql`
  * });
  */
 export function useMessageReceivedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<IMessageReceivedSubscription, IMessageReceivedSubscriptionVariables>) {
-        return Apollo.useSubscription<IMessageReceivedSubscription, IMessageReceivedSubscriptionVariables>(MessageReceivedDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<IMessageReceivedSubscription, IMessageReceivedSubscriptionVariables>(MessageReceivedDocument, options);
       }
 export type MessageReceivedSubscriptionHookResult = ReturnType<typeof useMessageReceivedSubscription>;
 export type MessageReceivedSubscriptionResult = Apollo.SubscriptionResult<IMessageReceivedSubscription>;
@@ -1735,10 +1771,12 @@ export const SearchDocument = gql`
  * });
  */
 export function useSearchQuery(baseOptions: Apollo.QueryHookOptions<ISearchQuery, ISearchQueryVariables>) {
-        return Apollo.useQuery<ISearchQuery, ISearchQueryVariables>(SearchDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ISearchQuery, ISearchQueryVariables>(SearchDocument, options);
       }
 export function useSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ISearchQuery, ISearchQueryVariables>) {
-          return Apollo.useLazyQuery<ISearchQuery, ISearchQueryVariables>(SearchDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ISearchQuery, ISearchQueryVariables>(SearchDocument, options);
         }
 export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>;
 export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>;

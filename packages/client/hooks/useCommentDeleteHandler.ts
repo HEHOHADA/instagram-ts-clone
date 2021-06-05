@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useDeleteCommentMutation } from '@instagram/common'
+import { useDeleteCommentMutation } from '@/geterated'
 
 export const useCommentDeleteHandler = ({ photoId }: any) => {
   const [deleteCommentMutation] = useDeleteCommentMutation()
