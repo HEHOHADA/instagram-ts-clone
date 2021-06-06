@@ -1,29 +1,36 @@
 import React, { FC } from 'react'
-import { LinkItem } from '@/components/utils/LinkItem'
+import { CommentContainer, CommentIcon, CommentText, CommentUserLink } from './CommentStyled'
+import { ImageWrapper } from '@/components/nav/NavbarItems/NavbarItemStyled'
+import { Icon } from '@/components/icons'
+import { UserLink } from '@/components/link'
+import { IComment } from '@/geterated'
+import { CommentDelete } from '@/hooks'
 
-type PropsType = {
-  username: string
-  commentText: string
-  id: string
-  isAuthor: boolean
-  pictureUrl?: string
-  onDelete?: (id: string) => Promise<void>
-}
+type PropsType =
+  Pick<IComment, 'id' | 'isAuthor' | 'commentText'>
+  & Pick<IComment['user'], 'username' | 'pictureUrl'>
+  & Partial<CommentDelete>
 
-export const CommentItem: FC<PropsType> = ({username, pictureUrl, commentText, onDelete, id, isAuthor}) => {
+export const CommentItem: FC<PropsType> = (props) => {
+  const {
+    username,
+    pictureUrl,
+    commentText,
+    onDeleteComment,
+    id,
+    isAuthor
+  } = props
+
   return (
-    <li className="comment__item">
-      { pictureUrl && <div className="comment__img">
-        <img src={ pictureUrl } alt="picture"/>
-      </div> }
-      <LinkItem
-        href={ `/${ username }` }
-        linkClassName={ 'comment__username' }
-        LinkContent={ `${ username }:` }/>
-      <p className="comment__text">{ commentText }</p>
-      { isAuthor && onDelete &&
-      <span onClick={ () => onDelete(id) }
-            className="material-icons delete__comment">delete</span> }
-    </li>
+    <CommentContainer>
+      { pictureUrl &&
+      <ImageWrapper $height={ 20 }>
+        <img src={ pictureUrl } alt='picture' />
+      </ImageWrapper> }
+      <UserLink username={ username }><CommentUserLink>{ username }:</CommentUserLink></UserLink>
+      <CommentText>{ commentText }</CommentText>
+      { isAuthor && onDeleteComment &&
+      <Icon iconName='delete' wrapper={ CommentIcon } onClick={ () => onDeleteComment(id) } /> }
+    </CommentContainer>
   )
 }

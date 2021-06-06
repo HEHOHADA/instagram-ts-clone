@@ -7,11 +7,11 @@ import { CommentTools } from './comment/CommentTools'
 import { PhotoItemContainer, PhotoItemType } from '@/hoc/PhotoItemContainer'
 import { CreateCommentForm } from '@/components/photo/CreateCommentForm'
 import { DeletePhotoGetters } from '@/hooks/useDeletePhoto'
-import { IPhoto } from '@/geterated'
+import { PhotoItem } from '@/components/dashboard/post/Posts'
 
 
 type PropsType = DeletePhotoGetters & {
-  photo: IPhoto
+  photo: PhotoItem
 }
 
 const PostItem: FC<PropsType> = React.memo(({ photo, onDeletePhoto }) => {

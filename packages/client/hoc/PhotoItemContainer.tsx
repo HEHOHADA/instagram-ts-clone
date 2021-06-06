@@ -12,10 +12,10 @@ import {
   useLikeHandler,
   useModal
 } from '@/hooks'
-import { IPhoto } from '@/geterated'
+import { IPhoto, IViewPhotoByIdQuery } from '@/geterated'
 
 type PropsType = DeletePhotoGetters & {
-  photo: IPhoto
+  photo: IViewPhotoByIdQuery['viewPhotoById']
   children: FC<PhotoItemType>
 }
 
