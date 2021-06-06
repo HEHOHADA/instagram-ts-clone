@@ -4,27 +4,25 @@ import { useRouter } from 'next/router'
 import withApollo from '@/lib/withApollo'
 import { useModal } from '@/hooks/useModal'
 import { MainLayout } from '@/components/layouts/MainLayout'
-import useFollowButton from '@/hooks/useFollowButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { PhotoItems } from '@/components/profile/PhotoItems'
 import { ProfileInfo } from '@/components/profile/ProfileInfo'
 import { SubscriptionModal } from '@/components/modal/SubscriptionModal'
 import Loading from '@/components/utils/Loading'
+import { FollowButton } from '@/components/follow/FollowButton'
 import {
-  IPhotoItemFragment,
   useGetUserInfoQuery,
   useMeQuery,
   useViewUserPhotoQuery
 } from '@/geterated'
 
 export type ProfileItemsType = {
-  onClick?: (e?: any) => void | null | undefined
+  onClick?: (e?: any) => void | null
   count: number
   text: string
 }
 
 export type ModalUserPageType = 'subscribers' | 'subscriptions' | null
-
 
 const Profile = () => {
   const { openModal, ModalWindow } = useModal()
@@ -37,11 +35,12 @@ const Profile = () => {
   } = useGetUserInfoQuery({ variables: { username: (queryUserName as string) } })
   const { data: dataPhoto } = useViewUserPhotoQuery({ variables: { username: (queryUserName as string) } })
   const { data: meData } = useMeQuery()
-  const { followButton } = useFollowButton()
+
   const changeSubs = (subName: ModalUserPageType) => {
     subs.current = subName
     openModal()
   }
+
   return (
     <MainLayout title={ data?.getUserInfo.fullName || 'Профиль' }>
       { !data && !loading ?
@@ -58,14 +57,14 @@ const Profile = () => {
             id: data!.getUserInfo.id,
             userId: meData?.me?.id,
             isCurrent: data!.getUserInfo.isCurrentUser,
-            FollowButton: followButton,
+            FollowButton,
             ...ref
           }
           switch (subs.current) {
             case'subscribers':
               return (<SubscriptionModal
                 { ...modalProps }
-                subscriber={ true } />)
+                subscriber />)
             case 'subscriptions':
               return <SubscriptionModal
                 { ...modalProps }
@@ -76,9 +75,9 @@ const Profile = () => {
         } }
       </ModalWindow>
       <div className='profile container'>
-        { data?.getUserInfo && <ProfileInfo
+        { data?.getUserInfo &&
+        <ProfileInfo
           meId={ meData?.me?.id }
-          followButton={ followButton }
           changeSubs={ changeSubs }
           { ...data.getUserInfo } /> }
         <hr />
@@ -91,7 +90,7 @@ const Profile = () => {
           </div>
         </div>
         { dataPhoto?.viewUserPhoto &&
-        <PhotoItems photoItems={ dataPhoto.viewUserPhoto as IPhotoItemFragment[] } /> }
+        <PhotoItems photoItems={ dataPhoto.viewUserPhoto } /> }
       </div>
     </MainLayout>
   )

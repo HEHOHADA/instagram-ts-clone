@@ -15,7 +15,6 @@ export const RecommendationItems:FC = () => {
               <img
                   alt="Фото профиля dilyaravl"
                   src="https://scontent-frx5-1.cdninstagram.com/v/t51.2885-19/s150x150/102266003_2974769402619790_6785781755961355718_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&_nc_ohc=N53qFP8962cAX_wDUo5&oh=1b86b8b13fceb0f16d02be176e8c9e8c&oe=5FAA91D5"/>
-
             </div>
             <div className="recommend__info">
               <a className="recommend__username">dima</a>

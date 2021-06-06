@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 
 import withApollo from '@/lib/withApollo'
@@ -9,21 +9,15 @@ import { CreateCommentForm } from '@/components/photo/CreateCommentForm'
 import { Comments } from '@/components/dashboard/post/comment/Comments'
 import { PhotoItemContainer, PhotoItemType } from '@/hoc/PhotoItemContainer'
 import { CommentTools } from '@/components/dashboard/post/comment/CommentTools'
-import { IViewPhotoByIdQuery, useDeletePhotoMutation, useViewPhotoByIdQuery } from '@/geterated'
+import { IViewPhotoByIdQuery, useViewPhotoByIdQuery } from '@/geterated'
+import { useDeletePhoto } from '@/hooks/useDeletePhoto'
 
 type ViewPhotoByIdType = IViewPhotoByIdQuery['viewPhotoById']
 
 const PhotoViewPost = () => {
   const router = useRouter()
-  const [deletePhotoMutation] = useDeletePhotoMutation()
-  const deletePhoto = useCallback(async (id: string) => {
-    await deletePhotoMutation({
-      variables: { id },
-      update: (cache) => {
-        cache.evict({ id: cache.identify({ __ref: `Photo:${ id }` }) })
-      }
-    })
-  }, [deletePhotoMutation])
+  const { deletePhoto } = useDeletePhoto()
+
   const url = typeof router.query.photoId === 'string' ? router.query.photoId : -1
   const { data, loading } = useViewPhotoByIdQuery({
     skip: url === -1,
@@ -51,15 +45,14 @@ const PhotoViewPost = () => {
       postText, id, comments
     }: ViewPhotoByIdType = data!.viewPhotoById
 
-
     body = <div className='photo__container'>
       <PhotoItemContainer
         photo={ data!.viewPhotoById }
-        deletePhoto={ deletePhoto }>
+        onDeletePhoto={ deletePhoto }>
         { ({
-          openModal, onLikeHandler,
+          onOpenModal, onLike,
           onDeleteComment,
-          createCommentHandler
+          onCreateComment
         }: PhotoItemType) => (
           <>
             <div className='content__img'>
@@ -71,7 +64,7 @@ const PhotoViewPost = () => {
             </div>
             <div className='content__img__info'>
               <PostHeader
-                onOpenModal={ openModal }
+                onOpenModal={ onOpenModal }
                 isAuthor={ isAuthor }
                 pictureUrl={ user.pictureUrl }
                 username={ user.username } />
@@ -82,7 +75,7 @@ const PhotoViewPost = () => {
               </div>
               <div className='content__tools'>
                 <CommentTools
-                  onLike={ onLikeHandler }
+                  onLike={ onLike }
                   isLiked={ isLiked }
                 />
                 <div className='content__likes'>
@@ -91,9 +84,8 @@ const PhotoViewPost = () => {
                 <div className='content__likes'>
                   <span>Нравится { likeCount } людям</span>
                 </div>
-
                 <div className='content__created' />
-                <CreateCommentForm photoId={ id } createCommentHandler={ createCommentHandler } />
+                <CreateCommentForm photoId={ id } onCreateComment={ onCreateComment } />
               </div>
             </div>
           </>

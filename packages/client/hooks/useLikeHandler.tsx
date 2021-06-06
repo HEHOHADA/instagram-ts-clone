@@ -1,11 +1,15 @@
 import { useCallback } from 'react'
 import { gql } from '@apollo/client'
 import { useLikeMutation } from '@/geterated'
+import { Getters } from '@/hoc'
+
+
+export type LikeGetters = Getters<ReturnType<typeof useLikeHandler>>
 
 export const useLikeHandler = ({ photoId, isLiked }: any) => {
   const [likeMutation] = useLikeMutation()
 
-  const onLikeHandler = useCallback(async () => {
+  const like = useCallback(async () => {
     try {
       await likeMutation({
         variables: {
@@ -43,6 +47,6 @@ export const useLikeHandler = ({ photoId, isLiked }: any) => {
   }, [isLiked, photoId])
 
   return {
-    onLikeHandler
+    like: like
   }
 }

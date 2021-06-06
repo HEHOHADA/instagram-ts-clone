@@ -1,16 +1,19 @@
 import { useCallback } from 'react'
 import { useDeleteCommentMutation } from '@/geterated'
+import { Getters } from '@/hoc'
+
+export type CommentDelete = Getters<ReturnType<typeof useCommentDeleteHandler>>
 
 export const useCommentDeleteHandler = ({ photoId }: any) => {
   const [deleteCommentMutation] = useDeleteCommentMutation()
-  const onDeleteComment = useCallback(
+  const deleteComment = useCallback(
     async (id: string) => {
       try {
         await deleteCommentMutation({
           variables: { data: { id } },
           update: (cache: any) => {
             cache.modify({
-              id: `Photo:${photoId}`,
+              id: `Photo:${ photoId }`,
               fields: {
                 commentCount(cachedValue: any) {
                   return cachedValue - 1
@@ -21,7 +24,7 @@ export const useCommentDeleteHandler = ({ photoId }: any) => {
               }
             })
             cache.evict({
-              id: cache.identify({ __ref: `Comment:${id}` })
+              id: cache.identify({ __ref: `Comment:${ id }` })
             })
           }
         })
@@ -33,6 +36,6 @@ export const useCommentDeleteHandler = ({ photoId }: any) => {
   )
 
   return {
-    onDeleteComment
+    deleteComment: deleteComment
   }
 }

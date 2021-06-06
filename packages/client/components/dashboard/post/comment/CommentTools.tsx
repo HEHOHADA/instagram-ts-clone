@@ -1,15 +1,18 @@
 import React, { FC, useMemo } from 'react'
+import { LikeGetters } from '@/hooks'
+import {IPhoto } from '@/geterated'
 
-type PropsType = {
-  onLike?: () => void
-  isLiked: boolean
-}
+type PropsType = Partial<LikeGetters> & Pick<IPhoto, 'isLiked'>
 
 export const CommentTools: FC<PropsType> = (props) => {
-
   const tools = useMemo(() => {
     return [
-      {onClick: props.onLike, iconName: 'favorite', className: 'tool', style: {color: props.isLiked ? 'red' : 'black'}},
+      {
+        onClick: props.onLike,
+        iconName: 'favorite',
+        className: 'tool',
+        style: { color: props.isLiked ? 'red' : 'black' }
+      },
       {
         onClick: () => {
         }, iconName: 'forum', className: 'tool'
@@ -26,17 +29,17 @@ export const CommentTools: FC<PropsType> = (props) => {
   }, [props.isLiked])
 
   return (
-      <div className="content__tools__options">
-        { tools.map((tool) => (
-            <div
-                className={ tool.className }
-                key={ `${ tool.iconName }_commentTool_${ tool.className }` }
-                onClick={ tool.onClick }>
+    <div className='content__tools__options'>
+      { tools.map((tool) => (
+        <div
+          className={ tool.className }
+          key={ `${ tool.iconName }_commentTool_${ tool.className }` }
+          onClick={ tool.onClick }>
               <span
-                  style={ {...tool?.style} }
-                  className="material-icons">{ tool.iconName }</span>
-            </div>
-        )) }
-      </div>
+                style={ { ...tool?.style } }
+                className='material-icons'>{ tool.iconName }</span>
+        </div>
+      )) }
+    </div>
   )
 }

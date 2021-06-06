@@ -2,7 +2,7 @@ import React from 'react'
 
 import withApollo from '@/lib/withApollo'
 import { History } from '@/components/dashboard/History'
-import { PhotoFeedType, Posts } from '@/components/dashboard/post/Posts'
+import { Posts } from '@/components/dashboard/post/Posts'
 import { UserProfileRecommendation } from '@/components/dashboard/UserProfileRecommendation'
 import { RecommendationItems } from '@/components/recommendation/RecommendationItems'
 import Loading from '@/components/utils/Loading'
@@ -38,7 +38,7 @@ const IndexPage = () => {
           <div className='dashboard__container_el'>
             { dataFeed?.feed
               ? <Posts
-                feed={ dataFeed.feed.items as PhotoFeedType[] } />
+                feed={ dataFeed.feed.items } />
               : loading
                 ? <Loading /> :
                 <h1>Нет постов</h1> }

@@ -1,11 +1,8 @@
 import React, { FC } from 'react'
 import { LinkItem } from '@/components/utils/LinkItem'
+import { IUser } from '@/geterated'
 
-type ProsType = {
-  pictureUrl?: string | null
-  fullName: string
-  username: string
-}
+type ProsType = Pick<IUser, 'fullName' | 'username' | 'pictureUrl'>
 
 export const UserProfileRecommendation: FC<ProsType> = React.memo(({
   pictureUrl,

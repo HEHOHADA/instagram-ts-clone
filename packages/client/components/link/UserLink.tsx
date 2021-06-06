@@ -1,10 +1,9 @@
 import React from 'react'
 import Link, { LinkProps } from 'next/link'
 import { LinkStyled } from './LinkStyled'
+import { IUser } from '@/geterated'
 
-export interface UserLinkProps extends Omit<LinkProps, 'href' | 'as'> {
-  username: string
-}
+export type UserLinkProps = Omit<LinkProps, 'href' | 'as'> & Pick<IUser, 'username'>
 
 export const UserLink: React.FC<UserLinkProps> = ({ username, children, ...linkProps }) => {
 

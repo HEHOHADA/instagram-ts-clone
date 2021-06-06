@@ -1,5 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
 import { useEffectOnce } from '.'
+import { Getters } from '@/hoc'
+
+export type DropDownGetters = NonNullable<Getters<ReturnType<typeof useDropdown>>>
 
 export function useDropdown<T extends HTMLElement>(toggleClick?: () => void) {
   const dropDownRef = useRef<T | null>(null)
