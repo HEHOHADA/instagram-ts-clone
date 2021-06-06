@@ -8,6 +8,8 @@ import { PhotoItemContainer, PhotoItemType } from '@/hoc/PhotoItemContainer'
 import { CreateCommentForm } from '@/components/photo/CreateCommentForm'
 import { DeletePhotoGetters } from '@/hooks/useDeletePhoto'
 import { PhotoItem } from '@/components/dashboard/post/Posts'
+import { PostContainer } from '@/components/dashboard/post/PostStyled'
+import { Box } from '@/components/common/Containers'
 
 
 type PropsType = DeletePhotoGetters & {
@@ -17,7 +19,7 @@ type PropsType = DeletePhotoGetters & {
 const PostItem: FC<PropsType> = React.memo(({ photo, onDeletePhoto }) => {
 
   return (
-    <div className='dashboard__content'>
+    <PostContainer>
       <PhotoItemContainer
         photo={ photo }
         onDeletePhoto={ onDeletePhoto }>
@@ -33,13 +35,13 @@ const PostItem: FC<PropsType> = React.memo(({ photo, onDeletePhoto }) => {
               isAuthor={ photo.isAuthor }
               pictureUrl={ photo.user.pictureUrl }
               username={ photo.user.username } />
-            <div className='content__img'>
+            <Box>
               <img
                 alt='Не загрузилось'
                 src={ photo.pictureUrl }
-                className='content__img__item' sizes='610px'
+                className='content__img__item'
               />
-            </div>
+            </Box>
 
             <div className='content__tools'>
               <CommentTools
@@ -52,8 +54,7 @@ const PostItem: FC<PropsType> = React.memo(({ photo, onDeletePhoto }) => {
               <div className='content__likes'>
                 <span>Нравится { photo.likeCount } людям</span>
               </div>
-              { photo.comments
-              && <Comments
+              { photo.comments && <Comments
                 onDeleteComment={ onDeleteComment }
                 comments={ photo.comments } /> }
               <div
@@ -66,7 +67,7 @@ const PostItem: FC<PropsType> = React.memo(({ photo, onDeletePhoto }) => {
           </>
         ) }
       </PhotoItemContainer>
-    </div>
+    </PostContainer>
   )
 })
 

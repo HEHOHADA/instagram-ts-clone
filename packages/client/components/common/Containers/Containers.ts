@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-export const Box = styled.div`
+export const Box = styled.div<{ column?: boolean }>`
   display: flex;
-  flex-direction: row;
+  flex-direction: ${ ({ column }) => column ? 'column' : 'row' };
   position: relative;
 `
 

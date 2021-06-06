@@ -28,7 +28,7 @@ export const PostHeader: FC<PropsType> = React.memo(({ username, onOpenModal, pi
         e.stopPropagation()
         onOpenModal?.()
       } }>
-        <Icon iconName=' more_horiz' />
+        <Icon iconName='more_horiz' />
       </PostHeaderOptions>
     </PostHeaderWrapper>
   )

@@ -9,7 +9,7 @@ export const CommentsContainer = styled.div`
   flex-direction: column;
 `
 
-export const CommentContainer = styled(Box)`
+export const CommentContainer = styled(Box).attrs({ as: 'li' })`
   margin-bottom: 4px;
 `
 

@@ -1,5 +1,4 @@
 import jwtDecode from 'jwt-decode'
-import { TokenType } from '../types'
 
 let accessToken = ''
 export const setServerAccessToken = (s: string) => {
@@ -17,7 +16,7 @@ export const checkToken = (token?: string | null): boolean => {
   }
 
   try {
-    const {exp} = jwtDecode(token) as TokenType
+    const {exp} = jwtDecode(token) as any
     return Date.now() < exp * 1000
   } catch {
     return false

@@ -1,4 +1,3 @@
-import { useHistory } from 'react-router'
 import React, { FC, useEffect, useRef } from 'react'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 
@@ -16,9 +15,7 @@ import {
 } from '@/geterated'
 
 
-const ConversationItem: FC = () => {
-  const router = useHistory()
-  const id = router.location.pathname.split('/')[3]
+const ConversationItem: FC<{ id: string }> = ({ id }) => {
   const { data } = useChatQuery({
     variables: { id }
   })

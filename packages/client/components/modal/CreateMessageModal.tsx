@@ -3,14 +3,14 @@ import React from 'react'
 import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import Loading from '@/components/utils/Loading'
-import { useHistory } from 'react-router'
 import { LinkItem } from '@/components/utils/LinkItem'
 import { ChatDocument, useFindOrCreateChatMutation, useGetFollowingsQuery } from '@/geterated'
+import { useRouter } from 'next/router'
 
 export const CreateMessageModal = ({closeModal, id}: ModalRefType & { id: string }) => {
   const {data} = useGetFollowingsQuery({variables: {userId: id}})
   const [findOrCreateMutation] = useFindOrCreateChatMutation()
-  const router = useHistory()
+  const router = useRouter()
   const findOrCreateChat = async (userId: string) => {
     const response = await findOrCreateMutation({
       variables: {userId},
