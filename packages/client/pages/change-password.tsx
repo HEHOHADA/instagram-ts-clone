@@ -13,7 +13,6 @@ import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
 import { useChangeForgotPasswordMutation } from '@/geterated'
 
 const ChangePassword = () => {
-
   const [changeForgotPassword, {loading}] = useChangeForgotPasswordMutation()
   const router = useRouter()
   const token = typeof router.query.token === 'string' ? router.query.token : -1
@@ -59,7 +58,7 @@ const ChangePassword = () => {
                 link={ '/accounts/login' }/> }
             submitHandler={ changePasswordHandler }
             initialValues={ {password: ''} }
-            buttonText={ 'Change' }
+            buttonText='Change'
             fields={ fieldsItems }/>
       </AuthLayout>
   )

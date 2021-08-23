@@ -35,7 +35,7 @@ const PhotoViewPost = () => {
       justifyContent: 'center',
       fontSize: '40px'
     } }>Такого поста нет</h1>
-  } else if (!data && loading) {
+  } else if (loading) {
     body = <Loading />
   } else {
     const {

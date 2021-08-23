@@ -52,13 +52,13 @@ const Profile = () => {
         } }>Такого пользователя нет</h1> : loading ? <Loading /> : null
       }
       <ModalWindow>
-        { (ref: ModalRefType) => {
+        { (refProps: ModalRefType) => {
           const modalProps = {
             id: data!.getUserInfo.id,
             userId: meData?.me?.id,
             isCurrent: data!.getUserInfo.isCurrentUser,
             FollowButton,
-            ...ref
+            ...refProps
           }
           switch (subs.current) {
             case'subscribers':

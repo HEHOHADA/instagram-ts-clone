@@ -7,11 +7,10 @@ import { InputAuthField } from '@/components/utils/InputAuthField'
 import { InstagramAuthForm } from '@/components/form/InstagramAuthForm'
 import RedirectComponent from '@/components/auth/RedirectComponent'
 import OrComponentWithRedirect from '@/components/auth/OrComponentWithRedirect'
-import { NextPageContext } from 'next'
 import { ILoginInput } from '@/geterated'
 
 const Login = () => {
-  const {loading, submitLoginHandler} = useLogin()
+  const { loading, submitLoginHandler } = useLogin()
   const fieldsItems = useMemo(() => {
     return [{
       name: 'email' as const,
@@ -25,8 +24,7 @@ const Login = () => {
       placeholder: 'Password',
       type: 'password',
       component: InputAuthField
-    },
-    ]
+    }]
   }, [])
 
 
@@ -36,14 +34,14 @@ const Login = () => {
         loading={ loading }
         OrOptionsComponent={ <OrComponentWithRedirect
           link={ '/accounts/password/reset' }
-          text={ 'Забыли пароль' }/> }
+          text={ 'Забыли пароль' } /> }
         RedirectComponent={ <RedirectComponent
           text={ 'Регистрация' }
-          link={ '/accounts/register' }/> }
+          link={ '/accounts/register' } /> }
         buttonText={ 'Login' }
         fields={ fieldsItems }
-        initialValues={ {password: '', email: ''} }
-        submitHandler={ submitLoginHandler }/>
+        initialValues={ { password: '', email: '' } }
+        submitHandler={ submitLoginHandler } />
     </AuthLayout>
   )
 }
@@ -54,4 +52,4 @@ export const getServerSideProps = async () => {
   }
 }
 
-export default withApollo({ssr: false})(Login)
+export default withApollo({ ssr: false })(Login)

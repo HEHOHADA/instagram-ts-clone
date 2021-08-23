@@ -14,8 +14,8 @@ import Redirect from '@/lib/redirect'
 import { ICreatePhotoMutationVariables, useCreatePhotoMutation } from '@/geterated'
 
 const Create = () => {
-  const [createPhoto, { loading }] = useCreatePhotoMutation()
   const router = useRouter()
+  const [createPhoto, { loading }] = useCreatePhotoMutation()
 
   const createPhotoHandler = async (data: ICreatePhotoMutationVariables, { setErrors }: FormikHelpers<ICreatePhotoMutationVariables>) => {
     try {

@@ -1,10 +1,10 @@
-export const ICON_SIZE = {
+export const iconSize = {
   small: 20,
   medium: 24,
   big: 30
 }
 
-export const ICONS = {
+export const icons = {
   home: 'ios-home',
   search: 'ios-search',
   plus: 'ios-add-circle',

@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack'
-import { TabNewsParamList } from '@type/navigation'
+import { TabNewsParamList } from 'types/navigation'
 import * as React from 'react'
 import NewsScreen from '../../screens/News/NewsScreen'
 

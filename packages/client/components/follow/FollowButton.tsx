@@ -1,12 +1,12 @@
-import Link from 'next/link'
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 
+import { Link } from '@/components/link'
+import { SecondaryButton } from '../common'
 import { followCallback } from '@/utils/followFunction'
-import { Button } from '@/components/utils/Button'
-import { useFollowUserMutation, useUnFollowUserMutation } from '@/geterated'
+import { IUser, useFollowUserMutation, useUnFollowUserMutation } from '@/geterated'
 
-export type FollowButtonProps = {
-  isFollowing: boolean, id: string, userId?: string
+export type FollowButtonProps = Pick<IUser, 'isFollowing' | 'id'> & {
+  userId?: string
 }
 
 export const FollowButton: FC<FollowButtonProps> = (props) => {
@@ -19,16 +19,16 @@ export const FollowButton: FC<FollowButtonProps> = (props) => {
   const text = isFollowing ? 'Отписаться' : 'Подписаться'
   if (!userId) {
     return (
-      <Link href='/accounts/login'>
+      <Link to='login'>
         <a className='profile__edit'>Войти в аккаунт</a>
       </Link>
     )
   }
   return (
-    <Button
+    <SecondaryButton
       text={ text }
-      className='profile__edit'
-      onClick={ () => onClick(id, userId) } />
+      onClick={ () => onClick(id, userId) }
+      size='medium' />
   )
 
 }

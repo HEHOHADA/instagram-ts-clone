@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { SubscriptionType } from '@type/subscription'
+import { SubscriptionType } from 'types/subscription'
 
 export function useNavigate() {
   const {navigate} = useNavigation()

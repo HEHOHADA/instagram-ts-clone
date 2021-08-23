@@ -1,19 +1,18 @@
 import React, { FC } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { AppImage } from '@ui/AppImage'
-import { ExtraInfo } from '@components/profile/ExtraInfo'
-import { SCREEN_WIDTH } from '@constants/demens'
-import { IUser } from '@instagram/common'
-import { useNavigate } from '@hooks/useNavigate'
-
+import { AppImage } from '../ui/AppImage'
+import { useNavigate } from '../../hooks/useNavigate'
+import { screenWidth } from '../../constants/demens'
+import { ExtraInfo } from './ExtraInfo'
+import { IUser } from '../../geterated'
 
 const HeaderInfo: FC<Partial<IUser>> = ({
-                                          id,
-                                          photoCount = 0, pictureUrl,
-                                          followingCount = 0, followerCount = 0
-                                        }) => {
+  id,
+  photoCount = 0, pictureUrl,
+  followingCount = 0, followerCount = 0
+}) => {
 
-  const {navigateFollower} = useNavigate()
+  const { navigateFollower } = useNavigate()
   return (
     <View style={ styles.infoWrapper }>
       <TouchableOpacity style={ styles.avatarWrapper }>
@@ -22,16 +21,15 @@ const HeaderInfo: FC<Partial<IUser>> = ({
         />
       </TouchableOpacity>
       <View style={ styles.extraInfoWrapper }>
-        <ExtraInfo info={ photoCount } textInfo={ 'Posts' }/>
+        <ExtraInfo info={ photoCount } textInfo={ 'Posts' } />
         <ExtraInfo
           onOpen={ () => navigateFollower(id as string, 'subscriptions') }
           info={ followerCount }
-          textInfo={ 'Followers' }/>
+          textInfo={ 'Followers' } />
         <ExtraInfo
-
           onOpen={ () => navigateFollower(id as string, 'subscribers') }
           info={ followingCount }
-          textInfo={ 'Following' }/>
+          textInfo={ 'Following' } />
       </View>
     </View>
   )
@@ -53,9 +51,9 @@ const styles = StyleSheet.create({
   },
   extraInfoWrapper: {
     flexDirection: 'row',
-    width: SCREEN_WIDTH - 30 - 80,
+    width: screenWidth - 30 - 80,
     justifyContent: 'space-evenly'
-  },
+  }
 })
 
 export default React.memo(HeaderInfo)

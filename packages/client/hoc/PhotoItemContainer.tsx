@@ -7,8 +7,8 @@ import {
   CreateCommentGetters,
   LikeGetters,
   ModalGetters,
-  useCommentCreateHandler,
-  useCommentDeleteHandler,
+  useCreateComment,
+  useDeleteComment,
   useLikeHandler,
   useModal
 } from '@/hooks'
@@ -31,8 +31,8 @@ export type Getters<T> = {
 
 export const PhotoItemContainer = React.memo(({ photo, onDeletePhoto, children }: PropsType) => {
   const { openModal, ModalWindow } = useModal()
-  const { createComment } = useCommentCreateHandler()
-  const { deleteComment } = useCommentDeleteHandler({ photoId: photo.id })
+  const { createComment } = useCreateComment()
+  const { deleteComment } = useDeleteComment({ photoId: photo.id })
   const { like } = useLikeHandler({ photoId: photo.id, isLiked: photo.isLiked })
 
   const childrenProps = {

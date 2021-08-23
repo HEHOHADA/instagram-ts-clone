@@ -3,7 +3,7 @@ import { CloseModalButton } from './CloseModalButton'
 import { ModalRefType } from '@/hoc/ModalWindowContainer'
 import { useGetFollowersQuery, useGetFollowingsQuery } from '@/geterated'
 import { UserLink } from '@/components/link'
-import { FollowButton, FollowButtonReturn } from '@/components/follow/FollowButton'
+import { FollowButton} from '@/components/follow/FollowButton'
 import Loading from '@/components/utils/Loading'
 
 type SubscriptionModalType = {

@@ -1,4 +1,5 @@
 import jwtDecode from 'jwt-decode'
+
 export type TokenType = {
   userId: string
   tokenVersion: string | number
@@ -14,7 +15,6 @@ export const setServerAccessToken = (s: string) => {
 export const getServerAccessToken = () => {
   return accessToken
 }
-
 
 export const checkToken = (token?: string | null): boolean => {
   if (!token) {

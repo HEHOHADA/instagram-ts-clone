@@ -27,7 +27,6 @@ const Settings = () => {
         cache.evict({ id: `User:${ data?.me?.id }` })
       }
     })
-
   }, [setPicture, data?.me?.id])
 
   return (

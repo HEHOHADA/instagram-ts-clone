@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native'
-import { NAVIGATION_BAR_PADDING_V, SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
-import { View } from '@components/Themed'
-import { ChatItem } from '@components/direct/ChatItem'
+import { navigationBarPaddingV, screenHeight, screenWidth } from 'constants/demens'
+import { useNavigate } from 'hooks/useNavigate'
+import { InputIcon } from 'components/shared/InputIcon'
+import { ChatItem } from 'components/direct/ChatItem'
 import { useQuery } from '@apollo/client'
-import { ChatsDocument, IChatsQuery } from '@instagram/common'
-import { useNavigate } from '@hooks/useNavigate'
-import { InputIcon } from '@components/shared/InputIcon'
+import { useChatsQuery } from '../../geterated'
+import { View } from 'components/Themed'
+
 
 
 export default function DirectScreen() {
   const [search, setSearch] = useState('')
-  const {data} = useQuery<IChatsQuery>(ChatsDocument)
+  const {data} =useChatsQuery()
   const {navigateToChat} = useNavigate()
   return (
     <SafeAreaView style={ styles.container }>
@@ -42,14 +43,14 @@ export default function DirectScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: NAVIGATION_BAR_PADDING_V,
+    paddingVertical: navigationBarPaddingV,
     color: 'white',
     backgroundColor: '#fff',
-    height: SCREEN_HEIGHT,
+    height: screenHeight,
   },
   inputWrapper: {
     padding: 5,
-    width: SCREEN_WIDTH * 0.9,
+    width: screenWidth * 0.9,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#dedede',
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   input: {
-    width: SCREEN_WIDTH * 0.7,
+    width: screenWidth * 0.7,
     height: '100%',
     paddingHorizontal: 15
   },

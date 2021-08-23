@@ -1,20 +1,21 @@
 import * as React from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text, View } from '@components/Themed'
-import { AppIcon } from '@ui/AppIcon'
-import { AccountGallery } from '@components/profile/AccountGallery'
+import { Text, View } from 'components/Themed'
+import { AppIcon } from 'components/ui/AppIcon'
+import { AccountGallery } from 'components/profile/AccountGallery'
 import { useQuery } from '@apollo/client'
+
+import { RouteProp, useRoute } from '@react-navigation/native'
+import { TabProfileParams } from 'types/navigation'
+import { screenHeight, screenWidth } from 'constants/demens'
+import { AppLoader } from 'components/ui/AppLoader'
+import HeaderInfo from 'components/profile/HeaderInfo'
 import {
   GetUserInfoDocument,
   IGetUserInfoQuery,
   IViewUserPhotoQuery,
   ViewUserPhotoDocument
-} from '@instagram/common'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { TabProfileParams } from '@type/navigation'
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
-import { AppLoader } from '@ui/AppLoader'
-import HeaderInfo from '@components/profile/HeaderInfo'
+} from 'geterated'
 
 
 export default function ProfileScreen() {
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f7f8fc',
     width: '100%',
-    height: SCREEN_HEIGHT
+    height: screenHeight
   },
   mainAvatar: {
     height: 80,
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   },
   extraInfoWrapper: {
     flexDirection: 'row',
-    width: SCREEN_WIDTH - 30 - 80,
+    width: screenWidth - 30 - 80,
     justifyContent: 'space-evenly'
   },
   avatarWrapper: {
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   galleryTab: {
-    width: SCREEN_WIDTH * 0.5,
+    width: screenWidth * 0.5,
     justifyContent: 'center',
     alignItems: 'center',
     height: 44
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   },
   btnEditProfile: {
     marginVertical: 10,
-    width: SCREEN_WIDTH - 30,
+    width: screenWidth - 30,
     marginHorizontal: 15,
     backgroundColor: '#fff',
     borderRadius: 3,

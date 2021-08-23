@@ -2,15 +2,11 @@
   "name": "instagram-ts-clone",
   "private": true,
   "dependencies": {
-    "lerna": "^4.0.0",
-    "metro-config": "^0.56.0",
-    "expo-yarn-workspaces": "^1.5.1"
+    "lerna": "^4.0.0"
   },
   "workspaces": {
     "packages": [
-      "packages/common",
-      "packages/client",
-      "packages/app"
+      "packages/client"
     ],
     "nohoist": [
       "**"

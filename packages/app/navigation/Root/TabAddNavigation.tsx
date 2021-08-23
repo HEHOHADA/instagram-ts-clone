@@ -1,7 +1,7 @@
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { TabAddParamList } from '@type/navigation'
-import * as React from 'react'
-import AddScreen from '../../screens/Add/AddScreen'
+import { TabAddParamList } from 'types/navigation'
+import AddScreen from 'screens/Add/AddScreen'
 
 const TabAddStack = createStackNavigator<TabAddParamList>()
 

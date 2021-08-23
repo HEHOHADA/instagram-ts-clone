@@ -1,5 +1,5 @@
 import { ClassType, Field, ObjectType } from 'type-graphql'
-import { GraphQLScalarType } from 'graphql'
+import { hooksScalarType } from 'hooks'
 
 export default function PaginatedResponse<TItem, TCursor>(
   TItemClass: ClassType<TItem>,

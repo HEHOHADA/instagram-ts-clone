@@ -1,15 +1,9 @@
-import { onError } from '@apollo/client/link/error'
-import { ApolloClient, ApolloLink, InMemoryCache, OperationVariables, split } from '@apollo/client'
-import { getToken, setToken } from './token'
 import { Platform } from 'react-native'
-import {
-  authContextLink,
-  cacheConfig,
-  httpLinkWithUpload,
-  refreshLink,
-  wsLink,
-} from '@instagram/common'
+import { onError } from '@apollo/client/link/error'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { ApolloClient, ApolloLink, InMemoryCache, OperationVariables, split } from '@apollo/client'
+import { authContextLink, cacheConfig, httpLinkWithUpload, refreshLink, wsLink } from '../apollo'
+import { getToken, setToken } from './token'
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
   if (graphQLErrors)
@@ -23,7 +17,7 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
 
 const host =
   Platform.OS === 'ios' ? 'http://localhost:4000/graphql' : 'http://192.168.1.227:4000/graphql'
-const httpLink = httpLinkWithUpload(host)
+const httpLink = httpLinkWithUpload(host) as any
 const link =
   split(
     ({query}: any) => {

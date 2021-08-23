@@ -2,8 +2,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { Camera } from 'expo-camera'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, View } from '@components/Themed'
-
+import { Text, View } from 'components/Themed'
 
 export default function AddScreen() {
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean>()

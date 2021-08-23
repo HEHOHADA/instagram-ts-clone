@@ -1,7 +1,7 @@
 import React from 'react'
-import { DriverTabParamsList } from '@type/navigation'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import HomeScreen from '@screens/Home/HomeScreen'
+import { DriverTabParamsList } from '../types/navigation'
+import HomeScreen from '../screens/Home/HomeScreen'
 
 const DrawerTab = createDrawerNavigator<DriverTabParamsList>()
 

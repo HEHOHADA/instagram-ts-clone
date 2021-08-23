@@ -3,9 +3,9 @@ import { FormikHelpers } from 'formik'
 import { ICreateCommentType, useCreateCommentMutation } from '@/geterated'
 import { Getters } from '@/hoc'
 
-export type CreateCommentGetters = Getters<ReturnType<typeof useCommentCreateHandler>>
+export type CreateCommentGetters = Getters<ReturnType<typeof useCreateComment>>
 
-export const useCommentCreateHandler = () => {
+export const useCreateComment = () => {
   const [createCommentMutation] = useCreateCommentMutation()
   const createComment = useCallback(
     async (data: ICreateCommentType, { resetForm }: FormikHelpers<any>) => {

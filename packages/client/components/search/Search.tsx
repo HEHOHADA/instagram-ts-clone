@@ -27,8 +27,8 @@ export const Search = () => {
     }
   })
 
-  const onFetchMore = async () => {
-    fetchMore && called && await fetchMore({
+  const onFetchMore =  () => {
+    fetchMore && called && fetchMore({
       variables: {
         limit: variables!.limit,
         cursor: variables!.cursor,
@@ -67,7 +67,7 @@ export const Search = () => {
           </UserLink>
         )) }
         { data.search.paginationInfo.hasMore &&
-        <Button onClick={ onFetchMore } text={ 'Загрузить еще' } className={ 'menu-item' } />
+        <Button onClick={ onFetchMore } text= 'Загрузить еще'  className= 'menu-item'  />
         }
       </SearchDropDown>
       }

@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { SCREEN_WIDTH } from '@constants/demens'
-import { AppImage } from '@components/ui/AppImage'
 import { Animated } from 'react-native'
-import { IChatQuery, IUser } from '@instagram/common'
-import { Text } from '@components/Themed'
-import { DEFAULT_IMAGE } from '@constants/default'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+
+import { screenWidth } from 'constants/demens'
+import { AppImage } from 'components/ui/AppImage'
+import { Text } from 'components/Themed'
+import { defaultImage } from 'constants/default'
+import { IUser } from 'geterated'
 
 
 type PropsType = {
@@ -27,7 +28,7 @@ export const MessageItem: FC<PropsType> = ({ isAuthor, text, readTime, user }) =
       { !isAuthor &&
       <AppImage
         style={ styles.yourAvatar }
-        uri={ user.pictureUrl || DEFAULT_IMAGE }
+        uri={ user.pictureUrl || defaultImage }
       />
       }
       <Animated.View
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 20,
-    maxWidth: SCREEN_WIDTH * 0.6
+    maxWidth: screenWidth * 0.6
   },
   textMessage: {
     paddingHorizontal: 15

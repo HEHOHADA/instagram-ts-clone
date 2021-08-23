@@ -8,7 +8,7 @@ import { Icon } from '../icons'
 type PropsType = {
   username: string
   isCurrentUser: boolean
-  followButton: Element | JSX.Element
+  followButton:  JSX.Element
   infoItems: Array<ProfileItemsType>
   fullName: string
 }
@@ -29,8 +29,8 @@ export const ProfileItems: FC<PropsType> =
           </div>
           { isCurrentUser ?
             <LinkItem
-              linkClassName={ 'profile__edit' } href='/accounts/settings'
-              LinkContent={ 'Редиактировать пользователя' } />
+              linkClassName= 'profile__edit'  href='/accounts/settings'
+              LinkContent= 'Редиактировать пользователя' />
             : FollowButton
           }
         </div>

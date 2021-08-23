@@ -2,9 +2,9 @@ import { useCallback } from 'react'
 import { useDeleteCommentMutation } from '@/geterated'
 import { Getters } from '@/hoc'
 
-export type CommentDelete = Getters<ReturnType<typeof useCommentDeleteHandler>>
+export type CommentDelete = Getters<ReturnType<typeof useDeleteComment>>
 
-export const useCommentDeleteHandler = ({ photoId }: any) => {
+export const useDeleteComment = ({ photoId }: any) => {
   const [deleteCommentMutation] = useDeleteCommentMutation()
   const deleteComment = useCallback(
     async (id: string) => {

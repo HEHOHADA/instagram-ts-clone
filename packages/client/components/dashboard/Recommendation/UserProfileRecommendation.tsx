@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { IUser } from '@/geterated'
-import { UserInfo, UserInfoName, UserProfile } from './DashboardStyled'
 import { UserLink } from '@/components/link'
+import { UserProfile, UserInfo, UserInfoName } from '../DashboardStyled'
 
 type ProsType = Pick<IUser, 'fullName' | 'username' | 'pictureUrl'>
 

@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { HistoryPhoto } from './HistoryPhoto'
-import Colors from '@constants/Colors'
-import { PADDING_H } from '@constants/demens'
-import { VirtualizedView } from '@components/VirtualizeView'
+import Colors from 'constants/colors'
+import { paddingH } from 'constants/demens'
+import { VirtualizedView } from 'components/VirtualizeView'
 
 type PropsType = {
   data: Array<any>
@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
   historyWrapper: {
     borderBottomColor: Colors.light.borderColor,
     borderBottomWidth: 1,
-    paddingHorizontal: PADDING_H
+    paddingHorizontal: paddingH
   }
 })

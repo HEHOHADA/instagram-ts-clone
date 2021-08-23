@@ -1,16 +1,17 @@
 import React, { FC } from 'react'
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { AppImage } from '@ui/AppImage'
-import { Text } from '@components/Themed'
-import { AppHeaderIcon } from '@ui/AppHeaderIcon'
 import { HeaderButtons } from 'react-navigation-header-buttons'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { SCREEN_WIDTH } from '@constants/demens'
-import { AppIcon } from '@components/ui/AppIcon'
-import { ICON_SIZE, ICONS } from '@constants/icons'
-import { IPhoto, IPhotoItemFragment } from '@instagram/common'
+
 import { useNavigation } from '@react-navigation/native'
 import { TapGestureHandler } from 'react-native-gesture-handler'
+import { AppHeaderIcon } from 'components/ui/AppHeaderIcon'
+import { AppImage } from 'components/ui/AppImage'
+import { screenWidth } from 'constants/demens'
+import { AppIcon } from 'components/ui/AppIcon'
+import { iconSize, icons } from 'constants/icons'
+import { IPhoto, IPhotoItemFragment } from 'geterated'
+import { Text } from 'components/Themed'
 
 type PropsType = (Pick<IPhoto, 'isLiked' | 'isAuthor' | 'postText'> & IPhotoItemFragment) & {
   onNavigatePost?: (id: string) => void
@@ -59,8 +60,8 @@ export const PostItem: FC<PropsType> = ({
           numberOfTaps={ 2 }>
           <View>
             <Image
-              width={ SCREEN_WIDTH }
-              height={ SCREEN_WIDTH }
+              width={ screenWidth }
+              height={ screenWidth }
               source={ { uri: pictureUrl } }
             />
           </View>
@@ -72,13 +73,13 @@ export const PostItem: FC<PropsType> = ({
             <TouchableOpacity
               onPress={ () => onLike(id, isLiked) }
             >
-              <AppIcon name={ ICONS.like } color={ isLiked ? 'red' : 'black' } />
+              <AppIcon name={ icons.like } color={ isLiked ? 'red' : 'black' } />
             </TouchableOpacity>
             <TouchableOpacity>
-              <FontAwesome5 name={ ICONS.comment } size={ ICON_SIZE.big } color='black' />
+              <FontAwesome5 name={ icons.comment } size={ iconSize.big } color='black' />
             </TouchableOpacity>
             <TouchableOpacity onPress={ () => navigate('Direct', { screen: 'TabDirectScreen' }) }>
-              <FontAwesome5 name={ ICONS.direct } size={ ICON_SIZE.big } color='black' />
+              <FontAwesome5 name={ icons.direct } size={ iconSize.big } color='black' />
             </TouchableOpacity>
           </View>
         </View>
@@ -112,7 +113,6 @@ export const PostItem: FC<PropsType> = ({
             </TouchableOpacity>
           </> : null
         }
-
         <TouchableOpacity
           activeOpacity={ 1 }
           style={ styles.commentInputWrapper }>

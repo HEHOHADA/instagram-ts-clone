@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { AppIcon } from '@ui/AppIcon'
-import { IMessage, IUser } from '@instagram/common'
+import { AppIcon } from 'components/ui/AppIcon'
 import { UserInfo } from './UserInfo'
+import { IMessage, IUser } from 'geterated'
 
 type PropsType = {
   users: Array<Pick<IUser, 'pictureUrl' | 'username'>>

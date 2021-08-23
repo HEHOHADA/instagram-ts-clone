@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { TabProfileParams } from '@type/navigation'
-import { InputIcon } from '@components/shared/InputIcon'
+import { TabProfileParams } from 'types/navigation'
+import { InputIcon } from 'components/shared/InputIcon'
 
 export default function FollowScreen() {
   const {params} = useRoute<RouteProp<TabProfileParams, 'FollowScreen'>>()

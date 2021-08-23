@@ -1,20 +1,20 @@
 import { ApolloLink } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
-import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from '@apollo/client/link/context'
 import { TokenRefreshLink } from 'apollo-link-token-refresh'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { API_CONSTANTS } from '../config'
+import { createUploadLink } from 'apollo-upload-client'
+import { apiConstants } from 'constants/default'
 import { checkToken } from './util'
 
-export function httpLinkWithUpload(api = API_CONSTANTS.api): ApolloLink {
+export function httpLinkWithUpload(api = apiConstants.api){
   return createUploadLink({
     uri: api,
     credentials: 'include'
   })
 }
 
-export function wsLink(getAccessToken: () => Promise<string | null> | string | null, api = API_CONSTANTS.ws): ApolloLink {
+export function wsLink(getAccessToken: () => Promise<string | null> | string | null, api = apiConstants.ws): ApolloLink {
   return new WebSocketLink(new SubscriptionClient(api, {
     reconnect: true,
     lazy: true,
@@ -27,7 +27,8 @@ export function wsLink(getAccessToken: () => Promise<string | null> | string | n
   }))
 }
 
-export function refreshLink(getAccessToken: () => Promise<string | null> | string | null, setAccessToken: (token: string) => Promise<void> | void, api = API_CONSTANTS.refresh): ApolloLink {
+export function refreshLink(getAccessToken: () => Promise<string | null> | string | null, setAccessToken: (token: string) => Promise<void> | void, api = apiConstants.refresh): ApolloLink {
+  // @ts-ignore
   return new TokenRefreshLink({
     // @ts-ignore
     isTokenValidOrUndefined: async () => {

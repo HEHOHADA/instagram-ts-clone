@@ -15,7 +15,7 @@ export const Navbar: FC = () => {
     <NavContainer>
       <HeaderItems>
         <div css='flex: 1 1 0;'>
-          <Link>
+          <Link to='home'>
             <Logo />
           </Link>
         </div>

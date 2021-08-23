@@ -2,26 +2,18 @@ import React, { useCallback, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Image, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+import { setToken } from 'lib/token'
+import { screenHeight, screenWidth } from 'constants/demens'
+import { iconSize } from 'constants/icons'
+import { IMeQuery, MeDocument, useLoginMutation } from 'geterated'
+import { Text } from 'components/Themed'
 
-import {
-  ILoginMutation,
-  ILoginMutationVariables,
-  IMeQuery,
-  LoginDocument,
-  MeDocument
-} from '@instagram/common'
-
-import { Text } from '@components/Themed'
-import { ICON_SIZE } from '@constants/icons'
-import { useMutation } from '@apollo/client'
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@constants/demens'
-import { setToken } from '../../lib/token'
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [hidePassword, setHidePassword] = useState(true)
-  const [login] = useMutation<ILoginMutation, ILoginMutationVariables>(LoginDocument)
+  const [login] =useLoginMutation()
   const {navigate} = useNavigation()
   const submitLoginHandler = useCallback(async (data) => {
     try {
@@ -77,11 +69,11 @@ export default function LoginScreen() {
               onPress={ () => setHidePassword(prevState => !prevState) }
             >
               { hidePassword ? (
-                <FontAwesome5 name="eye" size={ ICON_SIZE.small }
+                <FontAwesome5 name="eye" size={ iconSize.small }
                               color="#333"/>
               ) : (
                 <FontAwesome5 name="eye-slash" color="#318bfb"
-                              size={ ICON_SIZE.small }/>
+                              size={ iconSize.small }/>
               )
               }
             </TouchableOpacity>
@@ -142,13 +134,13 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   centerContainer: {
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
+    height: screenHeight,
+    width: screenWidth,
     justifyContent: 'center',
     alignItems: 'center'
   },
   form: {
-    width: SCREEN_WIDTH * 0.9,
+    width: screenWidth * 0.9,
   },
   textInputWrapper: {
     position: 'relative',
@@ -183,13 +175,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   forgot: {
-    width: SCREEN_WIDTH * 0.8,
+    width: screenWidth * 0.8,
     marginVertical: 15,
     justifyContent: 'center',
     alignItems: 'center'
   },
   otherOptionsWrapper: {
-    width: SCREEN_WIDTH * 0.9,
+    width: screenWidth * 0.9,
     justifyContent: 'center',
     alignItems: 'center',
   },

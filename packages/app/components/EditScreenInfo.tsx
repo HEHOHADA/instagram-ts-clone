@@ -1,10 +1,10 @@
+import Colors from 'constants/colors'
 import * as WebBrowser from 'expo-web-browser'
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
-import Colors from '@constants/Colors'
-import { MonoText } from '@ui/StyledText'
 import { Text, View } from './Themed'
+import { MonoText } from './ui/StyledText'
 
 export default function EditScreenInfo({path}: { path: string }) {
   return (

@@ -1,10 +1,11 @@
 import * as React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { TabDirectParamList } from '@type/navigation'
-import DirectScreen from '@screens/Direct/DirectScreen'
-import { UserInfo } from '@components/direct/UserInfo'
-import ChatScreen from '@screens/Direct/ChatScreen'
+
 import { TouchableOpacity } from 'react-native'
+import ChatScreen from '../../screens/Direct/ChatScreen'
+import { TabDirectParamList } from 'types/navigation'
+import DirectScreen from '../../screens/Direct/DirectScreen'
+import { UserInfo } from 'components/direct/UserInfo'
 
 const TabDirectStack = createStackNavigator<TabDirectParamList>()
 
