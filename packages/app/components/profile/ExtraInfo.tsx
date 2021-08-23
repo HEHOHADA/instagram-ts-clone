@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-import { Text } from '@components/Themed'
+import { Text } from 'components/Themed'
 
 type PropsType = {
   info: string | number | undefined | null

@@ -44,9 +44,9 @@ const NextNProgress = (props: NextNProgressPropsTypes) => {
 
 
   const {color, height} = props
-
   return (
-      <style jsx global>{ `
+    // @ts-ignore
+    <style jsx global>{ `
         #nprogress {
           pointer-events: none;
         }

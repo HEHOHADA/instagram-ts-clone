@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store'
 
-const TOKEN = 'token'
+const token = 'token'
 
 export async function getItem(key: string): Promise<string | null> {
   const value = await SecureStore.getItemAsync(key)
@@ -15,6 +15,6 @@ export async function removeItem(key: string): Promise<void> {
   return SecureStore.deleteItemAsync(key)
 }
 
-export const getToken = () => getItem(TOKEN)
-export const removeToken = () => removeItem(TOKEN)
-export const setToken = (value: string) => setItem(TOKEN, value)
+export const getToken = () => getItem(token)
+export const removeToken = () => removeItem(token)
+export const setToken = (value: string) => setItem(token, value)

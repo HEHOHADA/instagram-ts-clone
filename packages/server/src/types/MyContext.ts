@@ -6,7 +6,7 @@ import {
   createUserLoader,
   createPhotoLoader,
   createLikeLoader
-} from '@utils/index'
+} from '@helpers/loader'
 
 export interface MyContext extends ExpressContext {
   payload: { userId: string | null }

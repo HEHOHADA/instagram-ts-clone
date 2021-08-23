@@ -1,19 +1,16 @@
 import React, { FC } from 'react'
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { ICreateCommentType } from '@instagram/common'
+import { Field, Form, Formik } from 'formik'
 import { TextArea } from '../utils/TextArea'
+import { ICreateCommentType } from '@/geterated'
+import { PhotoItemType } from '@/hoc'
 
+type PropsType = Pick<PhotoItemType, 'onCreateComment'> & Pick<ICreateCommentType, 'photoId'>
 
-type PropsType = {
-  photoId: string,
-  createCommentHandler: (data: ICreateCommentType, { resetForm }: FormikHelpers<ICreateCommentType>) => Promise<void>
-}
-
-export const CreateCommentForm: FC<PropsType> = ({ photoId, createCommentHandler }) => {
+export const CreateCommentForm: FC<PropsType> = ({ photoId, onCreateComment }) => {
   return (
     <Formik<ICreateCommentType>
-      onSubmit={ createCommentHandler }
-      initialValues={ { commentText: '', photoId: photoId } }
+      onSubmit={ onCreateComment }
+      initialValues={ { commentText: '', photoId } }
     >
       { () => (
         <Form className='comment__create'>

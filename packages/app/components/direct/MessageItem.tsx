@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { SCREEN_WIDTH } from '@constants/demens'
-import { AppImage } from '@components/ui/AppImage'
 import { Animated } from 'react-native'
-import { IChatQuery, IUser } from '@instagram/common'
-import { Text } from '@components/Themed'
-import { DEFAULT_IMAGE } from '@constants/default'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+
+import { screenWidth } from 'constants/demens'
+import { AppImage } from 'components/ui/AppImage'
+import { Text } from 'components/Themed'
+import { defaultImage } from 'constants/default'
+import { IUser } from 'geterated'
 
 
 type PropsType = {
@@ -15,25 +16,29 @@ type PropsType = {
   user: NonNullable<Pick<IUser, 'pictureUrl' | 'username'>>
 }
 
-export const MessageItem: FC<PropsType> = ({isAuthor, text, readTime, user}) => {
+export const MessageItem: FC<PropsType> = ({ isAuthor, text, readTime, user }) => {
   return (
     <TouchableOpacity
       delayLongPress={ 200 }
       activeOpacity={ 1 }
       style={ {
         ...styles.messageItem,
-        justifyContent: isAuthor ? 'flex-end' : 'flex-start',
+        justifyContent: isAuthor ? 'flex-end' : 'flex-start'
       } }>
       { !isAuthor &&
-      <AppImage style={ styles.yourAvatar }
-                uri={ user.pictureUrl || DEFAULT_IMAGE }
+      <AppImage
+        style={ styles.yourAvatar }
+        uri={ user.pictureUrl || defaultImage }
       />
       }
-      <Animated.View style={ [styles.message, isAuthor
-        ? styles.myMessage : styles.yourMessage, styles.textMessage, {
-        alignItems: isAuthor ? 'flex-end' : 'flex-start',
-      }] }>
-        <Text style={ styles.msgText }>{ text }</Text>
+      <Animated.View
+        style={ [styles.message, isAuthor
+          ? styles.myMessage : styles.yourMessage, styles.textMessage, {
+          alignItems: isAuthor ? 'flex-end' : 'flex-start'
+        }] }>
+        <Text
+          style={ styles.msgText }
+        >{ text }</Text>
       </Animated.View>
       {
         readTime ?
@@ -60,14 +65,14 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 20,
-    maxWidth: SCREEN_WIDTH * 0.6,
+    maxWidth: screenWidth * 0.6
   },
   textMessage: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   myMessage: {
     backgroundColor: '#ddd',
-    marginHorizontal: 15,
+    marginHorizontal: 15
   },
   yourAvatar: {
     marginLeft: 15,
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
   msgText: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   seenLabel: {
     zIndex: 1,
@@ -89,6 +94,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 20,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
+    justifyContent: 'flex-end'
+  }
 })

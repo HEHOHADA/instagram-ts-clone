@@ -1,11 +1,20 @@
-import { getConnection } from 'typeorm'
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+
 import { Photo } from '@entity/Photo'
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
+import { Service } from 'typedi'
 
 @Resolver(() => Photo)
+@Service()
 export class ViewPhotoResolver {
+  constructor(
+    @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>
+  ) {}
+
   @FieldResolver(() => String, { nullable: true })
   pictureUrl(@Root() photo: Photo, @Ctx() ctx: MyContext) {
     if (photo.pictureUrl.includes('http')) {
@@ -20,8 +29,7 @@ export class ViewPhotoResolver {
       throw new Error('User not found')
     }
 
-    const user = await getConnection()
-      .getRepository(User)
+    const user = await this.userRepository
       .createQueryBuilder('user')
       .select('user')
       .where('user.username ILIKE :username', {
@@ -33,8 +41,7 @@ export class ViewPhotoResolver {
       throw new Error('User not found')
     }
 
-    return getConnection()
-      .getRepository(Photo)
+    return this.photoRepository
       .createQueryBuilder('photo')
       .select('photo')
       .orderBy('photo.date', 'DESC')
@@ -45,6 +52,6 @@ export class ViewPhotoResolver {
 
   @Query(() => Photo)
   async viewPhotoById(@Arg('id') id: string) {
-    return Photo.findOne(id)
+    return this.photoRepository.findOne(id)
   }
 }

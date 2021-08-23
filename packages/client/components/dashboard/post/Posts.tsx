@@ -1,37 +1,27 @@
-import dynamic from 'next/dynamic'
-import React, { FC, useCallback } from 'react'
-import { IPhotoItemFragment, useDeletePhotoMutation } from '@instagram/common'
+import React, { FC } from 'react'
+import PostItem from '@/components/dashboard/post/PostItem'
+import { IFeedQuery } from '@/geterated'
+import { useDeletePhoto } from '@/hooks/useDeletePhoto'
 
-const PostItem = dynamic(() => import('./PostItem'))
+export type PhotoItem = IFeedQuery['feed']['items'][0]
 
-export type PhotoFeedType = IPhotoItemFragment &
-    { isAuthor: boolean, isLiked: boolean, postText: string }
-
-type PropsType = {
-  feed: PhotoFeedType[]
+export type PostsProps = {
+  feed: Array<PhotoItem>
 }
 
-export const Posts: FC<PropsType> = ({feed, ...props}) => {
-  const [deletePhotoMutation] = useDeletePhotoMutation()
-  const deletePhoto = useCallback(async (id: string) => {
-    await deletePhotoMutation({
-      variables: {id},
-      update: (cache) => {
-        cache.evict({id: cache.identify({__ref: `Photo:${ id }`})})
-      }
-    })
-  }, [deletePhotoMutation])
-  return (
-      <>
-        { feed.map(photo => (
-            <PostItem
-                deletePhoto={ deletePhoto }
-                photo={ photo }
-                { ...props }
-                key={ photo.id }
-            />
-        )) }
-      </>
+export const Posts: FC<PostsProps> = ({ feed, ...props }) => {
+  const { deletePhoto } = useDeletePhoto()
 
+  return (
+    <>
+      { feed.map(photo => (
+        <PostItem
+          onDeletePhoto={ deletePhoto }
+          photo={ photo }
+          { ...props }
+          key={ photo.id }
+        />
+      )) }
+    </>
   )
 }

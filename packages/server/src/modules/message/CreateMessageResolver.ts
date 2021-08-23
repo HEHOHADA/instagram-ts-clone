@@ -1,4 +1,6 @@
 import { Context } from 'vm'
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import {
   Arg,
   Ctx,
@@ -10,13 +12,17 @@ import {
   Root,
   UseMiddleware
 } from 'type-graphql'
-import { Message } from '../../entity/Message'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { MyContext } from '../../types/MyContext'
-import { User } from '../../entity/User'
+import { Message } from '@entity/Message'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { MyContext } from '@type/MyContext'
+import { User } from '@entity/User'
+import { Service } from 'typedi'
 
 @Resolver(() => Message)
+@Service()
 export class CreateMessageResolver {
+  constructor(@InjectRepository(Message) private readonly messageRepository: Repository<Message>) {}
+
   @FieldResolver()
   @UseMiddleware(isAuth)
   isAuthor(@Root() message: Message, @Ctx() { payload }: MyContext) {
@@ -40,12 +46,14 @@ export class CreateMessageResolver {
       payload: { userId }
     } = ctx
 
-    const message = await Message.create({
-      text,
-      chatId,
-      userId,
-      date: new Date()
-    }).save()
+    const message = await this.messageRepository
+      .create({
+        text,
+        chatId,
+        userId,
+        date: new Date()
+      })
+      .save()
 
     pubSub.publish('sendMessage', { messageReceived: message })
 

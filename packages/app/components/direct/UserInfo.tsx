@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { AppImage } from '@ui/AppImage'
-import { DEFAULT_IMAGE } from '@constants/default'
-import { Text } from '@components/Themed'
+import { StyleSheet, View } from 'react-native'
+import { AppImage } from 'components/ui/AppImage'
+import { defaultImage } from 'constants/default'
+import { Text } from 'components/Themed'
 
 
 type PropsType = {
@@ -17,7 +17,7 @@ export const UserInfo: FC<PropsType> = ({pictureUrl, photoStyles, username, text
     <View style={ styles.wrapper }>
       <View>
         <AppImage
-          uri={ pictureUrl || DEFAULT_IMAGE }
+          uri={ pictureUrl || defaultImage }
           style={ {...styles.image, ...photoStyles} }/>
         <View style={ styles.onlinePoint }/>
       </View>

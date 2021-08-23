@@ -1,14 +1,7 @@
 import React, { FC } from 'react'
-import {
-  SafeAreaView,
-  StyleProp,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View, ViewStyle
-} from 'react-native'
-import { AppIcon } from '@ui/AppIcon'
-import { SCREEN_WIDTH } from '@constants/demens'
+import { StyleProp, StyleSheet, TextInput, TouchableOpacity, ViewStyle } from 'react-native'
+import { screenWidth } from '../../constants/demens'
+import { AppIcon } from '../ui/AppIcon'
 
 type PropsType = {
   value: string
@@ -21,20 +14,20 @@ type PropsType = {
 }
 
 export const InputIcon: FC<PropsType> = ({
-                                           value,
-                                           onPress,
-                                           opacity,
-                                           inputProps,
-                                           iconName,
-                                           onChangeText,
-                                           iconStyle
-                                         }) => {
+  value,
+  onPress,
+  opacity,
+  inputProps,
+  iconName,
+  onChangeText,
+  iconStyle
+}) => {
   return (
     <>
       { iconName ?
         <TouchableOpacity style={ iconStyle } activeOpacity={ opacity }
                           onPress={ onPress }>
-          <AppIcon style={ styles.icon } size={ 20 } color={ 'black' } name={ iconName }/>
+          <AppIcon style={ styles.icon } size={ 20 } color={ 'black' } name={ iconName } />
         </TouchableOpacity> : null }
       <TextInput
         value={ value }
@@ -53,9 +46,9 @@ const styles = StyleSheet.create({
       padding: 10
     },
     input: {
-      width: SCREEN_WIDTH * 0.7,
+      width: screenWidth * 0.7,
       height: '100%',
       paddingHorizontal: 15
-    },
+    }
   }
 )

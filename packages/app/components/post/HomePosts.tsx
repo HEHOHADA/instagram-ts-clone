@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
-import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native'
-import { IFeedQuery } from '@instagram/common'
-import { PostItem } from '@components/post/PostItem'
-import { VirtualizedView } from '@components/VirtualizeView'
-import { useNavigate } from '@hooks/useNavigate'
-import { HistoryItems } from '@components/history/HistoryItems'
-import { useLikeHandler } from '@hooks/useLike'
+import { FlatList } from 'react-native'
+import { VirtualizedView } from '../VirtualizeView'
+import { useNavigate } from 'hooks/useNavigate'
+import { HistoryItems } from '../history/HistoryItems'
+import { IFeedQuery } from 'geterated'
+import { useLikeHandler } from 'hooks/useLike'
+import { PostItem } from './PostItem'
+
 
 const data = [
   {

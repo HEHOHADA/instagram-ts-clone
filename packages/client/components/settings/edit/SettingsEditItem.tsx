@@ -5,8 +5,8 @@ type PropsType = {
   InputComponent: any
   inputProps: any
   PossibleInfo?: JSX.Element
-
 }
+
 export const SettingsEditItem: FC<PropsType> = ({
   name,
   InputComponent,

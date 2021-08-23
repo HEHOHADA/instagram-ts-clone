@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { gql, useMutation } from '@apollo/client'
-import { LikeDocument, useLikeMutation } from '@instagram/common'
+import { LikeDocument } from '../geterated'
 
 
 export const useLikeHandler = () => {

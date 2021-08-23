@@ -3,5 +3,4 @@
   "execMap": {
     "ts": "ts-node --compilerOptions '{\"module\":\"commonjs\"}'"
   }
-
 }

@@ -13,7 +13,9 @@ export const Button = React.memo(({
   ...props
 }: PropsType & ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <button className={ className }
-            onClick={ onClick } { ...props }>{ text }</button>
+    <button
+      className={ className }
+      onClick={ onClick }
+      { ...props }>{ text }</button>
   )
 })

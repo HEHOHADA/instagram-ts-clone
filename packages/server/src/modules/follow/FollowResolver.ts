@@ -1,21 +1,25 @@
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
-import { getConnection } from 'typeorm'
-import { MyContext } from '../../types/MyContext'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { User } from '../../entity/User'
-import { isUserAuthOrUndefined } from '../../middleware/isAuthenticatedMiddleware'
+
+import { User } from '@entity/User'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class FollowResolver {
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
   @UseMiddleware(isUserAuthOrUndefined)
   @Query(() => [User])
   async getFollowers(@Arg('userId') userId: string) {
     return (
-      await getConnection()
-        .getRepository(User)
-        .findOne(userId, {
-          relations: ['followers']
-        })
+      await this.userRepository.findOne(userId, {
+        relations: ['followers']
+      })
     )?.followers
   }
 
@@ -23,11 +27,9 @@ export class FollowResolver {
   @Query(() => [User])
   async getFollowings(@Arg('userId') userId: string) {
     return (
-      await getConnection()
-        .getRepository(User)
-        .findOne(userId, {
-          relations: ['following']
-        })
+      await this.userRepository.findOne(userId, {
+        relations: ['following']
+      })
     )?.following
   }
 
@@ -38,8 +40,7 @@ export class FollowResolver {
       throw new Error('Cannot follow yourself')
     }
 
-    await getConnection()
-      .getRepository(User)
+    await this.userRepository
       .createQueryBuilder()
       .relation(User, 'following')
       .of(payload.userId)

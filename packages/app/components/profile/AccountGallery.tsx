@@ -1,10 +1,9 @@
-import { SCREEN_WIDTH } from '@constants/demens'
 import React, { FC } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { GalleryImage } from './GalleryImage'
-import { IPhoto } from '@instagram/common'
-import { useNavigation } from '@react-navigation/native'
-import { useNavigate } from '@hooks/useNavigate'
+import { useNavigate } from '../../hooks/useNavigate'
+import { screenWidth } from '../../constants/demens'
+import { IPhoto } from '../../geterated'
 
 type PropsType = {
   photos: Array<IPhoto>
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: SCREEN_WIDTH,
+    width: screenWidth,
     backgroundColor: '#fff',
     paddingVertical: 5,
     borderBottomWidth: 1,

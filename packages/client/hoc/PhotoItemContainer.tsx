@@ -1,51 +1,58 @@
 import React, { FC } from 'react'
-import { FormikHelpers } from 'formik'
-import { ICreateCommentType } from '@instagram/common'
-import { useModal } from '@/hooks/useModal'
 import { ModalRefType } from './ModalWindowContainer'
-import { useLikeHandler } from '@/hooks/useLikeHandler'
-import { PhotoFeedType } from '@/components/dashboard/post/Posts'
-import { useCommentDeleteHandler } from '@/hooks/useCommentDeleteHandler'
-import { useCommentCreateHandler } from '@/hooks/useCommentCreateHandler'
 import { PhotoSettingsModal } from '@/components/modal/PhotoSettingsModal'
+import { DeletePhotoGetters } from '@/hooks/useDeletePhoto'
+import {
+  CommentDelete,
+  CreateCommentGetters,
+  LikeGetters,
+  ModalGetters,
+  useCreateComment,
+  useDeleteComment,
+  useLikeHandler,
+  useModal
+} from '@/hooks'
+import { IPhoto, IViewPhotoByIdQuery } from '@/geterated'
 
-type PropsType = {
-  photo: PhotoFeedType
-  deletePhoto: (id: string) => Promise<void>
+type PropsType = DeletePhotoGetters & {
+  photo: IViewPhotoByIdQuery['viewPhotoById']
   children: FC<PhotoItemType>
 }
 
-export type PhotoItemType = {
-  openModal: () => void
-  createCommentHandler: (data: ICreateCommentType, {resetForm}: FormikHelpers<any>) => Promise<void>
-  onDeleteComment: (id: string) => Promise<void>
-  onLikeHandler: () => Promise<void>
+export type PhotoItemType =
+  CommentDelete
+  & CreateCommentGetters
+  & LikeGetters
+  & Pick<ModalGetters, 'onOpenModal'>
+
+export type Getters<T> = {
+  [Property in keyof T as T[Property] extends (...args: any[]) => any ? `on${ Capitalize<string & Property> }` : Property]: T[Property]
 }
 
-export const PhotoItemContainer = React.memo(({photo, deletePhoto, children}: PropsType) => {
-  const {openModal, ModalWindow} = useModal()
-  const {createCommentHandler} = useCommentCreateHandler()
-  const {onDeleteComment} = useCommentDeleteHandler({photoId: photo.id})
-  const {onLikeHandler} = useLikeHandler({photoId: photo.id, isLiked: photo.isLiked})
+export const PhotoItemContainer = React.memo(({ photo, onDeletePhoto, children }: PropsType) => {
+  const { openModal, ModalWindow } = useModal()
+  const { createComment } = useCreateComment()
+  const { deleteComment } = useDeleteComment({ photoId: photo.id })
+  const { like } = useLikeHandler({ photoId: photo.id, isLiked: photo.isLiked })
 
   const childrenProps = {
-    openModal,
-    onDeleteComment,
-    onLikeHandler,
-    createCommentHandler
+    onOpenModal: openModal,
+    onDeleteComment: deleteComment,
+    onLike: like,
+    onCreateComment: createComment
   }
 
   return (
-      <>
-        <ModalWindow>
-          { (ref: ModalRefType) => (
-              <PhotoSettingsModal
-                  isAuthor={ photo.isAuthor }
-                  deletePhoto={ () => deletePhoto(photo.id) }
-                  { ...ref }/>)
-          }
-        </ModalWindow>
-        { children(childrenProps) }
-      </>
+    <>
+      <ModalWindow>
+        { (ref: ModalRefType) => (
+          <PhotoSettingsModal
+            isAuthor={ photo.isAuthor }
+            deletePhoto={ () => onDeletePhoto(photo.id) }
+            { ...ref } />)
+        }
+      </ModalWindow>
+      { children(childrenProps) }
+    </>
   )
 })

@@ -1,17 +1,17 @@
 import React, { useCallback } from 'react'
 import { NextPageContext } from 'next'
 
-import { useMeQuery, useSetPictureProfileMutation } from '@instagram/common'
 
 import Redirect from '@/lib/redirect'
 import withApollo from '@/lib/withApollo'
-import MainLayout from '@/components/MainLayout'
 import { getCookieParser } from 'next/dist/next-server/server/api-utils'
 import { DropzonePictureProfile } from '@/components/utils/DropzoneField'
 import Loading from '@/components/utils/Loading'
 import { useIsAuth } from '@/utils/useIsAuth'
 import { SettingsSidebar } from '@/components/settings/SettingsSidebar'
 import { SettingsEditForm } from '@/components/settings/edit/SettingsEditForm'
+import { MainLayout } from '@/components/layouts'
+import { useMeQuery, useSetPictureProfileMutation } from '@/geterated'
 
 const Settings = () => {
   useIsAuth()
@@ -27,7 +27,6 @@ const Settings = () => {
         cache.evict({ id: `User:${ data?.me?.id }` })
       }
     })
-
   }, [setPicture, data?.me?.id])
 
   return (

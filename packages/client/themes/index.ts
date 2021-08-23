@@ -36,7 +36,7 @@ export interface DisabledProp {
 
 export const fontSize = (size: FontSize) => ({ theme }: WithTheme) =>
   css`
-    font-size: ${theme.fonts.sizes[size]};
+    font-size: ${ theme.fonts.sizes[size] };
   `
 
 export const themeFontSize = (size: FontSize) => ({ theme }: WithTheme) => theme.fonts.sizes[size]

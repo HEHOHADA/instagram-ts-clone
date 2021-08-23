@@ -1,14 +1,13 @@
 import React from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native'
-import { NAVIGATION_BAR_PADDING_V } from '@constants/demens'
+import { useFeedQuery } from '../../geterated'
+import { HomePosts } from 'components/post/HomePosts'
+import { AppLoader } from 'components/ui/AppLoader'
+import { navigationBarPaddingV } from 'constants/demens'
 
-import { useQuery } from '@apollo/client'
-import { HomePosts } from '@components/post/HomePosts'
-import { FeedDocument } from '@instagram/common'
-import { AppLoader } from '@ui/AppLoader'
 
 export default function HomeScreen() {
-  const {data: dataFeed, loading, refetch, variables} = useQuery(FeedDocument, {
+  const {data: dataFeed, loading, refetch, variables} = useFeedQuery({
     variables: {
       limit: 2,
       cursor: null as null | string
@@ -36,7 +35,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: NAVIGATION_BAR_PADDING_V,
+    paddingVertical: navigationBarPaddingV,
     color: 'white'
   },
 })

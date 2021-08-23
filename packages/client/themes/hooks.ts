@@ -4,11 +4,13 @@ import { rgba } from 'polished'
 
 export const useThemeColor = (colorName?: string) => {
   const theme = useContext(ThemeContext)
+  // @ts-ignore
   return colorName ? theme.colors[colorName] : colorName
 }
 
 export const useThemeColors = (colorNames: string[]) => {
   const theme = useContext(ThemeContext)
+  // @ts-ignore
   return colorNames.map((name) => theme.colors[name] || name)
 }
 

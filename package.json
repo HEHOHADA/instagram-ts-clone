@@ -2,24 +2,14 @@
   "name": "instagram-ts-clone",
   "private": true,
   "dependencies": {
-    "metro-config": "^0.56.0"
+    "lerna": "^4.0.0"
   },
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/client"
     ],
     "nohoist": [
-      "**/react-native",
-      "**/*react-native*",
-      "**/react-native/**",
-      "**/react-native*/**",
-      "**/expo",
-      "**next**",
-      "**/expo*/**",
-      "@instagram/common",
-      "**/*expo*",
-      "**/*react-navigation*",
-      "**/*react-navigation*/**"
+      "**"
     ]
   }
 }

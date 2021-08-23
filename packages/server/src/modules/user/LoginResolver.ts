@@ -1,22 +1,31 @@
 import bcrypt from 'bcryptjs'
-import { AuthenticationError, ValidationError } from 'apollo-server-express'
+import { Service } from 'typedi'
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
+import { AuthenticationError, ValidationError } from 'apollo-server-express'
+
 import { User } from '@entity/User'
 import { MyContext } from '@type/MyContext'
-import { LoginInput } from './login/LoginInput'
-import { confirmEmailError, forgotPasswordLockedError, invalidLogin } from './utils/errorMessages'
-import { sendRefreshToken } from './auth/sendRefreshToken'
-import { createAccessToken, createRefreshToken } from './auth/createTokens'
-import { LoginResponseType } from './login/LoginResponseType'
+import { LoginInput, LoginResponseType } from '@type/user'
+import { sendRefreshToken, createAccessToken, createRefreshToken } from '@helpers/user'
+import {
+  confirmEmailError,
+  forgotPasswordLockedError,
+  invalidLogin
+} from '@helpers/user/errorMessages'
 
 @Resolver()
+@Service()
 export class LoginResolver {
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
   @Mutation(() => LoginResponseType)
   async login(
     @Arg('data') { email, password }: LoginInput,
     @Ctx() ctx: MyContext
   ): Promise<LoginResponseType> {
-    const user = await User.findOne({ where: { email } })
+    const user = await this.userRepository.findOne({ where: { email } })
 
     if (!user) {
       throw new ValidationError(invalidLogin)

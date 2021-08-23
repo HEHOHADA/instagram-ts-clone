@@ -6,20 +6,20 @@ type PropsType = {
   navItems: Array<ProfileItemsType>
 }
 
-const ProfileInfoItems = ({navItems}: PropsType) => {
+const ProfileInfoItems = ({ navItems }: PropsType) => {
 
   const renderInfoItems = useMemo(() => {
     return (
-        navItems.map((item, i) =>
-            <ProfileInfoItem key={ item.text + i }{ ...item }/>
-        )
+      navItems.map((item, i) =>
+        <ProfileInfoItem key={ item.text + i }{ ...item } />
+      )
     )
   }, [navItems])
 
   return (
-      <ul className="profile__item__info">
-        { renderInfoItems }
-      </ul>)
+    <ul className='profile__item__info'>
+      { renderInfoItems }
+    </ul>)
 }
 
 export default React.memo(ProfileInfoItems)

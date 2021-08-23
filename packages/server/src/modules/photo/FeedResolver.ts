@@ -1,13 +1,22 @@
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Int, Query, Resolver, UseMiddleware } from 'type-graphql'
-import { getConnection } from 'typeorm'
-import { isAuth } from '../../middleware/isAuthMiddleware'
-import { MyContext } from '../../types/MyContext'
-import { User } from '../../entity/User'
-import { PaginatedPhotos } from './types/PaginatedPhotos'
-import { Photo } from '../../entity/Photo'
+
+import { User } from '@entity/User'
+import { Photo } from '@entity/Photo'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { PaginatedPhotos } from '@type/photo/PaginatedPhotos'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class FeedResolver {
+  constructor(
+    @InjectRepository(Photo) private readonly photoRepository: Repository<Photo>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>
+  ) {}
+
   @Query(() => PaginatedPhotos)
   @UseMiddleware(isAuth)
   async feed(
@@ -20,12 +29,10 @@ export class FeedResolver {
     const realLimitPlusOne = realLimit + 1
 
     const qbFollow = (
-      await getConnection()
-        .getRepository(User)
-        .findOne(userId!, {
-          relations: ['following'],
-          cache: true
-        })
+      await this.userRepository.findOne(userId!, {
+        relations: ['following'],
+        cache: true
+      })
     )?.following.map((userItem) => userItem.id)
 
     // const replacements: any[] = [[...qbFollow!, userId].join(','), realLimitPlusOne]
@@ -35,8 +42,7 @@ export class FeedResolver {
     //   replacements.push(new Date(parseInt(cursor)))
     // }
 
-    const queryBuilder = getConnection()
-      .getRepository(Photo)
+    const queryBuilder = this.photoRepository
       .createQueryBuilder('p')
       .where('p.userId in (:...ids)', { ids: [...qbFollow!, userId] })
 

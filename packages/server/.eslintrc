@@ -26,6 +26,16 @@
     "import/prefer-default-export": "off",
     "no-plusplus": "off",
     "no-console": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-await-in-loop": "off",
     "import/no-cycle": "off",
     "class-methods-use-this": "off",
     "semi": ["error", "never"],

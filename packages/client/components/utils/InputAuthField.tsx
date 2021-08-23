@@ -20,6 +20,5 @@ export const InputAuthField = ({
         required />
       <label htmlFor={ props.name } className='form__label'>{ props.placeholder }</label>
     </div>
-
   )
 }

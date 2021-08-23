@@ -26,6 +26,9 @@
       "@type/*": [
         "src/types/*"
       ],
+      "@helpers/*": [
+        "src/helpers/*"
+      ],
       "@constants/*": ["src/modules/constants/*"]
     },
     "plugins": [

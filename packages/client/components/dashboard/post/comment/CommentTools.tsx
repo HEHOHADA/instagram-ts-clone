@@ -1,42 +1,52 @@
 import React, { FC, useMemo } from 'react'
+import { LikeGetters } from '@/hooks'
+import { IPhoto } from '@/geterated'
+import { Icon } from '@/components/icons'
+import {
+  CommentToolsWrapper,
+  DefaultTool,
+  SaveTool
+} from './CommentStyled'
 
-type PropsType = {
-  onLike?: () => void
-  isLiked: boolean
-}
+type PropsType = Partial<LikeGetters> & Pick<IPhoto, 'isLiked'>
 
 export const CommentTools: FC<PropsType> = (props) => {
-
   const tools = useMemo(() => {
     return [
-      {onClick: props.onLike, iconName: 'favorite', className: 'tool', style: {color: props.isLiked ? 'red' : 'black'}},
       {
-        onClick: () => {
-        }, iconName: 'forum', className: 'tool'
+        onClick: props.onLike,
+        iconName: 'favorite',
+        color: props.isLiked ? 'red' : 'black'
       },
       {
         onClick: () => {
-        }, iconName: 'comment', className: 'tool'
+        }, iconName: 'forum'
       },
       {
         onClick: () => {
-        }, iconName: 'save_alt', className: 'tool__save'
+        }, iconName: 'comment'
+      },
+      {
+        onClick: () => {
+        }, iconName: 'save_alt', Wrapper: SaveTool
       }
     ]
   }, [props.isLiked])
 
   return (
-      <div className="content__tools__options">
-        { tools.map((tool) => (
-            <div
-                className={ tool.className }
-                key={ `${ tool.iconName }_commentTool_${ tool.className }` }
-                onClick={ tool.onClick }>
-              <span
-                  style={ {...tool?.style} }
-                  className="material-icons">{ tool.iconName }</span>
-            </div>
-        )) }
-      </div>
+    <CommentToolsWrapper>
+      { tools.map((tool) => {
+        const Wrapper = tool.Wrapper ?? DefaultTool
+        return (
+          <Wrapper
+            key={ `${ tool.iconName }_commentTool` }
+            onClick={ tool.onClick }>
+            <Icon
+              iconName={ tool.iconName }
+              color={ tool.color } />
+          </Wrapper>
+        )
+      }) }
+    </CommentToolsWrapper>
   )
 }

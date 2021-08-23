@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  ActivityIndicator,
   Animated,
   FlatList,
   KeyboardAvoidingView,
@@ -8,27 +7,26 @@ import {
   SafeAreaView,
   StyleSheet
 } from 'react-native'
-import {
-  NAVIGATION_BAR_PADDING_V,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  STATUS_BAR_HEIGHT
-} from '@constants/demens'
-import { useReceivedMessage } from '@hooks/useRecieveMessage'
-import { ChatDocument, IChatQuery } from '@instagram/common'
-import { useQuery } from '@apollo/client'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { TabDirectParamList } from '@type/navigation'
-import { View } from '@components/Themed'
-import { MessageItem } from '@components/direct/MessageItem'
-import { ConversationInput } from '@components/direct/ConversationInput'
-import { AppLoader } from '@ui/AppLoader'
+import { MessageItem } from 'components/direct/MessageItem'
+import { AppLoader } from 'components/ui/AppLoader'
+import { useReceivedMessage } from 'hooks/useRecieveMessage'
+import {
+  navigationBarPaddingV,
+  screenHeight,
+  screenWidth,
+  statusBarHeight
+} from 'constants/demens'
+import { TabDirectParamList } from 'types/navigation'
+import { ConversationInput } from 'components/direct/ConversationInput'
+import { useChatQuery } from 'geterated'
+import { View } from 'components/Themed'
 
 
 export default function ChatScreen() {
   const {params} = useRoute<RouteProp<TabDirectParamList, 'TabChatScreen'>>()
   useReceivedMessage()
-  const {data, loading} = useQuery<IChatQuery>(ChatDocument, {
+  const {data, loading} =useChatQuery({
     variables: {
       id: params.id
     }
@@ -45,13 +43,13 @@ export default function ChatScreen() {
               height: '100%',
               transform: [{
                 translateY: Animated.multiply(-1, Animated.subtract(new Animated.Value(0),
-                  Animated.multiply(64, Animated.divide(new Animated.Value(0), SCREEN_WIDTH + 44))))
+                  Animated.multiply(64, Animated.divide(new Animated.Value(0), screenWidth + 44))))
               }]
             } }>
               <FlatList
                 showsVerticalScrollIndicator={ false }
                 style={ {
-                  height: SCREEN_HEIGHT - STATUS_BAR_HEIGHT - 88 - 30,
+                  height: screenHeight - statusBarHeight - 88 - 30,
                 } }
                 scrollsToTop={ false }
                 data={ data?.chat.messages }
@@ -71,10 +69,10 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: NAVIGATION_BAR_PADDING_V,
+    paddingVertical: navigationBarPaddingV,
     color: 'white',
     backgroundColor: '#fff',
-    height: SCREEN_HEIGHT,
+    height: screenHeight,
   },
   btnNavigation: {
     height: 44,
@@ -92,7 +90,7 @@ const styles = StyleSheet.create({
   messagesContainer: {
     backgroundColor: '#fff',
     width: '100%',
-    height: SCREEN_HEIGHT - STATUS_BAR_HEIGHT - 44,
+    height: screenHeight - statusBarHeight - 44,
     paddingBottom: 20
   },
   inboxContainer: {

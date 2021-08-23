@@ -1,15 +1,22 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+import { Repository } from 'typeorm'
 import { GraphQLUpload } from 'graphql-upload'
 import { ApolloError } from 'apollo-server-express'
-import { MyContext } from '@type/MyContext'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
 import { User } from '@entity/User'
+import { UploadType } from '@type/user'
+import { MyContext } from '@type/MyContext'
+import { processUpload } from '@helpers/shared'
+import { somethingWentWrong } from '@helpers/user'
 import { isAuth } from '@middleware/isAuthMiddleware'
-import { UploadType } from './types/UploadType'
-import { processUpload } from '../shared/processUpload'
-import { somethingWentWrong } from './utils/errorMessages'
+import { Service } from 'typedi'
 
 @Resolver()
+@Service()
 export class PictureProfileResolver {
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
   @UseMiddleware(isAuth)
   @Mutation(() => String)
   async setPictureProfile(
@@ -22,7 +29,7 @@ export class PictureProfileResolver {
       throw new ApolloError(somethingWentWrong)
     }
 
-    await User.update({ id: payload.userId! }, { pictureUrl: id })
+    await this.userRepository.update({ id: payload.userId! }, { pictureUrl: id })
 
     return id
   }

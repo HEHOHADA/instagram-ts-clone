@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { AppImage } from '@ui/AppImage'
-import { TouchableOpacity } from 'react-native'
-import { SCREEN_WIDTH } from '@constants/demens'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { AppImage } from '../ui/AppImage'
+import { screenWidth } from 'constants/demens'
 
 type PropsType = {
   navigate: (id: string) => void
@@ -40,8 +39,8 @@ const styles = StyleSheet.create({
   },
   photoWrapper: {
     position: 'relative',
-    width: SCREEN_WIDTH / 3 - 5,
-    height: SCREEN_WIDTH / 3 - 5,
+    width: screenWidth / 3 - 5,
+    height: screenWidth / 3 - 5,
     marginBottom: 5,
   },
   photo: {

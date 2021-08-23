@@ -1,12 +1,21 @@
+import { Repository } from 'typeorm'
+import { InjectRepository } from 'typeorm-typedi-extensions'
 import { Arg, Ctx, Query, Resolver, UseMiddleware } from 'type-graphql'
-import { getConnection } from 'typeorm'
+
+import { User } from '@entity/User'
 import { Chat } from '@entity/Chat'
 import { MyContext } from '@type/MyContext'
 import { isAuth } from '@middleware/isAuthMiddleware'
-import { User } from '@entity/User'
+import { Service } from 'typedi'
 
 @Resolver(() => Chat)
+@Service()
 export class ChatResolver {
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Chat) private readonly chatRepository: Repository<Chat>
+  ) {}
+
   @Query(() => Chat)
   @UseMiddleware(isAuth)
   async chat(@Arg('id') id: string, @Ctx() ctx: MyContext) {
@@ -18,14 +27,14 @@ export class ChatResolver {
     //   relations: ['users', 'messages'],
     //
     // })
-    const chat = await getConnection()
-      .getRepository(Chat)
+    const chat = await this.chatRepository
       .createQueryBuilder('c')
       .where('c.id = :id', { id })
       .leftJoinAndSelect('c.users', 'users')
       .leftJoinAndSelect('c.messages', 'messages')
       .orderBy('messages.date', 'ASC')
       .getOne()
+
     if (!chat) {
       throw new Error('Chat not found')
     }
@@ -55,7 +64,7 @@ export class ChatResolver {
     const {
       payload: { userId }
     } = ctx
-    const { chats } = await User.findOneOrFail({
+    const { chats } = await this.userRepository.findOneOrFail({
       where: { id: userId },
       relations: ['chats', 'chats.users', 'chats.messages']
     })

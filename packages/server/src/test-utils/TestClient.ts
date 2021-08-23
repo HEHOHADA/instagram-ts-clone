@@ -1,6 +1,6 @@
 import { registerTestMutation } from '@modules/test/Register.test'
-import { RegisterInput } from '@modules/user/register/RegisterInput'
-import { LoginInput } from '@modules/user/login/LoginInput'
+import { RegisterInput } from '@type/user/register/RegisterInput'
+import { LoginInput } from '@type/user/login/LoginInput'
 import { loginTestMutation } from '@modules/test/Login.test'
 import { gCall } from './gCall'
 

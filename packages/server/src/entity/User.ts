@@ -9,8 +9,9 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm'
 import { Ctx, Field, ID, ObjectType, Root, UseMiddleware } from 'type-graphql'
-import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
+
 import { MyContext } from '@type/MyContext'
+import { isUserAuthOrUndefined } from '@middleware/isAuthenticatedMiddleware'
 import { Photo } from './Photo'
 import { Comment } from './Comment'
 import { Chat } from './Chat'

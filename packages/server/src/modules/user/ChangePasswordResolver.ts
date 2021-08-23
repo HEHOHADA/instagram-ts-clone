@@ -1,16 +1,23 @@
-import { AuthenticationError } from 'apollo-server-express'
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import bcrypt from 'bcryptjs'
-import { User } from '@entity/User'
-import { isAuth } from '@middleware/isAuthMiddleware'
-import { MyContext } from '@type/MyContext'
+import { Repository } from 'typeorm'
+import { Service } from 'typedi'
+import { AuthenticationError } from 'apollo-server-express'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+
 import { redis } from '@utils/redis'
-import { forgotPasswordPrefix } from '@constants/redisPrefix'
-import { ChangeForgotPassword, ChangePassword } from './types/ChangePasswordInputType'
-import { expiredKeyError, invalidLogin } from './utils/errorMessages'
+import { User } from '@entity/User'
+import { MyContext } from '@type/MyContext'
+import { isAuth } from '@middleware/isAuthMiddleware'
+import { forgotPasswordPrefix } from '@helpers/constants'
+import { expiredKeyError, invalidLogin } from '@helpers/user'
+import { ChangeForgotPassword, ChangePassword } from '@type/user'
 
 @Resolver()
+@Service()
 export class ChangePasswordResolver {
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+
   @Mutation(() => User)
   async changeForgotPassword(
     @Arg('data', () => ChangeForgotPassword) { token, password }: ChangeForgotPassword
@@ -20,7 +27,7 @@ export class ChangePasswordResolver {
       throw new AuthenticationError(expiredKeyError)
     }
 
-    const user = await User.findOne(userId)
+    const user = await this.userRepository.findOne(userId)
 
     if (!user) {
       throw new AuthenticationError(invalidLogin)
@@ -41,7 +48,7 @@ export class ChangePasswordResolver {
     @Ctx() ctx: MyContext,
     @Arg('data') { password, oldPassword }: ChangePassword
   ) {
-    const user = await User.findOne(ctx.payload.userId!)
+    const user = await this.userRepository.findOne(ctx.payload.userId!)
 
     if (!user) {
       throw new AuthenticationError(invalidLogin)
